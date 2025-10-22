@@ -8,6 +8,9 @@ namespace WattsTap.Core
     public class ApplicationEntry : MonoBehaviour, IApplicationEntry
     {
         [SerializeField] private ConfigService _stageConfigService;
+        
+        [Header("UI")]
+        [SerializeField] private Transform _uiRoot;
         [SerializeField] private UIHost _overlayRoot;
         
         private ServiceLocator _serviceManager;
@@ -20,6 +23,11 @@ namespace WattsTap.Core
             
             ServiceLocator.Register<IConfigService>(_stageConfigService);
             _stageConfigService.Initialize();
+            
+            
+            ServiceLocator.Register<IUIService>(new UIService(_uiRoot, _overlayRoot));
+            
+            _serviceManager.InitializeAll();
         }
 
         private void OnPostInitialize()

@@ -416,6 +416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.ApplicationEntry
   _stageConfigService: {fileID: 1569553359}
+  _uiRoot: {fileID: 1700051878}
   _overlayRoot: {fileID: 427421229}
 --- !u!114 &1569553359
 MonoBehaviour:
