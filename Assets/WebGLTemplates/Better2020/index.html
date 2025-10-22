@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>{{{ PRODUCT_NAME }}}</title>
+      <style>
+          #invisible-button {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: transparent;
+              border: none;
+              cursor: pointer;
+              z-index: 10;
+          }
+      </style>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js">
+    </script>
+  </head>
+  <body class="{{{ SPLASH_SCREEN_STYLE.toLowerCase() }}}">
+    <button id="invisible-button"></button>
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas"></canvas>
+    </div>
+    <div id="loading-cover" style="display:none;">
+        <div id="unity-loading-bar">
+            <div id="unity-logo"><img src="logo.png"></div>
+            <div id="unity-progress-bar-empty" style="display: none;">
+                <div id="unity-progress-bar-full"></div>
+            </div>
+            <div class="spinner"></div>
+        </div>
+    </div>
+    <div id="unity-fullscreen-button" style="display: none;"></div>
+    <script>
+      const invisibleButton = document.getElementById('invisible-button');
+      const hideFullScreenButton = "{{{ HIDE_FULL_SCREEN_BUTTON }}}";
+      const buildUrl = "Build";
+      const loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
+      const config = {
+        dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
+        frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
+        codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+#if MEMORY_FILENAME
+        memoryUrl: buildUrl + "/{{{ MEMORY_FILENAME }}}",
+#endif
+#if SYMBOLS_FILENAME
+        symbolsUrl: buildUrl + "/{{{ SYMBOLS_FILENAME }}}",
+#endif
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "{{{ COMPANY_NAME }}}",
+        productName: "{{{ PRODUCT_NAME }}}",
+        productVersion: "{{{ PRODUCT_VERSION }}}",
+      };
+
+      const container = document.querySelector("#unity-container");
+      const canvas = document.querySelector("#unity-canvas");
+      const loadingCover = document.querySelector("#loading-cover");
+      const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
+      const progressBarFull = document.querySelector("#unity-progress-bar-full");
+      const fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      const spinner = document.querySelector('.spinner');
+
+      var MyGameInstance = null;
+
+      invisibleButton.addEventListener('click', () => {
+          invisibleButton.remove();
+          console.log('Overlay button removed');
+      });
+      
+      const canFullscreen = (function() {
+        for (const key of [
+            'exitFullscreen',
+            'webkitExitFullscreen',
+            'webkitCancelFullScreen',
+            'mozCancelFullScreen',
+            'msExitFullscreen',
+          ]) {
+          if (key in document) {
+            return true;
+          }
+        }
+        return false;
+      }());
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+          canvas.style.removeProperty('aspect-ratio');
+          var meta = document.createElement('meta');
+          meta.name = 'viewport';
+          meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+          document.getElementsByTagName('head')[0].appendChild(meta);
+          container.className = "unity-mobile";
+          canvas.className = "unity-mobile";
+      }
+
+#if BACKGROUND_FILENAME
+      canvas.style.background = "url('" + buildUrl + "/{{{ BACKGROUND_FILENAME.replace(/'/g, '%27') }}}') center / cover";
+#endif
+      loadingCover.style.display = "";
+
+      const script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+
+          if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+              if (window.Telegram && window.TelegramWebviewProxy) {
+                  window.Telegram.WebApp.expand();
+                  window.TelegramWebviewProxy.postEvent('web_app_request_fullscreen', '');
+              }
+          }
+
+        createUnityInstance(canvas, config, (progress) => {
+          spinner.style.display = "none";
+          progressBarEmpty.style.display = "";
+          progressBarFull.style.width = `${100 * progress}%`;
+        }).then((unityInstance) => {
+          MyGameInstance = unityInstance;
+
+          MyGameInstance.SendMessage('TelegramService', 'OnCreateUnityInstance');
+            
+          loadingCover.style.display = "none";
+
+            if (canFullscreen) {
+            if (!hideFullScreenButton) {
+              fullscreenButton.style.display = "none";
+            }
+            fullscreenButton.onclick = () => {
+              unityInstance.SetFullscreen(1);
+            };
+
+            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+
+                if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+                    DeviceMotionEvent.requestPermission()
+                        .then(permissionState => {
+                            if (permissionState === 'granted') {
+                                console.log('Access to sensors granted.');
+                            } else {
+                                console.log('Access to sensors denied.');
+                            }
+                        })
+                        .catch(console.error);
+                } else {
+                    console.log('DeviceMotionEvent is not supported.');
+                }
+            }
+          }
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      
+      window.GetTelegramInitDataUnsafeUser = function() {
+          var telegramId = '1234567890';
+          var telegramUserName = 'TestUser';
+          var initData = '';
+          
+          if (window.Telegram && window.Telegram.WebApp) {
+              if (window.Telegram.WebApp.initData) {
+                  initData = window.Telegram.WebApp.initData;
+                  alert("initData " + initData); 
+                  
+                  // Parse initData string to extract user parameter
+                  try {
+                      var urlParams = new URLSearchParams(initData);
+                      var userParam = urlParams.get('user');
+                      
+                      if (userParam) {
+                          // Decode URL-encoded string and parse JSON
+                          var userData = JSON.parse(decodeURIComponent(userParam));
+                          
+                          if (userData.id) {
+                              telegramId = userData.id.toString();
+                          }
+                          if (userData.username) {
+                              telegramUserName = userData.username;
+                          }
+                          
+                          // alert("Parsed - telegramId: " + telegramId + ", telegramUserName: " + telegramUserName);
+                      } else {
+                          // alert("User parameter not found in initData");
+                      }
+                  } catch (error) {
+                      alert("Error parsing initData: " + error.message);
+                  }
+              }
+          } else {
+              alert("Telegram not found, use default id");
+          }
+
+          MyGameInstance.SendMessage('TelegramService', 'ReceiveUserId', telegramId);
+          MyGameInstance.SendMessage('TelegramService', 'ReceiveUserName', telegramUserName);
+          MyGameInstance.SendMessage('TelegramService', 'ReceiveInitData', initData);
+      }
+      
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>

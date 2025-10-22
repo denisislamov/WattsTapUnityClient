@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae3b021040dd4364a8cec74b9c8d2ede, type: 3}
+  m_Name: UIConfig
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Configs.UIConfig
+  Entries:
+  - Id: MainMenu
+    Prefab: {fileID: 9207199259038984544, guid: 5d980fb2dd35949e0a9992574353fb66, type: 3}

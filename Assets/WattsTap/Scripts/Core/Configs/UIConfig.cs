@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace WattsTap.Core.Configs
 {
-    [CreateAssetMenu(menuName = "HNConfigs/UI Config")]
+    [CreateAssetMenu(menuName = "WattsTap/Configs/UI Config")]
     public class UIConfig : BaseConfig
     {
         [System.Serializable]

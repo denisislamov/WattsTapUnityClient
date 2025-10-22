@@ -1,0 +1,16 @@
+{
+    "name": "WattsTapGame",
+    "rootNamespace": "",
+    "references": [
+        "GUID:ba8a2adcf046e4b5dbd849536a619585"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

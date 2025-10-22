@@ -74,10 +74,4 @@ namespace WattsTap.Core.Configs
             _allConfigs[type][key] = config;
         }
     }
-
-    public interface IConfigService
-    {
-        T GetConfig<T>(string key = "default") where T : BaseConfig;
-        void RegisterConfig<T>(string key, T config) where T : BaseConfig;
-    }
 }
