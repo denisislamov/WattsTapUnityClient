@@ -1,0 +1,16 @@
+{
+    "name": "WattsTapCore",
+    "rootNamespace": "",
+    "references": [
+        "GUID:456458b2ee6bb4919b59eeb05198fb88"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
