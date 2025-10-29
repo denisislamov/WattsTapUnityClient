@@ -2,7 +2,8 @@
     "name": "WattsTapGame",
     "rootNamespace": "",
     "references": [
-        "GUID:ba8a2adcf046e4b5dbd849536a619585"
+        "GUID:ba8a2adcf046e4b5dbd849536a619585",
+        "GUID:456458b2ee6bb4919b59eeb05198fb88"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

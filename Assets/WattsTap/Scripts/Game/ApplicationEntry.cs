@@ -2,6 +2,7 @@ using UnityEngine;
 using WattsTap.Constants;
 using WattsTap.Core.Configs;
 using WattsTap.Core.UI;
+using WattsTap.Game.Tap.Services;
 
 namespace WattsTap.Core
 {
@@ -26,6 +27,10 @@ namespace WattsTap.Core
             
             
             ServiceLocator.Register<IUIService>(new UIService(_uiRoot, _overlayRoot));
+
+            // Register input and tap services so they are available at runtime. They will be initialized by ServiceLocator.InitializeAll() below.
+            ServiceLocator.Register<IInputService>(new InputService());
+            ServiceLocator.Register<ITapControllerService>(new TapControllerService());
             
             _serviceManager.InitializeAll();
         }

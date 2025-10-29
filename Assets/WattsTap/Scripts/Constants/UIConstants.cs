@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace WattsTap.Constants
 {
     public static class UIConstants
