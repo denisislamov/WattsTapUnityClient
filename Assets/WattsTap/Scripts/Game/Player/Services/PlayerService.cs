@@ -10,10 +10,10 @@ namespace WattsTap.Game.Player
     public class PlayerService : IPlayerService
     {
         private const string PlayerDataKey = "PlayerData";
-        private const int OfflineIncomeMaxHours = 4;
-        private const float EnergyRestoreInterval = 1f;
         
         private PlayerData _playerData;
+        private IResourceManager _resourceManager;
+        private ResourceConfig _resourceConfig;
         private float _energyRestoreTimer;
         
         public int InitializationOrder => 10;
@@ -23,11 +23,31 @@ namespace WattsTap.Game.Player
         public event Action<PlayerResources> OnResourcesChanged;
         public event Action<int> OnLevelUp;
         public event Action<int, int> OnEnergyChanged;
+        
+        /// <summary>
+        /// Получить менеджер р��сурсов для прямого доступа
+        /// </summary>
+        public IResourceManager ResourceManager => _resourceManager;
 
         public void Initialize()
         {
             if (IsInitialized) return;
+            
+            // Load or create default config
+            _resourceConfig = Resources.Load<ResourceConfig>("Configs/ResourceConfig");
+            if (_resourceConfig == null)
+            {
+                Debug.LogWarning("[PlayerService] ResourceConfig not found, using defaults");
+                _resourceConfig = ScriptableObject.CreateInstance<ResourceConfig>();
+            }
+            
             LoadPlayerData();
+            
+            // Initialize ResourceManager after player data is loaded
+            _resourceManager = new ResourceManager(_playerData.resources);
+            _resourceManager.OnResourceChanged += OnResourceManagerChanged;
+            _resourceManager.OnResourceTransaction += OnResourceManagerTransaction;
+            
             Application.targetFrameRate = 60;
             IsInitialized = true;
             Debug.Log("<color=green>[PlayerService] Initialized</color>");
@@ -35,8 +55,29 @@ namespace WattsTap.Game.Player
 
         public void Shutdown()
         {
+            if (_resourceManager != null)
+            {
+                _resourceManager.OnResourceChanged -= OnResourceManagerChanged;
+                _resourceManager.OnResourceTransaction -= OnResourceManagerTransaction;
+            }
             SavePlayerData();
             IsInitialized = false;
+        }
+        
+        private void OnResourceManagerChanged(ResourceType type, long previousValue, long newValue)
+        {
+            // Forward resource change events
+            if (type == ResourceType.Energy)
+            {
+                OnEnergyChanged?.Invoke((int)newValue, _playerData.resources.maxEnergy);
+            }
+            OnResourcesChanged?.Invoke(_playerData.resources);
+            _playerData.updatedAt = DateTime.UtcNow;
+        }
+        
+        private void OnResourceManagerTransaction(ResourceTransaction transaction)
+        {
+            Debug.Log($"[PlayerService] Resource transaction: {transaction.ResourceType} {(transaction.Amount >= 0 ? "+" : "")}{transaction.Amount} ({transaction.PreviousValue} -> {transaction.NewValue})");
         }
 
         public PlayerData GetPlayerData() => _playerData;
@@ -101,70 +142,82 @@ namespace WattsTap.Game.Player
         public void AddWatts(long amount)
         {
             if (amount <= 0) return;
-            _playerData.resources.watts += amount;
-            _playerData.updatedAt = DateTime.UtcNow;
-            OnResourcesChanged?.Invoke(_playerData.resources);
+            _resourceManager.AddResource(ResourceType.Watts, amount);
         }
 
         public bool SpendWatts(long amount)
         {
-            if (amount <= 0 || _playerData.resources.watts < amount) return false;
-            _playerData.resources.watts -= amount;
-            _playerData.updatedAt = DateTime.UtcNow;
-            OnResourcesChanged?.Invoke(_playerData.resources);
-            return true;
+            if (amount <= 0) return false;
+            var transaction = _resourceManager.SpendResource(ResourceType.Watts, amount);
+            return transaction.Success;
         }
 
         public void AddExperience(long amount)
         {
             if (amount <= 0) return;
-            _playerData.resources.currentXP += amount;
+            _resourceManager.AddResource(ResourceType.Experience, amount);
+            
+            // Check for level up
             while (_playerData.resources.currentXP >= _playerData.resources.xpToNextLevel)
             {
                 LevelUp();
             }
-            OnResourcesChanged?.Invoke(_playerData.resources);
         }
 
         private void LevelUp()
         {
             _playerData.resources.currentXP -= _playerData.resources.xpToNextLevel;
             _playerData.level++;
-            _playerData.resources.xpToNextLevel = CalculateXpForNextLevel(_playerData.level);
-            var wattsReward = _playerData.level * 100;
-            AddWatts(wattsReward);
-            _playerData.resources.currentEnergy = _playerData.resources.maxEnergy;
+            _playerData.resources.xpToNextLevel = _resourceConfig.CalculateXpForLevel(_playerData.level);
+            
+            var wattsReward = _resourceConfig.CalculateLevelUpReward(_playerData.level);
+            _resourceManager.AddResource(ResourceType.Watts, wattsReward, false);
+            
+            if (_resourceConfig.restoreEnergyOnLevelUp)
+            {
+                _resourceManager.SetResource(ResourceType.Energy, _playerData.resources.maxEnergy);
+            }
+            
             Debug.Log($"[PlayerService] Level UP! New level: {_playerData.level}");
             OnLevelUp?.Invoke(_playerData.level);
             OnPlayerDataChanged?.Invoke(_playerData);
-        }
-
-        private long CalculateXpForNextLevel(int level)
-        {
-            return (long)(100 * Math.Pow(level, 1.5));
+            OnResourcesChanged?.Invoke(_playerData.resources);
         }
 
         public bool UseEnergy(int amount = 1)
         {
-            if (_playerData.resources.currentEnergy < amount) return false;
-            _playerData.resources.currentEnergy -= amount;
-            OnEnergyChanged?.Invoke(_playerData.resources.currentEnergy, _playerData.resources.maxEnergy);
-            return true;
+            var transaction = _resourceManager.SpendResource(ResourceType.Energy, amount);
+            return transaction.Success;
         }
 
         public void RestoreEnergy(int amount)
         {
-            _playerData.resources.currentEnergy = Mathf.Min(_playerData.resources.currentEnergy + amount, _playerData.resources.maxEnergy);
-            OnEnergyChanged?.Invoke(_playerData.resources.currentEnergy, _playerData.resources.maxEnergy);
+            var currentEnergy = _resourceManager.GetResource(ResourceType.Energy);
+            var maxEnergy = _resourceManager.GetMaxResource(ResourceType.Energy);
+            var newEnergy = Math.Min(currentEnergy + amount, maxEnergy);
+            _resourceManager.SetResource(ResourceType.Energy, newEnergy, true);
         }
 
         public bool PerformTap()
         {
-            if (!UseEnergy()) return false;
+            var energyCost = _resourceConfig.energyCostPerTap;
+            if (!_resourceManager.HasEnough(ResourceType.Energy, energyCost)) 
+                return false;
+            
+            _resourceManager.SpendResource(ResourceType.Energy, energyCost);
+            
             var tapIncome = _playerData.stats.incomePerTap + CalculateTotalEquipmentBonus();
-            AddWatts(tapIncome);
-            AddExperience(1);
+            _resourceManager.AddResource(ResourceType.Watts, tapIncome);
+            _resourceManager.AddResource(ResourceType.Experience, _resourceConfig.xpPerTap);
+            
             _playerData.stats.totalTaps++;
+            
+            // Check for level up after adding experience
+            while (_playerData.resources.currentXP >= _playerData.resources.xpToNextLevel)
+            {
+                LevelUp();
+            }
+            
             return true;
         }
 
@@ -242,16 +295,19 @@ namespace WattsTap.Game.Player
 
         private void RecalculateMaxEnergy()
         {
-            int baseEnergy = 100;
+            int baseEnergy = _resourceConfig.baseMaxEnergy;
             int bonus = _playerData.inventory.items.Where(IsItemEquipped).Sum(item => item.energyBonus);
-            _playerData.resources.maxEnergy = baseEnergy + bonus;
-            OnEnergyChanged?.Invoke(_playerData.resources.currentEnergy, _playerData.resources.maxEnergy);
+            var newMaxEnergy = baseEnergy + bonus;
+            _resourceManager.SetMaxResource(ResourceType.Energy, newMaxEnergy);
         }
 
         public bool UpgradeItem(string itemId, long cost)
         {
             var item = _playerData.inventory.items.FirstOrDefault(i => i.itemId == itemId);
-            if (item == null || !SpendWatts(cost)) return false;
+            if (item == null) return false;
+            
+            var transaction = _resourceManager.SpendResource(ResourceType.Watts, cost);
+            if (!transaction.Success) return false;
             
             item.level++;
             item.tapIncomeBonus = (long)(item.tapIncomeBonus * 1.2);
@@ -274,7 +330,7 @@ namespace WattsTap.Game.Player
             }
             
             long sellPrice = CalculateItemSellPrice(item);
-            AddWatts(sellPrice);
+            _resourceManager.AddResource(ResourceType.Watts, sellPrice);
             _playerData.inventory.items.Remove(item);
             OnPlayerDataChanged?.Invoke(_playerData);
             Debug.Log($"[PlayerService] Sold item for {sellPrice} Watts");
@@ -300,86 +356,73 @@ namespace WattsTap.Game.Player
             _playerData.tonWalletAddress = walletAddress;
             SavePlayerData();
             OnPlayerDataChanged?.Invoke(_playerData);
-            Debug.Log($"[PlayerService] Connected wallet: {walletAddress}");
+            Debug.Log($"[PlayerService] Wallet connected: {walletAddress}");
         }
 
         public long CalculateOfflineIncome()
         {
-            var timeDiff = DateTime.UtcNow - _playerData.stats.lastLogoutTime;
-            var hours = Math.Min(timeDiff.TotalHours, OfflineIncomeMaxHours);
-            if (hours < 0.1) return 0;
-            return (long)(hours * _playerData.stats.incomePerHour);
+            var lastLogout = _playerData.stats.lastLogoutTime;
+            var now = DateTime.UtcNow;
+            var diff = now - lastLogout;
+            
+            var maxHours = _resourceConfig.maxOfflineIncomeHours;
+            var hours = Math.Min(diff.TotalHours, maxHours);
+            
+            var offlineIncome = (long)(hours * _playerData.stats.incomePerHour * _resourceConfig.offlineIncomeMultiplier);
+            return offlineIncome;
         }
 
         public void UpdateTournamentRank(int rank)
         {
             _playerData.stats.tournamentRank = rank;
-            if (rank < _playerData.stats.bestTournamentRank || _playerData.stats.bestTournamentRank == 0)
+            if (rank > 0 && (rank < _playerData.stats.bestTournamentRank || _playerData.stats.bestTournamentRank == 0))
             {
                 _playerData.stats.bestTournamentRank = rank;
             }
+            SavePlayerData();
             OnPlayerDataChanged?.Invoke(_playerData);
         }
 
         public void InviteFriend()
         {
             _playerData.stats.friendsCount++;
-            var reward = 1000;
-            AddWatts(reward);
-            Debug.Log($"[PlayerService] Friend invited! Reward: {reward} Watts");
+            SavePlayerData();
             OnPlayerDataChanged?.Invoke(_playerData);
         }
 
         public bool ClaimDailyBonus(out int streakDay)
         {
-            var today = DateTime.UtcNow.Date;
-            var lastBonus = _playerData.lastDailyBonusDate.Date;
+            var now = DateTime.UtcNow;
+            var lastBonus = _playerData.lastDailyBonusDate;
+            var daysSinceLastBonus = (now - lastBonus).Days;
             
-            if (lastBonus == today)
+            if (daysSinceLastBonus < 1)
             {
                 streakDay = _playerData.dailyLoginStreak;
-                return false;
+                return false; // Already claimed today
             }
             
-            var yesterday = today.AddDays(-1);
-            if (lastBonus == yesterday)
+            // Update streak
+            if (daysSinceLastBonus == 1)
             {
                 _playerData.dailyLoginStreak++;
             }
             else
             {
-                _playerData.dailyLoginStreak = 1;
+                _playerData.dailyLoginStreak = 1; // Reset streak
             }
             
-            if (_playerData.dailyLoginStreak > 7)
-            {
-                _playerData.dailyLoginStreak = 1;
-            }
-            
-            _playerData.lastDailyBonusDate = DateTime.UtcNow;
+            _playerData.lastDailyBonusDate = now;
             streakDay = _playerData.dailyLoginStreak;
-            var reward = streakDay * 500;
-            AddWatts(reward);
-            Debug.Log($"[PlayerService] Daily bonus claimed! Day {streakDay}, Reward: {reward} Watts");
-            SavePlayerData();
-            return true;
-        }
-
-        public void UpdateEnergyRestore(float deltaTime)
-        {
-            if (_playerData.resources.currentEnergy >= _playerData.resources.maxEnergy)
-            {
-                _energyRestoreTimer = 0;
-                return;
-            }
             
-            _energyRestoreTimer += deltaTime;
-            if (_energyRestoreTimer >= EnergyRestoreInterval)
-            {
-                _energyRestoreTimer = 0;
-                RestoreEnergy(1);
-            }
+            // Calculate reward based on streak
+            var wattsReward = streakDay * 100;
+            _resourceManager.AddResource(ResourceType.Watts, wattsReward);
+            
+            SavePlayerData();
+            OnPlayerDataChanged?.Invoke(_playerData);
+            Debug.Log($"[PlayerService] Daily bonus claimed: {wattsReward} Watts (Day {streakDay})");
+            return true;
         }
     }
 }
-

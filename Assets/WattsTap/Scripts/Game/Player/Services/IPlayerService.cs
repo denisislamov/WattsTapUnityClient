@@ -23,6 +23,11 @@ namespace WattsTap.Game.Player
         event Action<int> OnLevelUp;
         
         /// <summary>
+        /// Менеджер ресурсов игрока
+        /// </summary>
+        public IResourceManager ResourceManager { get; }
+        
+        /// <summary>
         /// Событие изменения энергии
         /// </summary>
         event Action<int, int> OnEnergyChanged; // current, max
