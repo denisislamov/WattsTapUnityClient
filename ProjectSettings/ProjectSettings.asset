@@ -830,7 +830,8 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    WebGL: FCU_EXISTS;JSONNET_EXISTS;TextMeshPro;UITK_EXISTS;DAG_EXISTS;DACR_EXISTS
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
