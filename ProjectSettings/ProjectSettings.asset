@@ -831,7 +831,7 @@ PlayerSettings:
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
   scriptingDefineSymbols:
-    WebGL: FCU_EXISTS;JSONNET_EXISTS;TextMeshPro;UITK_EXISTS;DAG_EXISTS;DACR_EXISTS
+    WebGL: FCU_EXISTS;JSONNET_EXISTS;TextMeshPro;UITK_EXISTS;DAG_EXISTS;DACR_EXISTS;U2D_SPRITE_EXISTS
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
