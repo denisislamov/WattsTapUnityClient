@@ -38,6 +38,16 @@ namespace WattsTap.Game.Player
         /// </summary>
         public decimal kiloWattTokens;
 
+        /// <summary>
+        /// УДАРЫ: текущие доступные удары для тапа
+        /// </summary>
+        public int currentHits;
+        
+        /// <summary>
+        /// УДАРЫ: максимальное количество ударов
+        /// </summary>
+        public int maxHits;
+
         public PlayerResources()
         {
             watts = 0;
@@ -46,6 +56,8 @@ namespace WattsTap.Game.Player
             currentXP = 0;
             xpToNextLevel = 100;
             kiloWattTokens = 0;
+            currentHits = 10;
+            maxHits = 10;
         }
     }
 }

@@ -20,6 +20,7 @@ namespace WattsTap.Game.Tap.Services
     {
         private IPlayerService _playerService;
         private TapConfig _config;
+        private ResourceConfig _resourceConfig;
 
         public int InitializationOrder => 20;
         public bool IsInitialized { get; private set; }
@@ -30,6 +31,9 @@ namespace WattsTap.Game.Tap.Services
         public float HitRecoverySeconds { get; private set; }
 
         private float _recoveryTimer;
+        private float _idleTimer;
+        private float _baseIncomeMultiplier;
+        private float _baseOfflineMultiplier;
 
         // Upgrade multipliers / modifiers
         private float _incomePerTapMultiplier = 1f;
@@ -38,6 +42,9 @@ namespace WattsTap.Game.Tap.Services
         public event Action<bool> OnTapPerformed;
         public event Action<int, int> OnHitsChanged;
         public event Action<long> OnOfflineBonusChanged;
+        public event Action<float> OnIncomeMultiplierChanged;
+
+        public float IncomeMultiplier => _incomePerTapMultiplier;
 
         public void Initialize()
         {
@@ -56,11 +63,38 @@ namespace WattsTap.Game.Tap.Services
                 _config = ScriptableObject.CreateInstance<TapConfig>();
             }
 
-            MaxHits = _config.baseMaxHits;
-            CurrentHits = MaxHits;
-            HitRecoverySeconds = _config.baseHitRecoverySeconds;
-            _recoveryTimer = 0f;
+            _resourceConfig = configService.GetConfig<ResourceConfig>("ResourceConfig");
+            if (_resourceConfig == null)
+            {
+                Debug.LogWarning("[TapControllerService] ResourceConfig not found, using defaults");
+                _resourceConfig = ScriptableObject.CreateInstance<ResourceConfig>();
+            }
+            // Apply config
+            HitRecoverySeconds = Mathf.Max(0.1f, _config.baseHitRecoverySeconds);
+            _baseIncomeMultiplier = Mathf.Max(1f, _config.incomePerTapMultiplier);
+            _incomePerTapMultiplier = _baseIncomeMultiplier;
+            _baseOfflineMultiplier = Mathf.Max(1f, _config.offlineBonusInitial);
+            _offlineBonusMultiplier = _baseOfflineMultiplier;
 
+            // Initialize Hits via ResourceManager to persist across sessions
+            var rm = _playerService.ResourceManager;
+            var savedMax = rm.GetMaxResource(ResourceType.Hits);
+            var configMaxHits = _config.baseMaxHits;
+            
+            var desiredMax = Math.Max(configMaxHits, (int)savedMax);
+            if (desiredMax != savedMax)
+            {
+                rm.SetMaxResource(ResourceType.Hits, desiredMax);
+            }
+            // Always fill current hits to max on startup
+            rm.SetResource(ResourceType.Hits, desiredMax, true);
+            var currentHits = desiredMax;
+
+            MaxHits = (int)rm.GetMaxResource(ResourceType.Hits);
+            CurrentHits = currentHits;
+            _recoveryTimer = 0f;
+            _idleTimer = 0f;
+            
             TotalTaps = _playerService.GetPlayerData().stats.totalTaps;
 
             IsInitialized = true;
@@ -68,6 +102,7 @@ namespace WattsTap.Game.Tap.Services
 
             OnHitsChanged?.Invoke(CurrentHits, MaxHits);
             OnOfflineBonusChanged?.Invoke(CalculateOfflineBonus(_playerService.GetPlayerData().stats.lastLogoutTime));
+            OnIncomeMultiplierChanged?.Invoke(_incomePerTapMultiplier);
         }
 
         public void Shutdown()
@@ -79,6 +114,26 @@ namespace WattsTap.Game.Tap.Services
         {
             if (!IsInitialized) return;
 
+            // Idle timer for multiplier reset
+            if (_config.multiplierResetSeconds > 0f)
+            {
+                _idleTimer += deltaTime;
+                if (_idleTimer >= _config.multiplierResetSeconds)
+                {
+                    bool incomeChanged = Math.Abs(_incomePerTapMultiplier - _baseIncomeMultiplier) > 0.0001f;
+                    bool offlineChanged = Math.Abs(_offlineBonusMultiplier - _baseOfflineMultiplier) > 0.0001f;
+                    _incomePerTapMultiplier = _baseIncomeMultiplier;
+                    _offlineBonusMultiplier = _baseOfflineMultiplier;
+                    if (incomeChanged) OnIncomeMultiplierChanged?.Invoke(_incomePerTapMultiplier);
+                    if (offlineChanged) OnOfflineBonusChanged?.Invoke(CalculateOfflineBonus(_playerService.GetPlayerData().stats.lastLogoutTime));
+                    _idleTimer = 0f; // reset timer after applying decay
+                }
+            }
+
+            var rm = _playerService.ResourceManager;
+            CurrentHits = (int)rm.GetResource(ResourceType.Hits);
+            MaxHits = (int)rm.GetMaxResource(ResourceType.Hits);
+
             if (CurrentHits < MaxHits)
             {
                 _recoveryTimer += deltaTime;
@@ -86,8 +141,13 @@ namespace WattsTap.Game.Tap.Services
                 {
                     var recovered = (int)(_recoveryTimer / HitRecoverySeconds);
                     _recoveryTimer -= recovered * HitRecoverySeconds;
-                    CurrentHits = Math.Min(MaxHits, CurrentHits + recovered);
-                    OnHitsChanged?.Invoke(CurrentHits, MaxHits);
+                    if (recovered > 0)
+                    {
+                        rm.AddResource(ResourceType.Hits, recovered);
+                        CurrentHits = (int)rm.GetResource(ResourceType.Hits);
+                        MaxHits = (int)rm.GetMaxResource(ResourceType.Hits);
+                        OnHitsChanged?.Invoke(CurrentHits, MaxHits);
+                    }
                 }
             }
         }
@@ -95,8 +155,9 @@ namespace WattsTap.Game.Tap.Services
         public bool HandleTap()
         {
             if (!IsInitialized) return false;
-
-            if (CurrentHits <= 0)
+            
+            var rm = _playerService.ResourceManager;
+            if (!rm.HasEnough(ResourceType.Hits, 1))
             {
                 OnTapPerformed?.Invoke(false);
                 return false;
@@ -106,14 +167,34 @@ namespace WattsTap.Game.Tap.Services
             var success = _playerService.PerformTap();
             if (success)
             {
-                CurrentHits--;
+                _idleTimer = 0f; // reset idle on tap
+                rm.SpendResource(ResourceType.Hits, 1);
+                CurrentHits = (int)rm.GetResource(ResourceType.Hits);
+                MaxHits = (int)rm.GetMaxResource(ResourceType.Hits);
                 TotalTaps++;
 
-                // Apply income multiplier by temporarily adjusting player stats: we add additional watts equal to (multiplier-1)*income
+                // Apply income multiplier by adding extra watts equal to (multiplier-1)*income
                 if (Math.Abs(_incomePerTapMultiplier - 1f) > 0.0001f)
                 {
-                    var extra = (long)((_incomePerTapMultiplier - 1f) * (_playerService.GetPlayerData().stats.incomePerTap));
+                    var baseIncome = _playerService.GetPlayerData().stats.incomePerTap;
+                    var extra = (long)((_incomePerTapMultiplier - 1f) * baseIncome);
                     if (extra > 0) _playerService.AddWatts(extra);
+                }
+
+                // Grow multipliers per tap within caps
+                if (_config.perTapIncomeMultiplierIncrement > 0f)
+                {
+                    var prev = _incomePerTapMultiplier;
+                    _incomePerTapMultiplier = Mathf.Min(_incomePerTapMultiplier + _config.perTapIncomeMultiplierIncrement,
+                        Mathf.Max(_config.incomePerTapMultiplierMax, 1f));
+                    if (Math.Abs(_incomePerTapMultiplier - prev) > 0.0001f)
+                        OnIncomeMultiplierChanged?.Invoke(_incomePerTapMultiplier);
+                }
+                if (_config.perTapOfflineMultiplierIncrement > 0f)
+                {
+                    _offlineBonusMultiplier = Mathf.Min(_offlineBonusMultiplier + _config.perTapOfflineMultiplierIncrement,
+                        Mathf.Max(_config.offlineMultiplierMax, 1f));
+                    OnOfflineBonusChanged?.Invoke(CalculateOfflineBonus(_playerService.GetPlayerData().stats.lastLogoutTime));
                 }
 
                 OnHitsChanged?.Invoke(CurrentHits, MaxHits);
@@ -127,13 +208,12 @@ namespace WattsTap.Game.Tap.Services
 
         public long CalculateOfflineBonus(DateTime lastLogoutUtc)
         {
-            var lastLogout = lastLogoutUtc;
             var now = DateTime.UtcNow;
-            var diff = now - lastLogout;
-            var maxHours = _config.maxOfflineIncomeHours;
+            var diff = now - lastLogoutUtc;
+            var maxHours = _resourceConfig.maxOfflineIncomeHours;
             var hours = Math.Min(diff.TotalHours, maxHours);
 
-            var baseIncome = (long)(hours * _playerService.GetPlayerData().stats.incomePerHour * _config.offlineIncomeBaseMultiplier);
+            var baseIncome = (long)(hours * _playerService.GetPlayerData().stats.incomePerHour * _resourceConfig.offlineIncomeMultiplier);
             var total = (long)(baseIncome * _offlineBonusMultiplier);
 
             return total;
@@ -145,18 +225,25 @@ namespace WattsTap.Game.Tap.Services
             {
                 case TapUpgradeType.IncomePerTapPercent:
                     _incomePerTapMultiplier += value;
+                    _baseIncomeMultiplier += value; // persist upgrade into baseline so reset keeps upgrades
+                    OnIncomeMultiplierChanged?.Invoke(_incomePerTapMultiplier);
                     break;
                 case TapUpgradeType.MaxHitsFlat:
-                    MaxHits += (int)value;
-                    CurrentHits = Math.Min(CurrentHits, MaxHits);
+                    var rm = _playerService.ResourceManager;
+                    var newMax = (int)(rm.GetMaxResource(ResourceType.Hits) + value);
+                    rm.SetMaxResource(ResourceType.Hits, newMax);
+                    MaxHits = newMax;
+                    CurrentHits = (int)rm.GetResource(ResourceType.Hits);
                     OnHitsChanged?.Invoke(CurrentHits, MaxHits);
                     break;
                 case TapUpgradeType.HitRecoveryPercent:
                     // value = -0.2f for -20%
                     HitRecoverySeconds *= (1f + value);
+                    HitRecoverySeconds = Mathf.Max(0.1f, HitRecoverySeconds);
                     break;
                 case TapUpgradeType.OfflineBonusPercent:
                     _offlineBonusMultiplier += value;
+                    _baseOfflineMultiplier += value; // persist into baseline
                     OnOfflineBonusChanged?.Invoke(CalculateOfflineBonus(_playerService.GetPlayerData().stats.lastLogoutTime));
                     break;
             }

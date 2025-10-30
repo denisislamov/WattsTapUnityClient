@@ -10,6 +10,9 @@ namespace WattsTap.Game.UI
         [SerializeField] private Text totalCoinsText;
         [SerializeField] private Text coinsPerTapText;
 
+        [Header("Hits Display")]
+        [SerializeField] private Text hitsText;
+
         public void UpdateTotalCoins(long totalCoins)
         {
             if (totalCoinsText != null)
@@ -23,6 +26,14 @@ namespace WattsTap.Game.UI
             if (coinsPerTapText != null)
             {
                 coinsPerTapText.text = $"+{coinsPerTap}";
+            }
+        }
+
+        public void UpdateHits(int current, int max)
+        {
+            if (hitsText != null)
+            {
+                hitsText.text = $"{current}/{max}";
             }
         }
     }

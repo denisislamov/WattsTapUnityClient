@@ -29,21 +29,21 @@ namespace WattsTap.Game.Player
 
         [Header("Tap Settings")]
         [Tooltip("Базовый доход за один тап")]
-        public long baseIncomePerTap = 1;
+        public long baseIncomePerTap = 2;
         
         [Tooltip("Опыт получаемый за один тап")]
         public long xpPerTap = 1;
         
-        [Tooltip("Стоимость энергии за один тап")]
-        public int energyCostPerTap = 1;
+        //[Tooltip("Стоимость энергии за один тап")]
+        //public int energyCostPerTap = 1;
 
         [Header("Offline Income Settings")]
         [Tooltip("Максимальное количество часов оффлайн дохода")]
-        public int maxOfflineIncomeHours = 4;
+        public int maxOfflineIncomeHours = 8;
         
         [Tooltip("Процент от активного дохода в час для оффлайн дохода (0-1)")]
         [Range(0f, 1f)]
-        public float offlineIncomeMultiplier = 0.5f;
+        public float offlineIncomeMultiplier = 1.0f;
 
         [Header("Level Up Rewards")]
         [Tooltip("Множитель награды в Watts за повышение уровня (уровень * множитель)")]
@@ -69,4 +69,3 @@ namespace WattsTap.Game.Player
         }
     }
 }
-

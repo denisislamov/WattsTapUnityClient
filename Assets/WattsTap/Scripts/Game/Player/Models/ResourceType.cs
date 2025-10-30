@@ -28,7 +28,11 @@ namespace WattsTap.Game.Player
         /// <summary>
         /// Премиум валюта (для будущего расширения)
         /// </summary>
-        Premium = 4
+        Premium = 4,
+        
+        /// <summary>
+        /// Удары (количество доступных тапов)
+        /// </summary>
+        Hits = 5
     }
 }
-

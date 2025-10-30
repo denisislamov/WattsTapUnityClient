@@ -50,6 +50,16 @@ namespace WattsTap.Game.Tap.Services
         /// </summary>
         void ApplyUpgrade(TapUpgradeType type, float value);
 
+        /// <summary>
+        /// Текущий множитель дохода за тап (>= 1)
+        /// </summary>
+        float IncomeMultiplier { get; }
+        
+        /// <summary>
+        /// Событие изменения множителя дохода за тап
+        /// </summary>
+        event Action<float> OnIncomeMultiplierChanged;
+
         event Action<bool> OnTapPerformed; // success
         event Action<int, int> OnHitsChanged; // current, max
         event Action<long> OnOfflineBonusChanged; // when internal offline-bonus metric changed

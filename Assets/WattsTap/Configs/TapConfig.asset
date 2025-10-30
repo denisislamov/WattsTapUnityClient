@@ -12,8 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f95397eed9ab4ea1af1b713643e83f61, type: 3}
   m_Name: TapConfig
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Scripts.Game.Tap.Data.TapConfig
-  baseMaxHits: 10
-  baseHitRecoverySeconds: 5
-  maxOfflineIncomeHours: 4
-  offlineIncomeBaseMultiplier: 1
-  offlineBonusInitial: 1
+  baseMaxHits: 1000
+  baseHitRecoverySeconds: 2
+  incomePerTapMultiplier: 1
+  perTapIncomeMultiplierIncrement: 0.05
+  incomePerTapMultiplierMax: 10
+  offlineBonusInitial: 2
+  perTapOfflineMultiplierIncrement: 0.02
+  offlineMultiplierMax: 10
+  multiplierResetSeconds: 3

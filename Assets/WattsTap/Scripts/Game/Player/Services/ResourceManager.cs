@@ -21,7 +21,8 @@ namespace WattsTap.Game.Player
             _resources = resources ?? throw new ArgumentNullException(nameof(resources));
             _maxValues = new Dictionary<ResourceType, long>
             {
-                { ResourceType.Energy, resources.maxEnergy }
+                { ResourceType.Energy, resources.maxEnergy },
+                { ResourceType.Hits, resources.maxHits }
             };
         }
 
@@ -34,6 +35,7 @@ namespace WattsTap.Game.Player
                 ResourceType.Experience => _resources.currentXP,
                 ResourceType.KiloWatt => (long)(_resources.kiloWattTokens * 1000000), // Convert to micro-units
                 ResourceType.Premium => 0, // Not implemented yet
+                ResourceType.Hits => _resources.currentHits,
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, "Unknown resource type")
             };
         }
@@ -157,7 +159,7 @@ namespace WattsTap.Game.Player
         {
             _maxValues[type] = maxValue;
             
-            // Update the underlying data for Energy
+            // Update the underlying data for Energy and Hits
             if (type == ResourceType.Energy)
             {
                 _resources.maxEnergy = (int)maxValue;
@@ -168,6 +170,16 @@ namespace WattsTap.Game.Player
                     var previousValue = _resources.currentEnergy;
                     _resources.currentEnergy = (int)maxValue;
                     OnResourceChanged?.Invoke(ResourceType.Energy, previousValue, maxValue);
+                }
+            }
+            else if (type == ResourceType.Hits)
+            {
+                _resources.maxHits = (int)maxValue;
+                if (_resources.currentHits > maxValue)
+                {
+                    var previousValue = _resources.currentHits;
+                    _resources.currentHits = (int)maxValue;
+                    OnResourceChanged?.Invoke(ResourceType.Hits, previousValue, maxValue);
                 }
             }
         }
@@ -192,10 +204,12 @@ namespace WattsTap.Game.Player
                     // Not implemented yet
                     Debug.LogWarning("[ResourceManager] Premium currency not implemented");
                     break;
+                case ResourceType.Hits:
+                    _resources.currentHits = (int)Math.Max(0, value);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, "Unknown resource type");
             }
         }
     }
 }
-

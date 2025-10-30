@@ -1,7 +1,9 @@
+using UnityEngine;
 using WattsTap.Core;
 using WattsTap.Core.React;
 using WattsTap.Core.UI;
 using WattsTap.Game.Player;
+using WattsTap.Game.Tap.Services;
 
 namespace WattsTap.Game.UI
 {
@@ -12,8 +14,11 @@ namespace WattsTap.Game.UI
         public ReactiveProperty<bool> IsLoading { get; private set; }
         public ReactiveProperty<long> TotalCoins { get; private set; }
         public ReactiveProperty<int> CoinsPerTap { get; private set; }
+        public ReactiveProperty<int> HitsCurrent { get; private set; }
+        public ReactiveProperty<int> HitsMax { get; private set; }
 
         private IPlayerService _playerService;
+        private ITapControllerService _tapController;
 
         public override void Initialize()
         {
@@ -24,18 +29,29 @@ namespace WattsTap.Game.UI
             IsLoading = new ReactiveProperty<bool>(false);
             TotalCoins = new ReactiveProperty<long>(0);
             CoinsPerTap = new ReactiveProperty<int>(1);
+            HitsCurrent = new ReactiveProperty<int>(0);
+            HitsMax = new ReactiveProperty<int>(0);
 
             // Получаем сервис игрока
             _playerService = ServiceLocator.Get<IPlayerService>();
+            _tapController = ServiceLocator.Get<ITapControllerService>();
             
             if (_playerService != null)
             {
-                // Подписываемся на изменения ресурсов
                 _playerService.OnResourcesChanged += OnPlayerResourcesChanged;
                 _playerService.OnPlayerDataChanged += OnPlayerDataChanged;
-                
-                // Инициализируем начальные значения
                 UpdateFromPlayerData();
+            }
+
+            if (_tapController != null)
+            {
+                _tapController.OnHitsChanged += OnHitsChanged;
+                _tapController.OnIncomeMultiplierChanged += OnIncomeMultiplierChanged;
+                // Инициализируем текущие значения хитов
+                HitsCurrent.Value = _tapController.CurrentHits;
+                HitsMax.Value = _tapController.MaxHits;
+                // Инициализируем CoinsPerTap с учётом множителя
+                RecalculateCoinsPerTap();
             }
         }
 
@@ -47,6 +63,8 @@ namespace WattsTap.Game.UI
         private void OnPlayerDataChanged(PlayerData playerData)
         {
             UpdateFromPlayerData();
+            // База дохода за тап могла измениться — пересчитаем отображение
+            RecalculateCoinsPerTap();
         }
 
         private void UpdateFromPlayerData()
@@ -57,10 +75,30 @@ namespace WattsTap.Game.UI
             if (playerData != null)
             {
                 TotalCoins.Value = playerData.resources.watts;
-                CoinsPerTap.Value = (int)playerData.stats.incomePerTap;
+                // CoinsPerTap будет рассчитываться отдельно с учётом множителя
                 PlayerName.Value = playerData.nickname;
                 PlayerLevel.Value = playerData.level;
             }
+        }
+
+        private void OnHitsChanged(int current, int max)
+        {
+            HitsCurrent.Value = current;
+            HitsMax.Value = max;
+        }
+
+        private void OnIncomeMultiplierChanged(float multiplier)
+        {
+            RecalculateCoinsPerTap();
+        }
+
+        private void RecalculateCoinsPerTap()
+        {
+            if (_playerService == null) return;
+            var baseIncome = (int)_playerService.GetPlayerData().stats.incomePerTap;
+            var multiplier = _tapController != null ? _tapController.IncomeMultiplier : 1f;
+            var effective = Mathf.Max(0, Mathf.RoundToInt(baseIncome * multiplier));
+            CoinsPerTap.Value = effective;
         }
 
         public override void Dispose()
@@ -72,11 +110,19 @@ namespace WattsTap.Game.UI
                 _playerService.OnPlayerDataChanged -= OnPlayerDataChanged;
             }
 
+            if (_tapController != null)
+            {
+                _tapController.OnHitsChanged -= OnHitsChanged;
+                _tapController.OnIncomeMultiplierChanged -= OnIncomeMultiplierChanged;
+            }
+
             PlayerName?.Dispose();
             PlayerLevel?.Dispose();
             IsLoading?.Dispose();
             TotalCoins?.Dispose();
             CoinsPerTap?.Dispose();
+            HitsCurrent?.Dispose();
+            HitsMax?.Dispose();
             
             base.Dispose();
         }

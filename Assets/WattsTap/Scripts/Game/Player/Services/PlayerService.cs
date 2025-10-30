@@ -92,12 +92,16 @@ namespace WattsTap.Game.Player
             {
                 Debug.Log("[PlayerService] No saved data found, creating new player");
                 _playerData = new PlayerData();
+                // Ensure base income per tap
+                _playerData.stats.incomePerTap = Math.Max(_playerData.stats.incomePerTap, _resourceConfig.baseIncomePerTap);
             }
             else
             {
                 try
                 {
                     _playerData = JsonUtility.FromJson<PlayerData>(json);
+                    // Ensure base income per tap for existing saves
+                    _playerData.stats.incomePerTap = Math.Max(_playerData.stats.incomePerTap, _resourceConfig.baseIncomePerTap);
                     var offlineIncome = CalculateOfflineIncome();
                     if (offlineIncome > 0)
                     {
@@ -111,6 +115,7 @@ namespace WattsTap.Game.Player
                 {
                     Debug.LogError($"[PlayerService] Failed to load player data: {e.Message}");
                     _playerData = new PlayerData();
+                    _playerData.stats.incomePerTap = Math.Max(_playerData.stats.incomePerTap, _resourceConfig.baseIncomePerTap);
                 }
             }
             OnPlayerDataChanged?.Invoke(_playerData);
@@ -202,11 +207,11 @@ namespace WattsTap.Game.Player
 
         public bool PerformTap()
         {
-            var energyCost = _resourceConfig.energyCostPerTap;
-            if (!_resourceManager.HasEnough(ResourceType.Energy, energyCost)) 
-                return false;
+            // var energyCost = _resourceConfig.energyCostPerTap;
+            // if (!_resourceManager.HasEnough(ResourceType.Energy, energyCost)) 
+            //     return false;
             
-            _resourceManager.SpendResource(ResourceType.Energy, energyCost);
+            //_resourceManager.SpendResource(ResourceType.Energy, energyCost);
             
             var tapIncome = _playerData.stats.incomePerTap + CalculateTotalEquipmentBonus();
             _resourceManager.AddResource(ResourceType.Watts, tapIncome);
