@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using WattsTap.Core;
+using WattsTap.Core.Configs;
 using WattsTap.Scripts.Game.Tap.Data;
 using WattsTap.Game.Player;
 
@@ -46,7 +47,9 @@ namespace WattsTap.Game.Tap.Services
             _playerService = ServiceLocator.Get<IPlayerService>();
 
             // Load config scriptable object if present
-            _config = Resources.Load<TapConfig>("Configs/TapConfig");
+            var configService = ServiceLocator.Get<IConfigService>();
+            _config = configService.GetConfig<TapConfig>( "TapConfig");
+          
             if (_config == null)
             {
                 Debug.LogWarning("[TapControllerService] TapConfig not found, using defaults");

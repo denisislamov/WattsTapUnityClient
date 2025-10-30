@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Configs.UIConfig
   Entries:
   - Id: MainMenu
-    Prefab: {fileID: 9207199259038984544, guid: 5d980fb2dd35949e0a9992574353fb66, type: 3}
+    Prefab: {fileID: 3866579325697092498, guid: d8867f2e926114b458761dc0b8ece6b3, type: 3}

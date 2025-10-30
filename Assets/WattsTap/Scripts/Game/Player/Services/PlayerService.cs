@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using WattsTap.Core;
 
 namespace WattsTap.Game.Player
 {
@@ -34,7 +35,8 @@ namespace WattsTap.Game.Player
             if (IsInitialized) return;
             
             // Load or create default config
-            _resourceConfig = Resources.Load<ResourceConfig>("Configs/ResourceConfig");
+            var configService = ServiceLocator.Get<Core.Configs.IConfigService>();
+            _resourceConfig = configService.GetConfig<ResourceConfig>( "ResourceConfig");
             if (_resourceConfig == null)
             {
                 Debug.LogWarning("[PlayerService] ResourceConfig not found, using defaults");

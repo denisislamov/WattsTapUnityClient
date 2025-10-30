@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using WattsTap.Core.Configs;
 
 namespace WattsTap.Game.Player
 {
@@ -7,7 +8,7 @@ namespace WattsTap.Game.Player
     /// Конфигурация параметров ресурсов
     /// </summary>
     [CreateAssetMenu(fileName = "ResourceConfig", menuName = "WattsTap/Configs/Resource Config")]
-    public class ResourceConfig : ScriptableObject
+    public class ResourceConfig : BaseConfig
     {
         [Header("Energy Settings")]
         [Tooltip("Базовая максимальная энергия")]

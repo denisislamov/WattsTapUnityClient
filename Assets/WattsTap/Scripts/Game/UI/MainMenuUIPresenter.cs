@@ -10,6 +10,12 @@ namespace WattsTap.Game.UI
             Model.PlayerName.OnValueChanged += OnPlayerNameChanged;
             Model.PlayerLevel.OnValueChanged += OnPlayerLevelChanged;
             Model.IsLoading.OnValueChanged += OnLoadingStateChanged;
+            Model.TotalCoins.OnValueChanged += OnTotalCoinsChanged;
+            Model.CoinsPerTap.OnValueChanged += OnCoinsPerTapChanged;
+            
+            // Инициализация начальных значений
+            OnTotalCoinsChanged(Model.TotalCoins.Value);
+            OnCoinsPerTapChanged(Model.CoinsPerTap.Value);
         }
 
         private void OnPlayerNameChanged(string newName)
@@ -27,6 +33,16 @@ namespace WattsTap.Game.UI
             // Здесь можно обновить View или выполнить другую логику
         }
 
+        private void OnTotalCoinsChanged(long totalCoins)
+        {
+            View.UpdateTotalCoins(totalCoins);
+        }
+
+        private void OnCoinsPerTapChanged(int coinsPerTap)
+        {
+            View.UpdateCoinsPerTap(coinsPerTap);
+        }
+
         protected override void OnDispose()
         {
             // Отписка от событий модели
@@ -35,6 +51,8 @@ namespace WattsTap.Game.UI
                 Model.PlayerName.OnValueChanged -= OnPlayerNameChanged;
                 Model.PlayerLevel.OnValueChanged -= OnPlayerLevelChanged;
                 Model.IsLoading.OnValueChanged -= OnLoadingStateChanged;
+                Model.TotalCoins.OnValueChanged -= OnTotalCoinsChanged;
+                Model.CoinsPerTap.OnValueChanged -= OnCoinsPerTapChanged;
             }
         }
     }

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 532a87faaba84e9ba99a55ae2297e206, type: 3}
+  m_Name: ResourceConfig
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.Player.ResourceConfig
+  baseMaxEnergy: 100
+  energyRestoreInterval: 1
+  energyAutoRestore: 1
+  baseXpForNextLevel: 100
+  xpGrowthMultiplier: 1.5
+  baseIncomePerTap: 1
+  xpPerTap: 1
+  energyCostPerTap: 1
+  maxOfflineIncomeHours: 4
+  offlineIncomeMultiplier: 0.5
+  levelUpWattsMultiplier: 100
+  restoreEnergyOnLevelUp: 1
