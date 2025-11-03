@@ -155,48 +155,56 @@
           alert(message);
         });
       };
-      
+
       window.GetTelegramInitDataUnsafeUser = function() {
           var telegramId = '1234567890';
           var telegramUserName = 'TestUser';
           var initData = '';
-          
+
           if (window.Telegram && window.Telegram.WebApp) {
               if (window.Telegram.WebApp.initData) {
                   initData = window.Telegram.WebApp.initData;
-                  alert("initData " + initData); 
-                  
+                  // alert("initData " + initData); 
+
                   // Parse initData string to extract user parameter
                   try {
                       var urlParams = new URLSearchParams(initData);
                       var userParam = urlParams.get('user');
-                      
+
                       if (userParam) {
                           // Decode URL-encoded string and parse JSON
                           var userData = JSON.parse(decodeURIComponent(userParam));
-                          
+
                           if (userData.id) {
                               telegramId = userData.id.toString();
                           }
                           if (userData.username) {
                               telegramUserName = userData.username;
                           }
-                          
+
                           // alert("Parsed - telegramId: " + telegramId + ", telegramUserName: " + telegramUserName);
                       } else {
                           // alert("User parameter not found in initData");
                       }
                   } catch (error) {
-                      alert("Error parsing initData: " + error.message);
+                      // alert("Error parsing initData: " + error.message);
                   }
               }
           } else {
-              alert("Telegram not found, use default id");
+              // alert("Telegram not found, use default id");
           }
 
           MyGameInstance.SendMessage('TelegramService', 'ReceiveUserId', telegramId);
           MyGameInstance.SendMessage('TelegramService', 'ReceiveUserName', telegramUserName);
           MyGameInstance.SendMessage('TelegramService', 'ReceiveInitData', initData);
+
+          // alert("safeAreaInset" + window.Telegram.WebApp.safeAreaInset);
+          var safeAreaToString = window.Telegram.WebApp.safeAreaInset.top.toString() + ',' +
+              window.Telegram.WebApp.safeAreaInset.left.toString() + ',' +
+              window.Telegram.WebApp.safeAreaInset.bottom.toString() + ',' +
+              window.Telegram.WebApp.safeAreaInset.right.toString();
+          // alert("SafeAreaInsets string : " + safeAreaToString);
+          MyGameInstance.SendMessage('TelegramService', 'ReceiveSafeAreaInsets', safeAreaToString);
       }
       
       document.body.appendChild(script);
