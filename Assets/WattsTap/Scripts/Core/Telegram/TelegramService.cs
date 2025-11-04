@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using WattsTap.Constants;
 using WattsTap.Core.Configs;
+using WattsTap.Core.Configs.Telegram;
 
 namespace WattsTap.Core.React
 {
@@ -94,18 +95,11 @@ namespace WattsTap.Core.React
 
             IsInitialized = true;
             
-// #if !UNITY_WEBGL || UNITY_EDITOR
-//             var configService = ServiceLocator.Get<IConfigService>();
-//             TelegramDebugData telegramDebugData =  configService.GetConfig<TelegramDebugData>(ConfigsConstants.HNTelegramDebugData);
-//             
-//             ReceiveUserId(telegramDebugData.UserId);
-//             ReceiveUserName(telegramDebugData.UserName);
-//             ReceiveInitData(telegramDebugData.InitData);
-//             
-//             // ReceiveUserId("999");
-//             // ReceiveUserName("NonWebGLTestUser");
-//             // ReceiveInitData("query_id=AAFDkQALAAAAAEORAAv6nX_C&user=%7B%22id%22%3A184586563%2C%22first_name%22%3A%22Denis%22%2C%22last_name%22%3A%22Islamov%22%2C%22username%22%3A%22disadisa%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FYUYvTC5gL9orROJT1oLjfIGG2X_Sy9QNBRgf0tGd8Pk.svg%22%7D&auth_date=1755257781&signature=Gqv7chbFahKG0fL7ys88iyYAs5tRGObWon3u1q-oIqP_ME5kDllk_Ew02S6ybxjZIJiqNKKwaybEsOx2NW9PAg&hash=be222a45ec08bfebc1061ba4890db9f74ccd6fdc101cc44243694e92bdd95c17");
-// #endif
+#if !UNITY_WEBGL || UNITY_EDITOR
+             var configService = ServiceLocator.Get<IConfigService>();
+             TelegramDebugData telegramDebugData = configService.GetConfig<TelegramDebugData>(ConfigsConstants.TelegramDebugData);
+             ReceiveInitData(telegramDebugData.InitData);
+#endif
         }
         
         public void Shutdown()
