@@ -86,6 +86,50 @@ namespace WattsTap.Core.React
             return user?.id ?? -1;
         }
         
+        /// <summary>
+        /// Parses Telegram initData and extracts the User object
+        /// Example: query_id=AAE71KpqAwAAADvUqmrbRN4l&user=%7B%22id%22%3A8232031291%2C%22first_name%22%3A%22Islamov%22...
+        /// </summary>
+        /// <param name="initData">The raw initData string from Telegram Web App</param>
+        /// <returns>Parsed User object or null if parsing fails</returns>
+        public static User ParseUserFromInitData(string initData)
+        {
+            if (string.IsNullOrEmpty(initData))
+            {
+                Debug.LogWarning("InitData is null or empty");
+                return null;
+            }
+
+            var match = Regex.Match(initData, @"user=([^&]+)");
+
+            if (!match.Success)
+            {
+                Debug.LogWarning("Failed to find user parameter in initData");
+                return null;
+            }
+
+            var userJsonEncoded = match.Groups[1].Value;
+            var userJson = Uri.UnescapeDataString(userJsonEncoded);
+
+            try
+            {
+                var user = JsonUtility.FromJson<User>(userJson);
+                if (user == null)
+                {
+                    Debug.LogWarning("Failed to deserialize user JSON");
+                    return null;
+                }
+                
+                Debug.Log($"Successfully parsed user from initData: {user}");
+                return user;
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Error parsing user from initData: {ex.Message}");
+                return null;
+            }
+        }
+        
         public void Initialize()
         {
             if (IsInitialized)
@@ -209,3 +253,4 @@ namespace WattsTap.Core.React
 //         }
     }
 }
+

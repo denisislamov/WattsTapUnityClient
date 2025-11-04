@@ -4,9 +4,9 @@ namespace WattsTap.Constants
     {
         public const string UIConfig = "UIConfig";
 #if !RELEASE
-        public const string TelegramDebugData = "HNTelegramDebugDataDev";
+        public const string TelegramDebugData = "TelegramDebugDataDev";
 #else
-        public const string TelegramDebugData = "HNTelegramDebugDataRelease";
+        public const string TelegramDebugData = "TelegramDebugDataRelease";
 #endif
     }
 }

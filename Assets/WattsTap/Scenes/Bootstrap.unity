@@ -418,7 +418,7 @@ MonoBehaviour:
   _stageConfigService: {fileID: 1569553359}
   _uiRoot: {fileID: 1700051878}
   _overlayRoot: {fileID: 427421229}
-  _telegramService: {fileID: 0}
+  _telegramService: {fileID: 1979693432}
 --- !u!114 &1569553359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -435,6 +435,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: de3dd1709b1434799ac1557a06dec399, type: 2}
   - {fileID: 11400000, guid: 18f4833834e40490facd4549582d93ad, type: 2}
   - {fileID: 11400000, guid: 1bbaa4ff3571c45739ec1d4db16d1d28, type: 2}
+  - {fileID: 11400000, guid: 43b9f3f9d9e644b9cb5ca6b486720d58, type: 2}
 --- !u!1 &1700051874
 GameObject:
   m_ObjectHideFlags: 0

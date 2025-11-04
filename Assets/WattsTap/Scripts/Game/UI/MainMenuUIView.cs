@@ -6,6 +6,9 @@ namespace WattsTap.Game.UI
 {
     public class MainMenuUIView : UIBaseView<MainMenuUIPresenter>
     {
+        [Header("User")]
+        [SerializeField] private Text _userName;
+        
         [Header("Currency Display")]
         [SerializeField] private Text totalCoinsText;
         [SerializeField] private Text coinsPerTapText;
@@ -34,6 +37,14 @@ namespace WattsTap.Game.UI
             if (hitsText != null)
             {
                 hitsText.text = $"{current}/{max}";
+            }
+        }
+        
+        public void UpdateUserName(string userName)
+        {
+            if (_userName != null)
+            {
+                _userName.text = userName;
             }
         }
     }

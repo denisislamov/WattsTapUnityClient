@@ -46,7 +46,6 @@ namespace WattsTap.Core
         private void OnPostInitialize()
         {
             var uiService = ServiceLocator.Get<IUIService>();
-            uiService.Open(UIConstants.MainMenu);
             
             if (string.IsNullOrEmpty(_telegramService.InitData))
             {
@@ -56,21 +55,31 @@ namespace WattsTap.Core
             {
                 TelegramServiceOnReceivedInitData(_telegramService.InitData);
             }
+            
+            uiService.Open(UIConstants.MainMenu);
         }
         
         private void TelegramServiceOnReceivedInitData(string initData)
         {
-            var nonAuthUser = new TelegramService.User();
-            if (!long.TryParse(_telegramService.Id, out nonAuthUser.id))
+            var user = TelegramService.ParseUserFromInitData(initData);
+            
+            if (user == null)
             {
-                nonAuthUser.id = -1;
+                Debug.LogWarning("Failed to parse user from initData, creating fallback user");
+                user = new TelegramService.User();
+                
+                if (!long.TryParse(_telegramService.Id, out user.id))
+                {
+                    user.id = -1;
+                }
+                
+                user.username = _telegramService.UserName;
             }
             
-            nonAuthUser.username = _telegramService.UserName;
-            _sharedDataService.SetData(SharedDataConstants.TelegramUser, nonAuthUser);
-            _sharedDataService.SetData(SharedDataConstants.TelegramChatId, nonAuthUser.id);
+            _sharedDataService.SetData(SharedDataConstants.TelegramUser, user);
+            _sharedDataService.SetData(SharedDataConstants.TelegramChatId, user.id);
             
-            Debug.Log($"Telegram non auth user: {nonAuthUser}");
+            Debug.Log($"Telegram user: {user}");
         }
     }
 }

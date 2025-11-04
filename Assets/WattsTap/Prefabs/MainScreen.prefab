@@ -4087,6 +4087,7 @@ GameObject:
   - component: {fileID: 7464527492354977753}
   - component: {fileID: 1389904445459627255}
   - component: {fileID: 302923663965545961}
+  - component: {fileID: 682962176018097781}
   m_Layer: 5
   m_Name: MainScreen
   m_TagString: Untagged
@@ -4192,9 +4193,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b92d5c204c6ac4f40b30e34242ff9e7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.MainMenuUIView
+  _userName: {fileID: 3456336875582191332}
   totalCoinsText: {fileID: 8644820641217333488}
   coinsPerTapText: {fileID: 3245608619311401651}
   hitsText: {fileID: 4142992201878574750}
+--- !u!114 &682962176018097781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3866579325697092498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff211a02dd9744749c8265d1789d6041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.React.TelegramSafeZoneApplier
+  _sides: 3
+  _applyMode: 1
+  _targetRectTransform: {fileID: 3688093715683534449}
 --- !u!1 &3959247620621938207
 GameObject:
   m_ObjectHideFlags: 0

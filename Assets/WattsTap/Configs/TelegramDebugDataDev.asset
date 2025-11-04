@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 767b8bf55586d4df1883e4986b6acaff, type: 3}
+  m_Name: TelegramDebugDataDev
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Configs.Telegram.TelegramDebugData
+  Entries:
+  - UserId: 1
+    UserName: DisaDisa
+    InitData: query_id=AAFDkQALAAAAAEORAAv6nX_C&user=%7B%22id%22%3A184586563%2C%22first_name%22%3A%22Denis%22%2C%22last_name%22%3A%22Islamov%22%2C%22username%22%3A%22disadisa%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2FYUYvTC5gL9orROJT1oLjfIGG2X_Sy9QNBRgf0tGd8Pk.svg%22%7D&auth_date=1755257781&signature=Gqv7chbFahKG0fL7ys88iyYAs5tRGObWon3u1q-oIqP_ME5kDllk_Ew02S6ybxjZIJiqNKKwaybEsOx2NW9PAg&hash=be222a45ec08bfebc1061ba4890db9f74ccd6fdc101cc44243694e92bdd95c17
+  - UserId: 2
+    UserName: Islamov
+    InitData: query_id=AAE71KpqAwAAADvUqmrbRN4l&user=%7B%22id%22%3A8232031291%2C%22first_name%22%3A%22Islamov%22%2C%22last_name%22%3A%22Denis%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F9dA5cn1869tQrg0rQ0iFFT8ksvPUDsR_KsxQiwVIsNfDSod1Lju2ueO9wKG91IyF.svg%22%7D&auth_date=1755513823&signature=w15e8Pfyef6ZSBtkB0nQcrTA5HtJT9VNSLOVHHZV1jHWI7yQ0hBf-NXYQ6PrMXR2J-DkQ1PslepVV1xOVDTSBA&hash=5e71a81c335626aad48915366306483101e622fee8e08d426d01f2890201b49f
+  EditorIndex: 0
+  UsageIndex: 1

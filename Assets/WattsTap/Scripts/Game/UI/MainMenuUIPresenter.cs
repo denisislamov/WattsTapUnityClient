@@ -1,3 +1,6 @@
+using WattsTap.Constants;
+using WattsTap.Core;
+using WattsTap.Core.React;
 using WattsTap.Core.UI;
 
 namespace WattsTap.Game.UI
@@ -19,11 +22,17 @@ namespace WattsTap.Game.UI
             OnTotalCoinsChanged(Model.TotalCoins.Value);
             OnCoinsPerTapChanged(Model.CoinsPerTap.Value);
             View.UpdateHits(Model.HitsCurrent.Value, Model.HitsMax.Value);
+            
+            var sharedDataService = ServiceLocator.Get<ISharedDataService>();
+            if (sharedDataService.TryGetData(SharedDataConstants.TelegramUser, out TelegramService.User telegramUser))
+            {
+                Model.PlayerName.Value = telegramUser.first_name + " " + telegramUser.last_name + " " + telegramUser.username;
+            }
         }
 
         private void OnPlayerNameChanged(string newName)
         {
-            // Здесь можно обновить View или выполнить другую логику
+            View.UpdateUserName(newName);
         }
 
         private void OnPlayerLevelChanged(int newLevel)
