@@ -8,6 +8,7 @@ namespace WattsTap.Game.UI
     {
         [Header("User")]
         [SerializeField] private Text _userName;
+        [SerializeField] private Image _userAvatar;
         
         [Header("Currency Display")]
         [SerializeField] private Text totalCoinsText;
@@ -45,6 +46,14 @@ namespace WattsTap.Game.UI
             if (_userName != null)
             {
                 _userName.text = userName;
+            }
+        }
+        
+        public void UpdateAvatar(Sprite avatarSprite)
+        {
+            if (_userAvatar != null && avatarSprite != null)
+            {
+                _userAvatar.sprite = avatarSprite;
             }
         }
     }

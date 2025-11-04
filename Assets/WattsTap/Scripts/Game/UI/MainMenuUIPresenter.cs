@@ -1,3 +1,8 @@
+using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.Networking;
 using WattsTap.Constants;
 using WattsTap.Core;
 using WattsTap.Core.React;
@@ -7,6 +12,8 @@ namespace WattsTap.Game.UI
 {
     public class MainMenuUIPresenter : UIBasePresenter<MainMenuUIView, MainMenuUIModel>
     {
+        private CancellationTokenSource _avatarLoadCts;
+
         protected override void OnInit()
         {
             // Подписка на изменения в модели
@@ -27,6 +34,75 @@ namespace WattsTap.Game.UI
             if (sharedDataService.TryGetData(SharedDataConstants.TelegramUser, out TelegramService.User telegramUser))
             {
                 Model.PlayerName.Value = telegramUser.first_name + " " + telegramUser.last_name + " " + telegramUser.username;
+                
+                // Загрузка аватара если присутствует URL
+                // if (!string.IsNullOrEmpty(telegramUser.photo_url))
+                // {
+                //     _avatarLoadCts = new CancellationTokenSource();
+                //     LoadAvatarAsync(telegramUser.photo_url, _avatarLoadCts.Token).Forget();
+                // }
+            }
+        }
+
+        /// <summary>
+        /// Асинхронная загрузка аватара пользователя из URL
+        /// </summary>
+        /// <param name="url">URL изображения аватара</param>
+        /// <param name="cancellationToken">Токен отмены операции</param>
+        private async UniTask LoadAvatarAsync(string url, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrEmpty(url))
+            {
+                Debug.LogWarning("Avatar URL is empty");
+                return;
+            }
+
+            Debug.Log($"Loading avatar from URL: {url}");
+
+            try
+            {
+                using (UnityWebRequest request = UnityWebRequestTexture.GetTexture(url))
+                {
+                    await request.SendWebRequest().WithCancellation(cancellationToken);
+
+#if UNITY_2020_1_OR_NEWER
+                    if (request.result == UnityWebRequest.Result.Success)
+#else
+                    if (!request.isNetworkError && !request.isHttpError)
+#endif
+                    {
+                        Texture2D texture = DownloadHandlerTexture.GetContent(request);
+                        
+                        if (texture != null)
+                        {
+                            // Создаем спрайт из загруженной текстуры
+                            Sprite avatarSprite = Sprite.Create(
+                                texture,
+                                new Rect(0, 0, texture.width, texture.height),
+                                new Vector2(0.5f, 0.5f)
+                            );
+                            
+                            View.UpdateAvatar(avatarSprite);
+                            Debug.Log("Avatar loaded successfully");
+                        }
+                        else
+                        {
+                            Debug.LogError("Failed to extract texture from download");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError($"Failed to load avatar: {request.error}");
+                    }
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                Debug.Log("Avatar loading was cancelled");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Error loading avatar: {ex.Message}");
             }
         }
 
@@ -62,6 +138,11 @@ namespace WattsTap.Game.UI
 
         protected override void OnDispose()
         {
+            // Отмена загрузки аватара при удалении
+            _avatarLoadCts?.Cancel();
+            _avatarLoadCts?.Dispose();
+            _avatarLoadCts = null;
+
             // Отписка от событий модели
             if (Model != null)
             {

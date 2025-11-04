@@ -2,7 +2,8 @@
     "name": "WattsTapCore",
     "rootNamespace": "",
     "references": [
-        "GUID:456458b2ee6bb4919b59eeb05198fb88"
+        "GUID:456458b2ee6bb4919b59eeb05198fb88",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
