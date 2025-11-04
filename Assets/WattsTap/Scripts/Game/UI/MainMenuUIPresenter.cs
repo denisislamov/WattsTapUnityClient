@@ -13,6 +13,7 @@ namespace WattsTap.Game.UI
     public class MainMenuUIPresenter : UIBasePresenter<MainMenuUIView, MainMenuUIModel>
     {
         private CancellationTokenSource _avatarLoadCts;
+        private ISharedDataService _sharedDataService;
 
         protected override void OnInit()
         {
@@ -30,8 +31,8 @@ namespace WattsTap.Game.UI
             OnCoinsPerTapChanged(Model.CoinsPerTap.Value);
             View.UpdateHits(Model.HitsCurrent.Value, Model.HitsMax.Value);
             
-            var sharedDataService = ServiceLocator.Get<ISharedDataService>();
-            if (sharedDataService.TryGetData(SharedDataConstants.TelegramUser, out TelegramService.User telegramUser))
+            _sharedDataService = ServiceLocator.Get<ISharedDataService>();
+            if (_sharedDataService.TryGetData(SharedDataConstants.TelegramUser, out TelegramService.User telegramUser))
             {
                 Model.PlayerName.Value = telegramUser.first_name + " " + telegramUser.last_name + " " + telegramUser.username;
                 
@@ -41,6 +42,21 @@ namespace WattsTap.Game.UI
                 //     _avatarLoadCts = new CancellationTokenSource();
                 //     LoadAvatarAsync(telegramUser.photo_url, _avatarLoadCts.Token).Forget();
                 // }
+            }
+            
+            _sharedDataService.OnDataUpdated += OnSharedDataUpdated;
+        }
+
+        private void OnSharedDataUpdated(string name)
+        {
+            if (name != SharedDataConstants.TelegramUser)
+            {
+                return;
+            }
+            
+            if (_sharedDataService.TryGetData(SharedDataConstants.TelegramUser, out TelegramService.User telegramUser))
+            {
+                Model.PlayerName.Value = telegramUser.first_name + " " + telegramUser.last_name + " " + telegramUser.username;
             }
         }
 

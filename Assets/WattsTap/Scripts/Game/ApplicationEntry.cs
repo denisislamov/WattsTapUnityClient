@@ -79,7 +79,7 @@ namespace WattsTap.Core
             _sharedDataService.SetData(SharedDataConstants.TelegramUser, user);
             _sharedDataService.SetData(SharedDataConstants.TelegramChatId, user.id);
             
-            Debug.Log($"Telegram user: {user}");
+            Debug.Log($"Telegram user: {user.first_name} {user.last_name} (@{user.username}), ID: {user.id}");
         }
     }
 }
