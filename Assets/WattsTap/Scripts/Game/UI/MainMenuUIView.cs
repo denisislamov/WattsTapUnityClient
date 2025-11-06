@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using WattsTap.Core.UI;
@@ -7,15 +8,16 @@ namespace WattsTap.Game.UI
     public class MainMenuUIView : UIBaseView<MainMenuUIPresenter>
     {
         [Header("User")]
-        [SerializeField] private Text _userName;
+        [SerializeField] private TMP_Text _userName;
         [SerializeField] private Image _userAvatar;
         
         [Header("Currency Display")]
-        [SerializeField] private Text totalCoinsText;
-        [SerializeField] private Text coinsPerTapText;
+        [SerializeField] private TMP_Text totalCoinsText;
+        [SerializeField] private TMP_Text coinsPerTapText;
 
         [Header("Hits Display")]
-        [SerializeField] private Text hitsText;
+        [SerializeField] private TMP_Text currentHitsText;
+        [SerializeField] private TMP_Text maxMitsText;
 
         public void UpdateTotalCoins(long totalCoins)
         {
@@ -35,9 +37,14 @@ namespace WattsTap.Game.UI
 
         public void UpdateHits(int current, int max)
         {
-            if (hitsText != null)
+            if (currentHitsText != null)
             {
-                hitsText.text = $"{current}/{max}";
+                currentHitsText.text = $"{current}";
+            }
+            
+            if (maxMitsText != null)
+            {
+                maxMitsText.text = $"{max}";
             }
         }
         
