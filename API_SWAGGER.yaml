@@ -1,0 +1,1425 @@
+openapi: 3.0.3
+info:
+  title: WattsTap REST API
+  description: |
+    Server-side REST API для tap-to-earn игры WattsTap в Telegram Mini App.
+    
+    ## Архитектура
+    - **Server Authoritative**: вся игровая логика на сервере
+    - **Batch Processing**: тапы отправляются пакетами для оптимизации
+    - **Anti-Cheat**: защита от читерства через валидацию и rate limiting
+    
+    ## Аутентификация
+    Используется Telegram WebApp аутентификация с JWT токенами.
+  version: 1.0.0
+  contact:
+    email: api-support@wattstap.com
+  license:
+    name: Proprietary
+servers:
+  - url: https://api.wattstap.com/v1
+    description: Production сервер
+  - url: https://api-staging.wattstap.com/v1
+    description: Staging сервер
+  - url: https://api-dev.wattstap.com/v1
+    description: Development сервер
+
+tags:
+  - name: Authentication
+    description: Аутентификация и авторизация
+  - name: Player
+    description: Управление данными игрока
+  - name: Gameplay
+    description: Основной игровой процесс (тапы, синхронизация)
+  - name: Resources
+    description: Управление ресурсами и бонусами
+  - name: Upgrades
+    description: Система улучшений
+  - name: Inventory
+    description: Инвентарь и предметы
+  - name: Social
+    description: Социальные функции и рефералы
+  - name: Tournaments
+    description: Турниры и соревнования
+  - name: Shop
+    description: Внутриигровой магазин
+  - name: Wallet
+    description: Интеграция с TON кошельками
+
+security:
+  - BearerAuth: []
+
+paths:
+  /auth/telegram:
+    post:
+      tags:
+        - Authentication
+      summary: Аутентификация через Telegram WebApp
+      description: Валидирует initData от Telegram и возвращает JWT токен
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TelegramAuthRequest'
+      responses:
+        '200':
+          description: Успешная аутентификация
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/AuthResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+
+  /player/me:
+    get:
+      tags:
+        - Player
+      summary: Получить данные текущего игрока
+      description: Возвращает полный профиль игрока со всеми данными
+      responses:
+        '200':
+          description: Данные игрока
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/PlayerData'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    
+    patch:
+      tags:
+        - Player
+      summary: Обновить профиль игрока
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nickname:
+                  type: string
+                  minLength: 3
+                  maxLength: 20
+                avatarUrl:
+                  type: string
+                  format: uri
+      responses:
+        '200':
+          description: Профиль обновлён
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/PlayerData'
+
+  /player/resources:
+    get:
+      tags:
+        - Player
+        - Resources
+      summary: Получить ресурсы игрока
+      description: Легковесный эндпоинт для получения только ресурсов
+      responses:
+        '200':
+          description: Ресурсы игрока
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/PlayerResources'
+
+  /gameplay/tap-batch:
+    post:
+      tags:
+        - Gameplay
+      summary: Отправить пакет тапов
+      description: |
+        **Основной эндпоинт для игрового процесса**
+        
+        Клиент накапливает тапы и отправляет их пакетами (5-10 тапов).
+        Сервер валидирует:
+        - Временные метки (±5 сек от серверного времени)
+        - Физическую возможность тапов (макс 10/сек)
+        - Доступность ударов (currentHits)
+        - Античит проверки
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TapBatchRequest'
+      responses:
+        '200':
+          description: Тапы обработаны
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/TapBatchResponse'
+                      antiCheat:
+                        $ref: '#/components/schemas/AntiCheatInfo'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+
+  /gameplay/sync:
+    post:
+      tags:
+        - Gameplay
+      summary: Синхронизировать состояние игрока
+      description: Используется при переподключении или восстановлении сессии
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                lastKnownServerTime:
+                  type: string
+                  format: date-time
+                clientTime:
+                  type: integer
+                  format: int64
+                  description: Unix timestamp в миллисекундах
+      responses:
+        '200':
+          description: Состояние синхронизировано
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          resources:
+                            $ref: '#/components/schemas/PlayerResources'
+                          offlineRewards:
+                            $ref: '#/components/schemas/OfflineRewards'
+                          hitsRecovered:
+                            type: integer
+
+  /player/claim-offline-bonus:
+    post:
+      tags:
+        - Resources
+      summary: Получить оффлайн награды
+      description: Начисляет пассивный доход за время оффлайн (макс. 4 часа)
+      responses:
+        '200':
+          description: Награды получены
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '#/components/schemas/OfflineRewards'
+                          - type: object
+                            properties:
+                              resources:
+                                $ref: '#/components/schemas/PlayerResources'
+
+  /player/claim-daily-bonus:
+    post:
+      tags:
+        - Resources
+      summary: Получить ежедневный бонус
+      description: Ежедневная награда с системой streak (дней подряд)
+      responses:
+        '200':
+          description: Бонус получен
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          streakDay:
+                            type: integer
+                          rewards:
+                            $ref: '#/components/schemas/Rewards'
+                          nextBonusAvailableAt:
+                            type: string
+                            format: date-time
+                          resources:
+                            $ref: '#/components/schemas/PlayerResources'
+        '400':
+          description: Бонус уже получен сегодня
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /upgrades/available:
+    get:
+      tags:
+        - Upgrades
+      summary: Получить доступные улучшения
+      responses:
+        '200':
+          description: Список улучшений
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          upgrades:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Upgrade'
+
+  /upgrades/purchase:
+    post:
+      tags:
+        - Upgrades
+      summary: Купить улучшение
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - upgradeId
+              properties:
+                upgradeId:
+                  type: string
+      responses:
+        '200':
+          description: Улучшение куплено
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          upgrade:
+                            type: object
+                            properties:
+                              upgradeId:
+                                type: string
+                              newLevel:
+                                type: integer
+                              costPaid:
+                                type: integer
+                                format: int64
+                          resources:
+                            $ref: '#/components/schemas/PlayerResources'
+                          stats:
+                            type: object
+        '400':
+          description: Недостаточно ресурсов или невыполнены требования
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /inventory:
+    get:
+      tags:
+        - Inventory
+      summary: Получить инвентарь игрока
+      responses:
+        '200':
+          description: Инвентарь игрока
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          equipped:
+                            type: object
+                            properties:
+                              weapon:
+                                $ref: '#/components/schemas/InventoryItem'
+                              helmet:
+                                $ref: '#/components/schemas/InventoryItem'
+                              armor:
+                                $ref: '#/components/schemas/InventoryItem'
+                              boots:
+                                $ref: '#/components/schemas/InventoryItem'
+                          items:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/InventoryItem'
+                          totalSlots:
+                            type: integer
+                          usedSlots:
+                            type: integer
+
+  /inventory/equip:
+    post:
+      tags:
+        - Inventory
+      summary: Экипировать предмет
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - itemId
+              properties:
+                itemId:
+                  type: string
+      responses:
+        '200':
+          description: Предмет экипирован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /inventory/merge:
+    post:
+      tags:
+        - Inventory
+      summary: Объединить предметы (мерж)
+      description: Система мержа - объединение нескольких предметов в один более редкий
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - sourceItemIds
+              properties:
+                sourceItemIds:
+                  type: array
+                  items:
+                    type: string
+                  minItems: 2
+      responses:
+        '200':
+          description: Предметы объединены
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          resultItem:
+                            $ref: '#/components/schemas/InventoryItem'
+                          consumedItems:
+                            type: array
+                            items:
+                              type: string
+
+  /inventory/upgrade-item:
+    post:
+      tags:
+        - Inventory
+      summary: Улучшить предмет
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - itemId
+                - costInWatts
+              properties:
+                itemId:
+                  type: string
+                costInWatts:
+                  type: integer
+                  format: int64
+      responses:
+        '200':
+          description: Предмет улучшен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /inventory/sell:
+    post:
+      tags:
+        - Inventory
+      summary: Продать предмет
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - itemId
+              properties:
+                itemId:
+                  type: string
+      responses:
+        '200':
+          description: Предмет продан
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          wattsEarned:
+                            type: integer
+                            format: int64
+                          resources:
+                            $ref: '#/components/schemas/PlayerResources'
+
+  /social/friends:
+    get:
+      tags:
+        - Social
+      summary: Получить список друзей
+      responses:
+        '200':
+          description: Список друзей
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          friends:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Friend'
+                          totalFriends:
+                            type: integer
+                          totalBonusEarned:
+                            type: integer
+                            format: int64
+
+  /social/invite:
+    post:
+      tags:
+        - Social
+      summary: Создать реферальную ссылку
+      responses:
+        '200':
+          description: Реферальная ссылка создана
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          referralCode:
+                            type: string
+                          inviteLink:
+                            type: string
+                            format: uri
+                          bonusPerFriend:
+                            type: integer
+
+  /social/leaderboard:
+    get:
+      tags:
+        - Social
+      summary: Получить таблицу лидеров
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [global, friends, tournament]
+            default: global
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+            minimum: 1
+            maximum: 500
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+      responses:
+        '200':
+          description: Таблица лидеров
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                          entries:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/LeaderboardEntry'
+                          yourRank:
+                            type: integer
+                          totalPlayers:
+                            type: integer
+
+  /tournaments/active:
+    get:
+      tags:
+        - Tournaments
+      summary: Получить активные турниры
+      responses:
+        '200':
+          description: Список активных турниров
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          tournaments:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Tournament'
+
+  /tournaments/{tournamentId}/leaderboard:
+    get:
+      tags:
+        - Tournaments
+      summary: Таблица лидеров турнира
+      parameters:
+        - name: tournamentId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: Таблица лидеров турнира
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          entries:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/LeaderboardEntry'
+
+  /shop/items:
+    get:
+      tags:
+        - Shop
+      summary: Получить товары магазина
+      responses:
+        '200':
+          description: Список товаров
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          categories:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/ShopCategory'
+
+  /shop/purchase:
+    post:
+      tags:
+        - Shop
+      summary: Купить товар
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - itemId
+                - quantity
+                - currency
+              properties:
+                itemId:
+                  type: string
+                quantity:
+                  type: integer
+                  minimum: 1
+                currency:
+                  type: string
+                  enum: [watts, kiloWattTokens]
+      responses:
+        '200':
+          description: Покупка совершена
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          purchase:
+                            type: object
+                            properties:
+                              itemId:
+                                type: string
+                              quantity:
+                                type: integer
+                              totalCost:
+                                type: integer
+                                format: int64
+                          rewards:
+                            type: array
+                            items:
+                              type: object
+                          resources:
+                            $ref: '#/components/schemas/PlayerResources'
+
+  /wallet/connect:
+    post:
+      tags:
+        - Wallet
+      summary: Подключить TON кошелёк
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - walletAddress
+                - proof
+              properties:
+                walletAddress:
+                  type: string
+                  description: TON wallet address
+                proof:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: integer
+                      format: int64
+                    domain:
+                      type: string
+                    signature:
+                      type: string
+      responses:
+        '200':
+          description: Кошелёк подключен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+
+  /wallet/withdraw:
+    post:
+      tags:
+        - Wallet
+      summary: Вывести KiloWatt токены
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - amount
+                - walletAddress
+              properties:
+                amount:
+                  type: string
+                  description: Количество токенов (decimal string)
+                  example: "100.50"
+                walletAddress:
+                  type: string
+      responses:
+        '200':
+          description: Вывод инициирован
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          transactionId:
+                            type: string
+                          status:
+                            type: string
+                            enum: [pending, processing, completed, failed]
+                          estimatedTime:
+                            type: integer
+                            description: Estimated time in seconds
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT токен, полученный через /auth/telegram
+
+  schemas:
+    # Authentication
+    TelegramAuthRequest:
+      type: object
+      required:
+        - initData
+      properties:
+        initData:
+          type: string
+          description: initDataRaw от Telegram WebApp SDK
+        initDataUnsafe:
+          type: object
+          description: Parsed initData для удобства
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT токен
+        expiresIn:
+          type: integer
+          description: Время жизни токена в секундах
+        player:
+          type: object
+          properties:
+            playerId:
+              type: string
+              format: uuid
+            nickname:
+              type: string
+            level:
+              type: integer
+            isNewPlayer:
+              type: boolean
+
+    # Player Data
+    PlayerData:
+      type: object
+      properties:
+        playerId:
+          type: string
+          format: uuid
+        nickname:
+          type: string
+        level:
+          type: integer
+        avatarUrl:
+          type: string
+          format: uri
+        telegramUserId:
+          type: integer
+          format: int64
+        tonWalletAddress:
+          type: string
+          nullable: true
+        resources:
+          $ref: '#/components/schemas/PlayerResources'
+        stats:
+          $ref: '#/components/schemas/PlayerStats'
+        inventory:
+          $ref: '#/components/schemas/InventoryData'
+        dailyLoginStreak:
+          type: integer
+        lastDailyBonusDate:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    PlayerResources:
+      type: object
+      properties:
+        watts:
+          type: integer
+          format: int64
+          description: Основная валюта
+        currentEnergy:
+          type: integer
+          description: Текущая энергия
+        maxEnergy:
+          type: integer
+          description: Максимальная энергия
+        currentXP:
+          type: integer
+          format: int64
+          description: Текущий опыт
+        xpToNextLevel:
+          type: integer
+          format: int64
+          description: Опыт до следующего уровня
+        kiloWattTokens:
+          type: string
+          description: KiloWatt токены (decimal)
+          example: "125.50"
+        currentHits:
+          type: integer
+          description: Текущие доступные удары
+        maxHits:
+          type: integer
+          description: Максимальное количество ударов
+
+    PlayerStats:
+      type: object
+      properties:
+        totalTaps:
+          type: integer
+          format: int64
+        totalPlayTimeSeconds:
+          type: integer
+          format: int64
+        incomePerHour:
+          type: integer
+          format: int64
+        incomePerTap:
+          type: integer
+          format: int64
+        friendsCount:
+          type: integer
+        upgradesPurchased:
+          type: integer
+        chestsOpened:
+          type: integer
+        tournamentRank:
+          type: integer
+          nullable: true
+        bestTournamentRank:
+          type: integer
+          nullable: true
+        lastLoginTime:
+          type: string
+          format: date-time
+
+    InventoryData:
+      type: object
+      properties:
+        equippedWeaponId:
+          type: string
+          nullable: true
+        equippedHelmetId:
+          type: string
+          nullable: true
+        equippedArmorId:
+          type: string
+          nullable: true
+        equippedBootsId:
+          type: string
+          nullable: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryItem'
+
+    InventoryItem:
+      type: object
+      properties:
+        itemId:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [weapon, helmet, armor, boots]
+        rarity:
+          type: string
+          enum: [common, uncommon, rare, epic, legendary]
+        level:
+          type: integer
+        tapIncomeBonus:
+          type: integer
+          format: int64
+        passiveIncomeBonus:
+          type: integer
+          format: int64
+        energyBonus:
+          type: integer
+        isEquipped:
+          type: boolean
+
+    # Gameplay
+    TapBatchRequest:
+      type: object
+      required:
+        - taps
+        - clientTime
+        - sessionId
+      properties:
+        taps:
+          type: array
+          items:
+            type: object
+            properties:
+              clientTimestamp:
+                type: integer
+                format: int64
+                description: Unix timestamp в миллисекундах
+              screenPosition:
+                type: object
+                properties:
+                  x:
+                    type: number
+                    format: float
+                  y:
+                    type: number
+                    format: float
+          minItems: 1
+          maxItems: 20
+        clientTime:
+          type: integer
+          format: int64
+          description: Текущее время клиента (Unix timestamp ms)
+        sessionId:
+          type: string
+          description: ID сессии клиента
+
+    TapBatchResponse:
+      type: object
+      properties:
+        validTapsCount:
+          type: integer
+          description: Количество валидных тапов
+        invalidTapsCount:
+          type: integer
+          description: Количество невалидных тапов
+        wattsEarned:
+          type: integer
+          format: int64
+          description: Заработано Watts
+        xpEarned:
+          type: integer
+          format: int64
+          description: Получено опыта
+        resources:
+          $ref: '#/components/schemas/PlayerResources'
+        effects:
+          type: array
+          items:
+            type: object
+            description: Визуальные эффекты для клиента
+            properties:
+              type:
+                type: string
+                enum: [tap_success, combo, critical, level_up]
+              position:
+                type: object
+                properties:
+                  x:
+                    type: number
+                  y:
+                    type: number
+              value:
+                type: number
+              multiplier:
+                type: number
+        levelUp:
+          type: object
+          nullable: true
+          description: Информация о повышении уровня
+          properties:
+            newLevel:
+              type: integer
+            rewards:
+              $ref: '#/components/schemas/Rewards'
+
+    AntiCheatInfo:
+      type: object
+      properties:
+        flagged:
+          type: boolean
+          description: Помечено ли действие как подозрительное
+        trustScore:
+          type: number
+          format: float
+          description: Уровень доверия игроку (0.0 - 1.0)
+        warnings:
+          type: array
+          items:
+            type: string
+
+    # Resources
+    OfflineRewards:
+      type: object
+      properties:
+        wattsEarned:
+          type: integer
+          format: int64
+        offlineDuration:
+          type: integer
+          description: Время оффлайн в секундах
+        multiplier:
+          type: number
+          format: float
+          description: Применённый множитель
+        maxDuration:
+          type: integer
+          description: Максимальное время оффлайн бонуса (секунды)
+
+    Rewards:
+      type: object
+      properties:
+        watts:
+          type: integer
+          format: int64
+        xp:
+          type: integer
+          format: int64
+        kiloWattTokens:
+          type: string
+          nullable: true
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryItem'
+
+    # Upgrades
+    Upgrade:
+      type: object
+      properties:
+        upgradeId:
+          type: string
+        category:
+          type: string
+          enum: [income, capacity, recovery, passive]
+        name:
+          type: string
+        description:
+          type: string
+        currentLevel:
+          type: integer
+        maxLevel:
+          type: integer
+        cost:
+          type: integer
+          format: int64
+        effect:
+          type: object
+          properties:
+            type:
+              type: string
+            value:
+              type: number
+        requirements:
+          type: object
+          properties:
+            level:
+              type: integer
+        available:
+          type: boolean
+
+    # Social
+    Friend:
+      type: object
+      properties:
+        playerId:
+          type: string
+          format: uuid
+        nickname:
+          type: string
+        level:
+          type: integer
+        avatarUrl:
+          type: string
+          format: uri
+        totalEarnings:
+          type: integer
+          format: int64
+        yourBonus:
+          type: integer
+          format: int64
+          description: Ваш бонус от этого друга
+        invitedAt:
+          type: string
+          format: date-time
+
+    LeaderboardEntry:
+      type: object
+      properties:
+        rank:
+          type: integer
+        playerId:
+          type: string
+          format: uuid
+        nickname:
+          type: string
+        level:
+          type: integer
+        totalWatts:
+          type: integer
+          format: int64
+        avatarUrl:
+          type: string
+          format: uri
+
+    # Tournaments
+    Tournament:
+      type: object
+      properties:
+        tournamentId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        rewards:
+          type: array
+          items:
+            type: object
+            properties:
+              rank:
+                type: integer
+              watts:
+                type: integer
+                format: int64
+              items:
+                type: array
+                items:
+                  type: string
+        yourRank:
+          type: integer
+          nullable: true
+        yourScore:
+          type: integer
+          format: int64
+
+    # Shop
+    ShopCategory:
+      type: object
+      properties:
+        categoryId:
+          type: string
+        name:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShopItem'
+
+    ShopItem:
+      type: object
+      properties:
+        itemId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: integer
+          format: int64
+        currency:
+          type: string
+          enum: [watts, kiloWattTokens]
+        contents:
+          type: object
+          description: Содержимое (для сундуков и т.п.)
+        imageUrl:
+          type: string
+          format: uri
+
+    # Common Response Types
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        serverTime:
+          type: string
+          format: date-time
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              enum:
+                - INVALID_TOKEN
+                - UNAUTHORIZED
+                - RATE_LIMIT_EXCEEDED
+                - INSUFFICIENT_RESOURCES
+                - INVALID_ACTION
+                - PLAYER_NOT_FOUND
+                - ITEM_NOT_FOUND
+                - ANTI_CHEAT_VIOLATION
+                - SERVER_ERROR
+                - MAINTENANCE
+            message:
+              type: string
+            details:
+              type: object
+        serverTime:
+          type: string
+          format: date-time
+
+  responses:
+    UnauthorizedError:
+      description: Неавторизован или неверный токен
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            error:
+              code: UNAUTHORIZED
+              message: Invalid or expired token
+            serverTime: "2025-11-12T10:30:15Z"
+
+    RateLimitError:
+      description: Превышен лимит запросов
+      headers:
+        X-RateLimit-Limit:
+          schema:
+            type: integer
+          description: Максимальное количество запросов
+        X-RateLimit-Remaining:
+          schema:
+            type: integer
+          description: Оставшиеся запросы
+        X-RateLimit-Reset:
+          schema:
+            type: integer
+          description: Unix timestamp сброса лимита
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            error:
+              code: RATE_LIMIT_EXCEEDED
+              message: Too many requests. Please try again later.
+            serverTime: "2025-11-12T10:30:15Z"
+
+    BadRequestError:
+      description: Некорректный запрос
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            error:
+              code: INVALID_ACTION
+              message: Invalid request parameters
+              details:
+                field: taps
+                issue: Array cannot be empty
+            serverTime: "2025-11-12T10:30:15Z"
+
