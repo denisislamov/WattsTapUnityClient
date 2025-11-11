@@ -13,6 +13,7 @@ namespace WattsTap.Core.React
 {
     public class TelegramService : MonoBehaviour, ITelegramService
     {
+        [Serializable]
         public class SafeArea
         {
             public float Top;
@@ -57,6 +58,12 @@ namespace WattsTap.Core.React
         
         [SerializeField] private string _botToken;
         
+#if UNITY_EDITOR
+        [Header("Debug Settings (Editor Only)")]
+        [SerializeField] private bool _useDebugSafeArea = false;
+        [SerializeField] private SafeArea _debugSafeAreaInsets = new SafeArea();
+#endif
+        
         public string Id { get; private set; }
         public string UserName { get; private set; }
         public string InitData { get; private set; }
@@ -70,7 +77,7 @@ namespace WattsTap.Core.React
         public event Action<string> OnReceivedUserName;
         public event Action<string> OnReceivedInitData;
         
-        private SafeArea _safeAreaInsets;
+        private SafeArea _safeAreaInsets = new SafeArea();
          
         public static long GetUserIdFromInitData(string initData)
         {
@@ -143,6 +150,14 @@ namespace WattsTap.Core.React
              var configService = ServiceLocator.Get<IConfigService>();
              TelegramDebugData telegramDebugData = configService.GetConfig<TelegramDebugData>(ConfigsConstants.TelegramDebugData);
              ReceiveInitData(telegramDebugData.InitData);
+#endif
+
+#if UNITY_EDITOR
+            if (_useDebugSafeArea)
+            {
+                _safeAreaInsets = _debugSafeAreaInsets;
+                Debug.Log($"Using debug safe area insets: {_safeAreaInsets}");
+            }
 #endif
         }
         

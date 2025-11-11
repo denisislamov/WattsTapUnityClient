@@ -107,10 +107,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3688093715683534449}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 30, y: -40}
-  m_SizeDelta: {x: 620, y: 620}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 32.123993, y: -1.4032}
+  m_SizeDelta: {x: 63.5477, y: 522.0502}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &978637544724855843
 CanvasRenderer:
@@ -436,9 +436,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 77.848236}
+  m_AnchoredPosition: {x: 0, y: 10}
   m_SizeDelta: {x: 0, y: 71.55713}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &4562686098146741221
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -454,7 +454,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1790122410760270625}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -671,9 +671,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -99}
+  m_AnchoredPosition: {x: 0, y: -10}
   m_SizeDelta: {x: 0, y: 62.462}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3950536721851494186
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -830,7 +830,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.React.TelegramSafeZoneApplier
   _sides: 3
-  _applyMode: 1
+  _applyMode: 0
   _targetRectTransform: {fileID: 3688093715683534449}
 --- !u!1 &5449668535693118556
 GameObject:
@@ -3225,7 +3225,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2981877454354136173, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000032067
+      value: 0.000032424927
       objectReference: {fileID: 0}
     - target: {fileID: 2981877454354136173, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
