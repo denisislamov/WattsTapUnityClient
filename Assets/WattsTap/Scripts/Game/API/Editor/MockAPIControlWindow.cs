@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using WattsTap.Game.API;
@@ -322,3 +323,4 @@ namespace WattsTap.Scripts.Game.API.Editor
         }
     }
 }
+#endif
