@@ -646,6 +646,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.React.TelegramService
   _botToken: 
+  _useDebugSafeArea: 1
+  _debugSafeAreaInsets:
+    Top: 80
+    Bottom: 50
+    Left: 0
+    Right: 0
 --- !u!4 &1979693433
 Transform:
   m_ObjectHideFlags: 0
