@@ -813,8 +813,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.MainMenuUIView
   _userName: {fileID: 4337823610494765502}
   _userAvatar: {fileID: 3209893513270852025}
+  _currencyPanel: {fileID: 726128925095499454}
   totalCoinsText: {fileID: 3406190211271174298}
   coinsPerTapText: {fileID: 4533605739123940352}
+  _baseCurrencyPanelWidth: 92
+  _widthIncreasePerDigit: 15
   currentHitsText: {fileID: 5424560476590021156}
   maxMitsText: {fileID: 5420474072264530899}
 --- !u!114 &682962176018097781
@@ -2204,7 +2207,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5279561187328916074, guid: 75cc680980c7f45098c8e27f27072529, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 92.1635
+      value: 107
       objectReference: {fileID: 0}
     - target: {fileID: 5279561187328916074, guid: 75cc680980c7f45098c8e27f27072529, type: 3}
       propertyPath: m_SizeDelta.y
@@ -2289,6 +2292,10 @@ PrefabInstance:
     - target: {fileID: 6335152711061826634, guid: 75cc680980c7f45098c8e27f27072529, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7787367482098107470, guid: 75cc680980c7f45098c8e27f27072529, type: 3}
+      propertyPath: m_text
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8273421176437480498, guid: 75cc680980c7f45098c8e27f27072529, type: 3}
       propertyPath: m_Name

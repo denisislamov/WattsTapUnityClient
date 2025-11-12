@@ -12,19 +12,39 @@ namespace WattsTap.Game.UI
         [SerializeField] private Image _userAvatar;
         
         [Header("Currency Display")]
+        [SerializeField] private RectTransform _currencyPanel;
         [SerializeField] private TMP_Text totalCoinsText;
         [SerializeField] private TMP_Text coinsPerTapText;
-
+        
+        [Header("Currency Panel Width Settings")]
+        [SerializeField] private float _baseCurrencyPanelWidth = 200f;
+        [SerializeField] private float _widthIncreasePerDigit = 15f;
+        
         [Header("Hits Display")]
         [SerializeField] private TMP_Text currentHitsText;
         [SerializeField] private TMP_Text maxMitsText;
 
         public void UpdateTotalCoins(long totalCoins)
         {
-            if (totalCoinsText != null)
+            if (totalCoinsText == null)
             {
-                totalCoinsText.text = $"{totalCoins:N0}";
+                return;
             }
+            
+            totalCoinsText.text = $"{totalCoins:N0}";
+            UpdateCurrencyPanelWidth(totalCoins);
+        }
+
+        private void UpdateCurrencyPanelWidth(long totalCoins)
+        {
+            if (_currencyPanel == null)
+            {
+                return;
+            }
+
+            int digitCount = totalCoins == 0 ? 1 : Mathf.FloorToInt(Mathf.Log10(totalCoins) + 1);
+            float newWidth = _baseCurrencyPanelWidth + (digitCount - 1)* _widthIncreasePerDigit;
+            _currencyPanel.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, newWidth);
         }
 
         public void UpdateCoinsPerTap(int coinsPerTap)
