@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using System.IO;
@@ -163,3 +164,4 @@ namespace WattsTap.Scripts.Game.GlobalConfigs.Editor
         }
     }
 }
+#endif
