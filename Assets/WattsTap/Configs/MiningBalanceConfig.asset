@@ -1,0 +1,326 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f555a970c28b5422893dc1b34cd87944, type: 3}
+  m_Name: MiningBalanceConfig
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Scripts.Game.GlobalConfigs.MiningBalanceConfig
+  coinsPerTap: 1
+  expPerTap: 1
+  startCapacityHits: 1500
+  cooldownPerHitSec: 2
+  critMultiplier: 1.2
+  chanceCritPercent: 1
+  avgPlaytimeMinutes: 15
+  tapsPerSecond: 10
+  profitPerHour: 500
+  maxHoursOffline: 3
+  sessionsPerDay: 2
+  dailyProgression:
+  - day: 1
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 6946.8
+    cumulativeExp: 3900
+  - day: 2
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 13893.6
+    cumulativeExp: 7800
+  - day: 3
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 20840.4
+    cumulativeExp: 11700
+  - day: 4
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 27787.2
+    cumulativeExp: 15600
+  - day: 5
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 34734
+    cumulativeExp: 19500
+  - day: 6
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 41680.8
+    cumulativeExp: 23400
+  - day: 7
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 48627.6
+    cumulativeExp: 27300
+  - day: 8
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 55574.4
+    cumulativeExp: 31200
+  - day: 9
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 62521.2
+    cumulativeExp: 35100
+  - day: 10
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 69468
+    cumulativeExp: 39000
+  - day: 11
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 76414.8
+    cumulativeExp: 42900
+  - day: 12
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 83361.6
+    cumulativeExp: 46800
+  - day: 13
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 90308.4
+    cumulativeExp: 50700
+  - day: 14
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 97255.2
+    cumulativeExp: 54600
+  - day: 15
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 104202
+    cumulativeExp: 58500
+  - day: 16
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 111148.8
+    cumulativeExp: 62400
+  - day: 17
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 118095.6
+    cumulativeExp: 66300
+  - day: 18
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 125042.4
+    cumulativeExp: 70200
+  - day: 19
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 131989.2
+    cumulativeExp: 74100
+  - day: 20
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 138936
+    cumulativeExp: 78000
+  - day: 21
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 145882.8
+    cumulativeExp: 81900
+  - day: 22
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 152829.6
+    cumulativeExp: 85800
+  - day: 23
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 159776.4
+    cumulativeExp: 89700
+  - day: 24
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 166723.2
+    cumulativeExp: 93600
+  - day: 25
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 173670
+    cumulativeExp: 97500
+  - day: 26
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 180616.8
+    cumulativeExp: 101400
+  - day: 27
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 187563.6
+    cumulativeExp: 105300
+  - day: 28
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 194510.4
+    cumulativeExp: 109200
+  - day: 29
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 201457.2
+    cumulativeExp: 113100
+  - day: 30
+    playtimeSec: 900
+    tapsPerSession: 1950
+    tapsPerDay: 3900
+    expPerDay: 3900
+    coinsFromTaps: 3946.8
+    coinsFromOfflineBonus: 3000
+    profitCoins: 6946.8
+    cumulativeProfitCoins: 208404
+    cumulativeExp: 117000
