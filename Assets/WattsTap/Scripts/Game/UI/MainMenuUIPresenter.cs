@@ -45,6 +45,13 @@ namespace WattsTap.Game.UI
             }
             
             _sharedDataService.OnDataUpdated += OnSharedDataUpdated;
+
+            View.ChangeSkinButton.onClick.AddListener(ChangeSkinButtonOnClick);
+        }
+
+        private void ChangeSkinButtonOnClick()
+        {
+            View.SetNextSkin();
         }
 
         private void OnSharedDataUpdated(string name)
@@ -159,6 +166,8 @@ namespace WattsTap.Game.UI
             _avatarLoadCts?.Dispose();
             _avatarLoadCts = null;
 
+            View.ChangeSkinButton.onClick.RemoveListener(ChangeSkinButtonOnClick);
+            
             // Отписка от событий модели
             if (Model != null)
             {

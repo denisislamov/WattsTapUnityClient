@@ -7,6 +7,35 @@ namespace WattsTap.Game.UI
 {
     public class MainMenuUIView : UIBaseView<MainMenuUIPresenter>
     {
+        [System.Serializable]
+        public class SkinElement
+        {
+            public Image[] backgroundImages;
+            public Color foregroundColor;
+            
+            public void SetColor()
+            {
+                foreach (var backgroundImage in backgroundImages)
+                {
+                    backgroundImage.color = foregroundColor;
+                }
+            }
+        }
+        
+        [System.Serializable]
+        public class Skin
+        {
+            public SkinElement[] skinElements;
+            
+            public void SetColors()
+            {
+                foreach (var element in skinElements)
+                {
+                    element.SetColor();
+                }
+            }
+        }
+        
         [Header("User")]
         [SerializeField] private TMP_Text _userName;
         [SerializeField] private Image _userAvatar;
@@ -24,6 +53,20 @@ namespace WattsTap.Game.UI
         [SerializeField] private TMP_Text currentHitsText;
         [SerializeField] private TMP_Text maxMitsText;
 
+        [Header("Skins")]
+        [SerializeField] private Skin[] skins;
+        [SerializeField] public Button changeSkinButton;
+        
+        public Button ChangeSkinButton => changeSkinButton;
+        
+        private int _currentSkinIndex = 0;
+        
+        public void SetNextSkin()
+        {
+            _currentSkinIndex = (_currentSkinIndex + 1) % skins.Length;
+            skins[_currentSkinIndex].SetColors();
+        }
+        
         public void UpdateTotalCoins(long totalCoins)
         {
             if (totalCoinsText == null)
