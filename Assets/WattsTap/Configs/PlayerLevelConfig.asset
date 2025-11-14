@@ -1,0 +1,1115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b0cf95d12db45cebf34530fab4db556, type: 3}
+  m_Name: PlayerLevelConfig
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Scripts.Game.GlobalConfigs.PlayerLevelConfig
+  levels:
+  - level: 1
+    expCoefficient: 1
+    needExp: 0
+    sumExp: 0
+    rewards:
+      coins: 0
+      draws: 0
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 2
+    expCoefficient: 1
+    needExp: 6000
+    sumExp: 6000
+    rewards:
+      coins: 1000
+      draws: 1
+      commonChests: 1
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 3
+    expCoefficient: 2.1
+    needExp: 12600
+    sumExp: 18600
+    rewards:
+      coins: 2500
+      draws: 1
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 4
+    expCoefficient: 2.1
+    needExp: 26460
+    sumExp: 45060
+    rewards:
+      coins: 3000
+      draws: 1
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 5
+    expCoefficient: 2.1
+    needExp: 55566
+    sumExp: 100626
+    rewards:
+      coins: 5000
+      draws: 1
+      commonChests: 2
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 6
+    expCoefficient: 1.8
+    needExp: 100019
+    sumExp: 200645
+    rewards:
+      coins: 7000
+      draws: 1
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 7
+    expCoefficient: 1.8
+    needExp: 180034
+    sumExp: 380679
+    rewards:
+      coins: 10000
+      draws: 1
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 8
+    expCoefficient: 1.8
+    needExp: 324061
+    sumExp: 704740
+    rewards:
+      coins: 15000
+      draws: 1
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 9
+    expCoefficient: 1.8
+    needExp: 583310
+    sumExp: 1288049
+    rewards:
+      coins: 21000
+      draws: 1
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 10
+    expCoefficient: 1.8
+    needExp: 1049957
+    sumExp: 2338007
+    rewards:
+      coins: 30000
+      draws: 1
+      commonChests: 3
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 11
+    expCoefficient: 1.6
+    needExp: 1679932
+    sumExp: 4017938
+    rewards:
+      coins: 40000
+      draws: 1
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 12
+    expCoefficient: 1.6
+    needExp: 2687891
+    sumExp: 6705829
+    rewards:
+      coins: 50000
+      draws: 1
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 13
+    expCoefficient: 1.6
+    needExp: 4300625
+    sumExp: 11006454
+    rewards:
+      coins: 62000
+      draws: 1
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 14
+    expCoefficient: 1.6
+    needExp: 6881001
+    sumExp: 17887455
+    rewards:
+      coins: 75000
+      draws: 1
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 15
+    expCoefficient: 1.6
+    needExp: 11009601
+    sumExp: 28897056
+    rewards:
+      coins: 90000
+      draws: 1
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 16
+    expCoefficient: 1.4
+    needExp: 15413441
+    sumExp: 44310497
+    rewards:
+      coins: 100000
+      draws: 1
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 17
+    expCoefficient: 1.4
+    needExp: 21578818
+    sumExp: 65889315
+    rewards:
+      coins: 115000
+      draws: 1
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 18
+    expCoefficient: 1.4
+    needExp: 30210345
+    sumExp: 96099659
+    rewards:
+      coins: 135000
+      draws: 1
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 19
+    expCoefficient: 1.4
+    needExp: 42294483
+    sumExp: 138394142
+    rewards:
+      coins: 150000
+      draws: 1
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 20
+    expCoefficient: 1.4
+    needExp: 59212276
+    sumExp: 197606417
+    rewards:
+      coins: 175000
+      draws: 1
+      commonChests: 3
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 21
+    expCoefficient: 1.3
+    needExp: 76975958
+    sumExp: 274582376
+    rewards:
+      coins: 200000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 22
+    expCoefficient: 1.3
+    needExp: 100068746
+    sumExp: 374651121
+    rewards:
+      coins: 225000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 23
+    expCoefficient: 1.3
+    needExp: 130089369
+    sumExp: 504740491
+    rewards:
+      coins: 250000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 24
+    expCoefficient: 1.3
+    needExp: 169116180
+    sumExp: 673856671
+    rewards:
+      coins: 275000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 25
+    expCoefficient: 1.3
+    needExp: 219851034
+    sumExp: 893707706
+    rewards:
+      coins: 300000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 26
+    expCoefficient: 1.2
+    needExp: 263821241
+    sumExp: 1157528947
+    rewards:
+      coins: 325000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 27
+    expCoefficient: 1.2
+    needExp: 316585490
+    sumExp: 1474114436
+    rewards:
+      coins: 350000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 28
+    expCoefficient: 1.2
+    needExp: 379902587
+    sumExp: 1854017024
+    rewards:
+      coins: 375000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 29
+    expCoefficient: 1.2
+    needExp: 455883105
+    sumExp: 2309900129
+    rewards:
+      coins: 400000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 30
+    expCoefficient: 1.2
+    needExp: 547059726
+    sumExp: 2856959855
+    rewards:
+      coins: 450000
+      draws: 2
+      commonChests: 2
+      uncommonChests: 1
+      rareChests: 0
+      legendaryChests: 0
+  - level: 31
+    expCoefficient: 1.1
+    needExp: 601765698
+    sumExp: 3458725553
+    rewards:
+      coins: 500000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 32
+    expCoefficient: 1.1
+    needExp: 661942268
+    sumExp: 4120667822
+    rewards:
+      coins: 550000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 33
+    expCoefficient: 1.1
+    needExp: 728136495
+    sumExp: 4848804317
+    rewards:
+      coins: 600000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 34
+    expCoefficient: 1.1
+    needExp: 800950145
+    sumExp: 5649754461
+    rewards:
+      coins: 650000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 35
+    expCoefficient: 1.1
+    needExp: 881045159
+    sumExp: 6530799621
+    rewards:
+      coins: 700000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 36
+    expCoefficient: 1.05
+    needExp: 925097417
+    sumExp: 7455897038
+    rewards:
+      coins: 750000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 37
+    expCoefficient: 1.05
+    needExp: 971352288
+    sumExp: 8427249326
+    rewards:
+      coins: 800000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 38
+    expCoefficient: 1.05
+    needExp: 1019919902
+    sumExp: 9447169228
+    rewards:
+      coins: 850000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 39
+    expCoefficient: 1.05
+    needExp: 1070915897
+    sumExp: 10518085126
+    rewards:
+      coins: 900000
+      draws: 2
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 40
+    expCoefficient: 1.05
+    needExp: 1124461692
+    sumExp: 11642546818
+    rewards:
+      coins: 1000000
+      draws: 2
+      commonChests: 2
+      uncommonChests: 1
+      rareChests: 0
+      legendaryChests: 0
+  - level: 41
+    expCoefficient: 1.025
+    needExp: 1152573235
+    sumExp: 12795120053
+    rewards:
+      coins: 1100000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 42
+    expCoefficient: 1.025
+    needExp: 1181387566
+    sumExp: 13976507618
+    rewards:
+      coins: 1200000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 43
+    expCoefficient: 1.025
+    needExp: 1210922255
+    sumExp: 15187429873
+    rewards:
+      coins: 1300000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 44
+    expCoefficient: 1.025
+    needExp: 1241195311
+    sumExp: 16428625184
+    rewards:
+      coins: 1400000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 45
+    expCoefficient: 1.025
+    needExp: 1272225194
+    sumExp: 17700850378
+    rewards:
+      coins: 1500000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 46
+    expCoefficient: 1.025
+    needExp: 1304030824
+    sumExp: 19004881201
+    rewards:
+      coins: 1600000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 47
+    expCoefficient: 1.025
+    needExp: 1336631594
+    sumExp: 20341512796
+    rewards:
+      coins: 1700000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 48
+    expCoefficient: 1.025
+    needExp: 1370047384
+    sumExp: 21711560180
+    rewards:
+      coins: 1800000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 49
+    expCoefficient: 1.025
+    needExp: 1404298569
+    sumExp: 23115858749
+    rewards:
+      coins: 1900000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 50
+    expCoefficient: 1.025
+    needExp: 1439406033
+    sumExp: 24555264781
+    rewards:
+      coins: 2000000
+      draws: 3
+      commonChests: 1
+      uncommonChests: 1
+      rareChests: 1
+      legendaryChests: 0
+  - level: 51
+    expCoefficient: 1.025
+    needExp: 1475391184
+    sumExp: 26030655965
+    rewards:
+      coins: 2200000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 52
+    expCoefficient: 1.025
+    needExp: 1512275963
+    sumExp: 27542931929
+    rewards:
+      coins: 2400000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 53
+    expCoefficient: 1.025
+    needExp: 1550082862
+    sumExp: 29093014791
+    rewards:
+      coins: 2600000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 54
+    expCoefficient: 1.025
+    needExp: 1588834934
+    sumExp: 30681849725
+    rewards:
+      coins: 2800000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 55
+    expCoefficient: 1.025
+    needExp: 1628555807
+    sumExp: 32310405532
+    rewards:
+      coins: 3000000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 56
+    expCoefficient: 1.025
+    needExp: 1669269703
+    sumExp: 33979675235
+    rewards:
+      coins: 3200000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 57
+    expCoefficient: 1.025
+    needExp: 1711001445
+    sumExp: 35690676680
+    rewards:
+      coins: 3400000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 58
+    expCoefficient: 1.025
+    needExp: 1753776481
+    sumExp: 37444453161
+    rewards:
+      coins: 3600000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 59
+    expCoefficient: 1.025
+    needExp: 1797620893
+    sumExp: 39242074055
+    rewards:
+      coins: 3800000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 60
+    expCoefficient: 1.025
+    needExp: 1842561416
+    sumExp: 41084635470
+    rewards:
+      coins: 4000000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 3
+      rareChests: 0
+      legendaryChests: 0
+  - level: 61
+    expCoefficient: 1.025
+    needExp: 1888625451
+    sumExp: 42973260921
+    rewards:
+      coins: 4250000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 62
+    expCoefficient: 1.025
+    needExp: 1935841087
+    sumExp: 44909102008
+    rewards:
+      coins: 4500000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 63
+    expCoefficient: 1.025
+    needExp: 1984237114
+    sumExp: 46893339123
+    rewards:
+      coins: 4750000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 64
+    expCoefficient: 1.025
+    needExp: 2033843042
+    sumExp: 48927182165
+    rewards:
+      coins: 5000000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 65
+    expCoefficient: 1.025
+    needExp: 2084689118
+    sumExp: 51011871284
+    rewards:
+      coins: 5250000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 66
+    expCoefficient: 1.025
+    needExp: 2136806346
+    sumExp: 53148677630
+    rewards:
+      coins: 5500000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 67
+    expCoefficient: 1.025
+    needExp: 2190226505
+    sumExp: 55338904135
+    rewards:
+      coins: 5750000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 68
+    expCoefficient: 1.025
+    needExp: 2244982168
+    sumExp: 57583886303
+    rewards:
+      coins: 6000000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 69
+    expCoefficient: 1.025
+    needExp: 2301106722
+    sumExp: 59884993024
+    rewards:
+      coins: 6250000
+      draws: 3
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 70
+    expCoefficient: 1.025
+    needExp: 2358634390
+    sumExp: 62243627414
+    rewards:
+      coins: 6500000
+      draws: 3
+      commonChests: 1
+      uncommonChests: 1
+      rareChests: 1
+      legendaryChests: 0
+  - level: 71
+    expCoefficient: 1.025
+    needExp: 2417600250
+    sumExp: 64661227664
+    rewards:
+      coins: 6750000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 72
+    expCoefficient: 1.025
+    needExp: 2478040256
+    sumExp: 67139267920
+    rewards:
+      coins: 7000000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 73
+    expCoefficient: 1.025
+    needExp: 2539991262
+    sumExp: 69679259182
+    rewards:
+      coins: 7250000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 74
+    expCoefficient: 1.025
+    needExp: 2603491044
+    sumExp: 72282750226
+    rewards:
+      coins: 7500000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 75
+    expCoefficient: 1.025
+    needExp: 2668578320
+    sumExp: 74951328545
+    rewards:
+      coins: 7750000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 76
+    expCoefficient: 1.025
+    needExp: 2735292778
+    sumExp: 77686621323
+    rewards:
+      coins: 8000000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 77
+    expCoefficient: 1.025
+    needExp: 2803675097
+    sumExp: 80490296421
+    rewards:
+      coins: 8250000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 78
+    expCoefficient: 1.025
+    needExp: 2873766975
+    sumExp: 83364063395
+    rewards:
+      coins: 8500000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 79
+    expCoefficient: 1.025
+    needExp: 2945611149
+    sumExp: 86309674545
+    rewards:
+      coins: 8750000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 80
+    expCoefficient: 1.025
+    needExp: 3019251428
+    sumExp: 89328925972
+    rewards:
+      coins: 9000000
+      draws: 4
+      commonChests: 1
+      uncommonChests: 1
+      rareChests: 2
+      legendaryChests: 0
+  - level: 81
+    expCoefficient: 1.025
+    needExp: 3094732714
+    sumExp: 92423658686
+    rewards:
+      coins: 9500000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 82
+    expCoefficient: 1.025
+    needExp: 3172101031
+    sumExp: 95595759717
+    rewards:
+      coins: 10000000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 83
+    expCoefficient: 1.025
+    needExp: 3251403557
+    sumExp: 98847163274
+    rewards:
+      coins: 10500000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 84
+    expCoefficient: 1.025
+    needExp: 3332688646
+    sumExp: 102179851921
+    rewards:
+      coins: 11000000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 85
+    expCoefficient: 1.025
+    needExp: 3416005862
+    sumExp: 105595857783
+    rewards:
+      coins: 11500000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 86
+    expCoefficient: 1.025
+    needExp: 3501406009
+    sumExp: 109097263792
+    rewards:
+      coins: 12000000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 87
+    expCoefficient: 1.025
+    needExp: 3588941159
+    sumExp: 112686204951
+    rewards:
+      coins: 12500000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 88
+    expCoefficient: 1.025
+    needExp: 3678664688
+    sumExp: 116364869639
+    rewards:
+      coins: 13000000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 89
+    expCoefficient: 1.025
+    needExp: 3770631305
+    sumExp: 120135500944
+    rewards:
+      coins: 13500000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 90
+    expCoefficient: 1.025
+    needExp: 3864897088
+    sumExp: 124000398032
+    rewards:
+      coins: 14000000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 1
+      rareChests: 1
+      legendaryChests: 1
+  - level: 91
+    expCoefficient: 1.025
+    needExp: 3961519515
+    sumExp: 127961917547
+    rewards:
+      coins: 15000000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 92
+    expCoefficient: 1.025
+    needExp: 4060557503
+    sumExp: 132022475050
+    rewards:
+      coins: 16000000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 93
+    expCoefficient: 1.025
+    needExp: 4162071440
+    sumExp: 136184546490
+    rewards:
+      coins: 17000000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 94
+    expCoefficient: 1.025
+    needExp: 4266123226
+    sumExp: 140450669717
+    rewards:
+      coins: 18000000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 95
+    expCoefficient: 1.025
+    needExp: 4372776307
+    sumExp: 144823446024
+    rewards:
+      coins: 19000000
+      draws: 4
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 96
+    expCoefficient: 1.025
+    needExp: 4482095715
+    sumExp: 149305541739
+    rewards:
+      coins: 20000000
+      draws: 5
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 97
+    expCoefficient: 1.025
+    needExp: 4594148108
+    sumExp: 153899689846
+    rewards:
+      coins: 21000000
+      draws: 5
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 98
+    expCoefficient: 1.025
+    needExp: 4709001810
+    sumExp: 158608691657
+    rewards:
+      coins: 22000000
+      draws: 5
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 99
+    expCoefficient: 1.025
+    needExp: 4826726856
+    sumExp: 163435418512
+    rewards:
+      coins: 23000000
+      draws: 5
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 0
+      legendaryChests: 0
+  - level: 100
+    expCoefficient: 1.025
+    needExp: 4947395027
+    sumExp: 168382813539
+    rewards:
+      coins: 24000000
+      draws: 5
+      commonChests: 0
+      uncommonChests: 0
+      rareChests: 2
+      legendaryChests: 1
