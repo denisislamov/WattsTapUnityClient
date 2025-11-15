@@ -11,13 +11,31 @@ namespace WattsTap.Game.UI
         public class SkinElement
         {
             public Image[] backgroundImages;
+            public TMP_Text[] texts;
+            
             public Color foregroundColor;
+            public Material material;
             
             public void SetColor()
             {
                 foreach (var backgroundImage in backgroundImages)
                 {
                     backgroundImage.color = foregroundColor;
+                    
+                    if (material != null)
+                    {
+                        backgroundImage.material = material;
+                    }
+                }
+                
+                foreach (var text in texts)
+                {
+                    text.color = foregroundColor;
+                    
+                    if (material != null)
+                    {
+                        text.material = material;
+                    }
                 }
             }
         }
@@ -60,6 +78,11 @@ namespace WattsTap.Game.UI
         public Button ChangeSkinButton => changeSkinButton;
         
         private int _currentSkinIndex = 0;
+
+        public void SetDefaultSkin()
+        {
+            skins[0].SetColors();    
+        }
         
         public void SetNextSkin()
         {

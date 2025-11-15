@@ -47,6 +47,8 @@ namespace WattsTap.Game.UI
             _sharedDataService.OnDataUpdated += OnSharedDataUpdated;
 
             View.ChangeSkinButton.onClick.AddListener(ChangeSkinButtonOnClick);
+
+            View.SetDefaultSkin();
         }
 
         private void ChangeSkinButtonOnClick()
