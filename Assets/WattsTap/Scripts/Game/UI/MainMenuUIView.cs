@@ -57,6 +57,8 @@ namespace WattsTap.Game.UI
         [Header("User")]
         [SerializeField] private TMP_Text _userName;
         [SerializeField] private Image _userAvatar;
+        [SerializeField] private TMP_Text _currentLevelText;
+        [SerializeField] private Slider _levelProgressBar;
         
         [Header("Currency Display")]
         [SerializeField] private RectTransform _currencyPanel;
@@ -147,6 +149,22 @@ namespace WattsTap.Game.UI
             if (_userAvatar != null && avatarSprite != null)
             {
                 _userAvatar.sprite = avatarSprite;
+            }
+        }
+
+        public void UpdateCurrentLevel(int level)
+        {
+            if (_currentLevelText != null)
+            {
+                _currentLevelText.text = $"lvl {level}";
+            }
+        }
+
+        public void UpdateLevelProgressBar(float progress)
+        {
+            if (_levelProgressBar != null)
+            {
+                _levelProgressBar.value = progress;
             }
         }
     }
