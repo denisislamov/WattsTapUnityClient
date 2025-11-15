@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using WattsTap.Core.Configs;
+using WattsTap.Scripts.Game.GlobalConfigs;
 
 namespace WattsTap.Game.Player
 {
@@ -55,8 +56,13 @@ namespace WattsTap.Game.Player
         /// <summary>
         /// Рассчитать опыт необходимый для следующего уровня
         /// </summary>
-        public long CalculateXpForLevel(int level)
+        public long CalculateXpForLevel(int level, PlayerLevelConfig levelConfig)
         {
+            var nextLevelData = levelConfig.GetLevelData(level + 1);
+            if (nextLevelData != null)
+            {
+                return nextLevelData.needExp;
+            }
             return (long)(baseXpForNextLevel * Math.Pow(level, xpGrowthMultiplier));
         }
 

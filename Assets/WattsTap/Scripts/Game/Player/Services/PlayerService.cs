@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 using WattsTap.Core;
+using WattsTap.Scripts.Game.GlobalConfigs;
 
 namespace WattsTap.Game.Player
 {
@@ -15,6 +16,8 @@ namespace WattsTap.Game.Player
         private PlayerData _playerData;
         private IResourceManager _resourceManager;
         private ResourceConfig _resourceConfig;
+        private PlayerLevelConfig _levelConfig;
+        
         private float _energyRestoreTimer;
         
         public int InitializationOrder => 10;
@@ -118,6 +121,9 @@ namespace WattsTap.Game.Player
                     _playerData.stats.incomePerTap = Math.Max(_playerData.stats.incomePerTap, _resourceConfig.baseIncomePerTap);
                 }
             }
+            
+            var configService = ServiceLocator.Get<Core.Configs.IConfigService>();
+            _levelConfig = configService.GetConfig<PlayerLevelConfig>("PlayerLevelConfig");
             OnPlayerDataChanged?.Invoke(_playerData);
         }
 
@@ -175,7 +181,7 @@ namespace WattsTap.Game.Player
         {
             _playerData.resources.currentXP -= _playerData.resources.xpToNextLevel;
             _playerData.level++;
-            _playerData.resources.xpToNextLevel = _resourceConfig.CalculateXpForLevel(_playerData.level);
+            _playerData.resources.xpToNextLevel = _resourceConfig.CalculateXpForLevel(_playerData.level, _levelConfig);
             
             var wattsReward = _resourceConfig.CalculateLevelUpReward(_playerData.level);
             _resourceManager.AddResource(ResourceType.Watts, wattsReward, false);

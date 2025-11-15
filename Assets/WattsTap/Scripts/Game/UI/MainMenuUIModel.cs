@@ -16,7 +16,11 @@ namespace WattsTap.Game.UI
         public ReactiveProperty<int> CoinsPerTap { get; private set; }
         public ReactiveProperty<int> HitsCurrent { get; private set; }
         public ReactiveProperty<int> HitsMax { get; private set; }
-
+        
+        public ReactiveProperty<int> Level { get; private set; }
+        public ReactiveProperty<long> CurrentXp { get; private set; }
+        public ReactiveProperty<long> XpToNextLevel { get; private set; }
+        
         private IPlayerService _playerService;
         private ITapControllerService _tapController;
 
@@ -31,7 +35,10 @@ namespace WattsTap.Game.UI
             CoinsPerTap = new ReactiveProperty<int>(1);
             HitsCurrent = new ReactiveProperty<int>(0);
             HitsMax = new ReactiveProperty<int>(0);
-
+            Level = new ReactiveProperty<int>(1);
+            CurrentXp = new ReactiveProperty<long>(0);
+            XpToNextLevel = new ReactiveProperty<long>(100);
+            
             // Получаем сервис игрока
             _playerService = ServiceLocator.Get<IPlayerService>();
             _tapController = ServiceLocator.Get<ITapControllerService>();
@@ -40,6 +47,8 @@ namespace WattsTap.Game.UI
             {
                 _playerService.OnResourcesChanged += OnPlayerResourcesChanged;
                 _playerService.OnPlayerDataChanged += OnPlayerDataChanged;
+                _playerService.OnLevelUp += OnLevelUp;
+                
                 UpdateFromPlayerData();
             }
 
@@ -55,9 +64,16 @@ namespace WattsTap.Game.UI
             }
         }
 
+        private void OnLevelUp(int value)
+        {
+            Level.Value = value;
+        }
+
         private void OnPlayerResourcesChanged(PlayerResources resources)
         {
             TotalCoins.Value = resources.watts;
+            CurrentXp.Value = resources.currentXP;
+            XpToNextLevel.Value = resources.xpToNextLevel;
         }
 
         private void OnPlayerDataChanged(PlayerData playerData)
@@ -76,8 +92,10 @@ namespace WattsTap.Game.UI
             {
                 TotalCoins.Value = playerData.resources.watts;
                 // CoinsPerTap будет рассчитываться отдельно с учётом множителя
-                PlayerName.Value = playerData.nickname;
+                // PlayerName.Value = playerData.nickname;
                 PlayerLevel.Value = playerData.level;
+                CurrentXp.Value = playerData.resources.currentXP;
+                XpToNextLevel.Value = playerData.resources.xpToNextLevel;
             }
         }
 
@@ -108,6 +126,7 @@ namespace WattsTap.Game.UI
             {
                 _playerService.OnResourcesChanged -= OnPlayerResourcesChanged;
                 _playerService.OnPlayerDataChanged -= OnPlayerDataChanged;
+                _playerService.OnLevelUp -= OnLevelUp;
             }
 
             if (_tapController != null)

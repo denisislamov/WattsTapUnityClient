@@ -33,6 +33,16 @@ namespace WattsTap.Game.Player
         /// <summary>
         /// Удары (количество доступных тапов)
         /// </summary>
-        Hits = 5
+        Hits = 5,
+        
+        /// <summary>
+        /// Опыт до следующего уровня
+        /// </summary>
+        XpToNextLevel = 6,
+        
+        /// <summary>
+        /// Суммарный опыт на этом уровне
+        /// </summary>
+        SummXp = 7
     }
 }

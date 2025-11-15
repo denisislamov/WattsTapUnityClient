@@ -4,6 +4,7 @@ using WattsTap.Core;
 using WattsTap.Core.Configs;
 using WattsTap.Scripts.Game.Tap.Data;
 using WattsTap.Game.Player;
+using WattsTap.Scripts.Game.GlobalConfigs;
 
 namespace WattsTap.Game.Tap.Services
 {
@@ -21,7 +22,8 @@ namespace WattsTap.Game.Tap.Services
         private IPlayerService _playerService;
         private TapConfig _config;
         private ResourceConfig _resourceConfig;
-
+        private MiningBalanceConfig _miningBalanceConfig;
+        
         public int InitializationOrder => 20;
         public bool IsInitialized { get; private set; }
 
@@ -56,6 +58,7 @@ namespace WattsTap.Game.Tap.Services
             // Load config scriptable object if present
             var configService = ServiceLocator.Get<IConfigService>();
             _config = configService.GetConfig<TapConfig>( "TapConfig");
+            _miningBalanceConfig = configService.GetConfig<MiningBalanceConfig>("MiningBalanceConfig");
           
             if (_config == null)
             {
@@ -178,7 +181,14 @@ namespace WattsTap.Game.Tap.Services
                 {
                     var baseIncome = _playerService.GetPlayerData().stats.incomePerTap;
                     var extra = (long)((_incomePerTapMultiplier - 1f) * baseIncome);
-                    if (extra > 0) _playerService.AddWatts(extra);
+                    
+                    if (extra > 0)
+                    {
+                        _playerService.AddWatts(extra);
+
+                        var expPerTap = _miningBalanceConfig.expPerTap;
+                        _playerService.AddExperience(expPerTap);
+                    }
                 }
 
                 // Grow multipliers per tap within caps

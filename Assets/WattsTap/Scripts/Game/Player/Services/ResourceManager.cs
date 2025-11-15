@@ -33,6 +33,8 @@ namespace WattsTap.Game.Player
                 ResourceType.Watts => _resources.watts,
                 ResourceType.Energy => _resources.currentEnergy,
                 ResourceType.Experience => _resources.currentXP,
+                ResourceType.XpToNextLevel => _resources.xpToNextLevel,
+                ResourceType.SummXp => _resources.sumExp,
                 ResourceType.KiloWatt => (long)(_resources.kiloWattTokens * 1000000), // Convert to micro-units
                 ResourceType.Premium => 0, // Not implemented yet
                 ResourceType.Hits => _resources.currentHits,

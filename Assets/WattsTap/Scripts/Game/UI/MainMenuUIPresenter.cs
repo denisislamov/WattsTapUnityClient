@@ -25,6 +25,8 @@ namespace WattsTap.Game.UI
             Model.CoinsPerTap.OnValueChanged += OnCoinsPerTapChanged;
             Model.HitsCurrent.OnValueChanged += OnHitsChanged;
             Model.HitsMax.OnValueChanged += OnHitsChanged;
+            Model.Level.OnValueChanged += OnLevelChanged;
+            Model.CurrentXp.OnValueChanged += OnCurrentXpChanged;
             
             // Инициализация начальных значений
             OnTotalCoinsChanged(Model.TotalCoins.Value);
@@ -49,6 +51,20 @@ namespace WattsTap.Game.UI
             View.ChangeSkinButton.onClick.AddListener(ChangeSkinButtonOnClick);
 
             View.SetDefaultSkin();
+            
+            View.UpdateCurrentLevel(Model.Level.Value);
+            View.UpdateLevelProgressBar(Model.CurrentXp.Value);
+        }
+
+        private void OnCurrentXpChanged(long value)
+        {
+            var progress = (float) value / Model.XpToNextLevel.Value;
+            View.UpdateLevelProgressBar(progress);
+        }
+
+        private void OnLevelChanged(int value)
+        {
+            View.UpdateCurrentLevel(value);
         }
 
         private void ChangeSkinButtonOnClick()
@@ -180,6 +196,9 @@ namespace WattsTap.Game.UI
                 Model.CoinsPerTap.OnValueChanged -= OnCoinsPerTapChanged;
                 Model.HitsCurrent.OnValueChanged -= OnHitsChanged;
                 Model.HitsMax.OnValueChanged -= OnHitsChanged;
+                Model.Level.OnValueChanged -= OnLevelChanged;
+                Model.CurrentXp.OnValueChanged -= OnCurrentXpChanged;
+
             }
         }
     }

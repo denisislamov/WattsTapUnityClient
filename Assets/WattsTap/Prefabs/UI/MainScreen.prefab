@@ -955,6 +955,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.MainMenuUIView
   _userName: {fileID: 4337823610494765502}
   _userAvatar: {fileID: 3209893513270852025}
+  _currentLevelText: {fileID: 7383613168540664310}
+  _levelProgressBar: {fileID: 1433811945968516298}
   _currencyPanel: {fileID: 726128925095499454}
   totalCoinsText: {fileID: 3406190211271174298}
   coinsPerTapText: {fileID: 4533605739123940352}
@@ -2592,6 +2594,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d461f72156b3496f918df56891bf4cd, type: 3}
+--- !u!114 &1433811945968516298 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2321802522696783456, guid: 7d461f72156b3496f918df56891bf4cd, type: 3}
+  m_PrefabInstance: {fileID: 3737248035237309098}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!114 &3209893513270852025 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2258144465146237715, guid: 7d461f72156b3496f918df56891bf4cd, type: 3}
@@ -2630,6 +2643,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8464281894027279563, guid: 7d461f72156b3496f918df56891bf4cd, type: 3}
   m_PrefabInstance: {fileID: 3737248035237309098}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7383613168540664310 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6172889480922131292, guid: 7d461f72156b3496f918df56891bf4cd, type: 3}
+  m_PrefabInstance: {fileID: 3737248035237309098}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1001 &3805496514769324324
 PrefabInstance:
   m_ObjectHideFlags: 0

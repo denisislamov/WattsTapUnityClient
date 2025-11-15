@@ -15,11 +15,10 @@ MonoBehaviour:
   baseMaxEnergy: 100
   energyRestoreInterval: 1
   energyAutoRestore: 1
-  baseXpForNextLevel: 100
+  baseXpForNextLevel: 6000
   xpGrowthMultiplier: 1.5
   baseIncomePerTap: 1
   xpPerTap: 1
-  energyCostPerTap: 1
   maxOfflineIncomeHours: 4
   offlineIncomeMultiplier: 0.5
   levelUpWattsMultiplier: 100
