@@ -19,11 +19,6 @@ namespace WattsTap.Game.Player
         public ResourceManager(PlayerResources resources)
         {
             _resources = resources ?? throw new ArgumentNullException(nameof(resources));
-            _maxValues = new Dictionary<ResourceType, long>
-            {
-                { ResourceType.Energy, resources.maxEnergy },
-                { ResourceType.Hits, resources.maxHits }
-            };
         }
 
         public long GetResource(ResourceType type)
@@ -31,7 +26,6 @@ namespace WattsTap.Game.Player
             return type switch
             {
                 ResourceType.Watts => _resources.watts,
-                ResourceType.Energy => _resources.currentEnergy,
                 ResourceType.Experience => _resources.currentXP,
                 ResourceType.XpToNextLevel => _resources.xpToNextLevel,
                 ResourceType.SummXp => _resources.sumExp,
@@ -63,12 +57,6 @@ namespace WattsTap.Game.Player
             var previousValue = GetResource(type);
             var newValue = previousValue + amount;
             
-            // Check max value constraints
-            if (_maxValues.TryGetValue(type, out var maxValue) && maxValue > 0)
-            {
-                newValue = Math.Min(newValue, maxValue);
-            }
-
             SetResourceInternal(type, newValue);
             
             var transaction = ResourceTransaction.CreateSuccess(type, amount, previousValue, newValue);
@@ -156,45 +144,13 @@ namespace WattsTap.Game.Player
             }
             return long.MaxValue; // No limit
         }
-
-        public void SetMaxResource(ResourceType type, long maxValue)
-        {
-            _maxValues[type] = maxValue;
-            
-            // Update the underlying data for Energy and Hits
-            if (type == ResourceType.Energy)
-            {
-                _resources.maxEnergy = (int)maxValue;
-                
-                // Cap current energy if it exceeds new max
-                if (_resources.currentEnergy > maxValue)
-                {
-                    var previousValue = _resources.currentEnergy;
-                    _resources.currentEnergy = (int)maxValue;
-                    OnResourceChanged?.Invoke(ResourceType.Energy, previousValue, maxValue);
-                }
-            }
-            else if (type == ResourceType.Hits)
-            {
-                _resources.maxHits = (int)maxValue;
-                if (_resources.currentHits > maxValue)
-                {
-                    var previousValue = _resources.currentHits;
-                    _resources.currentHits = (int)maxValue;
-                    OnResourceChanged?.Invoke(ResourceType.Hits, previousValue, maxValue);
-                }
-            }
-        }
-
+        
         private void SetResourceInternal(ResourceType type, long value)
         {
             switch (type)
             {
                 case ResourceType.Watts:
                     _resources.watts = Math.Max(0, value);
-                    break;
-                case ResourceType.Energy:
-                    _resources.currentEnergy = (int)Math.Max(0, value);
                     break;
                 case ResourceType.Experience:
                     _resources.currentXP = Math.Max(0, value);

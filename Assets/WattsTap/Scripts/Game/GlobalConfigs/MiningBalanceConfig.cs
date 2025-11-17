@@ -18,6 +18,9 @@ namespace WattsTap.Scripts.Game.GlobalConfigs
         [Tooltip("Опыт за один тап")]
         public int expPerTap = 1;
         
+        [Tooltip("Стоимость энергии за один тап")]
+        public int energyCostPerTap;
+        
         [Tooltip("Начальная вместимость ударов")]
         public int startCapacityHits = 1500;
         
@@ -48,7 +51,7 @@ namespace WattsTap.Scripts.Game.GlobalConfigs
         [Header("Daily Progression")]
         [Tooltip("Данные прогрессии по дням")]
         public DailyProgressionData[] dailyProgression = new DailyProgressionData[30];
-
+        
         /// <summary>
         /// Получить данные прогрессии для конкретного дня
         /// </summary>

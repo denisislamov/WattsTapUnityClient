@@ -113,8 +113,8 @@ namespace WattsTap.Game.UI
         private void RecalculateCoinsPerTap()
         {
             if (_playerService == null) return;
-            var baseIncome = (int)_playerService.GetPlayerData().stats.incomePerTap;
-            var multiplier = _tapController != null ? _tapController.IncomeMultiplier : 1f;
+            var baseIncome = _playerService.IncomePerTap;
+            var multiplier = _playerService.IncomeMultiplier;
             var effective = Mathf.Max(0, Mathf.RoundToInt(baseIncome * multiplier));
             CoinsPerTap.Value = effective;
         }

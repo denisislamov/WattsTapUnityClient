@@ -25,11 +25,6 @@ namespace WattsTap.Game.Tap.Services
         int MaxHits { get; }
 
         /// <summary>
-        /// Время (в секундах) восстановления одного удара
-        /// </summary>
-        float HitRecoverySeconds { get; }
-
-        /// <summary>
         /// Выполнить тап. Возвращает true, если тап применён (энергия была потрачена и ресурсы начислены).
         /// </summary>
         bool HandleTap();
@@ -39,37 +34,25 @@ namespace WattsTap.Game.Tap.Services
         /// </summary>
         void Update(float deltaTime);
 
-        /// <summary>
-        /// Рассчитать оффлайн-бонус в ваттах, на основании времени оффлайн и внутренних бонусов тапового контроллера.
-        /// </summary>
-        long CalculateOfflineBonus(DateTime lastLogoutUtc);
+        // /// <summary>
+        // /// Рассчитать оффлайн-бонус в ваттах, на основании времени оффлайн и внутренних бонусов тапового контроллера.
+        // /// </summary>
+        // long CalculateOfflineBonus(DateTime lastLogoutUtc);
 
-        /// <summary>
-        /// Применить апгрейд, влияющий на поведение тапов (увеличение дохода за тап, увеличение MaxHits или снижение HitRecoverySeconds и т.п.)
-        /// value — размер увеличения/множителя в зависимости от типа апгрейда
-        /// </summary>
-        void ApplyUpgrade(TapUpgradeType type, float value);
+        // /// <summary>
+        // /// Применить апгрейд, влияющий на поведение тапов (увеличение дохода за тап, увеличение MaxHits или снижение HitRecoverySeconds и т.п.)
+        // /// value — размер увеличения/множителя в зависимости от типа апгрейда
+        // /// </summary>
+        // void ApplyUpgrade(TapUpgradeType type, float value);
 
-        /// <summary>
-        /// Текущий множитель дохода за тап (>= 1)
-        /// </summary>
-        float IncomeMultiplier { get; }
         
         /// <summary>
         /// Событие изменения множителя дохода за тап
         /// </summary>
-        event Action<float> OnIncomeMultiplierChanged;
-
-        event Action<bool> OnTapPerformed; // success
-        event Action<int, int> OnHitsChanged; // current, max
-        event Action<long> OnOfflineBonusChanged; // when internal offline-bonus metric changed
-    }
-
-    public enum TapUpgradeType
-    {
-        IncomePerTapPercent, // увеличивает доход за тап в процентах (например 0.2 = +20%)
-        MaxHitsFlat,         // прибавляет к MaxHits
-        HitRecoveryPercent,  // уменьшает время восстановления (например -0.2 = -20% recovery time)
-        OfflineBonusPercent  // увеличивает оффлайн-бонус
+         event Action<float> OnIncomeMultiplierChanged;
+        
+        // event Action<bool> OnTapPerformed; // success
+         event Action<int, int> OnHitsChanged; // current, max
+        // event Action<long> OnOfflineBonusChanged; // when internal offline-bonus metric changed
     }
 }

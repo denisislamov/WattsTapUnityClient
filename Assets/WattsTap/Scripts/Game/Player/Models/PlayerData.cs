@@ -44,11 +44,6 @@ namespace WattsTap.Game.Player
         public PlayerResources resources;
         
         /// <summary>
-        /// Статистика игрока
-        /// </summary>
-        public PlayerStats stats;
-        
-        /// <summary>
         /// Инвентарь игрока
         /// </summary>
         public InventoryData inventory;
@@ -82,7 +77,6 @@ namespace WattsTap.Game.Player
             telegramUserId = 0;
             tonWalletAddress = string.Empty;
             resources = new PlayerResources();
-            stats = new PlayerStats();
             inventory = new InventoryData();
             createdAt = DateTime.UtcNow;
             updatedAt = DateTime.UtcNow;

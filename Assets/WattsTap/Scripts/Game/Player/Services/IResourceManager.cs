@@ -37,26 +37,6 @@ namespace WattsTap.Game.Player
         /// Потратить ресурс (с проверкой достаточности)
         /// </summary>
         ResourceTransaction SpendResource(ResourceType type, long amount, bool notifyChange = true);
-        
-        /// <summary>
-        /// Установить значение ресурса напрямую (для загрузки данных)
-        /// </summary>
-        void SetResource(ResourceType type, long value, bool notifyChange = false);
-        
-        /// <summary>
-        /// Попытаться потратить несколько ресурсов атомарно
-        /// </summary>
-        bool TrySpendMultiple(params (ResourceType type, long amount)[] costs);
-        
-        /// <summary>
-        /// Получить максимальное значение ресурса (для энергии и т.д.)
-        /// </summary>
-        long GetMaxResource(ResourceType type);
-        
-        /// <summary>
-        /// Установить максимальное значение ресурса
-        /// </summary>
-        void SetMaxResource(ResourceType type, long maxValue);
     }
 }
 

@@ -11,11 +11,6 @@ namespace WattsTap.Game.Player
         Watts = 0,
         
         /// <summary>
-        /// Энергия для тапов
-        /// </summary>
-        Energy = 1,
-        
-        /// <summary>
         /// Опыт игрока
         /// </summary>
         Experience = 2,
