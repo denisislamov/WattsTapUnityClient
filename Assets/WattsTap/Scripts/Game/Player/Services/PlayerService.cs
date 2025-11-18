@@ -135,7 +135,7 @@ namespace WattsTap.Game.Player
         {
             _playerData.resources.currentXP -= _playerData.resources.xpToNextLevel;
             _playerData.level++;
-            _playerData.resources.xpToNextLevel = _levelConfig.GetExpRequiredForLevel(_playerData.level);
+            _playerData.resources.xpToNextLevel = _levelConfig.GetExpRequiredForLevel(_playerData.level + 1);
 
             var wattsReward = _levelConfig.GetRewardsForLevel(_playerData.level).coins;
             _resourceManager.AddResource(ResourceType.Watts, wattsReward, false);
