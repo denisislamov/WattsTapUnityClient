@@ -964,6 +964,13 @@ MonoBehaviour:
   _widthIncreasePerDigit: 15
   currentHitsText: {fileID: 5424560476590021156}
   maxMitsText: {fileID: 5420474072264530899}
+  _themeManager: {fileID: 0}
+  _fallbackSkin: {fileID: 0}
+  _skinBindings:
+  - tokenId: 
+    imageTargets: []
+    textTargets: []
+    suppressMissingTokenWarning: 0
   skins:
   - skinElements:
     - backgroundImages:

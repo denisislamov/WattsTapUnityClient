@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using WattsTap.Core;
 using WattsTap.Core.UI;
 
 namespace WattsTap.Game.UI
@@ -20,6 +21,11 @@ namespace WattsTap.Game.UI
             {
                 foreach (var backgroundImage in backgroundImages)
                 {
+                    if (backgroundImage == null)
+                    {
+                        continue;
+                    }
+                    
                     backgroundImage.color = foregroundColor;
                     
                     if (material != null)
@@ -30,6 +36,11 @@ namespace WattsTap.Game.UI
                 
                 foreach (var text in texts)
                 {
+                    if (text == null)
+                    {
+                        continue;
+                    }
+                    
                     text.color = foregroundColor;
                     
                     if (material != null)
@@ -47,9 +58,14 @@ namespace WattsTap.Game.UI
             
             public void SetColors()
             {
+                if (skinElements == null)
+                {
+                    return;
+                }
+                
                 foreach (var element in skinElements)
                 {
-                    element.SetColor();
+                    element?.SetColor();
                 }
             }
         }
@@ -73,23 +89,62 @@ namespace WattsTap.Game.UI
         [SerializeField] private TMP_Text currentHitsText;
         [SerializeField] private TMP_Text maxMitsText;
 
-        [Header("Skins")]
+        [Header("Skinning")]
+        [SerializeField] private MainMenuThemeManager _themeManager;
+        [SerializeField] private MainMenuSkinDefinition _fallbackSkin;
+        [SerializeField] private SkinTokenBinding[] _skinBindings;
+        
+        [Header("Legacy Skins (Temporary)")]
         [SerializeField] private Skin[] skins;
+        
         [SerializeField] public Button changeSkinButton;
         
         public Button ChangeSkinButton => changeSkinButton;
         
-        private int _currentSkinIndex = 0;
+        private int _currentLegacySkinIndex;
 
         public void SetDefaultSkin()
         {
-            skins[0].SetColors();    
+            if (_themeManager != null)
+            {
+                var skin = _themeManager.SetDefaultSkin();
+                if (skin == null && _fallbackSkin != null)
+                {
+                    ApplySkin(_fallbackSkin);
+                }
+                
+                return;
+            }
+
+            if (_fallbackSkin != null)
+            {
+                ApplySkin(_fallbackSkin);
+                return;
+            }
+
+            ApplyLegacySkin(0);
         }
         
         public void SetNextSkin()
         {
-            _currentSkinIndex = (_currentSkinIndex + 1) % skins.Length;
-            skins[_currentSkinIndex].SetColors();
+            if (_themeManager != null)
+            {
+                var skin = _themeManager.SetNextSkin();
+                if (skin == null && _fallbackSkin != null)
+                {
+                    ApplySkin(_fallbackSkin);
+                }
+                
+                return;
+            }
+
+            if (_fallbackSkin != null)
+            {
+                ApplySkin(_fallbackSkin);
+                return;
+            }
+
+            ApplyNextLegacySkin();
         }
         
         public void UpdateTotalCoins(long totalCoins)
@@ -165,6 +220,172 @@ namespace WattsTap.Game.UI
             if (_levelProgressBar != null)
             {
                 _levelProgressBar.value = progress;
+            }
+        }
+
+        private void OnEnable()
+        {
+            _themeManager = ServiceLocator.Get<MainMenuThemeManager>();
+            
+            if (_themeManager != null)
+            {
+                _themeManager.SkinChanged += OnSkinChanged;
+
+                if (_themeManager.CurrentSkin != null)
+                {
+                    ApplySkin(_themeManager.CurrentSkin);
+                    return;
+                }
+            }
+
+            if (_fallbackSkin != null)
+            {
+                ApplySkin(_fallbackSkin);
+                return;
+            }
+
+            ApplyLegacySkin(_currentLegacySkinIndex);
+        }
+
+        private void OnDisable()
+        {
+            if (_themeManager != null)
+            {
+                _themeManager.SkinChanged -= OnSkinChanged;
+            }
+        }
+
+        private void OnSkinChanged(MainMenuSkinDefinition skin)
+        {
+            if (skin == null)
+            {
+                if (_fallbackSkin != null)
+                {
+                    ApplySkin(_fallbackSkin);
+                    return;
+                }
+
+                ApplyLegacySkin(_currentLegacySkinIndex);
+                return;
+            }
+
+            ApplySkin(skin);
+        }
+
+        private void ApplySkin(MainMenuSkinDefinition skin)
+        {
+            if (skin == null)
+            {
+                Debug.LogWarning("MainMenuUIView: No skin provided to apply.");
+                return;
+            }
+
+            if (_skinBindings == null || _skinBindings.Length == 0)
+            {
+                Debug.LogWarning("MainMenuUIView: No skin bindings configured.");
+                return;
+            }
+
+            foreach (var binding in _skinBindings)
+            {
+                binding?.Apply(skin, this);
+            }
+        }
+        
+        private void ApplyLegacySkin(int index)
+        {
+            if (skins == null || skins.Length == 0)
+            {
+                return;
+            }
+
+            index = Mathf.Clamp(index, 0, skins.Length - 1);
+            skins[index]?.SetColors();
+            _currentLegacySkinIndex = index;
+        }
+
+        private void ApplyNextLegacySkin()
+        {
+            if (skins == null || skins.Length == 0)
+            {
+                return;
+            }
+
+            _currentLegacySkinIndex = (_currentLegacySkinIndex + 1) % skins.Length;
+            skins[_currentLegacySkinIndex]?.SetColors();
+        }
+
+        [System.Serializable]
+        private class SkinTokenBinding
+        {
+            [SerializeField] private string tokenId;
+            [SerializeField] private Image[] imageTargets;
+            [SerializeField] private TMP_Text[] textTargets;
+            [SerializeField] private bool suppressMissingTokenWarning;
+
+            public void Apply(MainMenuSkinDefinition skin, MonoBehaviour context)
+            {
+                if (skin == null || string.IsNullOrEmpty(tokenId))
+                {
+                    return;
+                }
+
+                if (!skin.TryGetToken(tokenId, out var token))
+                {
+                    if (!suppressMissingTokenWarning)
+                    {
+                        Debug.LogWarning($"MainMenuUIView: Token '{tokenId}' was not found in skin '{skin.name}'.", context);
+                    }
+                    
+                    return;
+                }
+
+                ApplyToImages(token);
+                ApplyToTexts(token);
+            }
+
+            private void ApplyToImages(MainMenuSkinDefinition.SkinToken token)
+            {
+                if (imageTargets == null)
+                {
+                    return;
+                }
+                
+                foreach (var image in imageTargets)
+                {
+                    if (image == null)
+                    {
+                        continue;
+                    }
+
+                    image.color = token.Color;
+                    if (token.Material != null)
+                    {
+                        image.material = token.Material;
+                    }
+                }
+            }
+
+            private void ApplyToTexts(MainMenuSkinDefinition.SkinToken token)
+            {
+                if (textTargets == null)
+                {
+                    return;
+                }
+                
+                foreach (var text in textTargets)
+                {
+                    if (text == null)
+                    {
+                        continue;
+                    }
+
+                    text.color = token.Color;
+                    if (token.Material != null)
+                    {
+                        text.material = token.Material;
+                    }
+                }
             }
         }
     }

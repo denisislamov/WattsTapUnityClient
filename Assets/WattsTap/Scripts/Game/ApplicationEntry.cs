@@ -6,6 +6,7 @@ using WattsTap.Core.React;
 using WattsTap.Core.UI;
 using WattsTap.Game.Player;
 using WattsTap.Game.Tap.Services;
+using WattsTap.Game.UI;
 
 namespace WattsTap.Core
 {
@@ -22,6 +23,7 @@ namespace WattsTap.Core
         
         [Header("Update Service")]       
         [SerializeField] private UpdateService _updateService;
+        [SerializeField] private MainMenuThemeManager _mainMenuThemeManager;
         
         private SharedDataService _sharedDataService;
         private ServiceLocator _serviceManager;
@@ -41,6 +43,8 @@ namespace WattsTap.Core
             ServiceLocator.Register<IInputService>(new InputService());
             ServiceLocator.Register<ITapControllerService>(new TapControllerService());
             ServiceLocator.Register<ITelegramService>(_telegramService);
+            
+            ServiceLocator.Register(_mainMenuThemeManager);
             
             _sharedDataService = new SharedDataService();
             ServiceLocator.Register<ISharedDataService>(_sharedDataService);
