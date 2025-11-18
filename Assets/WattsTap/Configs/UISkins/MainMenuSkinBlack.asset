@@ -12,8 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17d67db10610f4aa198906370dd9b8f5, type: 3}
   m_Name: MainMenuSkinBlack
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.MainMenuSkinDefinition
-  skinId: default
+  skinId: black
   tokens:
-  - tokenId: Buttons
-    color: {r: 0, g: 0, b: 0, a: 0}
+  - tokenId: bg-panel
+    color: {r: 1, g: 1, b: 1, a: 1}
+    material: {fileID: 2100000, guid: 57474698930bd4f40a152a11c315dfe5, type: 2}
+  - tokenId: primary-card
+    color: {r: 0.1882353, g: 0.1882353, b: 0.1882353, a: 0.3019608}
+    material: {fileID: 0}
+  - tokenId: secondary-card
+    color: {r: 0.1882353, g: 0.1882353, b: 0.1882353, a: 0.3019608}
+    material: {fileID: 0}
+  - tokenId: main-background
+    color: {r: 0.1882353, g: 0.1882353, b: 0.1882353, a: 0.3019608}
+    material: {fileID: 0}
+  - tokenId: icon
+    color: {r: 1, g: 1, b: 1, a: 1}
+    material: {fileID: 0}
+  - tokenId: button-fill
+    color: {r: 1, g: 1, b: 1, a: 1}
+    material: {fileID: 0}
+  - tokenId: text-primary
+    color: {r: 1, g: 1, b: 1, a: 1}
     material: {fileID: 0}

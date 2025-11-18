@@ -967,9 +967,55 @@ MonoBehaviour:
   _themeManager: {fileID: 0}
   _fallbackSkin: {fileID: 0}
   _skinBindings:
-  - tokenId: 
-    imageTargets: []
+  - tokenId: bg-panel
+    imageTargets:
+    - {fileID: 581533287702750377}
     textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: primary-card
+    imageTargets:
+    - {fileID: 2279115366967533988}
+    - {fileID: 3530768085098434621}
+    - {fileID: 1746095948731363358}
+    - {fileID: 6876108950805964374}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: secondary-card
+    imageTargets:
+    - {fileID: 2961439505257384135}
+    - {fileID: 7533410595330503088}
+    - {fileID: 3970732665764103046}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: main-background
+    imageTargets:
+    - {fileID: 210390585928588724}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: icon
+    imageTargets:
+    - {fileID: 1471344061679295922}
+    - {fileID: 2081596658255637668}
+    - {fileID: 1689336501695591275}
+    - {fileID: 2828144107648399032}
+    - {fileID: 3926404339058249186}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: button-fill
+    imageTargets:
+    - {fileID: 4674639135480044723}
+    - {fileID: 8034810974185893162}
+    - {fileID: 5135737297122561289}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: text-primary
+    imageTargets: []
+    textTargets:
+    - {fileID: 9187258481464173943}
+    - {fileID: 4475950540919198561}
+    - {fileID: 4533605739123940352}
+    - {fileID: 9189856459558398486}
+    - {fileID: 4337823610494765502}
     suppressMissingTokenWarning: 0
   skins:
   - skinElements:
