@@ -4,10 +4,6 @@ using UnityEngine;
 
 namespace WattsTap.Game.Player
 {
-    /// <summary>
-    /// Менеджер управления игровыми ресурсами
-    /// Работает с PlayerResources для хранения данных
-    /// </summary>
     public class ResourceManager : IResourceManager
     {
         private readonly PlayerResources _resources;
@@ -29,8 +25,7 @@ namespace WattsTap.Game.Player
                 ResourceType.Experience => _resources.currentXP,
                 ResourceType.XpToNextLevel => _resources.xpToNextLevel,
                 ResourceType.SummXp => _resources.sumExp,
-                ResourceType.KiloWatt => (long)(_resources.kiloWattTokens * 1000000), // Convert to micro-units
-                ResourceType.Premium => 0, // Not implemented yet
+                ResourceType.KiloWatt => (long)(_resources.kiloWattTokens * 1000000),
                 ResourceType.Hits => _resources.currentHits,
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, "Unknown resource type")
             };
@@ -117,32 +112,22 @@ namespace WattsTap.Game.Player
 
         public bool TrySpendMultiple(params (ResourceType type, long amount)[] costs)
         {
-            // First check if all resources are available
             foreach (var (type, amount) in costs)
             {
                 if (!HasEnough(type, amount))
                 {
-                    Debug.LogWarning($"[ResourceManager] Cannot spend multiple: not enough {type} (need {amount}, have {GetResource(type)})");
+                    Debug.LogWarning($"[ResourceManager] Cannot spend multiple: not enough {type}" +
+                                     $" (need {amount}, have {GetResource(type)})");
                     return false;
                 }
             }
 
-            // If all checks pass, spend all resources
             foreach (var (type, amount) in costs)
             {
                 SpendResource(type, amount);
             }
 
             return true;
-        }
-
-        public long GetMaxResource(ResourceType type)
-        {
-            if (_maxValues.TryGetValue(type, out var maxValue))
-            {
-                return maxValue;
-            }
-            return long.MaxValue; // No limit
         }
         
         private void SetResourceInternal(ResourceType type, long value)
@@ -157,10 +142,6 @@ namespace WattsTap.Game.Player
                     break;
                 case ResourceType.KiloWatt:
                     _resources.kiloWattTokens = Math.Max(0, value / 1000000m);
-                    break;
-                case ResourceType.Premium:
-                    // Not implemented yet
-                    Debug.LogWarning("[ResourceManager] Premium currency not implemented");
                     break;
                 case ResourceType.Hits:
                     _resources.currentHits = (int)Math.Max(0, value);

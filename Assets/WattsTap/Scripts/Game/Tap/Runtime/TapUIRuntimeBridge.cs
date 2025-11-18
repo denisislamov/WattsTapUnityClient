@@ -2,23 +2,27 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using WattsTap.Core;
+using WattsTap.Core.GameLoop;
 using WattsTap.Game.Tap.Services;
 
 namespace WattsTap.Scripts.Game.Tap.Runtime
 {
-    public class TapUIRuntimeBridge : MonoBehaviour
+    public class TapUIRuntimeBridge : MonoBehaviour, IUpdatable
     {
         public GameObject targetUI;
         public GraphicRaycaster[] raycasters;
 
         private IInputService _input;
         private ITapControllerService _tapController;
+        private IUpdateService _updateService;
+        
         private EventSystem _eventSystem;
 
         private void Start()
         {
             _input = ServiceLocator.Get<IInputService>();
             _tapController = ServiceLocator.Get<ITapControllerService>();
+            
             _eventSystem = EventSystem.current;
 
             if (_input != null)
@@ -27,13 +31,32 @@ namespace WattsTap.Scripts.Game.Tap.Runtime
             }
         }
 
-        private void Update()
+        private void OnDestroy()
+        {
+            if (_input != null)
+            {
+                _input.OnTap -= OnTap;
+            }
+        }
+        
+        private void OnEnable()
+        {
+            _updateService = ServiceLocator.Get<IUpdateService>();
+            _updateService.Register(this);
+        }
+
+        private void OnDisable()
+        {
+            _updateService.Unregister(this);
+        }
+        
+        public void OnUpdate()
         {
             var dt = Time.deltaTime;
             _input?.Update(dt);
             _tapController?.Update(dt);
         }
-
+        
         private void OnTap(Vector2 screenPos)
         {
             if (IsPointerOverTarget(screenPos))
@@ -100,14 +123,6 @@ namespace WattsTap.Scripts.Game.Tap.Runtime
             }
 
             return false;
-        }
-
-        void OnDestroy()
-        {
-            if (_input != null)
-            {
-                _input.OnTap -= OnTap;
-            }
         }
     }
 }

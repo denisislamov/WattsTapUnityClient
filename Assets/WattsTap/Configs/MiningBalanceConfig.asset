@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Scripts.Game.GlobalConfigs.MiningBalanceConfig
   coinsPerTap: 1
   expPerTap: 1
+  energyCostPerTap: 1
   startCapacityHits: 1500
   cooldownPerHitSec: 2
   critMultiplier: 1.2

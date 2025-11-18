@@ -26,8 +26,8 @@ MonoBehaviour:
       legendaryChests: 0
   - level: 2
     expCoefficient: 1
-    needExp: 6000
-    sumExp: 6000
+    needExp: 60
+    sumExp: 60
     rewards:
       coins: 1000
       draws: 1

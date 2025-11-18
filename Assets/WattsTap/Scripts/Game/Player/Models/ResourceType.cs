@@ -21,11 +21,6 @@ namespace WattsTap.Game.Player
         KiloWatt = 3,
         
         /// <summary>
-        /// Премиум валюта (для будущего расширения)
-        /// </summary>
-        Premium = 4,
-        
-        /// <summary>
         /// Удары (количество доступных тапов)
         /// </summary>
         Hits = 5,

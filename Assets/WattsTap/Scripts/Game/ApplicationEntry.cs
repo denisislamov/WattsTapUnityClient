@@ -1,6 +1,7 @@
 using UnityEngine;
 using WattsTap.Constants;
 using WattsTap.Core.Configs;
+using WattsTap.Core.GameLoop;
 using WattsTap.Core.React;
 using WattsTap.Core.UI;
 using WattsTap.Game.Player;
@@ -19,6 +20,9 @@ namespace WattsTap.Core
         [Header("Telegram")]
         [SerializeField] private TelegramService _telegramService;
         
+        [Header("Update Service")]       
+        [SerializeField] private UpdateService _updateService;
+        
         private SharedDataService _sharedDataService;
         private ServiceLocator _serviceManager;
         public ServiceLocator ServiceManager => _serviceManager;
@@ -31,6 +35,7 @@ namespace WattsTap.Core
             ServiceLocator.Register<IConfigService>(_stageConfigService);
             _stageConfigService.Initialize();
             
+            ServiceLocator.Register<IUpdateService>(_updateService);
             ServiceLocator.Register<IUIService>(new UIService(_uiRoot, _overlayRoot));
             ServiceLocator.Register<IPlayerService>(new PlayerService());
             ServiceLocator.Register<IInputService>(new InputService());
