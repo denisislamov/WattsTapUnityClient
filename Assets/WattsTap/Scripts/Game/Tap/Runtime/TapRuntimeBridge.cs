@@ -14,7 +14,7 @@ namespace WattsTap.Game.Tap.Runtime
         private IInputService _input;
         private ITapControllerService _tapController;
 
-        void Start()
+        private void Start()
         {
             // Services should be registered by ApplicationEntry
             _input = ServiceLocator.Get<IInputService>();
