@@ -57,6 +57,8 @@ namespace WattsTap.Game.Player
             _resourceManager.OnResourceChanged += OnResourceManagerChanged;
             _resourceManager.OnResourceTransaction += OnResourceManagerTransaction;
             
+            _playerData.resources.xpToNextLevel = _levelConfig.GetExpRequiredForLevel(_playerData.level + 1);
+            
             Application.targetFrameRate = 60;
             IsInitialized = true;
             
