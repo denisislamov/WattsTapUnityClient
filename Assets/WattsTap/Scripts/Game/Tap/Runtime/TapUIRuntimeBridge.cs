@@ -6,26 +6,17 @@ using WattsTap.Game.Tap.Services;
 
 namespace WattsTap.Scripts.Game.Tap.Runtime
 {
-    /// <summary>
-    /// Bridge MonoBehaviour: вызывает Update у InputService и TapControllerService и связывает OnTap -> HandleTap
-    /// только если палец или мышь были над указанным UI-объектом.
-    /// Поместите на любой GameObject в сцене с ApplicationEntry и назначьте targetUI (UI GameObject).
-    /// </summary>
     public class TapUIRuntimeBridge : MonoBehaviour
     {
-        [Tooltip("UI GameObject (или его дочерний объект). Тапы будут учитываться только если произошли над этим объектом.")]
         public GameObject targetUI;
-
-        [Tooltip("Необязательные GraphicRaycasters. Если не заданы, будут найдены автоматически.")]
         public GraphicRaycaster[] raycasters;
 
         private IInputService _input;
         private ITapControllerService _tapController;
         private EventSystem _eventSystem;
 
-        void Start()
+        private void Start()
         {
-            // Services should be registered by ApplicationEntry
             _input = ServiceLocator.Get<IInputService>();
             _tapController = ServiceLocator.Get<ITapControllerService>();
             _eventSystem = EventSystem.current;
@@ -36,7 +27,7 @@ namespace WattsTap.Scripts.Game.Tap.Runtime
             }
         }
 
-        void Update()
+        private void Update()
         {
             var dt = Time.deltaTime;
             _input?.Update(dt);
@@ -53,13 +44,18 @@ namespace WattsTap.Scripts.Game.Tap.Runtime
 
         private bool IsPointerOverTarget(Vector2 screenPos)
         {
-            if (targetUI == null) return false;
+            if (targetUI == null)
+            {
+                return false;
+            }
 
-            // Ensure we have an EventSystem
-            var es = _eventSystem ?? EventSystem.current;
-            if (es == null) return false;
+            var eventSystem = _eventSystem ?? EventSystem.current;
+            if (eventSystem == null)
+            {
+                return false;
+            }
 
-            var eventData = new PointerEventData(es)
+            var eventData = new PointerEventData(eventSystem)
             {
                 position = screenPos
             };
@@ -68,27 +64,39 @@ namespace WattsTap.Scripts.Game.Tap.Runtime
 
             if (raycasters != null && raycasters.Length > 0)
             {
-                foreach (var rc in raycasters)
+                foreach (var raycaster in raycasters)
                 {
-                    if (rc == null) continue;
-                    rc.Raycast(eventData, results);
+                    if (raycaster == null)
+                    {
+                        continue;
+                    }
+                    raycaster.Raycast(eventData, results);
                 }
             }
             else
             {
-                // Find all GraphicRaycasters in the scene (canvases)
-                var all = Object.FindObjectsByType<GraphicRaycaster>(FindObjectsSortMode.None);
+                var all = FindObjectsByType<GraphicRaycaster>(FindObjectsSortMode.None);
                 foreach (var rc in all)
                 {
-                    if (rc == null) continue;
+                    if (rc == null)
+                    {
+                        continue;
+                    }
                     rc.Raycast(eventData, results);
                 }
             }
 
-            foreach (var r in results)
+            foreach (var result in results)
             {
-                if (r.gameObject == targetUI) return true;
-                if (r.gameObject.transform.IsChildOf(targetUI.transform)) return true;
+                if (result.gameObject == targetUI)
+                {
+                    return true;
+                }
+
+                if (result.gameObject.transform.IsChildOf(targetUI.transform))
+                {
+                    return true;
+                }
             }
 
             return false;
