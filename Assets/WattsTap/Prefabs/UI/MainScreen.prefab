@@ -1019,6 +1019,12 @@ MonoBehaviour:
     - {fileID: 755690349056368612}
     - {fileID: 4868643791387425402}
     suppressMissingTokenWarning: 0
+  - tokenId: timer
+    imageTargets:
+    - {fileID: 2123483066321732674}
+    - {fileID: 6094502229808964060}
+    textTargets: []
+    suppressMissingTokenWarning: 0
   changeSkinButton: {fileID: 6582713047458403840}
 --- !u!114 &682962176018097781
 MonoBehaviour:
@@ -1942,6 +1948,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!114 &2123483066321732674 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2150173469289791971, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
+  m_PrefabInstance: {fileID: 49209715784598945}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!224 &3012646772730296780 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2981877454354136173, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
@@ -3900,6 +3917,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!114 &6094502229808964060 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2150173469289791971, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
+  m_PrefabInstance: {fileID: 5279052314306027583}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!224 &6927441824079158354 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2981877454354136173, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}

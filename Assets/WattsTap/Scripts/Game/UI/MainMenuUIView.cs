@@ -258,6 +258,12 @@ namespace WattsTap.Game.UI
                     }
 
                     image.color = token.Color;
+                    
+                    if (token.Sprite != null)
+                    {
+                        image.sprite = token.Sprite;
+                    }
+                    
                     if (token.Material != null)
                     {
                         image.material = token.Material;

@@ -44,11 +44,12 @@ namespace WattsTap.Game.UI
             [SerializeField] private string tokenId;
             [SerializeField] private Color color = Color.white;
             [SerializeField] private Material material;
+            [SerializeField] private Sprite sprite;
 
             public string TokenId => tokenId;
             public Color Color => color;
             public Material Material => material;
+            public Sprite Sprite => sprite;
         }
     }
 }
-
