@@ -8,68 +8,6 @@ namespace WattsTap.Game.UI
 {
     public class MainMenuUIView : UIBaseView<MainMenuUIPresenter>
     {
-        [System.Serializable]
-        public class SkinElement
-        {
-            public Image[] backgroundImages;
-            public TMP_Text[] texts;
-            
-            public Color foregroundColor;
-            public Material material;
-            
-            public void SetColor()
-            {
-                foreach (var backgroundImage in backgroundImages)
-                {
-                    if (backgroundImage == null)
-                    {
-                        continue;
-                    }
-                    
-                    backgroundImage.color = foregroundColor;
-                    
-                    if (material != null)
-                    {
-                        backgroundImage.material = material;
-                    }
-                }
-                
-                foreach (var text in texts)
-                {
-                    if (text == null)
-                    {
-                        continue;
-                    }
-                    
-                    text.color = foregroundColor;
-                    
-                    if (material != null)
-                    {
-                        text.material = material;
-                    }
-                }
-            }
-        }
-        
-        [System.Serializable]
-        public class Skin
-        {
-            public SkinElement[] skinElements;
-            
-            public void SetColors()
-            {
-                if (skinElements == null)
-                {
-                    return;
-                }
-                
-                foreach (var element in skinElements)
-                {
-                    element?.SetColor();
-                }
-            }
-        }
-        
         [Header("User")]
         [SerializeField] private TMP_Text _userName;
         [SerializeField] private Image _userAvatar;
@@ -94,15 +32,39 @@ namespace WattsTap.Game.UI
         [SerializeField] private MainMenuSkinDefinition _fallbackSkin;
         [SerializeField] private SkinTokenBinding[] _skinBindings;
         
-        [Header("Legacy Skins (Temporary)")]
-        [SerializeField] private Skin[] skins;
-        
         [SerializeField] public Button changeSkinButton;
         
         public Button ChangeSkinButton => changeSkinButton;
         
-        private int _currentLegacySkinIndex;
+        private void OnEnable()
+        {
+            _themeManager = ServiceLocator.Get<MainMenuThemeManager>();
+            
+            if (_themeManager != null)
+            {
+                _themeManager.SkinChanged += OnSkinChanged;
 
+                if (_themeManager.CurrentSkin != null)
+                {
+                    ApplySkin(_themeManager.CurrentSkin);
+                    return;
+                }
+            }
+
+            if (_fallbackSkin != null)
+            {
+                ApplySkin(_fallbackSkin);
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (_themeManager != null)
+            {
+                _themeManager.SkinChanged -= OnSkinChanged;
+            }
+        }
+        
         public void SetDefaultSkin()
         {
             if (_themeManager != null)
@@ -119,10 +81,7 @@ namespace WattsTap.Game.UI
             if (_fallbackSkin != null)
             {
                 ApplySkin(_fallbackSkin);
-                return;
             }
-
-            ApplyLegacySkin(0);
         }
         
         public void SetNextSkin()
@@ -141,10 +100,7 @@ namespace WattsTap.Game.UI
             if (_fallbackSkin != null)
             {
                 ApplySkin(_fallbackSkin);
-                return;
             }
-
-            ApplyNextLegacySkin();
         }
         
         public void UpdateTotalCoins(long totalCoins)
@@ -222,39 +178,7 @@ namespace WattsTap.Game.UI
                 _levelProgressBar.value = progress;
             }
         }
-
-        private void OnEnable()
-        {
-            _themeManager = ServiceLocator.Get<MainMenuThemeManager>();
-            
-            if (_themeManager != null)
-            {
-                _themeManager.SkinChanged += OnSkinChanged;
-
-                if (_themeManager.CurrentSkin != null)
-                {
-                    ApplySkin(_themeManager.CurrentSkin);
-                    return;
-                }
-            }
-
-            if (_fallbackSkin != null)
-            {
-                ApplySkin(_fallbackSkin);
-                return;
-            }
-
-            ApplyLegacySkin(_currentLegacySkinIndex);
-        }
-
-        private void OnDisable()
-        {
-            if (_themeManager != null)
-            {
-                _themeManager.SkinChanged -= OnSkinChanged;
-            }
-        }
-
+        
         private void OnSkinChanged(MainMenuSkinDefinition skin)
         {
             if (skin == null)
@@ -262,10 +186,8 @@ namespace WattsTap.Game.UI
                 if (_fallbackSkin != null)
                 {
                     ApplySkin(_fallbackSkin);
-                    return;
                 }
-
-                ApplyLegacySkin(_currentLegacySkinIndex);
+                
                 return;
             }
 
@@ -292,29 +214,6 @@ namespace WattsTap.Game.UI
             }
         }
         
-        private void ApplyLegacySkin(int index)
-        {
-            if (skins == null || skins.Length == 0)
-            {
-                return;
-            }
-
-            index = Mathf.Clamp(index, 0, skins.Length - 1);
-            skins[index]?.SetColors();
-            _currentLegacySkinIndex = index;
-        }
-
-        private void ApplyNextLegacySkin()
-        {
-            if (skins == null || skins.Length == 0)
-            {
-                return;
-            }
-
-            _currentLegacySkinIndex = (_currentLegacySkinIndex + 1) % skins.Length;
-            skins[_currentLegacySkinIndex]?.SetColors();
-        }
-
         [System.Serializable]
         private class SkinTokenBinding
         {
