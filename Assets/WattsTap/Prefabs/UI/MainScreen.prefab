@@ -1016,161 +1016,9 @@ MonoBehaviour:
     - {fileID: 4533605739123940352}
     - {fileID: 9189856459558398486}
     - {fileID: 4337823610494765502}
+    - {fileID: 755690349056368612}
+    - {fileID: 4868643791387425402}
     suppressMissingTokenWarning: 0
-  skins:
-  - skinElements:
-    - backgroundImages:
-      - {fileID: 581533287702750377}
-      texts: []
-      foregroundColor: {r: 1, g: 1, b: 1, a: 1}
-      material: {fileID: 2100000, guid: 1e80315645d8942ae9ccbac9a975c0b2, type: 2}
-    - backgroundImages:
-      - {fileID: 2279115366967533988}
-      - {fileID: 3530768085098434621}
-      - {fileID: 1746095948731363358}
-      - {fileID: 6876108950805964374}
-      texts: []
-      foregroundColor: {r: 1, g: 1, b: 1, a: 1}
-      material: {fileID: 0}
-    - backgroundImages:
-      - {fileID: 2961439505257384135}
-      - {fileID: 7533410595330503088}
-      - {fileID: 3970732665764103046}
-      texts: []
-      foregroundColor: {r: 1, g: 1, b: 1, a: 1}
-      material: {fileID: 0}
-    - backgroundImages:
-      - {fileID: 210390585928588724}
-      texts: []
-      foregroundColor: {r: 0.9882353, g: 0.9882353, b: 0.9882353, a: 0.5019608}
-      material: {fileID: 0}
-    - backgroundImages:
-      - {fileID: 1471344061679295922}
-      - {fileID: 2081596658255637668}
-      - {fileID: 1689336501695591275}
-      - {fileID: 2828144107648399032}
-      - {fileID: 3926404339058249186}
-      texts: []
-      foregroundColor: {r: 0, g: 0, b: 0, a: 1}
-      material: {fileID: 0}
-    - backgroundImages:
-      - {fileID: 4674639135480044723}
-      - {fileID: 8034810974185893162}
-      - {fileID: 5135737297122561289}
-      texts: []
-      foregroundColor: {r: 0, g: 0, b: 0, a: 1}
-      material: {fileID: 0}
-    - backgroundImages: []
-      texts:
-      - {fileID: 9187258481464173943}
-      - {fileID: 4475950540919198561}
-      - {fileID: 4533605739123940352}
-      - {fileID: 9189856459558398486}
-      - {fileID: 4337823610494765502}
-      foregroundColor: {r: 0, g: 0, b: 0, a: 1}
-      material: {fileID: 0}
-  - skinElements:
-    - backgroundImages:
-      - {fileID: 581533287702750377}
-      texts: []
-      foregroundColor: {r: 1, g: 1, b: 1, a: 1}
-      material: {fileID: 2100000, guid: 3bdbd8af2747e4383802d2dd605fb88c, type: 2}
-    - backgroundImages:
-      - {fileID: 2279115366967533988}
-      - {fileID: 3530768085098434621}
-      - {fileID: 1746095948731363358}
-      - {fileID: 6876108950805964374}
-      texts: []
-      foregroundColor: {r: 0.1882353, g: 0.1882353, b: 0.1882353, a: 0.3019608}
-      material: {fileID: 0}
-    - backgroundImages:
-      - {fileID: 2961439505257384135}
-      - {fileID: 7533410595330503088}
-      - {fileID: 3970732665764103046}
-      texts: []
-      foregroundColor: {r: 0.1882353, g: 0.1882353, b: 0.1882353, a: 0.3019608}
-      material: {fileID: 0}
-    - backgroundImages:
-      - {fileID: 210390585928588724}
-      texts: []
-      foregroundColor: {r: 0.1882353, g: 0.1882353, b: 0.1882353, a: 0.3019608}
-      material: {fileID: 0}
-    - backgroundImages:
-      - {fileID: 1471344061679295922}
-      - {fileID: 2081596658255637668}
-      - {fileID: 1689336501695591275}
-      - {fileID: 2828144107648399032}
-      - {fileID: 3926404339058249186}
-      texts: []
-      foregroundColor: {r: 1, g: 1, b: 1, a: 1}
-      material: {fileID: 0}
-    - backgroundImages:
-      - {fileID: 4674639135480044723}
-      - {fileID: 8034810974185893162}
-      - {fileID: 5135737297122561289}
-      texts: []
-      foregroundColor: {r: 1, g: 1, b: 1, a: 1}
-      material: {fileID: 0}
-    - backgroundImages: []
-      texts:
-      - {fileID: 9187258481464173943}
-      - {fileID: 4475950540919198561}
-      - {fileID: 4533605739123940352}
-      - {fileID: 9189856459558398486}
-      - {fileID: 4337823610494765502}
-      foregroundColor: {r: 1, g: 1, b: 1, a: 1}
-      material: {fileID: 0}
-  - skinElements:
-    - backgroundImages:
-      - {fileID: 581533287702750377}
-      texts: []
-      foregroundColor: {r: 1, g: 1, b: 1, a: 1}
-      material: {fileID: 2100000, guid: 57474698930bd4f40a152a11c315dfe5, type: 2}
-    - backgroundImages:
-      - {fileID: 2279115366967533988}
-      - {fileID: 3530768085098434621}
-      - {fileID: 1746095948731363358}
-      - {fileID: 6876108950805964374}
-      texts: []
-      foregroundColor: {r: 0.21960784, g: 0.21960784, b: 0.21960784, a: 1}
-      material: {fileID: 0}
-    - backgroundImages:
-      - {fileID: 2961439505257384135}
-      - {fileID: 7533410595330503088}
-      - {fileID: 3970732665764103046}
-      texts: []
-      foregroundColor: {r: 0.21960784, g: 0.21960784, b: 0.21960784, a: 1}
-      material: {fileID: 0}
-    - backgroundImages:
-      - {fileID: 210390585928588724}
-      texts: []
-      foregroundColor: {r: 0.1882353, g: 0.1882353, b: 0.1882353, a: 0.3019608}
-      material: {fileID: 0}
-    - backgroundImages:
-      - {fileID: 1471344061679295922}
-      - {fileID: 2081596658255637668}
-      - {fileID: 1689336501695591275}
-      - {fileID: 2828144107648399032}
-      - {fileID: 3926404339058249186}
-      texts: []
-      foregroundColor: {r: 1, g: 1, b: 1, a: 0.3019608}
-      material: {fileID: 0}
-    - backgroundImages:
-      - {fileID: 4674639135480044723}
-      - {fileID: 8034810974185893162}
-      - {fileID: 5135737297122561289}
-      texts: []
-      foregroundColor: {r: 1, g: 1, b: 1, a: 1}
-      material: {fileID: 0}
-    - backgroundImages: []
-      texts:
-      - {fileID: 9187258481464173943}
-      - {fileID: 4475950540919198561}
-      - {fileID: 4533605739123940352}
-      - {fileID: 9189856459558398486}
-      - {fileID: 4337823610494765502}
-      foregroundColor: {r: 1, g: 1, b: 1, a: 1}
-      material: {fileID: 0}
   changeSkinButton: {fileID: 6582713047458403840}
 --- !u!114 &682962176018097781
 MonoBehaviour:
@@ -1860,6 +1708,10 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4278190080
       objectReference: {fileID: 0}
+    - target: {fileID: 1058431247004211372, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
+      propertyPath: m_Name
+      value: TimerText
+      objectReference: {fileID: 0}
     - target: {fileID: 1863562001887493847, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
       propertyPath: m_Name
       value: Timer
@@ -2079,6 +1931,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
+--- !u!114 &755690349056368612 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 779707295941843525, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
+  m_PrefabInstance: {fileID: 49209715784598945}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &3012646772730296780 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2981877454354136173, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
@@ -3803,6 +3666,10 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4278190080
       objectReference: {fileID: 0}
+    - target: {fileID: 1058431247004211372, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
+      propertyPath: m_Name
+      value: TimerText
+      objectReference: {fileID: 0}
     - target: {fileID: 1863562001887493847, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
       propertyPath: m_Name
       value: Timer
@@ -4022,6 +3889,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
+--- !u!114 &4868643791387425402 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 779707295941843525, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
+  m_PrefabInstance: {fileID: 5279052314306027583}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &6927441824079158354 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2981877454354136173, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
