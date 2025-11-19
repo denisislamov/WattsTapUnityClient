@@ -470,7 +470,7 @@ MonoBehaviour:
   _overlayRoot: {fileID: 427421229}
   _telegramService: {fileID: 1979693432}
   _updateService: {fileID: 1959272533}
-  _mainMenuThemeManager: {fileID: 0}
+  _mainMenuThemeManager: {fileID: 221845536}
 --- !u!114 &1569553359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -524,7 +524,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
 --- !u!114 &1700051876
 MonoBehaviour:
   m_ObjectHideFlags: 0
