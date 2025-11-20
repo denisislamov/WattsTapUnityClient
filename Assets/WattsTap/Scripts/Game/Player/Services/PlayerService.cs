@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
+using WattsTap.Constants;
 using WattsTap.Core;
+using WattsTap.Core.UI;
 using WattsTap.Scripts.Game.GlobalConfigs;
 
 namespace WattsTap.Game.Player
@@ -144,6 +146,7 @@ namespace WattsTap.Game.Player
             OnLevelUp?.Invoke(_playerData.level);
             OnPlayerDataChanged?.Invoke(_playerData);
             OnResourcesChanged?.Invoke(_playerData.resources);
+            ShowLevelUpPopup();
         }
         
 
@@ -165,6 +168,21 @@ namespace WattsTap.Game.Player
              }
             
              return true;
+        }
+
+        private void ShowLevelUpPopup()
+        {
+            if (!ServiceLocator.TryGet<IUIService>(out var uiService))
+            {
+                return;
+            }
+
+            if (uiService.GetViews(UIConstants.LevelUpPopUp).Count > 0)
+            {
+                uiService.Close(UIConstants.LevelUpPopUp);
+            }
+
+            uiService.Open(UIConstants.LevelUpPopUp);
         }
     }
 }

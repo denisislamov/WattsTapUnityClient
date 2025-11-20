@@ -653,6 +653,7 @@ GameObject:
   - component: {fileID: 6825769545153820290}
   - component: {fileID: 7464527492354977753}
   - component: {fileID: 682962176018097781}
+  - component: {fileID: 835374162284386456}
   m_Layer: 5
   m_Name: LevelUpPopUp
   m_TagString: Untagged
@@ -739,6 +740,27 @@ MonoBehaviour:
     Left: 0
     Right: 0
   _targetRectTransform: {fileID: 3688093715683534449}
+--- !u!114 &835374162284386456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3866579325697092498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74ffe6a62e0d4d5ba8f4ec52ffb62a1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.LevelUpUIView
+  _levelValue: {fileID: 8957508249824139963}
+  _rewardSlots:
+  - root: {fileID: 5240579091516606101}
+    rewardValue: {fileID: 8240930988860914657}
+  - root: {fileID: 4869748963223322325}
+    rewardValue: {fileID: 6203254465075670367}
+  - root: {fileID: 1385024618587234369}
+    rewardValue: {fileID: 1700231091520712349}
+  _collectButton: {fileID: 4683074928434889890}
 --- !u!1 &4869748963223322325
 GameObject:
   m_ObjectHideFlags: 0
@@ -2478,6 +2500,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
+--- !u!114 &1700231091520712349 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 779707295941843525, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
+  m_PrefabInstance: {fileID: 2110636320229323992}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &3759306336614500533 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2981877454354136173, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
@@ -2754,6 +2787,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
+--- !u!114 &6203254465075670367 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 779707295941843525, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
+  m_PrefabInstance: {fileID: 6684591675141273370}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!224 &8477376524596677495 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2981877454354136173, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
@@ -3035,3 +3079,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2981877454354136173, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
   m_PrefabInstance: {fileID: 8687365297557266852}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8240930988860914657 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 779707295941843525, guid: 0155b2b44a12b4f16b121d4488210c31, type: 3}
+  m_PrefabInstance: {fileID: 8687365297557266852}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI

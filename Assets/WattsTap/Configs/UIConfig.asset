@@ -15,3 +15,5 @@ MonoBehaviour:
   Entries:
   - Id: MainMenu
     Prefab: {fileID: 3866579325697092498, guid: d8867f2e926114b458761dc0b8ece6b3, type: 3}
+  - Id: LevelUpPopUp
+    Prefab: {fileID: 3866579325697092498, guid: 88f933d442aac4bb68513ae862e6cd59, type: 3}
