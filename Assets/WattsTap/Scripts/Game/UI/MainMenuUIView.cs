@@ -34,6 +34,9 @@ namespace WattsTap.Game.UI
         
         [SerializeField] public Button changeSkinButton;
         
+        [Header("Version Info")]
+        [SerializeField] private TMP_Text _versionText;
+        
         public Button ChangeSkinButton => changeSkinButton;
         
         private void OnEnable()
@@ -194,6 +197,14 @@ namespace WattsTap.Game.UI
             ApplySkin(skin);
         }
 
+        public void UpdateVersionText(string version)
+        {
+            if (_versionText != null)
+            {
+                _versionText.text = $"v{version}";
+            }
+        }
+        
         private void ApplySkin(MainMenuSkinDefinition skin)
         {
             if (skin == null)

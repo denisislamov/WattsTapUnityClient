@@ -31,9 +31,13 @@ namespace WattsTap.Core.React
         private Vector2 _originalOffsetMax;
         private Vector2 _originalSizeDelta;
         private Vector2 _originalAnchoredPosition;
-
+        
+        private ITelegramService _telegramService;
+        
         private void Awake()
         {
+            _telegramService = ServiceLocator.Get<ITelegramService>();
+            
             if (_targetRectTransform == null)
             {
                 _targetRectTransform = GetComponent<RectTransform>();
@@ -47,33 +51,19 @@ namespace WattsTap.Core.React
                 _originalSizeDelta = _targetRectTransform.sizeDelta;
                 _originalAnchoredPosition = _targetRectTransform.anchoredPosition;
             }
+            
+            _telegramService.OnReceivedSafeAreaInsets += ApplySafeZone;
         }
 
-        private void OnEnable()
-        {
-            ApplySafeZone();
-        }
-
-        /// <summary>
-        /// Applies safe zone insets from Telegram service
-        /// </summary>
-        public void ApplySafeZone()
+        private void ApplySafeZone(TelegramService.SafeArea insets)
         {
             if (_targetRectTransform == null)
             {
                 Debug.LogWarning("[TelegramSafeZone] Target RectTransform is not assigned!");
                 return;
             }
-
-            var telegramService = ServiceLocator.Get<ITelegramService>();
-            if (telegramService == null)
-            {
-                Debug.LogWarning("[TelegramSafeZone] Telegram service not found!");
-                return;
-            }
-
-            var safeArea = telegramService.SafeAreaInsets;
-            if (safeArea == null)
+            
+            if (insets == null)
             {
                 Debug.LogWarning("[TelegramSafeZone] Safe area insets not available!");
                 return;
@@ -93,11 +83,12 @@ namespace WattsTap.Core.React
             float pixelHeight = canvas.pixelRect.height;
             float pixelWidth = canvas.pixelRect.width;
 
-            float topOffset = (_sides & SafeZoneSide.Top) != 0 ? (safeArea.Top / pixelHeight) * canvasHeight : 0;
-            float bottomOffset = (_sides & SafeZoneSide.Bottom) != 0 ? (safeArea.Bottom / pixelHeight) * canvasHeight : 0;
-            float leftOffset = (_sides & SafeZoneSide.Left) != 0 ? (safeArea.Left / pixelWidth) * canvasWidth : 0;
-            float rightOffset = (_sides & SafeZoneSide.Right) != 0 ? (safeArea.Right / pixelWidth) * canvasWidth : 0;
+            float topOffset = (_sides & SafeZoneSide.Top) != 0 ? (insets.Top / pixelHeight) * canvasHeight : 0;
+            float bottomOffset = (_sides & SafeZoneSide.Bottom) != 0 ? (insets.Bottom / pixelHeight) * canvasHeight : 0;
+            float leftOffset = (_sides & SafeZoneSide.Left) != 0 ? (insets.Left / pixelWidth) * canvasWidth : 0;
+            float rightOffset = (_sides & SafeZoneSide.Right) != 0 ? (insets.Right / pixelWidth) * canvasWidth : 0;
 
+            Debug.LogErrorFormat("[TelegramSafeZone] Safe Area Insets (pixels) - Top: {0}, Bottom: {1}, Left: {2}, Right: {3}", insets.Top, insets.Bottom, insets.Left, insets.Right);
             switch (_applyMode)
             {
                 case ApplyMode.Padding:
@@ -113,7 +104,7 @@ namespace WattsTap.Core.React
 
             Debug.Log($"[TelegramSafeZone] Applied safe zone: Top={topOffset:F2}, Bottom={bottomOffset:F2}, Left={leftOffset:F2}, Right={rightOffset:F2}");
         }
-
+        
         private void ApplyPadding(float left, float right, float bottom, float top)
         {
             _targetRectTransform.offsetMin = _originalOffsetMin + new Vector2(left, bottom);

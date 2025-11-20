@@ -203,7 +203,7 @@
               window.Telegram.WebApp.safeAreaInset.left.toString() + ',' +
               window.Telegram.WebApp.safeAreaInset.bottom.toString() + ',' +
               window.Telegram.WebApp.safeAreaInset.right.toString();
-          // alert("SafeAreaInsets string : " + safeAreaToString);
+         // alert("SafeAreaInsets string : " + safeAreaToString);
           MyGameInstance.SendMessage('TelegramService', 'ReceiveSafeAreaInsets', safeAreaToString);
       }
       

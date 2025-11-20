@@ -10,6 +10,7 @@ namespace WattsTap.Core.React
         string InitData { get; }
         public TelegramService.SafeArea SafeAreaInsets { get; }
         event Action<string> OnReceivedInitData;
+        public event Action<TelegramService.SafeArea> OnReceivedSafeAreaInsets;
 
         // UniTask SendMessageAsync(string message, long chatId, CancellationToken cancellationToken = default);
     }

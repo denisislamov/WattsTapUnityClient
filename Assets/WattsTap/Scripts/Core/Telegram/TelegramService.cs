@@ -76,6 +76,7 @@ namespace WattsTap.Core.React
         public event Action<string> OnReceivedUserId;
         public event Action<string> OnReceivedUserName;
         public event Action<string> OnReceivedInitData;
+        public event Action<SafeArea> OnReceivedSafeAreaInsets;
         
         private SafeArea _safeAreaInsets = new SafeArea();
          
@@ -195,6 +196,7 @@ namespace WattsTap.Core.React
         public void ReceiveSafeAreaInsets(string safeAreaInsets)
         {
             var result = safeAreaInsets.Split(',');
+            Debug.LogErrorFormat("SafeAreaInsets top {0} left {1} bottom {2} right {3}", result[0], result[1], result[2], result[3]);
             _safeAreaInsets = new SafeArea
             {
                 Top = float.Parse(result[0]),
@@ -203,7 +205,8 @@ namespace WattsTap.Core.React
                 Right = float.Parse(result[3])
             };
             
-            Debug.Log($"Received Safe Area Insets: {_safeAreaInsets}");
+            Debug.LogErrorFormat($"Received Safe Area Insets: {_safeAreaInsets}");
+            OnReceivedSafeAreaInsets?.Invoke(_safeAreaInsets);
         }
         
         public void OnCreateUnityInstance()

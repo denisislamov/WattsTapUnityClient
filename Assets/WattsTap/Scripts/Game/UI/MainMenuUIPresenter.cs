@@ -54,6 +54,8 @@ namespace WattsTap.Game.UI
             
             View.UpdateCurrentLevel(Model.Level.Value);
             View.UpdateLevelProgressBar(Model.CurrentXp.Value);
+            
+            View.UpdateVersionText(Application.version);
         }
 
         private void OnCurrentXpChanged(long value)
