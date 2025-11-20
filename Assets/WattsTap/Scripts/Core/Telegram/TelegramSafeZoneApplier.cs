@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace WattsTap.Core.React
@@ -53,6 +54,16 @@ namespace WattsTap.Core.React
             }
             
             _telegramService.OnReceivedSafeAreaInsets += ApplySafeZone;
+        }
+
+        private void Start()
+        {
+#if UNITY_EDITOR
+            if (_telegramService.DebugSafeAreaInsets)
+            {
+                ApplySafeZone(_telegramService.SafeAreaInsets);
+            }
+#endif
         }
 
         private void ApplySafeZone(TelegramService.SafeArea insets)

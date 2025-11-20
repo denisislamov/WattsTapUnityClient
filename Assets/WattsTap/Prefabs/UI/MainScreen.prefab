@@ -1040,7 +1040,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.React.TelegramSafeZoneApplier
   _sides: 3
-  _applyMode: 1
+  _applyMode: 0
   _targetRectTransform: {fileID: 8479444618827859609}
 --- !u!1 &5449668535693118556
 GameObject:

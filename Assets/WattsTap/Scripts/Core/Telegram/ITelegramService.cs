@@ -8,6 +8,11 @@ namespace WattsTap.Core.React
         string Id { get; }
         string UserName { get; }
         string InitData { get; }
+        
+#if UNITY_EDITOR
+        bool DebugSafeAreaInsets { get; }
+#endif
+        
         public TelegramService.SafeArea SafeAreaInsets { get; }
         event Action<string> OnReceivedInitData;
         public event Action<TelegramService.SafeArea> OnReceivedSafeAreaInsets;

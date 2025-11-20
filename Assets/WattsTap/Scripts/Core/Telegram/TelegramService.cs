@@ -67,7 +67,10 @@ namespace WattsTap.Core.React
         public string Id { get; private set; }
         public string UserName { get; private set; }
         public string InitData { get; private set; }
-        
+
+#if UNITY_EDITOR       
+        public bool DebugSafeAreaInsets => _useDebugSafeArea;
+#endif
         public SafeArea SafeAreaInsets => _safeAreaInsets;
         
         public int InitializationOrder => 1000;
@@ -157,7 +160,10 @@ namespace WattsTap.Core.React
             if (_useDebugSafeArea)
             {
                 _safeAreaInsets = _debugSafeAreaInsets;
-                Debug.Log($"Using debug safe area insets: {_safeAreaInsets}");
+                Debug.Log($"Using debug safe area insets: Top={_safeAreaInsets.Top}, Bottom={_safeAreaInsets.Bottom}, Left={_safeAreaInsets.Left}, Right={_safeAreaInsets.Right}");
+                
+                // Trigger the event so TelegramSafeZoneApplier can apply the debug safe area
+                OnReceivedSafeAreaInsets?.Invoke(_safeAreaInsets);
             }
 #endif
         }
