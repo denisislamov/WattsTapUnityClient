@@ -749,6 +749,7 @@ MonoBehaviour:
     Bottom: 50
     Left: 0
     Right: 0
+    ContentSafeAreaTop: 0
 --- !u!4 &1979693433
 Transform:
   m_ObjectHideFlags: 0

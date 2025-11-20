@@ -94,12 +94,16 @@ namespace WattsTap.Core.React
             float pixelHeight = canvas.pixelRect.height;
             float pixelWidth = canvas.pixelRect.width;
 
-            float topOffset = (_sides & SafeZoneSide.Top) != 0 ? (insets.Top / pixelHeight) * canvasHeight : 0;
+            // Combine safeAreaInset.top with contentSafeAreaInset.top for proper Android support
+            float combinedTopInset = insets.Top + insets.ContentSafeAreaTop;
+            
+            float topOffset = (_sides & SafeZoneSide.Top) != 0 ? (combinedTopInset / pixelHeight) * canvasHeight : 0;
             float bottomOffset = (_sides & SafeZoneSide.Bottom) != 0 ? (insets.Bottom / pixelHeight) * canvasHeight : 0;
             float leftOffset = (_sides & SafeZoneSide.Left) != 0 ? (insets.Left / pixelWidth) * canvasWidth : 0;
             float rightOffset = (_sides & SafeZoneSide.Right) != 0 ? (insets.Right / pixelWidth) * canvasWidth : 0;
 
-            Debug.LogErrorFormat("[TelegramSafeZone] Safe Area Insets (pixels) - Top: {0}, Bottom: {1}, Left: {2}, Right: {3}", insets.Top, insets.Bottom, insets.Left, insets.Right);
+            Debug.LogErrorFormat("[TelegramSafeZone] Safe Area Insets (pixels) - Top: {0}, Bottom: {1}, Left: {2}, Right: {3}, ContentSafeAreaTop: {4}, Combined Top: {5}", 
+                insets.Top, insets.Bottom, insets.Left, insets.Right, insets.ContentSafeAreaTop, combinedTopInset);
             switch (_applyMode)
             {
                 case ApplyMode.Padding:

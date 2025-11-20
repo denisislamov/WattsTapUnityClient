@@ -20,6 +20,7 @@ namespace WattsTap.Core.React
             public float Bottom;
             public float Left;
             public float Right;
+            public float ContentSafeAreaTop; // Additional top inset from contentSafeAreaInset
         }
         
         [Serializable]
@@ -208,7 +209,8 @@ namespace WattsTap.Core.React
                 Top = float.Parse(result[0]),
                 Left = float.Parse(result[1]),
                 Bottom = float.Parse(result[2]),
-                Right = float.Parse(result[3])
+                Right = float.Parse(result[3]),
+                ContentSafeAreaTop = float.Parse(result[4]) // Parse the additional top inset
             };
             
             Debug.LogErrorFormat($"Received Safe Area Insets: {_safeAreaInsets}");
@@ -277,4 +279,3 @@ namespace WattsTap.Core.React
 //         }
     }
 }
-

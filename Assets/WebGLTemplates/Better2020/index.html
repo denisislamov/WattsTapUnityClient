@@ -198,11 +198,18 @@
           MyGameInstance.SendMessage('TelegramService', 'ReceiveUserName', telegramUserName);
           MyGameInstance.SendMessage('TelegramService', 'ReceiveInitData', initData);
 
+          // Get contentSafeAreaInset top value (for Android close/burger buttons)
+          var contentSafeAreaTop = 0;
+          if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.contentSafeAreaInset) {
+              contentSafeAreaTop = window.Telegram.WebApp.contentSafeAreaInset.top || 0;
+          }
+
           // alert("safeAreaInset" + window.Telegram.WebApp.safeAreaInset);
           var safeAreaToString = window.Telegram.WebApp.safeAreaInset.top.toString() + ',' +
               window.Telegram.WebApp.safeAreaInset.left.toString() + ',' +
               window.Telegram.WebApp.safeAreaInset.bottom.toString() + ',' +
-              window.Telegram.WebApp.safeAreaInset.right.toString();
+              window.Telegram.WebApp.safeAreaInset.right.toString() + ',' +
+              contentSafeAreaTop.toString();
          // alert("SafeAreaInsets string : " + safeAreaToString);
           MyGameInstance.SendMessage('TelegramService', 'ReceiveSafeAreaInsets', safeAreaToString);
       }
