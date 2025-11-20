@@ -69,6 +69,42 @@
 
       var MyGameInstance = null;
 
+      function detectTelegramEnvironment() {
+          const isMobileUA = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+          if (!(window.Telegram && window.Telegram.WebApp)) {
+              return isMobileUA ? 'MobileWeb' : 'DesktopWeb';
+          }
+
+          const platform = (window.Telegram.WebApp.platform || '').toLowerCase();
+
+          switch (platform) {
+              case 'android':
+              case 'ios':
+                  return 'MobileClient';
+              case 'macos':
+              case 'tdesktop':
+              case 'unigram':
+                  return 'DesktopClient';
+              case 'web':
+              case 'weba':
+              case 'webk':
+                  return isMobileUA ? 'MobileWeb' : 'DesktopWeb';
+              default:
+                  if (platform.includes('desktop')) {
+                      return 'DesktopClient';
+                  }
+                  if (platform.includes('web')) {
+                      return isMobileUA ? 'MobileWeb' : 'DesktopWeb';
+                  }
+                  if (platform.includes('android') || platform.includes('ios')) {
+                      return 'MobileClient';
+                  }
+          }
+
+          return isMobileUA ? 'MobileWeb' : 'DesktopWeb';
+      }
+
       invisibleButton.addEventListener('click', () => {
           invisibleButton.remove();
           console.log('Overlay button removed');
@@ -212,6 +248,9 @@
               contentSafeAreaTop.toString();
          // alert("SafeAreaInsets string : " + safeAreaToString);
           MyGameInstance.SendMessage('TelegramService', 'ReceiveSafeAreaInsets', safeAreaToString);
+
+          var telegramEnvironment = detectTelegramEnvironment();
+          MyGameInstance.SendMessage('TelegramService', 'ReceiveAppEnvironment', telegramEnvironment);
       }
       
       document.body.appendChild(script);

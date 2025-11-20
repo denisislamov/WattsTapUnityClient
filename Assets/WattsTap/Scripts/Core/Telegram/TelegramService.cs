@@ -13,6 +13,15 @@ namespace WattsTap.Core.React
 {
     public class TelegramService : MonoBehaviour, ITelegramService
     {
+        public enum TelegramAppEnvironment
+        {
+            Unknown = 0,
+            MobileClient,
+            DesktopClient,
+            DesktopWeb,
+            MobileWeb
+        }
+        
         [Serializable]
         public class SafeArea
         {
@@ -68,6 +77,7 @@ namespace WattsTap.Core.React
         public string Id { get; private set; }
         public string UserName { get; private set; }
         public string InitData { get; private set; }
+        public TelegramAppEnvironment AppEnvironment { get; private set; } = TelegramAppEnvironment.Unknown;
 
 #if UNITY_EDITOR       
         public bool DebugSafeAreaInsets => _useDebugSafeArea;
@@ -81,6 +91,7 @@ namespace WattsTap.Core.React
         public event Action<string> OnReceivedUserName;
         public event Action<string> OnReceivedInitData;
         public event Action<SafeArea> OnReceivedSafeAreaInsets;
+        public event Action<TelegramAppEnvironment> OnReceivedAppEnvironment;
         
         private SafeArea _safeAreaInsets = new SafeArea();
          
@@ -203,7 +214,6 @@ namespace WattsTap.Core.React
         public void ReceiveSafeAreaInsets(string safeAreaInsets)
         {
             var result = safeAreaInsets.Split(',');
-            Debug.LogErrorFormat("SafeAreaInsets top {0} left {1} bottom {2} right {3}", result[0], result[1], result[2], result[3]);
             _safeAreaInsets = new SafeArea
             {
                 Top = float.Parse(result[0]),
@@ -213,8 +223,20 @@ namespace WattsTap.Core.React
                 ContentSafeAreaTop = float.Parse(result[4]) // Parse the additional top inset
             };
             
-            Debug.LogErrorFormat($"Received Safe Area Insets: {_safeAreaInsets}");
             OnReceivedSafeAreaInsets?.Invoke(_safeAreaInsets);
+        }
+
+        public void ReceiveAppEnvironment(string environment)
+        {
+            if (string.IsNullOrEmpty(environment) ||
+                !Enum.TryParse(environment, true, out TelegramAppEnvironment parsedEnvironment))
+            {
+                parsedEnvironment = TelegramAppEnvironment.Unknown;
+            }
+
+            AppEnvironment = parsedEnvironment;
+            OnReceivedAppEnvironment?.Invoke(parsedEnvironment);
+            Debug.LogError($"Received Telegram environment: {parsedEnvironment}");
         }
         
         public void OnCreateUnityInstance()

@@ -5,6 +5,15 @@ namespace WattsTap.Core.React
 {
     public class TelegramSafeZoneApplier : MonoBehaviour
     {
+        [Serializable]
+        public class AdditionalOffsets
+        {
+            public float Top;
+            public float Bottom;
+            public float Left;
+            public float Right;
+        }
+
         [System.Flags]
         public enum SafeZoneSide
         {
@@ -24,6 +33,8 @@ namespace WattsTap.Core.React
         [Header("Safe Zone Settings")]
         [SerializeField] private SafeZoneSide _sides = SafeZoneSide.Top;
         [SerializeField] private ApplyMode _applyMode = ApplyMode.Padding;
+        [Header("Additional Mobile Client Offsets (pixels)")]
+        [SerializeField] private AdditionalOffsets _mobileClientAdditionalOffsets = new AdditionalOffsets();
 
         [Header("Target Components")]
         [SerializeField] private RectTransform _targetRectTransform;
@@ -54,6 +65,7 @@ namespace WattsTap.Core.React
             }
             
             _telegramService.OnReceivedSafeAreaInsets += ApplySafeZone;
+            _telegramService.OnReceivedAppEnvironment += HandleEnvironmentChanged;
         }
 
         private void Start()
@@ -64,6 +76,17 @@ namespace WattsTap.Core.React
                 ApplySafeZone(_telegramService.SafeAreaInsets);
             }
 #endif
+        }
+
+        private void OnDestroy()
+        {
+            if (_telegramService == null)
+            {
+                return;
+            }
+            
+            _telegramService.OnReceivedSafeAreaInsets -= ApplySafeZone;
+            _telegramService.OnReceivedAppEnvironment -= HandleEnvironmentChanged;
         }
 
         private void ApplySafeZone(TelegramService.SafeArea insets)
@@ -102,7 +125,27 @@ namespace WattsTap.Core.React
             float leftOffset = (_sides & SafeZoneSide.Left) != 0 ? (insets.Left / pixelWidth) * canvasWidth : 0;
             float rightOffset = (_sides & SafeZoneSide.Right) != 0 ? (insets.Right / pixelWidth) * canvasWidth : 0;
 
-            Debug.LogErrorFormat("[TelegramSafeZone] Safe Area Insets (pixels) - Top: {0}, Bottom: {1}, Left: {2}, Right: {3}, ContentSafeAreaTop: {4}, Combined Top: {5}", 
+            if (IsMobileClient())
+            {
+                if ((_sides & SafeZoneSide.Top) != 0)
+                {
+                    topOffset += (_mobileClientAdditionalOffsets.Top / pixelHeight) * canvasHeight;
+                }
+                if ((_sides & SafeZoneSide.Bottom) != 0)
+                {
+                    bottomOffset += (_mobileClientAdditionalOffsets.Bottom / pixelHeight) * canvasHeight;
+                }
+                if ((_sides & SafeZoneSide.Left) != 0)
+                {
+                    leftOffset += (_mobileClientAdditionalOffsets.Left / pixelWidth) * canvasWidth;
+                }
+                if ((_sides & SafeZoneSide.Right) != 0)
+                {
+                    rightOffset += (_mobileClientAdditionalOffsets.Right / pixelWidth) * canvasWidth;
+                }
+            }
+
+            Debug.LogFormat("[TelegramSafeZone] Safe Area Insets (pixels) - Top: {0}, Bottom: {1}, Left: {2}, Right: {3}, ContentSafeAreaTop: {4}, Combined Top: {5}", 
                 insets.Top, insets.Bottom, insets.Left, insets.Right, insets.ContentSafeAreaTop, combinedTopInset);
             switch (_applyMode)
             {
@@ -118,6 +161,20 @@ namespace WattsTap.Core.React
             }
 
             Debug.Log($"[TelegramSafeZone] Applied safe zone: Top={topOffset:F2}, Bottom={bottomOffset:F2}, Left={leftOffset:F2}, Right={rightOffset:F2}");
+        }
+
+        private bool IsMobileClient()
+        {
+            return _telegramService != null &&
+                   _telegramService.AppEnvironment == TelegramService.TelegramAppEnvironment.MobileClient;
+        }
+
+        private void HandleEnvironmentChanged(TelegramService.TelegramAppEnvironment environment)
+        {
+            if (_telegramService?.SafeAreaInsets != null)
+            {
+                ApplySafeZone(_telegramService.SafeAreaInsets);
+            }
         }
         
         private void ApplyPadding(float left, float right, float bottom, float top)
