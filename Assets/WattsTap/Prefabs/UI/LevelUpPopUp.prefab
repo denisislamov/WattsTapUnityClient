@@ -142,7 +142,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 34068d94b2b144d9da1b98763f4f7146, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7fb0664ab8c674a0cb109763973f06b3, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -735,7 +735,7 @@ MonoBehaviour:
   _sides: 3
   _applyMode: 0
   _mobileClientAdditionalOffsets:
-    Top: 60
+    Top: 90
     Bottom: 0
     Left: 0
     Right: 0
@@ -980,7 +980,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 34068d94b2b144d9da1b98763f4f7146, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7fb0664ab8c674a0cb109763973f06b3, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1055,7 +1055,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 34068d94b2b144d9da1b98763f4f7146, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7fb0664ab8c674a0cb109763973f06b3, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1645,7 +1645,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
   m_AspectMode: 0
-  m_AspectRatio: 6.0515656
+  m_AspectRatio: 18.875
 --- !u!1 &7378035601045706341
 GameObject:
   m_ObjectHideFlags: 0
