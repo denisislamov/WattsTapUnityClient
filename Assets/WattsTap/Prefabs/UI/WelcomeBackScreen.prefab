@@ -1744,7 +1744,7 @@ GameObject:
   - component: {fileID: 4788190911421722399}
   - component: {fileID: 3370138668170928025}
   - component: {fileID: 727681895318359007}
-  - component: {fileID: 592203947657078482}
+  - component: {fileID: 3110193939710345296}
   m_Layer: 5
   m_Name: WelcomeBackScreen
   m_TagString: Untagged
@@ -1812,7 +1812,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &592203947657078482
+--- !u!114 &3110193939710345296
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1821,17 +1821,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5748633760880554082}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff211a02dd9744749c8265d1789d6041, type: 3}
+  m_Script: {fileID: 11500000, guid: 77306ef0bfc5342d0933baa43c58b5de, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.React.TelegramSafeZoneApplier
-  _sides: 3
-  _applyMode: 0
-  _mobileClientAdditionalOffsets:
-    Top: 90
-    Bottom: 0
-    Left: 0
-    Right: 0
-  _targetRectTransform: {fileID: 4788190911421722399}
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.WelcomeBackUIView
+  _timerSlider: {fileID: 8392756005341456290}
+  _timerText: {fileID: 138272718411668126}
+  _valueText: {fileID: 6482426587123478805}
+  _closeButton: {fileID: 8389552427490196489}
 --- !u!1 &5834183764660508891
 GameObject:
   m_ObjectHideFlags: 0
@@ -1988,7 +1984,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
   m_AspectMode: 0
-  m_AspectRatio: 6.0515656
+  m_AspectRatio: 18.875
 --- !u!1 &6739640524248942435
 GameObject:
   m_ObjectHideFlags: 0

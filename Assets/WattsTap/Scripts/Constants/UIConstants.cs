@@ -4,5 +4,6 @@ namespace WattsTap.Constants
     {
         public const string MainMenu = "MainMenu";
         public const string LevelUpPopUp = "LevelUpPopUp";
+        public const string WelcomeBackScreen = "WelcomeBackScreen";
     }
 }

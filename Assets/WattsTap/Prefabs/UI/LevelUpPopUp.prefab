@@ -652,8 +652,7 @@ GameObject:
   - component: {fileID: 3688093715683534449}
   - component: {fileID: 6825769545153820290}
   - component: {fileID: 7464527492354977753}
-  - component: {fileID: 682962176018097781}
-  - component: {fileID: 835374162284386456}
+  - component: {fileID: 8198283067829301567}
   m_Layer: 5
   m_Name: LevelUpPopUp
   m_TagString: Untagged
@@ -720,27 +719,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &682962176018097781
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3866579325697092498}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff211a02dd9744749c8265d1789d6041, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.React.TelegramSafeZoneApplier
-  _sides: 3
-  _applyMode: 0
-  _mobileClientAdditionalOffsets:
-    Top: 90
-    Bottom: 0
-    Left: 0
-    Right: 0
-  _targetRectTransform: {fileID: 3688093715683534449}
---- !u!114 &835374162284386456
+--- !u!114 &8198283067829301567
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
