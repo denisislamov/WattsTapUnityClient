@@ -1142,7 +1142,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 2766830575723264058}
   m_FillRect: {fileID: 979398523062350912}
   m_HandleRect: {fileID: 8875775080663093656}
@@ -3436,6 +3436,7 @@ GameObject:
   - component: {fileID: 4788190911421722399}
   - component: {fileID: 3370138668170928025}
   - component: {fileID: 727681895318359007}
+  - component: {fileID: 2145751830269345197}
   m_Layer: 5
   m_Name: ProfileScreen
   m_TagString: Untagged
@@ -3502,6 +3503,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2145751830269345197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5748633760880554082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9de35bd020ea4d288d73db11d8bada5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.ProfileScreenUIView
+  _userName: {fileID: 891754302568002493}
+  _userAvatar: {fileID: 7339283662008709416}
+  _currentLevelText: {fileID: 5864127613576924305}
+  _levelProgressBar: {fileID: 4413051706479046230}
+  _closeButton: {fileID: 2870909195120879084}
 --- !u!1 &5796097142108451525
 GameObject:
   m_ObjectHideFlags: 0

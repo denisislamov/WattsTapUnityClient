@@ -957,6 +957,7 @@ MonoBehaviour:
   _userAvatar: {fileID: 3209893513270852025}
   _currentLevelText: {fileID: 7383613168540664310}
   _levelProgressBar: {fileID: 1433811945968516298}
+  _profileButton: {fileID: 5329696522122386852}
   _currencyPanel: {fileID: 726128925095499454}
   totalCoinsText: {fileID: 3406190211271174298}
   coinsPerTapText: {fileID: 4533605739123940352}
@@ -2749,6 +2750,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2321802522696783456, guid: 7d461f72156b3496f918df56891bf4cd, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5035783861896185183, guid: 7d461f72156b3496f918df56891bf4cd, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2936,7 +2941,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6158297488330271824, guid: 7d461f72156b3496f918df56891bf4cd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5329696522122386852}
   m_SourcePrefab: {fileID: 100100000, guid: 7d461f72156b3496f918df56891bf4cd, type: 3}
 --- !u!114 &1433811945968516298 stripped
 MonoBehaviour:
@@ -2965,7 +2973,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 344454022711765292, guid: 7d461f72156b3496f918df56891bf4cd, type: 3}
   m_PrefabInstance: {fileID: 3737248035237309098}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 7398276990165550842}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -2998,6 +3006,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &7398276990165550842 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6158297488330271824, guid: 7d461f72156b3496f918df56891bf4cd, type: 3}
+  m_PrefabInstance: {fileID: 3737248035237309098}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5329696522122386852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7398276990165550842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 3970732665764103046}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &3805496514769324324
 PrefabInstance:
   m_ObjectHideFlags: 0

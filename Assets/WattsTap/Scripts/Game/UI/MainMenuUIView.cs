@@ -13,6 +13,7 @@ namespace WattsTap.Game.UI
         [SerializeField] private Image _userAvatar;
         [SerializeField] private TMP_Text _currentLevelText;
         [SerializeField] private Slider _levelProgressBar;
+        [SerializeField] private Button _profileButton;
         
         [Header("Currency Display")]
         [SerializeField] private RectTransform _currencyPanel;
@@ -38,6 +39,22 @@ namespace WattsTap.Game.UI
         [SerializeField] private TMP_Text _versionText;
         
         public Button ChangeSkinButton => changeSkinButton;
+        public Button ProfileButton => _profileButton;
+
+        private void Awake()
+        {
+            if (_profileButton == null && _userAvatar != null)
+            {
+                _profileButton = _userAvatar.GetComponent<Button>();
+
+                if (_profileButton == null)
+                {
+                    _profileButton = _userAvatar.gameObject.AddComponent<Button>();
+                    _profileButton.transition = Selectable.Transition.None;
+                    _profileButton.targetGraphic = _userAvatar;
+                }
+            }
+        }
         
         private void OnEnable()
         {

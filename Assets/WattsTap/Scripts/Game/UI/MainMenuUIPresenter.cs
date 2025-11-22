@@ -14,6 +14,7 @@ namespace WattsTap.Game.UI
     {
         private CancellationTokenSource _avatarLoadCts;
         private ISharedDataService _sharedDataService;
+        private IUIService _uiService;
 
         protected override void OnInit()
         {
@@ -49,6 +50,10 @@ namespace WattsTap.Game.UI
             _sharedDataService.OnDataUpdated += OnSharedDataUpdated;
 
             View.ChangeSkinButton.onClick.AddListener(ChangeSkinButtonOnClick);
+            if (View.ProfileButton != null)
+            {
+                View.ProfileButton.onClick.AddListener(OnProfileButtonClicked);
+            }
 
             View.SetDefaultSkin();
             
@@ -67,6 +72,16 @@ namespace WattsTap.Game.UI
         private void OnLevelChanged(int value)
         {
             View.UpdateCurrentLevel(value);
+        }
+
+        private void OnProfileButtonClicked()
+        {
+            if (_uiService == null)
+            {
+                ServiceLocator.TryGet(out _uiService);
+            }
+
+            _uiService?.Open(UIConstants.ProfileScreen);
         }
 
         private void ChangeSkinButtonOnClick()
@@ -187,6 +202,10 @@ namespace WattsTap.Game.UI
             _avatarLoadCts = null;
 
             View.ChangeSkinButton.onClick.RemoveListener(ChangeSkinButtonOnClick);
+            if (View?.ProfileButton != null)
+            {
+                View.ProfileButton.onClick.RemoveListener(OnProfileButtonClicked);
+            }
             
             // Отписка от событий модели
             if (Model != null)
