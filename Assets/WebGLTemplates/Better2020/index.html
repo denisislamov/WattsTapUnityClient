@@ -196,7 +196,7 @@
           var telegramId = '1234567890';
           var telegramUserName = 'TestUser';
           var initData = '';
-
+ 
           if (window.Telegram && window.Telegram.WebApp) {
               if (window.Telegram.WebApp.initData) {
                   initData = window.Telegram.WebApp.initData;
@@ -241,10 +241,11 @@
           }
 
           // alert("safeAreaInset" + window.Telegram.WebApp.safeAreaInset);
-          var safeAreaToString = window.Telegram.WebApp.safeAreaInset.top.toString() + ',' +
-              window.Telegram.WebApp.safeAreaInset.left.toString() + ',' +
-              window.Telegram.WebApp.safeAreaInset.bottom.toString() + ',' +
-              window.Telegram.WebApp.safeAreaInset.right.toString() + ',' +
+          var safeAreaInset = window.Telegram.WebApp.safeAreaInset || { top: 0, left: 0, bottom: 0, right: 0 };
+          var safeAreaToString = safeAreaInset.top.toString() + ',' +
+              safeAreaInset.left.toString() + ',' +
+              safeAreaInset.bottom.toString() + ',' +
+              safeAreaInset.right.toString() + ',' +
               contentSafeAreaTop.toString();
          // alert("SafeAreaInsets string : " + safeAreaToString);
           MyGameInstance.SendMessage('TelegramService', 'ReceiveSafeAreaInsets', safeAreaToString);
