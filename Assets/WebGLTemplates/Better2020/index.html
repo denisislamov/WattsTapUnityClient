@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>{{{ PRODUCT_NAME }}}</title>
       <style>
-          #invisible-button {
+          /*#invisible-button {
               position: absolute;
               top: 0;
               left: 0;
@@ -16,7 +16,7 @@
               border: none;
               cursor: pointer;
               z-index: 10;
-          }
+          }*/
       </style>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
@@ -24,7 +24,7 @@
     </script>
   </head>
   <body class="{{{ SPLASH_SCREEN_STYLE.toLowerCase() }}}">
-    <button id="invisible-button"></button>
+    <!--<button id="invisible-button"></button>-->
     <div id="unity-container" class="unity-desktop">
       <canvas id="unity-canvas"></canvas>
     </div>
@@ -39,7 +39,7 @@
     </div>
     <div id="unity-fullscreen-button" style="display: none;"></div>
     <script>
-      const invisibleButton = document.getElementById('invisible-button');
+      //const invisibleButton = document.getElementById('invisible-button');
       const hideFullScreenButton = "{{{ HIDE_FULL_SCREEN_BUTTON }}}";
       const buildUrl = "Build";
       const loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
@@ -105,10 +105,10 @@
           return isMobileUA ? 'MobileWeb' : 'DesktopWeb';
       }
 
-      invisibleButton.addEventListener('click', () => {
+      /*invisibleButton.addEventListener('click', () => {
           invisibleButton.remove();
           console.log('Overlay button removed');
-      });
+      });*/
       
       const canFullscreen = (function() {
         for (const key of [
@@ -170,22 +170,22 @@
               unityInstance.SetFullscreen(1);
             };
 
-            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-
-                if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-                    DeviceMotionEvent.requestPermission()
-                        .then(permissionState => {
-                            if (permissionState === 'granted') {
-                                console.log('Access to sensors granted.');
-                            } else {
-                                console.log('Access to sensors denied.');
-                            }
-                        })
-                        .catch(console.error);
-                } else {
-                    console.log('DeviceMotionEvent is not supported.');
-                }
-            }
+            // if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            //
+            //     if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+            //         DeviceMotionEvent.requestPermission()
+            //             .then(permissionState => {
+            //                 if (permissionState === 'granted') {
+            //                     console.log('Access to sensors granted.');
+            //                 } else {
+            //                     console.log('Access to sensors denied.');
+            //                 }
+            //             })
+            //             .catch(console.error);
+            //     } else {
+            //         console.log('DeviceMotionEvent is not supported.');
+            //     }
+            // }
           }
         }).catch((message) => {
           alert(message);
