@@ -6232,7 +6232,7 @@ MonoBehaviour:
   - {fileID: 1916508779453166909}
   _walletDisconnectedObjects:
   - {fileID: 5834183764660508891}
-  _scrollViewRect: {fileID: 3526986119528896496}
+  _scrollRect: {fileID: 2336942942621704580}
   _scrollAnchoredYConnected: -332
   _scrollAnchoredYDisconnected: -288
   _startWithWalletConnected: 0

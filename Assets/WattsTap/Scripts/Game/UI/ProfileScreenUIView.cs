@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,10 +22,12 @@ namespace WattsTap.Game.UI
         [SerializeField] private Button _changeWalletButton;
         [SerializeField] private GameObject[] _walletConnectedObjects;
         [SerializeField] private GameObject[] _walletDisconnectedObjects;
-        [SerializeField] private RectTransform _scrollViewRect;
+        [SerializeField] private ScrollRect _scrollRect;
         [SerializeField] private float _scrollAnchoredYConnected = -306.21185f;
         [SerializeField] private float _scrollAnchoredYDisconnected = -278f;
         [SerializeField] private bool _startWithWalletConnected = true;
+
+        private Coroutine _scrollToTopRoutine;
 
         public Button CloseButton => _closeButton;
         public Button ConnectWalletButton => _connectWalletButton;
@@ -78,6 +81,7 @@ namespace WattsTap.Game.UI
             ToggleObjects(_walletConnectedObjects, isConnected);
             ToggleObjects(_walletDisconnectedObjects, !isConnected);
             UpdateScrollViewTop(isConnected);
+            ResetScrollToTop();
         }
 
         private static void ToggleObjects(GameObject[] targets, bool isActive)
@@ -98,14 +102,56 @@ namespace WattsTap.Game.UI
 
         private void UpdateScrollViewTop(bool isConnected)
         {
-            if (_scrollViewRect == null)
+            if (_scrollRect == null)
             {
                 return;
             }
 
-            var anchoredPosition = _scrollViewRect.anchoredPosition;
+            var scrollViewRect = _scrollRect.GetComponent<RectTransform>();
+            if (scrollViewRect == null)
+            {
+                return;
+            }
+
+            var anchoredPosition = scrollViewRect.anchoredPosition;
             anchoredPosition.y = isConnected ? _scrollAnchoredYConnected : _scrollAnchoredYDisconnected;
-            _scrollViewRect.anchoredPosition = anchoredPosition;
+            scrollViewRect.anchoredPosition = anchoredPosition;
+        }
+
+        private void ResetScrollToTop()
+        {
+            if (!isActiveAndEnabled || _scrollRect == null)
+            {
+                return;
+            }
+
+            if (_scrollToTopRoutine != null)
+            {
+                StopCoroutine(_scrollToTopRoutine);
+            }
+
+            _scrollToTopRoutine = StartCoroutine(ScrollToTopNextFrame());
+        }
+
+        private IEnumerator ScrollToTopNextFrame()
+        {
+            yield return null;
+
+            if (_scrollRect == null)
+            {
+                yield break;
+            }
+
+            var content = _scrollRect.content;
+            if (content != null)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(content);
+            }
+
+            Canvas.ForceUpdateCanvases();
+            _scrollRect.StopMovement();
+            _scrollRect.verticalNormalizedPosition = 1f;
+            _scrollToTopRoutine = null;
         }
     }
 }
