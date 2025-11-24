@@ -15,6 +15,7 @@ namespace WattsTap.Game.UI
         private ISharedDataService _sharedDataService;
         private IUIService _uiService;
         private CancellationTokenSource _avatarLoadCts;
+        private bool _isWalletConnected;
 
         protected override void OnInit()
         {
@@ -37,11 +38,24 @@ namespace WattsTap.Game.UI
                 View.CloseButton.onClick.AddListener(OnCloseClicked);
             }
 
+            if (View.ConnectWalletButton != null)
+            {
+                View.ConnectWalletButton.onClick.AddListener(OnConnectWalletClicked);
+            }
+
+            if (View.ChangeWalletButton != null)
+            {
+                View.ChangeWalletButton.onClick.AddListener(OnChangeWalletClicked);
+            }
+
             ServiceLocator.TryGet(out _uiService);
 
             OnPlayerNameChanged(Model.PlayerName.Value);
             OnLevelChanged(Model.Level.Value);
             UpdateProgressBar();
+
+            _isWalletConnected = View.StartWithWalletConnected;
+            View.SetWalletConnectionState(_isWalletConnected);
         }
 
         private void OnCloseClicked()
@@ -138,11 +152,32 @@ namespace WattsTap.Game.UI
             UpdateProgressBar();
         }
 
+        private void OnConnectWalletClicked()
+        {
+            SetWalletState(true);
+        }
+
+        private void OnChangeWalletClicked()
+        {
+            SetWalletState(false);
+        }
+
         private void UpdateProgressBar()
         {
             var targetXp = Mathf.Max(1, Model.XpToNextLevel.Value);
             var progress = (float)Model.CurrentXp.Value / targetXp;
             View.UpdateLevelProgressBar(progress);
+        }
+
+        private void SetWalletState(bool isConnected)
+        {
+            if (_isWalletConnected == isConnected)
+            {
+                return;
+            }
+
+            _isWalletConnected = isConnected;
+            View.SetWalletConnectionState(_isWalletConnected);
         }
 
         private static string ComposePlayerName(TelegramService.User user)
@@ -179,6 +214,16 @@ namespace WattsTap.Game.UI
             if (View?.CloseButton != null)
             {
                 View.CloseButton.onClick.RemoveListener(OnCloseClicked);
+            }
+
+            if (View?.ConnectWalletButton != null)
+            {
+                View.ConnectWalletButton.onClick.RemoveListener(OnConnectWalletClicked);
+            }
+
+            if (View?.ChangeWalletButton != null)
+            {
+                View.ChangeWalletButton.onClick.RemoveListener(OnChangeWalletClicked);
             }
 
             if (Model != null)

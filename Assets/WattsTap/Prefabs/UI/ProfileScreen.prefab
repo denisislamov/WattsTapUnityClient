@@ -6222,6 +6222,15 @@ MonoBehaviour:
   _currentLevelText: {fileID: 5864127613576924305}
   _levelProgressBar: {fileID: 4413051706479046230}
   _closeButton: {fileID: 2870909195120879084}
+  _connectWalletButton: {fileID: 8389552427490196489}
+  _changeWalletButton: {fileID: 2271470564471296509}
+  _walletConnectedObjects:
+  - {fileID: 2562087219156793451}
+  _walletDisconnectedObjects: []
+  _scrollViewRect: {fileID: 3526986119528896496}
+  _scrollAnchoredYConnected: -306.21185
+  _scrollAnchoredYDisconnected: -278
+  _startWithWalletConnected: 1
 --- !u!1 &5796097142108451525
 GameObject:
   m_ObjectHideFlags: 0
