@@ -22,5 +22,7 @@ namespace WattsTap.Core.UI
         public IUIHost OverlayRoot { get; }
 
         IReadOnlyList<IUIView> GetViews(string id);
+
+        bool HasActiveViewsExcept(params string[] allowedIds);
     }
 }

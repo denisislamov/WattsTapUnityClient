@@ -229,6 +229,35 @@ namespace WattsTap.Core.UI
             }
         }
 
+        public bool HasActiveViewsExcept(params string[] allowedIds)
+        {
+            if (_viewInstances.Count == 0)
+            {
+                return false;
+            }
+
+            HashSet<string> allowed = null;
+            if (allowedIds != null && allowedIds.Length > 0)
+            {
+                allowed = new HashSet<string>(allowedIds);
+            }
+
+            foreach (var kvp in _viewInstances)
+            {
+                if (allowed != null && allowed.Contains(kvp.Key))
+                {
+                    continue;
+                }
+
+                if (HasActiveViewInstance(kvp.Value))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public IReadOnlyList<IUIView> GetViews(string id)
         {
             if (_viewInstances.TryGetValue(id, out var list))
@@ -237,6 +266,39 @@ namespace WattsTap.Core.UI
             }
 
             return new List<IUIView>();
+        }
+
+        private static bool HasActiveViewInstance(List<IUIView> views)
+        {
+            if (views == null)
+            {
+                return false;
+            }
+
+            foreach (var view in views)
+            {
+                if (IsViewActive(view))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsViewActive(IUIView view)
+        {
+            if (view == null)
+            {
+                return false;
+            }
+
+            if (view is MonoBehaviour mb)
+            {
+                return mb != null && mb.gameObject.activeInHierarchy;
+            }
+
+            return true;
         }
     }
 }

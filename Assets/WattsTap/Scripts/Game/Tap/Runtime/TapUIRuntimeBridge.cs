@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using WattsTap.Constants;
 using WattsTap.Core;
 using WattsTap.Core.GameLoop;
+using WattsTap.Core.UI;
 using WattsTap.Game.Tap.Services;
 
 namespace WattsTap.Scripts.Game.Tap.Runtime
@@ -15,6 +17,7 @@ namespace WattsTap.Scripts.Game.Tap.Runtime
         private IInputService _input;
         private ITapControllerService _tapController;
         private IUpdateService _updateService;
+        private IUIService _uiService;
         
         private EventSystem _eventSystem;
 
@@ -22,6 +25,7 @@ namespace WattsTap.Scripts.Game.Tap.Runtime
         {
             _input = ServiceLocator.Get<IInputService>();
             _tapController = ServiceLocator.Get<ITapControllerService>();
+            ServiceLocator.TryGet(out _uiService);
             
             _eventSystem = EventSystem.current;
 
@@ -59,6 +63,11 @@ namespace WattsTap.Scripts.Game.Tap.Runtime
         
         private void OnTap(Vector2 screenPos)
         {
+            if (!CanProcessTap())
+            {
+                return;
+            }
+
             if (IsPointerOverTarget(screenPos))
             {
                 _tapController?.HandleTap();
@@ -123,6 +132,55 @@ namespace WattsTap.Scripts.Game.Tap.Runtime
             }
 
             return false;
+        }
+
+        private bool CanProcessTap()
+        {
+            if (_uiService == null && !ServiceLocator.TryGet(out _uiService))
+            {
+                return true;
+            }
+
+            if (!IsMainMenuVisible())
+            {
+                return false;
+            }
+
+            return !_uiService.HasActiveViewsExcept(UIConstants.MainMenu);
+        }
+
+        private bool IsMainMenuVisible()
+        {
+            var views = _uiService?.GetViews(UIConstants.MainMenu);
+            if (views == null || views.Count == 0)
+            {
+                return false;
+            }
+
+            foreach (var view in views)
+            {
+                if (IsViewActive(view))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsViewActive(IUIView view)
+        {
+            if (view == null)
+            {
+                return false;
+            }
+
+            if (view is MonoBehaviour mb)
+            {
+                return mb != null && mb.gameObject.activeInHierarchy;
+            }
+
+            return true;
         }
     }
 }
