@@ -6,5 +6,6 @@ namespace WattsTap.Constants
         public const string LevelUpPopUp = "LevelUpPopUp";
         public const string WelcomeBackScreen = "WelcomeBackScreen";
         public const string ProfileScreen = "ProfileScreen";
+        public const string FriendsReferralScreen = "FriendsReferralScreen";
     }
 }

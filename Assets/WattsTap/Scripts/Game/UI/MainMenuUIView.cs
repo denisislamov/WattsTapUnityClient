@@ -37,9 +37,13 @@ namespace WattsTap.Game.UI
         
         [Header("Version Info")]
         [SerializeField] private TMP_Text _versionText;
+
+        [Header("Navigation")]
+        [SerializeField] private Button _friendsReferralButton;
         
         public Button ChangeSkinButton => changeSkinButton;
         public Button ProfileButton => _profileButton;
+        public Button FriendsReferralButton => _friendsReferralButton;
 
         private void Awake()
         {

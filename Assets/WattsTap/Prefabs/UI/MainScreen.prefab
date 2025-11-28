@@ -1028,6 +1028,7 @@ MonoBehaviour:
     suppressMissingTokenWarning: 0
   changeSkinButton: {fileID: 6582713047458403840}
   _versionText: {fileID: 8828595424311240172}
+  _friendsReferralButton: {fileID: 4930703422563887075}
 --- !u!114 &682962176018097781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2417,6 +2418,17 @@ PrefabInstance:
       addedObject: {fileID: 9068102584705965778}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
+--- !u!114 &4930703422563887075 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5979175700302483011, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
+  m_PrefabInstance: {fileID: 1627818432308472224}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!224 &6754606362029890853 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}

@@ -882,7 +882,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 10.230072, y: -44}
+  m_AnchoredPosition: {x: 10.230103, y: -44}
   m_SizeDelta: {x: -19.539856, y: -59.53769}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3960083204061843652
@@ -936,8 +936,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ScrollRect
   m_Content: {fileID: 5337373006688791657}
-  m_Horizontal: 1
-  m_Vertical: 0
+  m_Horizontal: 0
+  m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1
   m_Inertia: 1
@@ -1665,7 +1665,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 21.425024, y: -71.42502}
+  m_AnchoredPosition: {x: 21.425049, y: -71.42502}
   m_SizeDelta: {x: 108.75, y: 56.80335}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &3069400666459550587
@@ -6681,6 +6681,8 @@ GameObject:
   - component: {fileID: 1067159234590560384}
   - component: {fileID: 955485821331744613}
   - component: {fileID: 4368522242988070033}
+  - component: {fileID: 4332290277277122711}
+  - component: {fileID: 3171096700143529848}
   m_Layer: 5
   m_Name: FriendsReferralScreen
   m_TagString: Untagged
@@ -6748,6 +6750,45 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4332290277277122711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6994799608154508993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3576fa67f90f948429052053b0259733, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.FriendsReferralScreenUIView
+  _referralButton: {fileID: 9222736339130337103}
+  _friendsButton: {fileID: 708081478059241254}
+  _referralElements:
+  - {fileID: 8244110347390859517}
+  _friendsElements:
+  - {fileID: 6109861905884370092}
+  _miningButton: {fileID: 4495270043021772341}
+--- !u!114 &3171096700143529848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6994799608154508993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff211a02dd9744749c8265d1789d6041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.React.TelegramSafeZoneApplier
+  _sides: 3
+  _applyMode: 0
+  _mobileClientAdditionalOffsets:
+    Top: 110
+    Bottom: 0
+    Left: 0
+    Right: 0
+  _targetRectTransform: {fileID: 1067159234590560384}
 --- !u!1 &7324235604467649172
 GameObject:
   m_ObjectHideFlags: 0
@@ -10447,3 +10488,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
   m_PrefabInstance: {fileID: 7825044859767081078}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4495270043021772341 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5979175700302483011, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
+  m_PrefabInstance: {fileID: 7825044859767081078}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button

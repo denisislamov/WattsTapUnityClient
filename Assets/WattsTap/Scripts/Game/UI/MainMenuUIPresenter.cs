@@ -55,6 +55,11 @@ namespace WattsTap.Game.UI
                 View.ProfileButton.onClick.AddListener(OnProfileButtonClicked);
             }
 
+            if (View.FriendsReferralButton != null)
+            {
+                View.FriendsReferralButton.onClick.AddListener(OnFriendsReferralButtonClicked);
+            }
+
             View.SetDefaultSkin();
             
             View.UpdateCurrentLevel(Model.Level.Value);
@@ -82,6 +87,16 @@ namespace WattsTap.Game.UI
             }
 
             _uiService?.Open(UIConstants.ProfileScreen);
+        }
+
+        private void OnFriendsReferralButtonClicked()
+        {
+            if (_uiService == null)
+            {
+                ServiceLocator.TryGet(out _uiService);
+            }
+
+            _uiService?.Open(UIConstants.FriendsReferralScreen);
         }
 
         private void ChangeSkinButtonOnClick()
@@ -205,6 +220,11 @@ namespace WattsTap.Game.UI
             if (View?.ProfileButton != null)
             {
                 View.ProfileButton.onClick.RemoveListener(OnProfileButtonClicked);
+            }
+
+            if (View?.FriendsReferralButton != null)
+            {
+                View.FriendsReferralButton.onClick.RemoveListener(OnFriendsReferralButtonClicked);
             }
             
             // Отписка от событий модели
