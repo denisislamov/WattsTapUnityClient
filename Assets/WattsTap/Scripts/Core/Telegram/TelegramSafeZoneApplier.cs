@@ -74,8 +74,15 @@ namespace WattsTap.Core.React
             if (_telegramService.DebugSafeAreaInsets)
             {
                 ApplySafeZone(_telegramService.SafeAreaInsets);
+                return;
             }
 #endif
+            // If safe area insets are already available (event was fired before this instance was created),
+            // apply them immediately
+            if (_telegramService.SafeAreaInsets != null)
+            {
+                ApplySafeZone(_telegramService.SafeAreaInsets);
+            }
         }
 
         private void OnDestroy()

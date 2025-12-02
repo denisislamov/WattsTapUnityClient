@@ -93,7 +93,7 @@ namespace WattsTap.Core.React
         public event Action<SafeArea> OnReceivedSafeAreaInsets;
         public event Action<TelegramAppEnvironment> OnReceivedAppEnvironment;
         
-        private SafeArea _safeAreaInsets = new SafeArea();
+        private SafeArea _safeAreaInsets = null;
          
         public static long GetUserIdFromInitData(string initData)
         {
