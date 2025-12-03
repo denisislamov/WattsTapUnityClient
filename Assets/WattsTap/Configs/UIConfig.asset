@@ -23,3 +23,5 @@ MonoBehaviour:
     Prefab: {fileID: 5748633760880554082, guid: 0361af44d09244cf6a06be3ee55b41d4, type: 3}
   - Id: FriendsReferralScreen
     Prefab: {fileID: 6994799608154508993, guid: b1eb292f8a78449268462836bd43da40, type: 3}
+  - Id: ShopScreen
+    Prefab: {fileID: 6994799608154508993, guid: e4a53d3bce587464c826d3676cdfc374, type: 3}

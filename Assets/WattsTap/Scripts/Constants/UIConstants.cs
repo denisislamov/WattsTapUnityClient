@@ -7,5 +7,6 @@ namespace WattsTap.Constants
         public const string WelcomeBackScreen = "WelcomeBackScreen";
         public const string ProfileScreen = "ProfileScreen";
         public const string FriendsReferralScreen = "FriendsReferralScreen";
+        public const string ShopScreen = "ShopScreen";
     }
 }

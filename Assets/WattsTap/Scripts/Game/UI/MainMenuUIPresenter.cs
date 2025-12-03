@@ -60,6 +60,11 @@ namespace WattsTap.Game.UI
                 View.FriendsReferralButton.onClick.AddListener(OnFriendsReferralButtonClicked);
             }
 
+            if (View.ShopButton != null)
+            {
+                View.ShopButton.onClick.AddListener(OnShopButtonClicked);
+            }
+
             View.SetDefaultSkin();
             
             View.UpdateCurrentLevel(Model.Level.Value);
@@ -97,6 +102,16 @@ namespace WattsTap.Game.UI
             }
 
             _uiService?.Open(UIConstants.FriendsReferralScreen);
+        }
+
+        private void OnShopButtonClicked()
+        {
+            if (_uiService == null)
+            {
+                ServiceLocator.TryGet(out _uiService);
+            }
+
+            _uiService?.Open(UIConstants.ShopScreen);
         }
 
         private void ChangeSkinButtonOnClick()
@@ -225,6 +240,11 @@ namespace WattsTap.Game.UI
             if (View?.FriendsReferralButton != null)
             {
                 View.FriendsReferralButton.onClick.RemoveListener(OnFriendsReferralButtonClicked);
+            }
+
+            if (View?.ShopButton != null)
+            {
+                View.ShopButton.onClick.RemoveListener(OnShopButtonClicked);
             }
             
             // Отписка от событий модели
