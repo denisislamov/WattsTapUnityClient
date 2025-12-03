@@ -380,8 +380,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Console\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 457
-    y: 1030
+    x: 1
+    y: 946
     width: 1020
     height: 202
   m_SerializedDataModeController:
@@ -416,8 +416,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Scene\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 457
-    y: 108
+    x: 1
+    y: 24
     width: 582
     height: 896
   m_SerializedDataModeController:
@@ -1049,7 +1049,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 108
+    y: 24
     width: 456
     height: 589
   m_SerializedDataModeController:
@@ -1115,7 +1115,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 723
+    y: 639
     width: 456
     height: 509
   m_SerializedDataModeController:
@@ -1159,7 +1159,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 64c80000
     m_LastClickedID: 51300
-    m_ExpandedIDs: 00000000aac60000acc60000aec60000b0c60000b2c60000b4c60000b6c60000b8c60000bac60000bcc60000bec60000c0c60000c2c60000c4c60000c6c60000c8c60000cac60000ccc60000cec60000d0c60000d2c600004cc7000074c7000078c7000000ca9a3b
+    m_ExpandedIDs: 00000000aac60000acc60000aec60000b0c60000b2c60000b4c60000b6c60000b8c60000bac60000bcc60000bec60000c0c60000c2c60000c4c60000c6c60000c8c60000cac60000ccc60000cec60000d0c60000d2c60000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1220,18 +1220,18 @@ MonoBehaviour:
     m_ExpandedInstanceIDs: c623000032b0000002bc0000dccd00008ec00000c2ed01008aaf000026c2000080f1000090b1000086cb0000ead80200eea80200de940200e0940200b2b6000046b60000749402001ead0100789402005693020040b100003eb100003cb100009ab0000020af0000144b0200d8d7000084b0000016b10000a43f0300a83f030042c80000dec5000000000000b8b800006c5301006a5301001eaf040060be0000c2c000006cc000008c45ffffd2c0000094c20000cac00000febf0000d0bf00009ac8000012bb0000d2b9000004ba000006ba0000fab900004af30000b6bf0000ecbd0000acbf0000f0130100b2bf00000c5101007c520100165101001851010024c000000cbd00000abd000090b500008cc6000008c200009817040006c2000026bd0000a8b90000a0b90000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: TelegramSafeZoneApplier
-      m_OriginalName: TelegramSafeZoneApplier
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 32250
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_TrimLeadingAndTrailingWhitespace: 0
       m_ClientGUIView: {fileID: 11}
@@ -1359,8 +1359,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1479
-    y: 108
+    x: 1480
+    y: 24
     width: 576
     height: 1124
   m_SerializedDataModeController:
@@ -1408,8 +1408,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Simulator\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1041
-    y: 108
+    x: 585
+    y: 24
     width: 436
     height: 896
   m_SerializedDataModeController:
@@ -1439,7 +1439,7 @@ MonoBehaviour:
   m_UseMipMap: 0
   m_SimulatorState:
     controlPanelVisible: 0
-    controlPanelWidth: 0
+    controlPanelWidth: NaN
     controlPanelFoldoutKeys:
     - UnityEditor.DeviceSimulation.ApplicationSettingsPlugin
     controlPanelFoldoutValues: 01
@@ -1449,7 +1449,7 @@ MonoBehaviour:
     pluginStates:
     - '{}'
     - '{}'
-    scale: 30
+    scale: 10
     fitToScreenEnabled: 1
     rotationDegree: 0
     highlightSafeAreaEnabled: 0
