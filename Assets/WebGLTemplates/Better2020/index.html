@@ -196,16 +196,54 @@
           var telegramId = '1234567890';
           var telegramUserName = 'TestUser';
           var initData = '';
+          var startParam = '';  // Referral code from deep link
+          
+          // Debug: Log all Telegram WebApp data
+          var debugInfo = 'Telegram WebApp Debug Info:\n';
+          if (window.Telegram && window.Telegram.WebApp) {
+              var webApp = window.Telegram.WebApp;
+              debugInfo += 'Platform: ' + (webApp.platform || 'unknown') + '\n';
+              debugInfo += 'Version: ' + (webApp.version || 'unknown') + '\n';
+              debugInfo += 'initData: ' + (webApp.initData ? 'present (' + webApp.initData.length + ' chars)' : 'empty') + '\n';
+              
+              if (webApp.initDataUnsafe) {
+                  debugInfo += 'initDataUnsafe.start_param: ' + (webApp.initDataUnsafe.start_param || 'none') + '\n';
+                  debugInfo += 'initDataUnsafe.query_id: ' + (webApp.initDataUnsafe.query_id || 'none') + '\n';
+                  if (webApp.initDataUnsafe.user) {
+                      debugInfo += 'initDataUnsafe.user.id: ' + (webApp.initDataUnsafe.user.id || 'none') + '\n';
+                      debugInfo += 'initDataUnsafe.user.username: ' + (webApp.initDataUnsafe.user.username || 'none') + '\n';
+                  } else {
+                      debugInfo += 'initDataUnsafe.user: none\n';
+                  }
+              } else {
+                  debugInfo += 'initDataUnsafe: not available\n';
+              }
+          } else {
+              debugInfo += 'Telegram.WebApp: NOT AVAILABLE\n';
+          }
+          
+          console.log('[TelegramWebApp] ' + debugInfo);
+          alert(debugInfo);
  
           if (window.Telegram && window.Telegram.WebApp) {
               if (window.Telegram.WebApp.initData) {
                   initData = window.Telegram.WebApp.initData;
-                  // alert("initData " + initData); 
+                  alert("initData " + initData); 
 
                   // Parse initData string to extract user parameter
                   try {
                       var urlParams = new URLSearchParams(initData);
                       var userParam = urlParams.get('user');
+                      
+                      // First try to get start_param from initDataUnsafe (more reliable)
+                      if (window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.start_param) {
+                          startParam = window.Telegram.WebApp.initDataUnsafe.start_param;
+                          console.log('[TelegramWebApp] Got start_param from initDataUnsafe: ' + startParam);
+                      } else {
+                          // Fallback: parse start_param from initData string
+                          startParam = urlParams.get('start_param') || '';
+                          console.log('[TelegramWebApp] Got start_param from initData string: ' + startParam);
+                      }
 
                       if (userParam) {
                           // Decode URL-encoded string and parse JSON
@@ -225,11 +263,25 @@
                   } catch (error) {
                       // alert("Error parsing initData: " + error.message);
                   }
+              } else {
+                  // Even if initData is empty, try to get start_param from initDataUnsafe
+                  if (window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.start_param) {
+                      startParam = window.Telegram.WebApp.initDataUnsafe.start_param;
+                      console.log('[TelegramWebApp] Got start_param from initDataUnsafe (no initData): ' + startParam);
+                  }
               }
           } else {
               // alert("Telegram not found, use default id");
           }
 
+          // Send StartParam FIRST, before InitData, because InitData triggers authentication
+          if (startParam) {
+              console.log('[TelegramWebApp] Sending start_param to Unity: ' + startParam);
+          } else {
+              console.log('[TelegramWebApp] No start_param found (not a referral link)');
+          }
+          MyGameInstance.SendMessage('TelegramService', 'ReceiveStartParam', startParam);
+          
           MyGameInstance.SendMessage('TelegramService', 'ReceiveUserId', telegramId);
           MyGameInstance.SendMessage('TelegramService', 'ReceiveUserName', telegramUserName);
           MyGameInstance.SendMessage('TelegramService', 'ReceiveInitData', initData);

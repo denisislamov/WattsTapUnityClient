@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7531b176fe7f4cf7a2e341ab7da26954, type: 3}
+  m_Name: ReferralConfig
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Configs.Referral.ReferralConfig
+  BaseUrl: https://wattstap-referral-service.onrender.com
+  RequestTimeout: 30
+  BotUsername: WattsTapDevTemp_bot
+  MiniAppShortName: play
+  DefaultBonusPerFriend: 5000
+  ShareText: "Join me in WattsTap and get bonus coins! \u26A1\U0001F3AE"

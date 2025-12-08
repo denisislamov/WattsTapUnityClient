@@ -92,8 +92,20 @@ namespace WattsTap.Core.React
         public event Action<string> OnReceivedInitData;
         public event Action<SafeArea> OnReceivedSafeAreaInsets;
         public event Action<TelegramAppEnvironment> OnReceivedAppEnvironment;
+        public event Action<string> OnReceivedStartParam;
         
         private SafeArea _safeAreaInsets = null;
+        
+        /// <summary>
+        /// Start parameter from deep link (referral code)
+        /// Example: t.me/WattsTapBot?start=REF_ABC123
+        /// </summary>
+        public string StartParam { get; private set; }
+        
+        /// <summary>
+        /// Returns true if there's a referral code in start_param
+        /// </summary>
+        public bool HasReferralCode => !string.IsNullOrEmpty(StartParam);
          
         public static long GetUserIdFromInitData(string initData)
         {
@@ -237,6 +249,60 @@ namespace WattsTap.Core.React
             AppEnvironment = parsedEnvironment;
             OnReceivedAppEnvironment?.Invoke(parsedEnvironment);
             Debug.LogError($"Received Telegram environment: {parsedEnvironment}");
+        }
+        
+        /// <summary>
+        /// Receives start_param from JavaScript (referral code from deep link)
+        /// Called from WebGL JavaScript
+        /// </summary>
+        public void ReceiveStartParam(string startParam)
+        {
+            StartParam = startParam;
+            OnReceivedStartParam?.Invoke(startParam);
+            
+            if (!string.IsNullOrEmpty(startParam))
+            {
+                Debug.Log($"<color=#00FF00>[TelegramService] Received Start Param (Referral): {startParam}</color>");
+            }
+            else
+            {
+                Debug.Log($"<color=#FFFF00>[TelegramService] No Start Param received (not a referral link)</color>");
+            }
+        }
+        
+        /// <summary>
+        /// Gets the clean referral code without the REF_ prefix
+        /// </summary>
+        /// <returns>Clean referral code or null</returns>
+        public string GetCleanReferralCode()
+        {
+            if (string.IsNullOrEmpty(StartParam))
+                return null;
+            
+            // Remove REF_ prefix if present
+            if (StartParam.StartsWith("REF_", StringComparison.OrdinalIgnoreCase))
+            {
+                return StartParam.Substring(4).ToUpperInvariant();
+            }
+            
+            return StartParam.ToUpperInvariant();
+        }
+        
+        /// <summary>
+        /// Parses start_param from initData string (fallback method)
+        /// </summary>
+        public static string ParseStartParamFromInitData(string initData)
+        {
+            if (string.IsNullOrEmpty(initData))
+                return null;
+            
+            var match = Regex.Match(initData, @"start_param=([^&]+)");
+            if (match.Success)
+            {
+                return Uri.UnescapeDataString(match.Groups[1].Value);
+            }
+            
+            return null;
         }
         
         public void OnCreateUnityInstance()
