@@ -113,7 +113,14 @@ namespace WattsTap.Core.API
             };
             
             string json = JsonUtility.ToJson(request);
-            Debug.Log($"[ReferralAPIService] Sending auth request: {json}");
+            
+            // Debug: Log referral code being sent
+            Debug.Log($"<color=#FF00FF>[ReferralAPIService] ========== AUTH REQUEST DEBUG ==========</color>");
+            Debug.Log($"<color=#FF00FF>[ReferralAPIService] Referral Code being sent: '{referralCode ?? "NULL"}'</color>");
+            Debug.Log($"<color=#FF00FF>[ReferralAPIService] initData length: {initData?.Length ?? 0}</color>");
+            Debug.Log($"<color=#FF00FF>[ReferralAPIService] Full JSON request: {json}</color>");
+            Debug.Log($"<color=#FF00FF>[ReferralAPIService] API URL: {GetBaseUrl()}/auth/telegram</color>");
+            Debug.Log($"<color=#FF00FF>[ReferralAPIService] ========================================</color>");
             
             using (var www = CreatePostRequest("/auth/telegram", json, useAuth: false))
             {
@@ -123,7 +130,7 @@ namespace WattsTap.Core.API
                 {
                     try
                     {
-                        Debug.Log($"[ReferralAPIService] Auth response: {www.downloadHandler.text}");
+                        Debug.Log($"<color=#00FF00>[ReferralAPIService] Auth response: {www.downloadHandler.text}</color>");
                         
                         // Server returns data directly, not wrapped in success/data
                         var response = JsonUtility.FromJson<AuthResponse>(www.downloadHandler.text);
@@ -140,7 +147,27 @@ namespace WattsTap.Core.API
                                 _sharedDataService?.SetData(SharedDataConstants.ReferralCode, response.player.referralCode);
                             }
                             
-                            Debug.Log($"<color=#00FF00>[ReferralAPIService] Authentication successful. Token stored in SharedData.</color>");
+                            // Debug: Log referral result
+                            Debug.Log($"<color=#00FF00>[ReferralAPIService] ========== AUTH RESPONSE DEBUG ==========</color>");
+                            Debug.Log($"<color=#00FF00>[ReferralAPIService] Authentication successful!</color>");
+                            Debug.Log($"<color=#00FF00>[ReferralAPIService] Player ID: {response.player?.playerId}</color>");
+                            Debug.Log($"<color=#00FF00>[ReferralAPIService] Player referralCode: {response.player?.referralCode}</color>");
+                            // Debug.Log($"<color=#00FF00>[ReferralAPIService] isNewPlayer: {response.isNewPlayer}</color>");
+                            if (response.referral != null)
+                            {
+                                Debug.Log($"<color=#00FF00>[ReferralAPIService] Referral applied: {response.referral.applied}</color>");
+                                Debug.Log($"<color=#00FF00>[ReferralAPIService] Referral message: {response.referral.message}</color>");
+                                if (response.referral.referrer != null)
+                                {
+                                    Debug.Log($"<color=#00FF00>[ReferralAPIService] Referrer: {response.referral.referrer.nickname} (ID: {response.referral.referrer.userId})</color>");
+                                }
+                            }
+                            else
+                            {
+                                Debug.Log($"<color=#FFFF00>[ReferralAPIService] No referral info in response</color>");
+                            }
+                            Debug.Log($"<color=#00FF00>[ReferralAPIService] =========================================</color>");
+                            
                             onSuccess?.Invoke(response);
                         }
                         else
@@ -157,6 +184,9 @@ namespace WattsTap.Core.API
                 }
                 else
                 {
+                    Debug.LogError($"<color=#FF0000>[ReferralAPIService] Auth request failed: {www.error}</color>");
+                    Debug.LogError($"<color=#FF0000>[ReferralAPIService] Response code: {www.responseCode}</color>");
+                    Debug.LogError($"<color=#FF0000>[ReferralAPIService] Response body: {www.downloadHandler?.text}</color>");
                     HandleRequestError(www, onError);
                 }
             }
@@ -262,6 +292,8 @@ namespace WattsTap.Core.API
         
         private string BaseUrl => _config?.BaseUrl ?? "http://localhost:8000";
         private int RequestTimeout => _config?.RequestTimeout ?? 30;
+        
+        private string GetBaseUrl() => BaseUrl;
         
         private UnityWebRequest CreateGetRequest(string endpoint)
         {
