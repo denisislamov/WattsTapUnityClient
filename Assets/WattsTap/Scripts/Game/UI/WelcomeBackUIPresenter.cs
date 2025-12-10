@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using WattsTap.Constants;
 using WattsTap.Core;
+using WattsTap.Core.Telegram;
 using WattsTap.Core.UI;
 
 namespace WattsTap.Game.UI
@@ -13,12 +14,15 @@ namespace WattsTap.Game.UI
 
         private Coroutine _timerCoroutine;
         private IUIService _uiService;
+        private IHapticFeedbackService _hapticService;
 
         protected override void OnInit()
         {
             Model.RemainingTime.OnValueChanged += OnRemainingTimeChanged;
             Model.TimerProgress.OnValueChanged += OnTimerProgressChanged;
             Model.RewardAmount.OnValueChanged += OnRewardAmountChanged;
+            
+            ServiceLocator.TryGet(out _hapticService);
 
             if (View.CloseButton != null)
             {
@@ -77,6 +81,8 @@ namespace WattsTap.Game.UI
 
         private void OnCloseClicked()
         {
+            _hapticService?.ButtonPressed();
+            
             if (_uiService == null)
             {
                 ServiceLocator.TryGet(out _uiService);
@@ -103,4 +109,3 @@ namespace WattsTap.Game.UI
         }
     }
 }
-

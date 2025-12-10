@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using WattsTap.Core;
 using WattsTap.Core.Configs;
+using WattsTap.Core.Telegram;
 using WattsTap.Scripts.Game.Tap.Data;
 using WattsTap.Game.Player;
 using WattsTap.Scripts.Game.GlobalConfigs;
@@ -11,6 +12,7 @@ namespace WattsTap.Game.Tap.Services
     public class TapControllerService : ITapControllerService
     {
         private IPlayerService _playerService;
+        private IHapticFeedbackService _hapticService;
         private TapConfig _config;
         private MiningBalanceConfig _miningBalanceConfig;
         private float _recoveryTimer;
@@ -37,6 +39,7 @@ namespace WattsTap.Game.Tap.Services
             }
 
             _playerService = ServiceLocator.Get<IPlayerService>();
+            ServiceLocator.TryGet(out _hapticService);
 
             var configService = ServiceLocator.Get<IConfigService>();
             _config = configService.GetConfig<TapConfig>( "TapConfig");
@@ -103,6 +106,9 @@ namespace WattsTap.Game.Tap.Services
             var success = _playerService.PerformTap();
             if (success)
             {
+                // Trigger haptic feedback for successful tap
+                _hapticService?.TapPerformed();
+                
                 // _idleTimer = 0f; // reset idle on tap
                 resourceManager.SpendResource(ResourceType.Hits, _miningBalanceConfig.energyCostPerTap);
                 CurrentHits = (int)resourceManager.GetResource(ResourceType.Hits);

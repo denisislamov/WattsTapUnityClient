@@ -2,6 +2,7 @@ using WattsTap.Constants;
 using WattsTap.Core;
 using WattsTap.Core.API;
 using WattsTap.Core.Services;
+using WattsTap.Core.Telegram;
 using WattsTap.Core.UI;
 
 namespace WattsTap.Game.UI
@@ -10,11 +11,13 @@ namespace WattsTap.Game.UI
     {
         private IUIService _uiService;
         private IReferralService _referralService;
+        private IHapticFeedbackService _hapticService;
 
         protected override void OnInit()
         {
             ServiceLocator.TryGet(out _uiService);
             ServiceLocator.TryGet(out _referralService);
+            ServiceLocator.TryGet(out _hapticService);
 
             // Tab buttons
             if (View.ReferralButton != null)
@@ -110,16 +113,20 @@ namespace WattsTap.Game.UI
 
         private void OnReferralButtonClicked()
         {
+            _hapticService?.ButtonPressed();
             View.ShowReferralTab();
         }
 
         private void OnFriendsButtonClicked()
         {
+            _hapticService?.ButtonPressed();
             View.ShowFriendsTab();
         }
 
         private void OnMiningButtonClicked()
         {
+            _hapticService?.ButtonPressed();
+            
             if (_uiService == null)
             {
                 ServiceLocator.TryGet(out _uiService);
@@ -130,11 +137,13 @@ namespace WattsTap.Game.UI
         
         private void OnShareButtonClicked()
         {
+            _hapticService?.ButtonPressed();
             _referralService?.ShareInviteLink();
         }
         
         private void OnCopyLinkClicked()
         {
+            _hapticService?.ButtonPressed();
             _referralService?.CopyInviteLink();
             // Note: ShowCopiedNotification is now called via OnLinkCopied event
         }
@@ -189,11 +198,3 @@ namespace WattsTap.Game.UI
         }
     }
 }
-
-
-
-
-
-
-
-

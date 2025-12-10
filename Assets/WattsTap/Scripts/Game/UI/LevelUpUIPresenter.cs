@@ -1,5 +1,6 @@
 using WattsTap.Constants;
 using WattsTap.Core;
+using WattsTap.Core.Telegram;
 using WattsTap.Core.UI;
 
 namespace WattsTap.Game.UI
@@ -7,11 +8,14 @@ namespace WattsTap.Game.UI
     public class LevelUpUIPresenter : UIBasePresenter<LevelUpUIView, LevelUpUIModel>
     {
         private IUIService _uiService;
+        private IHapticFeedbackService _hapticService;
 
         protected override void OnInit()
         {
             Model.Level.OnValueChanged += OnLevelChanged;
             Model.WattReward.OnValueChanged += OnRewardChanged;
+            
+            ServiceLocator.TryGet(out _hapticService);
 
             if (View.CollectButton != null)
             {
@@ -24,6 +28,8 @@ namespace WattsTap.Game.UI
 
         private void OnCollectClicked()
         {
+            _hapticService?.ButtonPressed();
+            
             if (_uiService == null)
             {
                 ServiceLocator.TryGet(out _uiService);
@@ -57,4 +63,3 @@ namespace WattsTap.Game.UI
         }
     }
 }
-

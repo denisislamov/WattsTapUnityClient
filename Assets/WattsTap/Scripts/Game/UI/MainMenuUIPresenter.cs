@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using WattsTap.Constants;
 using WattsTap.Core;
 using WattsTap.Core.React;
+using WattsTap.Core.Telegram;
 using WattsTap.Core.UI;
 
 namespace WattsTap.Game.UI
@@ -15,6 +16,7 @@ namespace WattsTap.Game.UI
         private CancellationTokenSource _avatarLoadCts;
         private ISharedDataService _sharedDataService;
         private IUIService _uiService;
+        private IHapticFeedbackService _hapticService;
 
         protected override void OnInit()
         {
@@ -35,6 +37,8 @@ namespace WattsTap.Game.UI
             View.UpdateHits(Model.HitsCurrent.Value, Model.HitsMax.Value);
             
             _sharedDataService = ServiceLocator.Get<ISharedDataService>();
+            ServiceLocator.TryGet(out _hapticService);
+            
             if (_sharedDataService.TryGetData(SharedDataConstants.TelegramUser, out TelegramService.User telegramUser))
             {
                 Model.PlayerName.Value = telegramUser.first_name + " " + telegramUser.last_name + " " + telegramUser.username;
@@ -86,16 +90,20 @@ namespace WattsTap.Game.UI
 
         private void OnProfileButtonClicked()
         {
+            _hapticService?.ButtonPressed();
+            
             if (_uiService == null)
             {
                 ServiceLocator.TryGet(out _uiService);
             }
-
+            
             _uiService?.Open(UIConstants.ProfileScreen);
         }
 
         private void OnFriendsReferralButtonClicked()
         {
+            _hapticService?.ButtonPressed();
+            
             if (_uiService == null)
             {
                 ServiceLocator.TryGet(out _uiService);
@@ -106,6 +114,8 @@ namespace WattsTap.Game.UI
 
         private void OnShopButtonClicked()
         {
+            _hapticService?.ButtonPressed();
+            
             if (_uiService == null)
             {
                 ServiceLocator.TryGet(out _uiService);
@@ -116,6 +126,7 @@ namespace WattsTap.Game.UI
 
         private void ChangeSkinButtonOnClick()
         {
+            _hapticService?.ButtonPressed();
             View.SetNextSkin();
         }
 

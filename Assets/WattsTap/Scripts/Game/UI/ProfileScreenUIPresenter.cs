@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using WattsTap.Constants;
 using WattsTap.Core;
 using WattsTap.Core.React;
+using WattsTap.Core.Telegram;
 using WattsTap.Core.UI;
 
 namespace WattsTap.Game.UI
@@ -14,6 +15,7 @@ namespace WattsTap.Game.UI
     {
         private ISharedDataService _sharedDataService;
         private IUIService _uiService;
+        private IHapticFeedbackService _hapticService;
         private CancellationTokenSource _avatarLoadCts;
         private bool _isWalletConnected;
 
@@ -26,6 +28,7 @@ namespace WattsTap.Game.UI
 
             _sharedDataService = ServiceLocator.Get<ISharedDataService>();
             _sharedDataService.OnDataUpdated += OnSharedDataUpdated;
+            ServiceLocator.TryGet(out _hapticService);
 
             if (_sharedDataService.TryGetData(SharedDataConstants.TelegramUser, out TelegramService.User telegramUser))
             {
@@ -60,6 +63,8 @@ namespace WattsTap.Game.UI
 
         private void OnCloseClicked()
         {
+            _hapticService?.ButtonPressed();
+            
             if (_uiService == null)
             {
                 ServiceLocator.TryGet(out _uiService);
@@ -154,12 +159,18 @@ namespace WattsTap.Game.UI
 
         private void OnConnectWalletClicked()
         {
-            SetWalletState(true);
+            _hapticService?.ButtonPressed();
+            
+            _isWalletConnected = true;
+            View.SetWalletConnectionState(true);
         }
 
         private void OnChangeWalletClicked()
         {
-            SetWalletState(false);
+            _hapticService?.ButtonPressed();
+            
+            _isWalletConnected = false;
+            View.SetWalletConnectionState(false);
         }
 
         private void UpdateProgressBar()
@@ -236,4 +247,3 @@ namespace WattsTap.Game.UI
         }
     }
 }
-

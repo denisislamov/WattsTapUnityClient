@@ -1,5 +1,6 @@
 using WattsTap.Constants;
 using WattsTap.Core;
+using WattsTap.Core.Telegram;
 using WattsTap.Core.UI;
 
 namespace WattsTap.Game.UI
@@ -7,10 +8,12 @@ namespace WattsTap.Game.UI
     public class ShopScreenUIPresenter : UIBasePresenter<ShopScreenUIView, ShopScreenUIModel>
     {
         private IUIService _uiService;
+        private IHapticFeedbackService _hapticService;
 
         protected override void OnInit()
         {
             ServiceLocator.TryGet(out _uiService);
+            ServiceLocator.TryGet(out _hapticService);
 
             if (View.ChestsButton != null)
             {
@@ -33,16 +36,20 @@ namespace WattsTap.Game.UI
 
         private void OnChestsButtonClicked()
         {
+            _hapticService?.ButtonPressed();
             View.ShowChestsTab();
         }
 
         private void OnBoostersButtonClicked()
         {
+            _hapticService?.ButtonPressed();
             View.ShowBoostersTab();
         }
 
         private void OnCloseButtonClicked()
         {
+            _hapticService?.ButtonPressed();
+            
             if (_uiService == null)
             {
                 ServiceLocator.TryGet(out _uiService);
@@ -70,11 +77,3 @@ namespace WattsTap.Game.UI
         }
     }
 }
-
-
-
-
-
-
-
-

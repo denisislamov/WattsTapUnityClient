@@ -429,6 +429,7 @@ GameObject:
   - component: {fileID: 1569553357}
   - component: {fileID: 1569553358}
   - component: {fileID: 1569553359}
+  - component: {fileID: 1569553360}
   m_Layer: 0
   m_Name: ---ApplicationEntry---
   m_TagString: Untagged
@@ -469,6 +470,7 @@ MonoBehaviour:
   _uiRoot: {fileID: 1700051878}
   _overlayRoot: {fileID: 427421229}
   _telegramService: {fileID: 1979693432}
+  _hapticFeedbackService: {fileID: 1569553360}
   _updateService: {fileID: 1959272533}
   _mainMenuThemeManager: {fileID: 221845536}
 --- !u!114 &1569553359
@@ -490,6 +492,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: aacaa360bdefd44aa9fb8313c1f6f0b1, type: 2}
   - {fileID: 11400000, guid: f96e748f6e8c748289f7ef9963f663f3, type: 2}
   - {fileID: 11400000, guid: e3468a4b0c585498485f3535d35d61fb, type: 2}
+--- !u!114 &1569553360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569553356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e750854f36440bebbc2c1c1f50d7e93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Telegram.HapticFeedbackService
 --- !u!1 &1700051874
 GameObject:
   m_ObjectHideFlags: 0

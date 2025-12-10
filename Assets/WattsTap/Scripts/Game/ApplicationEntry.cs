@@ -8,6 +8,7 @@ using WattsTap.Core.React;
 using WattsTap.Core.UI;
 using WattsTap.Core.API;
 using WattsTap.Core.Services;
+using WattsTap.Core.Telegram;
 using WattsTap.Game.Player;
 using WattsTap.Game.Tap.Services;
 using WattsTap.Game.UI;
@@ -24,6 +25,7 @@ namespace WattsTap.Core
         
         [Header("Telegram")]
         [SerializeField] private TelegramService _telegramService;
+        [SerializeField] private HapticFeedbackService _hapticFeedbackService;
         
         [Header("Update Service")]       
         [SerializeField] private UpdateService _updateService;
@@ -47,6 +49,7 @@ namespace WattsTap.Core
             ServiceLocator.Register<IInputService>(new InputService());
             ServiceLocator.Register<ITapControllerService>(new TapControllerService());
             ServiceLocator.Register<ITelegramService>(_telegramService);
+            ServiceLocator.Register<IHapticFeedbackService>(_hapticFeedbackService);
             
             ServiceLocator.Register(_mainMenuThemeManager);
             

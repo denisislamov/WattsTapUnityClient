@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using WattsTap.Constants;
 using WattsTap.Core;
+using WattsTap.Core.Telegram;
 using WattsTap.Core.UI;
 using WattsTap.Scripts.Game.GlobalConfigs;
 
@@ -11,6 +12,7 @@ namespace WattsTap.Game.Player
     {
         private PlayerData _playerData;
         private IResourceManager _resourceManager;
+        private IHapticFeedbackService _hapticService;
         private PlayerLevelConfig _levelConfig;
         private MiningBalanceConfig _miningBalanceConfig;
         private float _energyRestoreTimer;
@@ -37,6 +39,8 @@ namespace WattsTap.Game.Player
             
             _levelConfig = configService.GetConfig<PlayerLevelConfig>("PlayerLevelConfig");
             _miningBalanceConfig = configService.GetConfig<MiningBalanceConfig>("MiningBalanceConfig");
+            
+            ServiceLocator.TryGet(out _hapticService);
             
             LoadPlayerData();
             
@@ -141,6 +145,9 @@ namespace WattsTap.Game.Player
 
             var wattsReward = _levelConfig.GetRewardsForLevel(_playerData.level).coins;
             _resourceManager.AddResource(ResourceType.Watts, wattsReward, false);
+            
+            // Trigger haptic feedback for level up
+            _hapticService?.LevelUp();
             
             Debug.Log($"[PlayerService] Level UP! New level: {_playerData.level}");
             OnLevelUp?.Invoke(_playerData.level);
