@@ -39,7 +39,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.22770691, y: -291.19244}
+  m_AnchoredPosition: {x: -0.22772217, y: -291.19244}
   m_SizeDelta: {x: -76.0736, y: 71.9548}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6881254081634472246
@@ -113,10 +113,10 @@ CanvasGroup:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 58908800010066957}
-  m_Enabled: 1
-  m_Alpha: 0.46
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Enabled: 0
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!1 &853994368591222365
 GameObject:

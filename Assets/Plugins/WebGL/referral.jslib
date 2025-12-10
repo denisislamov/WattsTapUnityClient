@@ -42,28 +42,32 @@ mergeInto(LibraryManager.library, {
         
         console.log('[Referral] Copying to clipboard:', text);
         
-        // Try modern clipboard API first
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text)
-                .then(function() {
-                    console.log('[Referral] Successfully copied to clipboard');
-                    
-                    // Show Telegram popup if available
-                    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.showPopup) {
-                        window.Telegram.WebApp.showPopup({
-                            title: 'Copied!',
-                            message: 'Invite link copied to clipboard',
-                            buttons: [{type: 'ok'}]
-                        });
-                    }
-                })
-                .catch(function(err) {
-                    console.error('[Referral] Clipboard API failed:', err);
-                    fallbackCopyToClipboard(text);
-                });
-        } else {
-            // Fallback for older browsers
-            fallbackCopyToClipboard(text);
+        // Function to show success notification in Telegram
+        function showCopySuccess() {
+            if (window.Telegram && window.Telegram.WebApp) {
+                // Use HapticFeedback for tactile response
+                if (window.Telegram.WebApp.HapticFeedback) {
+                    window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+                }
+                
+                // Show alert or popup
+                if (window.Telegram.WebApp.showAlert) {
+                    window.Telegram.WebApp.showAlert('Link copied to clipboard! ✓');
+                } else if (window.Telegram.WebApp.showPopup) {
+                    window.Telegram.WebApp.showPopup({
+                        title: 'Copied!',
+                        message: 'Invite link copied to clipboard',
+                        buttons: [{type: 'ok'}]
+                    });
+                }
+            }
+        }
+        
+        function showCopyError() {
+            console.error('[Referral] All clipboard methods failed');
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.showAlert) {
+                window.Telegram.WebApp.showAlert('Could not copy automatically. Please copy manually: ' + text);
+            }
         }
         
         function fallbackCopyToClipboard(text) {
@@ -84,14 +88,50 @@ mergeInto(LibraryManager.library, {
                 var successful = document.execCommand('copy');
                 if (successful) {
                     console.log('[Referral] Fallback copy successful');
+                    showCopySuccess();
                 } else {
                     console.error('[Referral] Fallback copy failed');
+                    showCopyError();
                 }
             } catch (err) {
                 console.error('[Referral] Fallback copy error:', err);
+                showCopyError();
             }
             
             document.body.removeChild(textArea);
+        }
+        
+        // Method 1: Try Telegram WebApp clipboard API (if available in future versions)
+        if (window.Telegram && window.Telegram.WebApp) {
+            // Note: As of now, Telegram WebApp doesn't have writeText, 
+            // but we check for it in case it's added in the future
+            if (window.Telegram.WebApp.clipboard && typeof window.Telegram.WebApp.clipboard.writeText === 'function') {
+                try {
+                    window.Telegram.WebApp.clipboard.writeText(text);
+                    console.log('[Referral] Telegram WebApp clipboard.writeText successful');
+                    showCopySuccess();
+                    return;
+                } catch (e) {
+                    console.warn('[Referral] Telegram clipboard.writeText failed:', e);
+                }
+            }
+        }
+        
+        // Method 2: Try modern Clipboard API
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text)
+                .then(function() {
+                    console.log('[Referral] navigator.clipboard.writeText successful');
+                    showCopySuccess();
+                })
+                .catch(function(err) {
+                    console.warn('[Referral] navigator.clipboard failed:', err);
+                    // Method 3: Fallback to execCommand
+                    fallbackCopyToClipboard(text);
+                });
+        } else {
+            // Method 3: Fallback to execCommand for older browsers
+            fallbackCopyToClipboard(text);
         }
     },
     
@@ -112,8 +152,3 @@ mergeInto(LibraryManager.library, {
         }
     }
 });
-
-
-
-
-

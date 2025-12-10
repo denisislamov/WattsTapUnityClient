@@ -38,9 +38,19 @@ namespace WattsTap.Game.UI
                 View.ShareButton.onClick.AddListener(OnShareButtonClicked);
             }
             
+            if (View.ShareButton2 != null)
+            {
+                View.ShareButton2.onClick.AddListener(OnShareButtonClicked);
+            }
+            
             if (View.CopyLinkButton != null)
             {
                 View.CopyLinkButton.onClick.AddListener(OnCopyLinkClicked);
+            }
+            
+            if (View.CopyLinkButton2 != null)
+            {
+                View.CopyLinkButton2.onClick.AddListener(OnCopyLinkClicked);
             }
             
             // Subscribe to referral service events
@@ -165,6 +175,16 @@ namespace WattsTap.Game.UI
             if (View?.CopyLinkButton != null)
             {
                 View.CopyLinkButton.onClick.RemoveListener(OnCopyLinkClicked);
+            }
+            
+            if (View?.ShareButton2 != null)
+            {
+                View.ShareButton2.onClick.RemoveListener(OnShareButtonClicked);
+            }
+            
+            if (View?.CopyLinkButton2 != null)
+            {
+                View.CopyLinkButton2.onClick.RemoveListener(OnCopyLinkClicked);
             }
         }
     }

@@ -24,8 +24,12 @@ namespace WattsTap.Game.UI
         [SerializeField] private Button _shareButton;
         [SerializeField] private Button _copyLinkButton;
         
+        [SerializeField] private Button _shareButton2;
+        [SerializeField] private Button _copyLinkButton2;
+        
         [Header("Referral Tab - Display")]
         [SerializeField] private TMP_Text _inviteLinkText;
+        [SerializeField] private TMP_Text _inviteLinkText2;
         [SerializeField] private TMP_Text _friendsCountText;
         [SerializeField] private TMP_Text _totalBonusText;
         [SerializeField] private TMP_Text _bonusPerFriendText;
@@ -43,7 +47,9 @@ namespace WattsTap.Game.UI
         public Button FriendsButton => _friendsButton;
         public Button MiningButton => _miningButton;
         public Button ShareButton => _shareButton;
+        public Button ShareButton2 => _shareButton2;
         public Button CopyLinkButton => _copyLinkButton;
+        public Button CopyLinkButton2 => _copyLinkButton2;
         
         #endregion
 
@@ -80,6 +86,12 @@ namespace WattsTap.Game.UI
             {
                 // Show shortened link for display
                 _inviteLinkText.text = inviteLink ?? "Loading...";
+            }
+            
+            if (_inviteLinkText2 != null)
+            {
+                // Show shortened link for display
+                _inviteLinkText2.text = inviteLink ?? "Loading...";
             }
             
             if (_friendsCountText != null)
