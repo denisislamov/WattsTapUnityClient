@@ -22,11 +22,17 @@ namespace WattsTap.Game.UI
         [SerializeField] private Button[] _chestItemOpenButtons;
         [SerializeField] private ShopChestItemConfig[] _chestItemConfigs;
 
+        [Header("Booster Items")]
+        [SerializeField] private Button[] _boosterItemOpenButtons;
+        [SerializeField] private ShopBoosterItemConfig[] _boosterItemConfigs;
+
         public Button ChestsButton => _chestsButton;
         public Button BoostersButton => _boostersButton;
         public Button[] CloseButtons => _closeButtons;
         public Button[] ChestItemOpenButtons => _chestItemOpenButtons;
         public ShopChestItemConfig[] ChestItemConfigs => _chestItemConfigs;
+        public Button[] BoosterItemOpenButtons => _boosterItemOpenButtons;
+        public ShopBoosterItemConfig[] BoosterItemConfigs => _boosterItemConfigs;
 
         /// <summary>
         /// Shows chests tab content and hides boosters content

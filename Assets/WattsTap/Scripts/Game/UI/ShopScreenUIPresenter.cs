@@ -43,6 +43,19 @@ namespace WattsTap.Game.UI
                     }
                 }
             }
+
+            // Subscribe to booster item buttons
+            if (View.BoosterItemOpenButtons != null)
+            {
+                for (int i = 0; i < View.BoosterItemOpenButtons.Length; i++)
+                {
+                    if (View.BoosterItemOpenButtons[i] != null)
+                    {
+                        int index = i;
+                        View.BoosterItemOpenButtons[i].onClick.AddListener(() => OnBoosterItemButtonClicked(index));
+                    }
+                }
+            }
             
             // Show chests tab by default
             View.ShowChestsTab();
@@ -95,6 +108,29 @@ namespace WattsTap.Game.UI
             }
         }
 
+        private void OnBoosterItemButtonClicked(int index)
+        {
+            _hapticService?.ButtonPressed();
+
+            if (_uiService == null)
+            {
+                ServiceLocator.TryGet(out _uiService);
+            }
+
+            // Get the config for this booster item
+            ShopBoosterItemConfig config = null;
+            if (View.BoosterItemConfigs != null && index < View.BoosterItemConfigs.Length)
+            {
+                config = View.BoosterItemConfigs[index];
+            }
+
+            if (config != null)
+            {
+                ShopBoosterItemUIPresenter.SetPendingConfig(config);
+                _uiService?.Open(UIConstants.ShopBoosterItem);
+            }
+        }
+
         protected override void OnDispose()
         {
             if (View?.ChestsButton != null)
@@ -116,6 +152,18 @@ namespace WattsTap.Game.UI
             if (View?.ChestItemOpenButtons != null)
             {
                 foreach (var button in View.ChestItemOpenButtons)
+                {
+                    if (button != null)
+                    {
+                        button.onClick.RemoveAllListeners();
+                    }
+                }
+            }
+
+            // Unsubscribe from booster item buttons
+            if (View?.BoosterItemOpenButtons != null)
+            {
+                foreach (var button in View.BoosterItemOpenButtons)
                 {
                     if (button != null)
                     {
