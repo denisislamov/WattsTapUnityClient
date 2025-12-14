@@ -2012,7 +2012,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7575781679558124475
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2405,6 +2405,7 @@ GameObject:
   - component: {fileID: 6721389726533179398}
   - component: {fileID: 8663655923097795697}
   - component: {fileID: 2067762232834292019}
+  - component: {fileID: 3300774877793817728}
   m_Layer: 5
   m_Name: ShopChestItem
   m_TagString: Untagged
@@ -2430,10 +2431,10 @@ RectTransform:
   - {fileID: 7575781679558124475}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -572, y: 0}
-  m_SizeDelta: {x: 464, y: 1002}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8663655923097795697
 CanvasRenderer:
@@ -2473,6 +2474,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3300774877793817728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6358194411342956056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bb5a9535cd74f9bbb1b8016515c596a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.ShopChestItemUIView
+  _itemNameText: {fileID: 7793036156638909769}
+  _iconImage: {fileID: 8206801007069249273}
+  _primaryColorImage: {fileID: 8404417200608251486}
+  _secondaryColorImage: {fileID: 2533568277524691558}
+  _backButton: {fileID: 3494934352079888280}
 --- !u!1 &6943064809884705279
 GameObject:
   m_ObjectHideFlags: 0
@@ -3106,3 +3124,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
   m_PrefabInstance: {fileID: 7096209392758247899}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3494934352079888280 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5979175700302483011, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
+  m_PrefabInstance: {fileID: 7096209392758247899}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button

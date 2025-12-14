@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using WattsTap.Core.UI;
+using WattsTap.Game.Shop;
 
 namespace WattsTap.Game.UI
 {
@@ -17,9 +18,15 @@ namespace WattsTap.Game.UI
         [Header("Controls")]
         [SerializeField] private Button[] _closeButtons;
 
+        [Header("Chest Items")]
+        [SerializeField] private Button[] _chestItemOpenButtons;
+        [SerializeField] private ShopChestItemConfig[] _chestItemConfigs;
+
         public Button ChestsButton => _chestsButton;
         public Button BoostersButton => _boostersButton;
         public Button[] CloseButtons => _closeButtons;
+        public Button[] ChestItemOpenButtons => _chestItemOpenButtons;
+        public ShopChestItemConfig[] ChestItemConfigs => _chestItemConfigs;
 
         /// <summary>
         /// Shows chests tab content and hides boosters content
@@ -56,11 +63,3 @@ namespace WattsTap.Game.UI
         }
     }
 }
-
-
-
-
-
-
-
-

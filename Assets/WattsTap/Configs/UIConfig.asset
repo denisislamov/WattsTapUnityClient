@@ -25,3 +25,5 @@ MonoBehaviour:
     Prefab: {fileID: 6994799608154508993, guid: b1eb292f8a78449268462836bd43da40, type: 3}
   - Id: ShopScreen
     Prefab: {fileID: 6994799608154508993, guid: e4a53d3bce587464c826d3676cdfc374, type: 3}
+  - Id: ShopChestItem
+    Prefab: {fileID: 6358194411342956056, guid: 519569b3a778f4d58ae56b6fc802e802, type: 3}
