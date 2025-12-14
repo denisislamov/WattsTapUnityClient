@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace WattsTap.Game.Tap.Services
 {
@@ -28,6 +29,11 @@ namespace WattsTap.Game.Tap.Services
         /// Выполнить тап. Возвращает true, если тап применён (энергия была потрачена и ресурсы начислены).
         /// </summary>
         bool HandleTap();
+        
+        /// <summary>
+        /// Выполнить тап с передачей экранной позиции для визуальных эффектов.
+        /// </summary>
+        bool HandleTap(Vector2 screenPosition);
 
         /// <summary>
         /// Обновление сервиса (для восстановления ударов и учета таймеров) — должен вызываться извне (например из MonoBehaviour.Update)
@@ -45,6 +51,11 @@ namespace WattsTap.Game.Tap.Services
         // /// </summary>
         // void ApplyUpgrade(TapUpgradeType type, float value);
 
+        
+        /// <summary>
+        /// Событие успешного тапа с позицией на экране
+        /// </summary>
+        event Action<Vector2, int> OnTapPerformedWithPosition; // screenPosition, coinsEarned
         
         /// <summary>
         /// Событие изменения множителя дохода за тап

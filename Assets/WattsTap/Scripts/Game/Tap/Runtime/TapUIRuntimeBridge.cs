@@ -70,7 +70,7 @@ namespace WattsTap.Scripts.Game.Tap.Runtime
 
             if (IsPointerOverTarget(screenPos))
             {
-                _tapController?.HandleTap();
+                _tapController?.HandleTap(screenPos);
             }
         }
 

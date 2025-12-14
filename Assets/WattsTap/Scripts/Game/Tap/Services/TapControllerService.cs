@@ -27,6 +27,7 @@ namespace WattsTap.Game.Tap.Services
         public int MaxHits => _miningBalanceConfig.startCapacityHits;
         
         public event Action<bool> OnTapPerformed;
+        public event Action<Vector2, int> OnTapPerformedWithPosition;
         public event Action<int, int> OnHitsChanged;
         public event Action<long> OnOfflineBonusChanged;
         public event Action<float> OnIncomeMultiplierChanged;
@@ -94,6 +95,11 @@ namespace WattsTap.Game.Tap.Services
 
         public bool HandleTap()
         {
+            return HandleTap(Vector2.zero);
+        }
+        
+        public bool HandleTap(Vector2 screenPosition)
+        {
             if (!IsInitialized) return false;
             
             var resourceManager = _playerService.ResourceManager;
@@ -114,6 +120,11 @@ namespace WattsTap.Game.Tap.Services
                 CurrentHits = (int)resourceManager.GetResource(ResourceType.Hits);
                 OnHitsChanged?.Invoke(CurrentHits, MaxHits);
                 OnTapPerformed?.Invoke(true);
+                
+                // Notify with position for visual effects
+                int coinsEarned = _playerService.IncomePerTap;
+                OnTapPerformedWithPosition?.Invoke(screenPosition, coinsEarned);
+                
                 return true;
             }
 
