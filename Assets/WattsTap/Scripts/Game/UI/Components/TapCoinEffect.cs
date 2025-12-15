@@ -8,23 +8,25 @@ namespace WattsTap.Scripts.Game.UI.Components
 {
     /// <summary>
     /// Компонент для отображения эффекта монетки при тапе.
-    /// Монетка вылетает из места тапа и плавно исчезает с твин-анимацией.
+    /// Монетка вылетает из места тапа и летит к целевому RectTransform, плавно исчезая.
     /// </summary>
     public class TapCoinEffect : MonoBehaviour
     {
         [Header("References")]
         [SerializeField] private Canvas canvas;
         [SerializeField] private RectTransform effectContainer;
+        [SerializeField] private RectTransform target; // Целевой RectTransform куда летят монетки
         
         [Header("Coin Prefab")]
         [SerializeField] private GameObject coinEffectPrefab;
         
         [Header("Animation Settings")]
         [SerializeField] private float duration = 0.8f;
-        [SerializeField] private float floatDistance = 100f;
         [SerializeField] private float randomOffsetX = 30f;
+        [SerializeField] private float randomOffsetY = 20f;
+        [SerializeField] private float curveHeight = 50f; // Высота дуги полёта
         [SerializeField] private AnimationCurve moveCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
-        [SerializeField] private AnimationCurve fadeCurve = AnimationCurve.Linear(0, 1, 1, 0);
+        [SerializeField] private AnimationCurve fadeCurve = AnimationCurve.EaseInOut(0.7f, 1, 1, 0); // Начинает исчезать ближе к концу
         [SerializeField] private AnimationCurve scaleCurve = AnimationCurve.EaseInOut(0, 0.5f, 0.3f, 1f);
         
         [Header("Pool Settings")]
@@ -162,16 +164,37 @@ namespace WattsTap.Scripts.Game.UI.Components
                 _uiCamera, 
                 out localPoint);
             
-            // Add random horizontal offset
+            // Add random offset to start position
             float randomX = Random.Range(-randomOffsetX, randomOffsetX);
+            float randomY = Random.Range(-randomOffsetY, randomOffsetY);
             localPoint.x += randomX;
+            localPoint.y += randomY;
+            
+            // Calculate target position
+            Vector2 targetPosition;
+            if (target != null)
+            {
+                // Get target position in effectContainer's local space
+                Vector3 targetWorldPos = target.position;
+                Vector3 localTargetPos = effectContainer.InverseTransformPoint(targetWorldPos);
+                targetPosition = new Vector2(localTargetPos.x, localTargetPos.y);
+            }
+            else
+            {
+                // Fallback: fly upward if no target is set
+                targetPosition = localPoint + Vector2.up * 100f;
+            }
             
             // Setup instance
             instance.RectTransform.anchoredPosition = localPoint;
             instance.StartPosition = localPoint;
-            instance.TargetPosition = localPoint + Vector2.up * floatDistance;
+            instance.TargetPosition = targetPosition;
             instance.ElapsedTime = 0f;
             instance.Duration = duration;
+            
+            // Calculate curve control point for bezier-like movement
+            Vector2 midPoint = (localPoint + targetPosition) / 2f;
+            instance.ControlPoint = midPoint + Vector2.up * curveHeight;
             
             if (instance.Text != null)
             {
@@ -195,14 +218,16 @@ namespace WattsTap.Scripts.Game.UI.Components
                 
                 float t = Mathf.Clamp01(instance.ElapsedTime / instance.Duration);
                 
-                // Apply movement
+                // Apply curved movement using quadratic bezier
                 float moveT = moveCurve.Evaluate(t);
-                instance.RectTransform.anchoredPosition = Vector2.Lerp(
-                    instance.StartPosition, 
-                    instance.TargetPosition, 
-                    moveT);
+                Vector2 position = CalculateQuadraticBezierPoint(
+                    moveT,
+                    instance.StartPosition,
+                    instance.ControlPoint,
+                    instance.TargetPosition);
+                instance.RectTransform.anchoredPosition = position;
                 
-                // Apply fade
+                // Apply fade (starts fading closer to the end)
                 float fadeT = fadeCurve.Evaluate(t);
                 instance.CanvasGroup.alpha = fadeT;
                 
@@ -217,6 +242,22 @@ namespace WattsTap.Scripts.Game.UI.Components
                     _activeEffects.RemoveAt(i);
                 }
             }
+        }
+        
+        /// <summary>
+        /// Вычисляет точку на квадратичной кривой Безье
+        /// </summary>
+        private Vector2 CalculateQuadraticBezierPoint(float t, Vector2 p0, Vector2 p1, Vector2 p2)
+        {
+            float u = 1 - t;
+            float tt = t * t;
+            float uu = u * u;
+            
+            Vector2 point = uu * p0; // (1-t)^2 * P0
+            point += 2 * u * t * p1; // 2(1-t)t * P1
+            point += tt * p2;        // t^2 * P2
+            
+            return point;
         }
 
         private CoinEffectInstance GetFromPool()
@@ -244,6 +285,7 @@ namespace WattsTap.Scripts.Game.UI.Components
             public TMP_Text Text;
             public Vector2 StartPosition;
             public Vector2 TargetPosition;
+            public Vector2 ControlPoint; // Контрольная точка для кривой Безье
             public float ElapsedTime;
             public float Duration;
         }
