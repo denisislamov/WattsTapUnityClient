@@ -302,8 +302,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.MainMenuThemeManager
   fallbackSkin: {fileID: 11400000, guid: fa1b9841b248e4d1884a79465bc1fd3b, type: 2}
   availableSkins:
-  - {fileID: 11400000, guid: fa1b9841b248e4d1884a79465bc1fd3b, type: 2}
   - {fileID: 11400000, guid: 890cf1014d223498aa49906df5b7ba5e, type: 2}
+  - {fileID: 11400000, guid: fa1b9841b248e4d1884a79465bc1fd3b, type: 2}
 --- !u!1 &427421224
 GameObject:
   m_ObjectHideFlags: 0
