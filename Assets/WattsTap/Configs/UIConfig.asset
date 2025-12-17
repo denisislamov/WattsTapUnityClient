@@ -29,3 +29,5 @@ MonoBehaviour:
     Prefab: {fileID: 6358194411342956056, guid: 519569b3a778f4d58ae56b6fc802e802, type: 3}
   - Id: ShopBoosterItem
     Prefab: {fileID: 534711367491500794, guid: 8dee91b2598d24fd2b30527d61f48b86, type: 3}
+  - Id: WelcomeScreen
+    Prefab: {fileID: 5748633760880554082, guid: 5796b4991dd5a41fba9e12f37a7bc216, type: 3}

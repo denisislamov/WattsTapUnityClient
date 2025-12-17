@@ -77,7 +77,7 @@ namespace WattsTap.Core
             }
             
             uiService.Open(UIConstants.MainMenu);
-            uiService.Open(UIConstants.WelcomeBackScreen);
+            uiService.Open(UIConstants.WelcomeScreen);
         }
         
         private void TelegramServiceOnReceivedInitData(string initData)
