@@ -61,6 +61,10 @@ namespace WattsTap.Core
             ServiceLocator.Register<IReferralService>(new ReferralService());
             
             _serviceManager.InitializeAll();
+            
+            // Register Orientation Service
+            ServiceLocator.Register<IOrientationService>(new OrientationService());
+            _serviceManager.InitializeUninitialized();
         }
 
         private void OnPostInitialize()
