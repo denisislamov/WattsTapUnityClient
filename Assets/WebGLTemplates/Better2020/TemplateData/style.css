@@ -24,7 +24,7 @@ body {
     margin: auto;
     aspect-ratio: 9/16;
     display: block;
-    background: {{{ BACKGROUND_COLOR }}};
+    /*background: {{{ BACKGROUND_COLOR }}};*/
 }
 
 #unity-container.unity-mobile {
@@ -139,6 +139,11 @@ body {
     transform: translateZ(0);
     animation: spinner2-spin 1.1s infinite linear;
 }
+
+.spinner2 img {
+    max-width: 50%;
+}
+
 @keyframes spinner2-spin {
     0% {
         transform: rotate(0deg);
