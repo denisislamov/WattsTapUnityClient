@@ -51,6 +51,11 @@ namespace WattsTap.Game.UI
                 View.ChangeWalletButton.onClick.AddListener(OnChangeWalletClicked);
             }
 
+            if (View.AvatarButton != null)
+            {
+                View.AvatarButton.onClick.AddListener(OnAvatarButtonClicked);
+            }
+
             ServiceLocator.TryGet(out _uiService);
 
             OnPlayerNameChanged(Model.PlayerName.Value);
@@ -173,6 +178,18 @@ namespace WattsTap.Game.UI
             View.SetWalletConnectionState(false);
         }
 
+        private void OnAvatarButtonClicked()
+        {
+            _hapticService?.ButtonPressed();
+            
+            if (_uiService == null)
+            {
+                ServiceLocator.TryGet(out _uiService);
+            }
+
+            _uiService?.Open(UIConstants.AvatarScreen);
+        }
+
         private void UpdateProgressBar()
         {
             var targetXp = Mathf.Max(1, Model.XpToNextLevel.Value);
@@ -237,6 +254,11 @@ namespace WattsTap.Game.UI
                 View.ChangeWalletButton.onClick.RemoveListener(OnChangeWalletClicked);
             }
 
+            if (View?.AvatarButton != null)
+            {
+                View.AvatarButton.onClick.RemoveListener(OnAvatarButtonClicked);
+            }
+
             if (Model != null)
             {
                 Model.PlayerName.OnValueChanged -= OnPlayerNameChanged;
@@ -247,3 +269,4 @@ namespace WattsTap.Game.UI
         }
     }
 }
+

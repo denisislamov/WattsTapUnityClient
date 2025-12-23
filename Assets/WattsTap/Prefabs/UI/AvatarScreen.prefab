@@ -496,7 +496,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
   m_AspectMode: 0
-  m_AspectRatio: 6.7306485
+  m_AspectRatio: 19.967741
 --- !u!1 &1585620787260103845
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,7 +531,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 48.3}
+  m_AnchoredPosition: {x: 0, y: 48.30005}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2723319698126468350
@@ -1231,7 +1231,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6881462081971128528}
   m_HandleRect: {fileID: 2257778126882982122}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1537,6 +1537,7 @@ GameObject:
   - component: {fileID: 7795048938303096310}
   - component: {fileID: 5692706099462937072}
   - component: {fileID: 4972144245002129339}
+  - component: {fileID: 2615285328095817920}
   m_Layer: 5
   m_Name: AvatarScreen
   m_TagString: Untagged
@@ -1604,6 +1605,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2615285328095817920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5743152391601999037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af3f9abc3d2545a49f2c7b4b22e13e67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.AvatarScreenUIView
+  _backButton: {fileID: 2613146786345162016}
 --- !u!1 &6060013387429651377
 GameObject:
   m_ObjectHideFlags: 0
@@ -2305,7 +2319,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -274.77097}
+  m_AnchoredPosition: {x: 0, y: -1162.584}
   m_SizeDelta: {x: 420.3002, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6246737030435281704

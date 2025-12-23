@@ -16,6 +16,7 @@ namespace WattsTap.Game.UI
 
         [Header("Controls")]
         [SerializeField] private Button _closeButton;
+        [SerializeField] private Button _avatarButton;
 
         [Header("Wallet")]
         [SerializeField] private Button _connectWalletButton;
@@ -30,6 +31,7 @@ namespace WattsTap.Game.UI
         private Coroutine _scrollToTopRoutine;
 
         public Button CloseButton => _closeButton;
+        public Button AvatarButton => _avatarButton;
         public Button ConnectWalletButton => _connectWalletButton;
         public Button ChangeWalletButton => _changeWalletButton;
         public bool StartWithWalletConnected => _startWithWalletConnected;
