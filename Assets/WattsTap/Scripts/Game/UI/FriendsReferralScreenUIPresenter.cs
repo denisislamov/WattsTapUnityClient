@@ -34,6 +34,11 @@ namespace WattsTap.Game.UI
             {
                 View.MiningButton.onClick.AddListener(OnMiningButtonClicked);
             }
+
+            if (View.QuestsButton != null)
+            {
+                View.QuestsButton.onClick.AddListener(OnQuestsButtonClicked);
+            }
             
             // Referral action buttons
             if (View.ShareButton != null)
@@ -134,6 +139,19 @@ namespace WattsTap.Game.UI
 
             _uiService?.Close(UIConstants.FriendsReferralScreen);
         }
+
+        private void OnQuestsButtonClicked()
+        {
+            _hapticService?.ButtonPressed();
+            
+            if (_uiService == null)
+            {
+                ServiceLocator.TryGet(out _uiService);
+            }
+
+            _uiService?.Close(UIConstants.FriendsReferralScreen);
+            _uiService?.Open(UIConstants.QuestsScreen);
+        }
         
         private void OnShareButtonClicked()
         {
@@ -174,6 +192,11 @@ namespace WattsTap.Game.UI
             if (View?.MiningButton != null)
             {
                 View.MiningButton.onClick.RemoveListener(OnMiningButtonClicked);
+            }
+
+            if (View?.QuestsButton != null)
+            {
+                View.QuestsButton.onClick.RemoveListener(OnQuestsButtonClicked);
             }
             
             if (View?.ShareButton != null)

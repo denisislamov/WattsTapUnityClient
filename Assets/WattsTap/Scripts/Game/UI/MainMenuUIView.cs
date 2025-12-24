@@ -41,11 +41,13 @@ namespace WattsTap.Game.UI
         [Header("Navigation")]
         [SerializeField] private Button _friendsReferralButton;
         [SerializeField] private Button _shopButton;
+        [SerializeField] private Button _questsButton;
         
         public Button ChangeSkinButton => changeSkinButton;
         public Button ProfileButton => _profileButton;
         public Button FriendsReferralButton => _friendsReferralButton;
         public Button ShopButton => _shopButton;
+        public Button QuestsButton => _questsButton;
 
         private void Awake()
         {

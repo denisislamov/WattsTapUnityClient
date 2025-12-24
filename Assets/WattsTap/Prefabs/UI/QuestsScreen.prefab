@@ -264,7 +264,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8404896318767399777}
   m_Layer: 5
-  m_Name: FriendsReferralPanel
+  m_Name: QuestPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -670,6 +670,7 @@ GameObject:
   - component: {fileID: 1196981717590789354}
   - component: {fileID: 1764006979403085248}
   - component: {fileID: 8161151701368854694}
+  - component: {fileID: 5911876602758079298}
   m_Layer: 5
   m_Name: QuestsScreen
   m_TagString: Untagged
@@ -756,6 +757,23 @@ MonoBehaviour:
     Left: 0
     Right: 0
   _targetRectTransform: {fileID: 8404896318767399777}
+--- !u!114 &5911876602758079298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1389517353547243433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09b85f601bd34f58bf360407b418f4bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.QuestsScreenUIView
+  _mainMenuButton: {fileID: 7615849288182301774}
+  _friendsReferralButton: {fileID: 6116941672040471171}
+  _questListContainer: {fileID: 0}
+  _questItemPrefab: {fileID: 0}
+  _noQuestsPlaceholder: {fileID: 0}
 --- !u!1 &2010040050073167629
 GameObject:
   m_ObjectHideFlags: 0
@@ -1077,8 +1095,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5872183254109324216}
   m_HandleRect: {fileID: 7860744798535013146}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.8249841
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5655,6 +5673,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
   m_PrefabInstance: {fileID: 439649157790880960}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6116941672040471171 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5979175700302483011, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
+  m_PrefabInstance: {fileID: 439649157790880960}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1001 &1757708250116786399
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5807,7 +5836,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6697497194380443117, guid: a91153c1893a349b6853ed207e5268e4, type: 3}
       propertyPath: m_AspectRatio
-      value: 2.076918
+      value: 18.541029
       objectReference: {fileID: 0}
     - target: {fileID: 7862504496065073987, guid: a91153c1893a349b6853ed207e5268e4, type: 3}
       propertyPath: m_Pivot.x
@@ -6048,6 +6077,17 @@ PrefabInstance:
       addedObject: {fileID: 7376241021603597356}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
+--- !u!114 &7615849288182301774 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5979175700302483011, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
+  m_PrefabInstance: {fileID: 4272405375097621005}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!224 &8097648613739413128 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
@@ -6063,7 +6103,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6697497194380443117, guid: a91153c1893a349b6853ed207e5268e4, type: 3}
       propertyPath: m_AspectRatio
-      value: 2.076918
+      value: 18.541029
       objectReference: {fileID: 0}
     - target: {fileID: 7862504496065073987, guid: a91153c1893a349b6853ed207e5268e4, type: 3}
       propertyPath: m_Pivot.x
@@ -6319,7 +6359,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6697497194380443117, guid: a91153c1893a349b6853ed207e5268e4, type: 3}
       propertyPath: m_AspectRatio
-      value: 2.076918
+      value: 18.541029
       objectReference: {fileID: 0}
     - target: {fileID: 7862504496065073987, guid: a91153c1893a349b6853ed207e5268e4, type: 3}
       propertyPath: m_Pivot.x
@@ -6433,7 +6473,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6697497194380443117, guid: a91153c1893a349b6853ed207e5268e4, type: 3}
       propertyPath: m_AspectRatio
-      value: 2.076918
+      value: 18.541029
       objectReference: {fileID: 0}
     - target: {fileID: 7862504496065073987, guid: a91153c1893a349b6853ed207e5268e4, type: 3}
       propertyPath: m_Pivot.x
@@ -6547,7 +6587,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6697497194380443117, guid: a91153c1893a349b6853ed207e5268e4, type: 3}
       propertyPath: m_AspectRatio
-      value: 2.076918
+      value: 18.541029
       objectReference: {fileID: 0}
     - target: {fileID: 7862504496065073987, guid: a91153c1893a349b6853ed207e5268e4, type: 3}
       propertyPath: m_Pivot.x
@@ -6799,7 +6839,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6697497194380443117, guid: a91153c1893a349b6853ed207e5268e4, type: 3}
       propertyPath: m_AspectRatio
-      value: 2.076918
+      value: 18.541029
       objectReference: {fileID: 0}
     - target: {fileID: 7862504496065073987, guid: a91153c1893a349b6853ed207e5268e4, type: 3}
       propertyPath: m_Pivot.x

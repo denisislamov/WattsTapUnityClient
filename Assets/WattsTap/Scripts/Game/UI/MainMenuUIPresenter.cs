@@ -69,6 +69,11 @@ namespace WattsTap.Game.UI
                 View.ShopButton.onClick.AddListener(OnShopButtonClicked);
             }
 
+            if (View.QuestsButton != null)
+            {
+                View.QuestsButton.onClick.AddListener(OnQuestsButtonClicked);
+            }
+
             View.SetDefaultSkin();
             
             View.UpdateCurrentLevel(Model.Level.Value);
@@ -122,6 +127,18 @@ namespace WattsTap.Game.UI
             }
 
             _uiService?.Open(UIConstants.ShopScreen);
+        }
+
+        private void OnQuestsButtonClicked()
+        {
+            _hapticService?.ButtonPressed();
+            
+            if (_uiService == null)
+            {
+                ServiceLocator.TryGet(out _uiService);
+            }
+
+            _uiService?.Open(UIConstants.QuestsScreen);
         }
 
         private void ChangeSkinButtonOnClick()
@@ -256,6 +273,11 @@ namespace WattsTap.Game.UI
             if (View?.ShopButton != null)
             {
                 View.ShopButton.onClick.RemoveListener(OnShopButtonClicked);
+            }
+
+            if (View?.QuestsButton != null)
+            {
+                View.QuestsButton.onClick.RemoveListener(OnQuestsButtonClicked);
             }
             
             // Отписка от событий модели

@@ -13,5 +13,6 @@ namespace WattsTap.Constants
         public const string ShopBoosterItem = "ShopBoosterItem";
         public const string RotateScreen = "RotateScreen";
         public const string AvatarScreen = "AvatarScreen";
+        public const string QuestsScreen = "QuestsScreen";
     }
 }
