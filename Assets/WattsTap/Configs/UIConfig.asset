@@ -33,3 +33,5 @@ MonoBehaviour:
     Prefab: {fileID: 5748633760880554082, guid: 5796b4991dd5a41fba9e12f37a7bc216, type: 3}
   - Id: RotateScreen
     Prefab: {fileID: 7499445824958346083, guid: e89e24ae251a5455ab43a58998d33d3c, type: 3}
+  - Id: AvatarScreen
+    Prefab: {fileID: 5743152391601999037, guid: 24ad0790e242c4a21adef984c2faf1f6, type: 3}
