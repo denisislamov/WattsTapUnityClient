@@ -9,6 +9,7 @@ using WattsTap.Core.UI;
 using WattsTap.Core.API;
 using WattsTap.Core.Services;
 using WattsTap.Core.Telegram;
+using WattsTap.Game.Avatars;
 using WattsTap.Game.Player;
 using WattsTap.Game.Tap.Services;
 using WattsTap.Game.UI;
@@ -30,6 +31,9 @@ namespace WattsTap.Core
         [Header("Update Service")]       
         [SerializeField] private UpdateService _updateService;
         [SerializeField] private MainMenuThemeManager _mainMenuThemeManager;
+        
+        [Header("Avatars")]
+        [SerializeField] private AvatarsService _avatarsService;
         
         private SharedDataService _sharedDataService;
         private ServiceLocator _serviceManager;
@@ -59,6 +63,9 @@ namespace WattsTap.Core
             // Register Referral Services
             ServiceLocator.Register<IReferralAPIService>(new ReferralAPIService());
             ServiceLocator.Register<IReferralService>(new ReferralService());
+            
+            // Register Avatars Service
+            ServiceLocator.Register<IAvatarsService>(_avatarsService);
             
             _serviceManager.InitializeAll();
             

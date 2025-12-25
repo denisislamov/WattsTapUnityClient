@@ -304,6 +304,56 @@ MonoBehaviour:
   availableSkins:
   - {fileID: 11400000, guid: fa1b9841b248e4d1884a79465bc1fd3b, type: 2}
   - {fileID: 11400000, guid: 890cf1014d223498aa49906df5b7ba5e, type: 2}
+--- !u!1 &421674710
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 421674711}
+  - component: {fileID: 421674712}
+  m_Layer: 0
+  m_Name: ---AvatarService---
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &421674711
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421674710}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1569553357}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &421674712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421674710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 178d67ae726e4481a58f5b0c0905e50e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.Avatars.AvatarsService
+  _avatarConfigs:
+  - {fileID: 11400000, guid: ce4ba24c5982c42f08193b9cfd948f5e, type: 2}
+  - {fileID: 11400000, guid: b6e4c1a8525644cd980a26c72c8e3eec, type: 2}
+  - {fileID: 11400000, guid: add9fdd4738164d4782acabd43487342, type: 2}
+  - {fileID: 11400000, guid: d7e9273b5f07643898082d46b9d78510, type: 2}
+  _defaultAvatarSprite: {fileID: 21300000, guid: 6f61f9db08e5d40a8b22d5d028f725c9, type: 3}
 --- !u!1 &427421224
 GameObject:
   m_ObjectHideFlags: 0
@@ -452,6 +502,7 @@ Transform:
   m_Children:
   - {fileID: 1959272534}
   - {fileID: 221845535}
+  - {fileID: 421674711}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1569553358
@@ -473,6 +524,7 @@ MonoBehaviour:
   _hapticFeedbackService: {fileID: 1569553360}
   _updateService: {fileID: 1959272533}
   _mainMenuThemeManager: {fileID: 221845536}
+  _avatarsService: {fileID: 421674712}
 --- !u!114 &1569553359
 MonoBehaviour:
   m_ObjectHideFlags: 0
