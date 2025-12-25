@@ -8,6 +8,7 @@ using WattsTap.Core;
 using WattsTap.Core.React;
 using WattsTap.Core.Telegram;
 using WattsTap.Core.UI;
+using WattsTap.Game.Avatars;
 
 namespace WattsTap.Game.UI
 {
@@ -17,6 +18,7 @@ namespace WattsTap.Game.UI
         private ISharedDataService _sharedDataService;
         private IUIService _uiService;
         private IHapticFeedbackService _hapticService;
+        private IAvatarsService _avatarsService;
 
         protected override void OnInit()
         {
@@ -38,6 +40,14 @@ namespace WattsTap.Game.UI
             
             _sharedDataService = ServiceLocator.Get<ISharedDataService>();
             ServiceLocator.TryGet(out _hapticService);
+            
+            // Subscribe to avatar changes
+            if (ServiceLocator.TryGet(out _avatarsService))
+            {
+                _avatarsService.OnAvatarChanged += OnAvatarChanged;
+                _avatarsService.OnTelegramAvatarLoaded += OnTelegramAvatarLoaded;
+                UpdateCurrentAvatar();
+            }
             
             if (_sharedDataService.TryGetData(SharedDataConstants.TelegramUser, out TelegramService.User telegramUser))
             {
@@ -222,6 +232,34 @@ namespace WattsTap.Game.UI
             }
         }
 
+        private void OnAvatarChanged(string avatarId)
+        {
+            UpdateCurrentAvatar();
+        }
+        
+        private void OnTelegramAvatarLoaded(Sprite sprite)
+        {
+            // If current avatar is Telegram avatar, update it
+            if (_avatarsService != null && _avatarsService.GetCurrentAvatarId() == _avatarsService.TelegramAvatarId)
+            {
+                View.UpdateAvatar(sprite);
+            }
+        }
+        
+        private void UpdateCurrentAvatar()
+        {
+            if (_avatarsService == null)
+            {
+                return;
+            }
+            
+            var sprite = _avatarsService.GetCurrentAvatarSprite();
+            if (sprite != null)
+            {
+                View.UpdateAvatar(sprite);
+            }
+        }
+
         private void OnPlayerNameChanged(string newName)
         {
             View.UpdateUserName(newName);
@@ -258,6 +296,13 @@ namespace WattsTap.Game.UI
             _avatarLoadCts?.Cancel();
             _avatarLoadCts?.Dispose();
             _avatarLoadCts = null;
+            
+            // Unsubscribe from avatar service
+            if (_avatarsService != null)
+            {
+                _avatarsService.OnAvatarChanged -= OnAvatarChanged;
+                _avatarsService.OnTelegramAvatarLoaded -= OnTelegramAvatarLoaded;
+            }
 
             View.ChangeSkinButton.onClick.RemoveListener(ChangeSkinButtonOnClick);
             if (View?.ProfileButton != null)
