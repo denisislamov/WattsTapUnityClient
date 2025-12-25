@@ -117,7 +117,7 @@ namespace WattsTap.Game.UI
         
         private void OnAvatarItemClicked(string avatarId, AvatarItemState currentState)
         {
-            _hapticService?.ButtonPressed();
+            // _hapticService?.ButtonPressed();
             
             if (currentState == AvatarItemState.Locked)
             {
@@ -218,7 +218,7 @@ namespace WattsTap.Game.UI
 
         private void OnBackClicked()
         {
-            _hapticService?.ButtonPressed();
+            // _hapticService?.ButtonPressed();
 
             if (_uiService == null)
             {
