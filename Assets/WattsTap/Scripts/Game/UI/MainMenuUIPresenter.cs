@@ -51,7 +51,7 @@ namespace WattsTap.Game.UI
             
             if (_sharedDataService.TryGetData(SharedDataConstants.TelegramUser, out TelegramService.User telegramUser))
             {
-                Model.PlayerName.Value = telegramUser.first_name + " " + telegramUser.last_name + " " + telegramUser.username;
+                Model.PlayerName.Value = GetPlayerName(telegramUser);
                 
                 // Загрузка аватара если присутствует URL
                 // if (!string.IsNullOrEmpty(telegramUser.photo_url))
@@ -166,8 +166,54 @@ namespace WattsTap.Game.UI
             
             if (_sharedDataService.TryGetData(SharedDataConstants.TelegramUser, out TelegramService.User telegramUser))
             {
-                Model.PlayerName.Value = telegramUser.first_name + " " + telegramUser.last_name + " " + telegramUser.username;
+                Model.PlayerName.Value = GetPlayerName(telegramUser);
             }
+        }
+
+        /// <summary>
+        /// Returns player name based on priority:
+        /// 1. username if present
+        /// 2. first_name + last_name if both present
+        /// 3. first_name or last_name (whichever is present)
+        /// 4. user id if present
+        /// 5. "Player" as fallback
+        /// </summary>
+        private string GetPlayerName(TelegramService.User user)
+        {
+            // 1) username if present
+            if (!string.IsNullOrEmpty(user.username))
+            {
+                return user.username;
+            }
+
+            // 2) first_name + last_name if both present
+            var hasFirstName = !string.IsNullOrEmpty(user.first_name);
+            var hasLastName = !string.IsNullOrEmpty(user.last_name);
+            
+            if (hasFirstName && hasLastName)
+            {
+                return user.first_name + " " + user.last_name;
+            }
+
+            // 3) first_name or last_name (whichever is present)
+            if (hasFirstName)
+            {
+                return user.first_name;
+            }
+            
+            if (hasLastName)
+            {
+                return user.last_name;
+            }
+
+            // 4) user id if present
+            if (user.id != 0)
+            {
+                return user.id.ToString();
+            }
+
+            // 5) fallback
+            return "Player";
         }
 
         /// <summary>
