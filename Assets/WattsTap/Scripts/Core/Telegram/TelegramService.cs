@@ -248,7 +248,7 @@ namespace WattsTap.Core.React
 
             AppEnvironment = parsedEnvironment;
             OnReceivedAppEnvironment?.Invoke(parsedEnvironment);
-            Debug.LogError($"Received Telegram environment: {parsedEnvironment}");
+            Debug.Log($"Received Telegram environment: {parsedEnvironment}");
         }
         
         /// <summary>
