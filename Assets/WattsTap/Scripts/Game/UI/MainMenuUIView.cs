@@ -43,6 +43,9 @@ namespace WattsTap.Game.UI
         [SerializeField] private Button _shopButton;
         [SerializeField] private Button _questsButton;
         
+        [Header("Tap Hint")]
+        [SerializeField] private GameObject _tapHintObject;
+        
         public Button ChangeSkinButton => changeSkinButton;
         public Button ProfileButton => _profileButton;
         public Button FriendsReferralButton => _friendsReferralButton;
@@ -227,6 +230,14 @@ namespace WattsTap.Game.UI
             if (_versionText != null)
             {
                 _versionText.text = $"v{version}";
+            }
+        }
+
+        public void HideTapHint()
+        {
+            if (_tapHintObject != null)
+            {
+                _tapHintObject.SetActive(false);
             }
         }
         

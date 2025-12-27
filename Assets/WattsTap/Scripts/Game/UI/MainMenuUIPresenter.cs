@@ -19,6 +19,7 @@ namespace WattsTap.Game.UI
         private IUIService _uiService;
         private IHapticFeedbackService _hapticService;
         private IAvatarsService _avatarsService;
+        private bool _tapHintHidden;
 
         protected override void OnInit()
         {
@@ -324,6 +325,13 @@ namespace WattsTap.Game.UI
         private void OnTotalCoinsChanged(long totalCoins)
         {
             View.UpdateTotalCoins(totalCoins);
+            
+            // Hide tap hint on first coin earning
+            if (!_tapHintHidden && totalCoins > 0)
+            {
+                _tapHintHidden = true;
+                View.HideTapHint();
+            }
         }
 
         private void OnCoinsPerTapChanged(int coinsPerTap)

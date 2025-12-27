@@ -610,6 +610,99 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &2380511892157480176
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5439395488931248971}
+  - component: {fileID: 3264612244369196783}
+  - component: {fileID: 881659284027652893}
+  - component: {fileID: 5875527074530595289}
+  m_Layer: 5
+  m_Name: TapHint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &5439395488931248971
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2380511892157480176}
+  m_LocalRotation: {x: -0, y: -0, z: 0.17752245, w: 0.9841168}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: -0.25, y: 0.25, z: 0.25}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8479444618827859609}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 20.451}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -75, y: 16}
+  m_SizeDelta: {x: 406.4125, y: 418.2652}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &3264612244369196783
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2380511892157480176}
+  m_CullTransparentMesh: 1
+--- !u!114 &881659284027652893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2380511892157480176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 1d18f88e8622e4a15b7c6266c4619340, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5875527074530595289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2380511892157480176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d9d5a6115b54e43a432ec55876b0bf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.TapHintAnimator
+  _minScale: 0.99
+  _maxScale: 1.05
+  _scaleSpeed: 5
+  _verticalOffset: 5
+  _verticalSpeed: 0
 --- !u!1 &2395953133558007832
 GameObject:
   m_ObjectHideFlags: 0
@@ -1293,6 +1386,7 @@ MonoBehaviour:
   _friendsReferralButton: {fileID: 4930703422563887075}
   _shopButton: {fileID: 2021490647388356680}
   _questsButton: {fileID: 2203087659967404820}
+  _tapHintObject: {fileID: 2380511892157480176}
 --- !u!114 &682962176018097781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1844,6 +1938,7 @@ RectTransform:
   - {fileID: 2670007420666156466}
   - {fileID: 9189440544924609658}
   - {fileID: 5085017635077622107}
+  - {fileID: 5439395488931248971}
   - {fileID: 726128925095499454}
   - {fileID: 164349791467891508}
   - {fileID: 3249671245384751789}
@@ -3025,7 +3120,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1147948270707761940, guid: 7d461f72156b3496f918df56891bf4cd, type: 3}
       propertyPath: m_overflowMode
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1147948270707761940, guid: 7d461f72156b3496f918df56891bf4cd, type: 3}
       propertyPath: m_TextWrappingMode
