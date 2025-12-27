@@ -3302,7 +3302,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2084694426797575695}
   m_HandleRect: {fileID: 3211237648610988673}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3346,7 +3346,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -12.685181, y: -279.04266}
+  m_AnchoredPosition: {x: -12.68512, y: -279.04266}
   m_SizeDelta: {x: -18.891663, y: 101.2308}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &5633073828123233666
@@ -3969,10 +3969,10 @@ RectTransform:
   m_Father: {fileID: 7431720876704972739}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 91.68002, y: 0.000022888184}
-  m_SizeDelta: {x: 180.51, y: 111.8267}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 1.4270477, y: 0.000019073486}
+  m_SizeDelta: {x: -184.54, y: 111.8267}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &7615618848170449490
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4694,7 +4694,7 @@ MonoBehaviour:
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
+  m_overflowMode: 1
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
@@ -7181,10 +7181,10 @@ RectTransform:
   m_Father: {fileID: 3364118197725901365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 91.68002, y: 0.000022888184}
-  m_SizeDelta: {x: 180.51, y: 111.8267}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 1.4270325, y: 0.000049591064}
+  m_SizeDelta: {x: -184.54, y: 111.8267}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &6247720765793109997
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8252,7 +8252,7 @@ MonoBehaviour:
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
+  m_overflowMode: 1
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
