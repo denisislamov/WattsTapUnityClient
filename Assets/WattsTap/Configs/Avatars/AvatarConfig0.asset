@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3fbde82a5404378a732568aa4bb5f97, type: 3}
-  m_Name: AvatarConfig4
+  m_Name: AvatarConfig0
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.Avatars.AvatarConfig
-  _avatarId: 4
-  _displayName: 4
-  _avatarSprite: {fileID: 21300000, guid: dd5854c83cf97408a8d1ad2ce83fb107, type: 3}
-  _isUnlockedByDefault: 0
+  _avatarId: 0
+  _displayName: 0
+  _avatarSprite: {fileID: 21300000, guid: 294a1e41c627246ea8a4ee18e64a3935, type: 3}
+  _isUnlockedByDefault: 1
   _unlockRequirement: 
