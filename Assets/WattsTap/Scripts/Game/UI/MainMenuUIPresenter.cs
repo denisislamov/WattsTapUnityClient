@@ -85,6 +85,11 @@ namespace WattsTap.Game.UI
                 View.QuestsButton.onClick.AddListener(OnQuestsButtonClicked);
             }
 
+            if (View.BugReportButton != null)
+            {
+                View.BugReportButton.onClick.AddListener(OnBugReportButtonClicked);
+            }
+
             View.SetDefaultSkin();
             
             View.UpdateCurrentLevel(Model.Level.Value);
@@ -150,6 +155,18 @@ namespace WattsTap.Game.UI
             }
 
             _uiService?.Open(UIConstants.QuestsScreen);
+        }
+
+        private void OnBugReportButtonClicked()
+        {
+            _hapticService?.ButtonPressed();
+            
+            if (_uiService == null)
+            {
+                ServiceLocator.TryGet(out _uiService);
+            }
+
+            _uiService?.Open(UIConstants.BugReportScreen);
         }
 
         private void ChangeSkinButtonOnClick()
@@ -377,6 +394,11 @@ namespace WattsTap.Game.UI
             if (View?.QuestsButton != null)
             {
                 View.QuestsButton.onClick.RemoveListener(OnQuestsButtonClicked);
+            }
+
+            if (View?.BugReportButton != null)
+            {
+                View.BugReportButton.onClick.RemoveListener(OnBugReportButtonClicked);
             }
             
             // Отписка от событий модели

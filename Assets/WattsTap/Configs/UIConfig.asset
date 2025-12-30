@@ -37,3 +37,5 @@ MonoBehaviour:
     Prefab: {fileID: 5743152391601999037, guid: 24ad0790e242c4a21adef984c2faf1f6, type: 3}
   - Id: QuestsScreen
     Prefab: {fileID: 1389517353547243433, guid: 80c1d1112bed2480baabafc84933fcb2, type: 3}
+  - Id: BugReportScreen
+    Prefab: {fileID: 6255718208974231331, guid: 38dbec16c332a45558288b2e00ede763, type: 3}

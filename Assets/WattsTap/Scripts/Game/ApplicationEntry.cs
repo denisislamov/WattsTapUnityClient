@@ -8,6 +8,7 @@ using WattsTap.Core.React;
 using WattsTap.Core.UI;
 using WattsTap.Core.API;
 using WattsTap.Core.Services;
+using WattsTap.Core.Services.BugReport;
 using WattsTap.Core.Telegram;
 using WattsTap.Game.Avatars;
 using WattsTap.Game.Player;
@@ -66,6 +67,9 @@ namespace WattsTap.Core
             
             // Register Avatars Service
             ServiceLocator.Register<IAvatarsService>(_avatarsService);
+            
+            // Register Bug Report Service
+            ServiceLocator.Register<IBugReportService>(new BugReportService());
             
             _serviceManager.InitializeAll();
             
