@@ -1,5 +1,7 @@
 using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using WattsTap.Core;
 
 namespace WattsTap.Game.UI
@@ -123,6 +125,108 @@ namespace WattsTap.Game.UI
             CurrentSkin = skin;
             SkinChanged?.Invoke(CurrentSkin);
             return CurrentSkin;
+        }
+        
+        public void ApplySkin(MainMenuSkinDefinition skin, SkinTokenBinding[] skinBindings, MonoBehaviour context)
+        {
+            var skinToApply = skin ?? fallbackSkin;
+            
+            if (skinToApply == null)
+            {
+                Debug.LogWarning("MainMenuThemeManager: No skin provided to apply.");
+                return;
+            }
+
+            if (skinBindings == null || skinBindings.Length == 0)
+            {
+                Debug.LogWarning("MainMenuThemeManager: No skin bindings configured.");
+                return;
+            }
+
+            foreach (var binding in skinBindings)
+            {
+                binding?.Apply(skinToApply, context);
+            }
+        }
+        
+        [Serializable]
+        public class SkinTokenBinding
+        {
+            [SerializeField] private string tokenId;
+            [SerializeField] private Image[] imageTargets;
+            [SerializeField] private TMP_Text[] textTargets;
+            [SerializeField] private bool suppressMissingTokenWarning;
+
+            public void Apply(MainMenuSkinDefinition skin, MonoBehaviour context)
+            {
+                if (skin == null || string.IsNullOrEmpty(tokenId))
+                {
+                    return;
+                }
+
+                if (!skin.TryGetToken(tokenId, out var token))
+                {
+                    if (!suppressMissingTokenWarning)
+                    {
+                        Debug.LogWarning($"MainMenuThemeManager: Token '{tokenId}' was not found in skin '{skin.name}'.", context);
+                    }
+                    
+                    return;
+                }
+
+                ApplyToImages(token);
+                ApplyToTexts(token);
+            }
+
+            private void ApplyToImages(MainMenuSkinDefinition.SkinToken token)
+            {
+                if (imageTargets == null)
+                {
+                    return;
+                }
+                
+                foreach (var image in imageTargets)
+                {
+                    if (image == null)
+                    {
+                        continue;
+                    }
+
+                    image.color = token.Color;
+                    
+                    if (token.Sprite != null)
+                    {
+                        image.sprite = token.Sprite;
+                    }
+                    
+                    if (token.Material != null)
+                    {
+                        image.material = token.Material;
+                    }
+                }
+            }
+
+            private void ApplyToTexts(MainMenuSkinDefinition.SkinToken token)
+            {
+                if (textTargets == null)
+                {
+                    return;
+                }
+                
+                foreach (var text in textTargets)
+                {
+                    if (text == null)
+                    {
+                        continue;
+                    }
+
+                    text.color = token.Color;
+                    if (token.Material != null)
+                    {
+                        text.material = token.Material;
+                    }
+                }
+            }
         }
     }
 }

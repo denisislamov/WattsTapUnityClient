@@ -29,11 +29,11 @@ namespace WattsTap.Game.UI
         [SerializeField] private TMP_Text maxMitsText;
 
         [Header("Skinning")]
-        [SerializeField] private MainMenuThemeManager _themeManager;
-        [SerializeField] private MainMenuSkinDefinition _fallbackSkin;
-        [SerializeField] private SkinTokenBinding[] _skinBindings;
+        [SerializeField] private MainMenuThemeManager.SkinTokenBinding[] _skinBindings;
         
         [SerializeField] public Button changeSkinButton;
+        
+        private MainMenuThemeManager _themeManager;
         
         [Header("Version Info")]
         [SerializeField] private TMP_Text _versionText;
@@ -79,14 +79,11 @@ namespace WattsTap.Game.UI
 
                 if (_themeManager.CurrentSkin != null)
                 {
-                    ApplySkin(_themeManager.CurrentSkin);
+                    _themeManager.ApplySkin(_themeManager.CurrentSkin, _skinBindings, this);
                     return;
                 }
-            }
-
-            if (_fallbackSkin != null)
-            {
-                ApplySkin(_fallbackSkin);
+                
+                _themeManager.ApplySkin(null, _skinBindings, this);
             }
         }
 
@@ -103,17 +100,10 @@ namespace WattsTap.Game.UI
             if (_themeManager != null)
             {
                 var skin = _themeManager.SetDefaultSkin();
-                if (skin == null && _fallbackSkin != null)
+                if (skin == null)
                 {
-                    ApplySkin(_fallbackSkin);
+                    _themeManager.ApplySkin(null, _skinBindings, this);
                 }
-                
-                return;
-            }
-
-            if (_fallbackSkin != null)
-            {
-                ApplySkin(_fallbackSkin);
             }
         }
         
@@ -122,17 +112,10 @@ namespace WattsTap.Game.UI
             if (_themeManager != null)
             {
                 var skin = _themeManager.SetNextSkin();
-                if (skin == null && _fallbackSkin != null)
+                if (skin == null)
                 {
-                    ApplySkin(_fallbackSkin);
+                    _themeManager.ApplySkin(null, _skinBindings, this);
                 }
-                
-                return;
-            }
-
-            if (_fallbackSkin != null)
-            {
-                ApplySkin(_fallbackSkin);
             }
         }
         
@@ -214,17 +197,10 @@ namespace WattsTap.Game.UI
         
         private void OnSkinChanged(MainMenuSkinDefinition skin)
         {
-            if (skin == null)
+            if (_themeManager != null)
             {
-                if (_fallbackSkin != null)
-                {
-                    ApplySkin(_fallbackSkin);
-                }
-                
-                return;
+                _themeManager.ApplySkin(skin, _skinBindings, this);
             }
-
-            ApplySkin(skin);
         }
 
         public void UpdateVersionText(string version)
@@ -240,106 +216,6 @@ namespace WattsTap.Game.UI
             if (_tapHintObject != null)
             {
                 _tapHintObject.SetActive(false);
-            }
-        }
-        
-        private void ApplySkin(MainMenuSkinDefinition skin)
-        {
-            if (skin == null)
-            {
-                Debug.LogWarning("MainMenuUIView: No skin provided to apply.");
-                return;
-            }
-
-            if (_skinBindings == null || _skinBindings.Length == 0)
-            {
-                Debug.LogWarning("MainMenuUIView: No skin bindings configured.");
-                return;
-            }
-
-            foreach (var binding in _skinBindings)
-            {
-                binding?.Apply(skin, this);
-            }
-        }
-        
-        [System.Serializable]
-        private class SkinTokenBinding
-        {
-            [SerializeField] private string tokenId;
-            [SerializeField] private Image[] imageTargets;
-            [SerializeField] private TMP_Text[] textTargets;
-            [SerializeField] private bool suppressMissingTokenWarning;
-
-            public void Apply(MainMenuSkinDefinition skin, MonoBehaviour context)
-            {
-                if (skin == null || string.IsNullOrEmpty(tokenId))
-                {
-                    return;
-                }
-
-                if (!skin.TryGetToken(tokenId, out var token))
-                {
-                    if (!suppressMissingTokenWarning)
-                    {
-                        Debug.LogWarning($"MainMenuUIView: Token '{tokenId}' was not found in skin '{skin.name}'.", context);
-                    }
-                    
-                    return;
-                }
-
-                ApplyToImages(token);
-                ApplyToTexts(token);
-            }
-
-            private void ApplyToImages(MainMenuSkinDefinition.SkinToken token)
-            {
-                if (imageTargets == null)
-                {
-                    return;
-                }
-                
-                foreach (var image in imageTargets)
-                {
-                    if (image == null)
-                    {
-                        continue;
-                    }
-
-                    image.color = token.Color;
-                    
-                    if (token.Sprite != null)
-                    {
-                        image.sprite = token.Sprite;
-                    }
-                    
-                    if (token.Material != null)
-                    {
-                        image.material = token.Material;
-                    }
-                }
-            }
-
-            private void ApplyToTexts(MainMenuSkinDefinition.SkinToken token)
-            {
-                if (textTargets == null)
-                {
-                    return;
-                }
-                
-                foreach (var text in textTargets)
-                {
-                    if (text == null)
-                    {
-                        continue;
-                    }
-
-                    text.color = token.Color;
-                    if (token.Material != null)
-                    {
-                        text.material = token.Material;
-                    }
-                }
             }
         }
     }

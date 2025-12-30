@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using WattsTap.Core;
 using WattsTap.Core.UI;
 
 namespace WattsTap.Game.UI
@@ -28,6 +29,11 @@ namespace WattsTap.Game.UI
         [SerializeField] private float _scrollAnchoredYDisconnected = -278f;
         [SerializeField] private bool _startWithWalletConnected = true;
 
+        [Header("Skinning")]
+        [SerializeField] private MainMenuThemeManager.SkinTokenBinding[] _skinBindings;
+        
+        private MainMenuThemeManager _themeManager;
+        
         private Coroutine _scrollToTopRoutine;
 
         public Button CloseButton => _closeButton;
@@ -35,7 +41,33 @@ namespace WattsTap.Game.UI
         public Button ConnectWalletButton => _connectWalletButton;
         public Button ChangeWalletButton => _changeWalletButton;
         public bool StartWithWalletConnected => _startWithWalletConnected;
+        
+        private void OnEnable()
+        {
+            _themeManager = ServiceLocator.Get<MainMenuThemeManager>();
+            
+            if (_themeManager != null)
+            {
+                _themeManager.SkinChanged += OnSkinChanged;
 
+                if (_themeManager.CurrentSkin != null)
+                {
+                    _themeManager.ApplySkin(_themeManager.CurrentSkin, _skinBindings, this);
+                    return;
+                }
+                
+                _themeManager.ApplySkin(null, _skinBindings, this);
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (_themeManager != null)
+            {
+                _themeManager.SkinChanged -= OnSkinChanged;
+            }
+        }
+        
         public void UpdateUserName(string userName)
         {
             if (_userName != null)
@@ -154,6 +186,14 @@ namespace WattsTap.Game.UI
             _scrollRect.StopMovement();
             _scrollRect.verticalNormalizedPosition = 1f;
             _scrollToTopRoutine = null;
+        }
+        
+        private void OnSkinChanged(MainMenuSkinDefinition skin)
+        {
+            if (_themeManager != null)
+            {
+                _themeManager.ApplySkin(skin, _skinBindings, this);
+            }
         }
     }
 }

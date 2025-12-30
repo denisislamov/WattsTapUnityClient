@@ -3540,7 +3540,7 @@ MonoBehaviour:
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 1
+  m_overflowMode: 3
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
@@ -4617,7 +4617,7 @@ GameObject:
   - component: {fileID: 62013921236536827}
   - component: {fileID: 7834516061338606088}
   m_Layer: 5
-  m_Name: ValueText (TMP)
+  m_Name: ChangeAvatarValueText (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6552,7 +6552,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 2100000, guid: 41bc1ce8da9e87a4fa340d902394e0df, type: 2}
-  m_Color: {r: 0.7830189, g: 0.7830189, b: 0.7830189, a: 1}
+  m_Color: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6600,6 +6600,63 @@ MonoBehaviour:
   _scrollAnchoredYConnected: -332
   _scrollAnchoredYDisconnected: -310
   _startWithWalletConnected: 0
+  _skinBindings:
+  - tokenId: bg-panel
+    imageTargets:
+    - {fileID: 727681895318359007}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: text-primary
+    imageTargets: []
+    textTargets:
+    - {fileID: 7370247156529253210}
+    - {fileID: 2117232646477783033}
+    - {fileID: 2791956320734365763}
+    - {fileID: 7528045785818032660}
+    - {fileID: 6780373559473577225}
+    - {fileID: 881352604626716982}
+    - {fileID: 6541261458674776161}
+    - {fileID: 1145051351921742963}
+    - {fileID: 3372564428802439879}
+    - {fileID: 891754302568002493}
+    - {fileID: 5864127613576924305}
+    - {fileID: 2172407562608828533}
+    - {fileID: 6484107047532415170}
+    - {fileID: 1774958706413722963}
+    - {fileID: 8735088268446744366}
+    - {fileID: 4563246842552509334}
+    - {fileID: 1598531135521017953}
+    - {fileID: 6667019158999732927}
+    - {fileID: 810179319270820721}
+    - {fileID: 8998910520745617936}
+    - {fileID: 6484107047532415170}
+    - {fileID: 545621184610055863}
+    - {fileID: 5836088547428393185}
+    - {fileID: 8152507657794068785}
+    - {fileID: 8895537519286342551}
+    - {fileID: 6705997712530893026}
+    - {fileID: 6006775619218398188}
+    - {fileID: 3594826679418596249}
+    - {fileID: 7532313179981247958}
+    - {fileID: 3922168914819559408}
+    suppressMissingTokenWarning: 0
+  - tokenId: bg-blur
+    imageTargets:
+    - {fileID: 7498197930426306531}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: bg-list
+    imageTargets:
+    - {fileID: 1641509920346615002}
+    - {fileID: 2528407565063193459}
+    - {fileID: 5801786832386718717}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: collect-btn
+    imageTargets:
+    - {fileID: 5157181871730428976}
+    textTargets: []
+    suppressMissingTokenWarning: 0
 --- !u!1 &5796097142108451525
 GameObject:
   m_ObjectHideFlags: 0
