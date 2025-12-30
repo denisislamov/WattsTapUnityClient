@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using WattsTap.Core;
 using WattsTap.Core.UI;
 
 namespace WattsTap.Game.UI
@@ -14,10 +15,41 @@ namespace WattsTap.Game.UI
         [SerializeField] private Transform _avatarsContainer;
         [SerializeField] private AvatarItemUIView _avatarItemPrefab;
 
+        [Header("Skinning")]
+        [SerializeField] private MainMenuThemeManager.SkinTokenBinding[] _skinBindings;
+        
+        private MainMenuThemeManager _themeManager;
+
         public Button BackButton => _backButton;
         public Button EquipButton => _equipButton;
         public Transform AvatarsContainer => _avatarsContainer;
         public AvatarItemUIView AvatarItemPrefab => _avatarItemPrefab;
+        
+        private void OnEnable()
+        {
+            _themeManager = ServiceLocator.Get<MainMenuThemeManager>();
+            
+            if (_themeManager != null)
+            {
+                _themeManager.SkinChanged += OnSkinChanged;
+
+                if (_themeManager.CurrentSkin != null)
+                {
+                    _themeManager.ApplySkin(_themeManager.CurrentSkin, _skinBindings, this);
+                    return;
+                }
+                
+                _themeManager.ApplySkin(null, _skinBindings, this);
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (_themeManager != null)
+            {
+                _themeManager.SkinChanged -= OnSkinChanged;
+            }
+        }
         
         /// <summary>
         /// Shows or hides the equip button based on selection state.
@@ -38,6 +70,14 @@ namespace WattsTap.Game.UI
             if (_equipButton != null)
             {
                 _equipButton.interactable = interactable;
+            }
+        }
+        
+        private void OnSkinChanged(MainMenuSkinDefinition skin)
+        {
+            if (_themeManager != null)
+            {
+                _themeManager.ApplySkin(skin, _skinBindings, this);
             }
         }
     }

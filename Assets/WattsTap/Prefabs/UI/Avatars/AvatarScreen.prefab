@@ -197,7 +197,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 210.1501, y: -0}
-  m_SizeDelta: {x: 420.3002, y: 240}
+  m_SizeDelta: {x: 420.3002, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &4295136033446722470
 CanvasRenderer:
@@ -410,7 +410,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
   m_AspectMode: 0
-  m_AspectRatio: 7.266642
+  m_AspectRatio: 6.7306485
 --- !u!1 &1585620787260103845
 GameObject:
   m_ObjectHideFlags: 0
@@ -1343,6 +1343,37 @@ MonoBehaviour:
   _equipButton: {fileID: 5209296883715568203}
   _avatarsContainer: {fileID: 7038360411380240683}
   _avatarItemPrefab: {fileID: 5155886812433817548, guid: 1d0a0c77567814d37a5f6d5f344bf8fb, type: 3}
+  _skinBindings:
+  - tokenId: bg-panel
+    imageTargets:
+    - {fileID: 4972144245002129339}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: bg-blur
+    imageTargets:
+    - {fileID: 3663050640935357369}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: collect-btn
+    imageTargets:
+    - {fileID: 7790852036111614069}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: collect-text
+    imageTargets: []
+    textTargets:
+    - {fileID: 5652128027144372438}
+    suppressMissingTokenWarning: 0
+  - tokenId: text-primary
+    imageTargets: []
+    textTargets:
+    - {fileID: 7988903997166206837}
+    suppressMissingTokenWarning: 0
+  - tokenId: text-secondary
+    imageTargets: []
+    textTargets:
+    - {fileID: 6118339271465387032}
+    suppressMissingTokenWarning: 0
 --- !u!1 &6140605053088934199
 GameObject:
   m_ObjectHideFlags: 0

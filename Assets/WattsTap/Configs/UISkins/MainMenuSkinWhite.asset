@@ -50,3 +50,23 @@ MonoBehaviour:
     color: {r: 1, g: 1, b: 1, a: 1}
     material: {fileID: 0}
     sprite: {fileID: 21300000, guid: 84dd0264c71584c959832fe32d5d3409, type: 3}
+  - tokenId: bg-list
+    color: {r: 1, g: 1, b: 1, a: 1}
+    material: {fileID: 0}
+    sprite: {fileID: 0}
+  - tokenId: collect-btn
+    color: {r: 1, g: 1, b: 1, a: 1}
+    material: {fileID: 0}
+    sprite: {fileID: 21300000, guid: 9d4f4a002569044af9d11a7552bf0f9f, type: 3}
+  - tokenId: text-secondary
+    color: {r: 0, g: 0, b: 0, a: 1}
+    material: {fileID: 0}
+    sprite: {fileID: 0}
+  - tokenId: slider-bg
+    color: {r: 1, g: 1, b: 1, a: 1}
+    material: {fileID: 0}
+    sprite: {fileID: 0}
+  - tokenId: collect-text
+    color: {r: 1, g: 1, b: 1, a: 1}
+    material: {fileID: 0}
+    sprite: {fileID: 0}
