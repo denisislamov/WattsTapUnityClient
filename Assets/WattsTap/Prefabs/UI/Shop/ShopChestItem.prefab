@@ -632,7 +632,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2c10149187b2e4ac1ba09c5428f83b05, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d23bceb4d72e745c4a0c4afe4cb19b1f, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -641,7 +641,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 2.4
+  m_PixelsPerUnitMultiplier: 3.4
 --- !u!114 &8054331534842403592
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -656,7 +656,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.LayoutElement
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 0
+  m_MinHeight: 120
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
@@ -1001,7 +1001,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.003921569}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1801,7 +1801,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.003921569}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2489,8 +2489,36 @@ MonoBehaviour:
   _itemNameText: {fileID: 7793036156638909769}
   _iconImage: {fileID: 8206801007069249273}
   _primaryColorImage: {fileID: 8404417200608251486}
-  _secondaryColorImage: {fileID: 2533568277524691558}
+  _secondaryColorImage: {fileID: 0}
   _backButton: {fileID: 3494934352079888280}
+  _skinBindings:
+  - tokenId: bg-panel
+    imageTargets:
+    - {fileID: 2067762232834292019}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: shop-item-bg
+    imageTargets:
+    - {fileID: 8404417200608251486}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: item-description
+    imageTargets:
+    - {fileID: 859994535019842366}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: text-primary
+    imageTargets: []
+    textTargets:
+    - {fileID: 368456410862612832}
+    - {fileID: 5738212628666721522}
+    - {fileID: 7793036156638909769}
+    suppressMissingTokenWarning: 0
+  - tokenId: shop-item-lines-bg
+    imageTargets:
+    - {fileID: 2533568277524691558}
+    textTargets: []
+    suppressMissingTokenWarning: 0
 --- !u!1 &6943064809884705279
 GameObject:
   m_ObjectHideFlags: 0
@@ -2957,7 +2985,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
   m_AspectMode: 0
-  m_AspectRatio: 18.875
+  m_AspectRatio: 6.0515656
 --- !u!1001 &7096209392758247899
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -70,3 +70,27 @@ MonoBehaviour:
     color: {r: 1, g: 1, b: 1, a: 1}
     material: {fileID: 0}
     sprite: {fileID: 0}
+  - tokenId: chests-boosters-btn
+    color: {r: 1, g: 1, b: 1, a: 1}
+    material: {fileID: 0}
+    sprite: {fileID: 0}
+  - tokenId: chests-boosters-btn-2
+    color: {r: 1, g: 1, b: 1, a: 1}
+    material: {fileID: 0}
+    sprite: {fileID: 0}
+  - tokenId: boosters-bg
+    color: {r: 1, g: 1, b: 1, a: 1}
+    material: {fileID: 0}
+    sprite: {fileID: 21300000, guid: da34a4f2296664b7cb85ef176ab7f45b, type: 3}
+  - tokenId: item-description
+    color: {r: 1, g: 1, b: 1, a: 1}
+    material: {fileID: 0}
+    sprite: {fileID: 21300000, guid: d23bceb4d72e745c4a0c4afe4cb19b1f, type: 3}
+  - tokenId: shop-item-bg
+    color: {r: 0.7137255, g: 0.7137255, b: 0.7137255, a: 1}
+    material: {fileID: 0}
+    sprite: {fileID: 0}
+  - tokenId: shop-item-lines-bg
+    color: {r: 1, g: 1, b: 1, a: 0.29803923}
+    material: {fileID: 0}
+    sprite: {fileID: 0}
