@@ -348,6 +348,35 @@ MonoBehaviour:
   _iconImage: {fileID: 6991941504854956773}
   _descriptionText: {fileID: 4269161480174868556}
   _backButton: {fileID: 6257359677997441191}
+  _skinBindings:
+  - tokenId: bg-panel
+    imageTargets:
+    - {fileID: 7985117508348821450}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: shop-item-bg
+    imageTargets:
+    - {fileID: 3477899823238829894}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: item-description
+    imageTargets:
+    - {fileID: 3190722443502508342}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: text-primary
+    imageTargets:
+    - {fileID: 3477899823238829894}
+    textTargets:
+    - {fileID: 7665079987645811976}
+    - {fileID: 7151261808999896076}
+    - {fileID: 4269161480174868556}
+    suppressMissingTokenWarning: 0
+  - tokenId: shop-item-lines-bg
+    imageTargets:
+    - {fileID: 4162049442020347384}
+    textTargets: []
+    suppressMissingTokenWarning: 0
 --- !u!1 &1129859694807767375
 GameObject:
   m_ObjectHideFlags: 0
@@ -1823,7 +1852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
   m_AspectMode: 0
-  m_AspectRatio: 6.0515656
+  m_AspectRatio: 18.875
 --- !u!1001 &300852665297841892
 PrefabInstance:
   m_ObjectHideFlags: 0
