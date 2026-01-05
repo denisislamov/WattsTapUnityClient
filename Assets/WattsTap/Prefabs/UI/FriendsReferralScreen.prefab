@@ -180,7 +180,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 6155588536655433283}
   m_OnClick:
     m_PersistentCalls:
@@ -3970,7 +3970,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 1.4270477, y: 0.000019073486}
+  m_AnchoredPosition: {x: 1.427063, y: 0.000019073486}
   m_SizeDelta: {x: -184.54, y: 111.8267}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &7615618848170449490
@@ -4800,7 +4800,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4856,7 +4856,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 4745451711478870333}
   m_OnClick:
     m_PersistentCalls:
@@ -6790,6 +6790,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3576fa67f90f948429052053b0259733, type: 3}
   m_Name: 
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.FriendsReferralScreenUIView
+  _skinBindings:
+  - tokenId: bg-panel
+    imageTargets:
+    - {fileID: 4368522242988070033}
+    - {fileID: 2625104878718282337}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: text-primary
+    imageTargets: []
+    textTargets:
+    - {fileID: 2310269435861980240}
+    - {fileID: 9186121480114748211}
+    - {fileID: 3747334091662151564}
+    - {fileID: 3959916298783233025}
+    - {fileID: 5930219155143911233}
+    - {fileID: 6109417690426395219}
+    - {fileID: 7412366069026474044}
+    - {fileID: 7412366069026474044}
+    - {fileID: 4396696423686816557}
+    - {fileID: 5358792014005990776}
+    - {fileID: 5797160230333624249}
+    suppressMissingTokenWarning: 0
+  - tokenId: text-secondary
+    imageTargets: []
+    textTargets:
+    - {fileID: 3116003823900641479}
+    - {fileID: 3297730280546139276}
+    - {fileID: 1332978449418859019}
+    - {fileID: 1829669368538106087}
+    - {fileID: 3226248039785320218}
+    suppressMissingTokenWarning: 0
+  - tokenId: referral-bg
+    imageTargets:
+    - {fileID: 4278567396902941309}
+    - {fileID: 7359349612366083803}
+    - {fileID: 5397633705169876107}
+    - {fileID: 1971983495934872927}
+    - {fileID: 9045673819707819383}
+    - {fileID: 1932646919947207915}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: chests-boosters-btn
+    imageTargets:
+    - {fileID: 4745451711478870333}
+    - {fileID: 1001270612909039472}
+    - {fileID: 1922608385371577132}
+    - {fileID: 6155588536655433283}
+    textTargets: []
+    suppressMissingTokenWarning: 0
   _referralButton: {fileID: 9222736339130337103}
   _friendsButton: {fileID: 708081478059241254}
   _referralElements:
@@ -7182,7 +7231,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 1.4270325, y: 0.000049591064}
+  m_AnchoredPosition: {x: 1.427002, y: 0.000049591064}
   m_SizeDelta: {x: -184.54, y: 111.8267}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &6247720765793109997

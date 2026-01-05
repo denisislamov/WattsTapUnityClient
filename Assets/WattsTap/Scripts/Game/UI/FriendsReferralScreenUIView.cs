@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using WattsTap.Core;
 using WattsTap.Core.API;
 using WattsTap.Core.UI;
 
@@ -9,6 +10,11 @@ namespace WattsTap.Game.UI
 {
     public class FriendsReferralScreenUIView : UIBaseView<FriendsReferralScreenUIPresenter>
     {
+        [Header("Skinning")]
+        [SerializeField] private MainMenuThemeManager.SkinTokenBinding[] _skinBindings;
+        
+        private MainMenuThemeManager _themeManager;
+        
         [Header("Tab Buttons")]
         [SerializeField] private Button _referralButton;
         [SerializeField] private Button _friendsButton;
@@ -52,6 +58,44 @@ namespace WattsTap.Game.UI
         public Button ShareButton2 => _shareButton2;
         public Button CopyLinkButton => _copyLinkButton;
         public Button CopyLinkButton2 => _copyLinkButton2;
+        
+        #endregion
+
+        #region Skinning
+        
+        private void OnEnable()
+        {
+            _themeManager = ServiceLocator.Get<MainMenuThemeManager>();
+            
+            if (_themeManager != null)
+            {
+                _themeManager.SkinChanged += OnSkinChanged;
+
+                if (_themeManager.CurrentSkin != null)
+                {
+                    _themeManager.ApplySkin(_themeManager.CurrentSkin, _skinBindings, this);
+                    return;
+                }
+                
+                _themeManager.ApplySkin(null, _skinBindings, this);
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (_themeManager != null)
+            {
+                _themeManager.SkinChanged -= OnSkinChanged;
+            }
+        }
+        
+        private void OnSkinChanged(MainMenuSkinDefinition skin)
+        {
+            if (_themeManager != null)
+            {
+                _themeManager.ApplySkin(skin, _skinBindings, this);
+            }
+        }
         
         #endregion
 
