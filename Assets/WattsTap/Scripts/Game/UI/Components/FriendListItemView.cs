@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using WattsTap.Core;
 using WattsTap.Core.API;
 
 namespace WattsTap.Game.UI
@@ -10,6 +11,11 @@ namespace WattsTap.Game.UI
     /// </summary>
     public class FriendListItemView : MonoBehaviour
     {
+        [Header("Skinning")]
+        [SerializeField] private MainMenuThemeManager.SkinTokenBinding[] _skinBindings;
+        
+        private MainMenuThemeManager _themeManager;
+        
         [Header("Display Elements")]
         [SerializeField] private TMP_Text _nicknameText;
         [SerializeField] private TMP_Text _levelText;
@@ -19,6 +25,44 @@ namespace WattsTap.Game.UI
         [SerializeField] private GameObject _bonusIndicator;
         
         private FriendInfo _friendInfo;
+        
+        #region Skinning
+        
+        private void OnEnable()
+        {
+            _themeManager = ServiceLocator.Get<MainMenuThemeManager>();
+            
+            if (_themeManager != null)
+            {
+                _themeManager.SkinChanged += OnSkinChanged;
+
+                if (_themeManager.CurrentSkin != null)
+                {
+                    _themeManager.ApplySkin(_themeManager.CurrentSkin, _skinBindings, this);
+                    return;
+                }
+                
+                _themeManager.ApplySkin(null, _skinBindings, this);
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (_themeManager != null)
+            {
+                _themeManager.SkinChanged -= OnSkinChanged;
+            }
+        }
+        
+        private void OnSkinChanged(MainMenuSkinDefinition skin)
+        {
+            if (_themeManager != null)
+            {
+                _themeManager.ApplySkin(skin, _skinBindings, this);
+            }
+        }
+        
+        #endregion
         
         /// <summary>
         /// Setup the view with friend information

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6368861613850249442}
   - component: {fileID: 4859958248049589566}
   - component: {fileID: 5474597591543157061}
+  - component: {fileID: 1171337534462502698}
   m_Layer: 5
   m_Name: FriendsListElement
   m_TagString: Untagged
@@ -27,7 +28,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 58908800010066957}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -118,6 +119,42 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &1171337534462502698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 58908800010066957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6789012345678abcdef01234567890a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.FriendListItemView
+  _skinBindings:
+  - tokenId: text-primary
+    imageTargets: []
+    textTargets:
+    - {fileID: 8638460484590042093}
+    - {fileID: 4286294655526999368}
+    suppressMissingTokenWarning: 0
+  - tokenId: text-secondary
+    imageTargets: []
+    textTargets:
+    - {fileID: 719100452090838674}
+    - {fileID: 3633426098955362972}
+    suppressMissingTokenWarning: 0
+  - tokenId: friendslist-bg
+    imageTargets:
+    - {fileID: 6368861613850249442}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  _nicknameText: {fileID: 4286294655526999368}
+  _levelText: {fileID: 719100452090838674}
+  _bonusText: {fileID: 0}
+  _invitedAtText: {fileID: 0}
+  _avatarImage: {fileID: 3901807083831274232}
+  _bonusIndicator: {fileID: 0}
 --- !u!1 &853994368591222365
 GameObject:
   m_ObjectHideFlags: 0
