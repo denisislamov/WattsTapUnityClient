@@ -1,11 +1,17 @@
 using UnityEngine;
 using UnityEngine.UI;
+using WattsTap.Core;
 using WattsTap.Core.UI;
 
 namespace WattsTap.Game.UI
 {
     public class QuestsScreenUIView : UIBaseView<QuestsScreenUIPresenter>
     {
+        [Header("Skinning")]
+        [SerializeField] private MainMenuThemeManager.SkinTokenBinding[] _skinBindings;
+        
+        private MainMenuThemeManager _themeManager;
+        
         [Header("Navigation")]
         [SerializeField] private Button _mainMenuButton;
         [SerializeField] private Button _friendsReferralButton;
@@ -15,16 +21,48 @@ namespace WattsTap.Game.UI
         [SerializeField] private GameObject _questItemPrefab;
         [SerializeField] private GameObject _noQuestsPlaceholder;
         
-        #region Properties
-        
         public Button MainMenuButton => _mainMenuButton;
         public Button FriendsReferralButton => _friendsReferralButton;
         public Transform QuestListContainer => _questListContainer;
         public GameObject QuestItemPrefab => _questItemPrefab;
         
-        #endregion
+        #region Skinning
         
-        #region Public Methods
+        private void OnEnable()
+        {
+            _themeManager = ServiceLocator.Get<MainMenuThemeManager>();
+            
+            if (_themeManager != null)
+            {
+                _themeManager.SkinChanged += OnSkinChanged;
+
+                if (_themeManager.CurrentSkin != null)
+                {
+                    _themeManager.ApplySkin(_themeManager.CurrentSkin, _skinBindings, this);
+                    return;
+                }
+                
+                _themeManager.ApplySkin(null, _skinBindings, this);
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (_themeManager != null)
+            {
+                _themeManager.SkinChanged -= OnSkinChanged;
+            }
+        }
+        
+        private void OnSkinChanged(MainMenuSkinDefinition skin)
+        {
+            if (_themeManager != null)
+            {
+                _themeManager.ApplySkin(skin, _skinBindings, this);
+            }
+        }
+        
+        #endregion
         
         /// <summary>
         /// Shows or hides the no quests placeholder
@@ -50,8 +88,6 @@ namespace WattsTap.Game.UI
                 }
             }
         }
-        
-        #endregion
     }
 }
 

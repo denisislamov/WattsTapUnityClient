@@ -102,3 +102,19 @@ MonoBehaviour:
     color: {r: 1, g: 1, b: 1, a: 1}
     material: {fileID: 0}
     sprite: {fileID: 0}
+  - tokenId: reward-bg
+    color: {r: 1, g: 1, b: 1, a: 1}
+    material: {fileID: 0}
+    sprite: {fileID: 21300000, guid: 14923357ec6ec4e8ba513d2d1a56701d, type: 3}
+  - tokenId: circle_with_border
+    color: {r: 1, g: 1, b: 1, a: 1}
+    material: {fileID: 0}
+    sprite: {fileID: 21300000, guid: 423456b7694a44f0192f73fa6e1e000f, type: 3}
+  - tokenId: quest-progress-value-bg
+    color: {r: 1, g: 1, b: 1, a: 1}
+    material: {fileID: 0}
+    sprite: {fileID: 0}
+  - tokenId: slider-bg-2
+    color: {r: 1, g: 1, b: 1, a: 1}
+    material: {fileID: 0}
+    sprite: {fileID: 0}
