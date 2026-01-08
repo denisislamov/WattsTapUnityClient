@@ -6279,7 +6279,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 84dd0264c71584c959832fe32d5d3409, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4908f02af7bbe4e6693a8e97a1bc5cb4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6623,7 +6623,7 @@ MonoBehaviour:
     - {fileID: 3594826679418596249}
     - {fileID: 7532313179981247958}
     suppressMissingTokenWarning: 0
-  - tokenId: bg-blur
+  - tokenId: bg-panel-2
     imageTargets:
     - {fileID: 7498197930426306531}
     textTargets: []
@@ -9686,7 +9686,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 3792335218748665582}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.6465809
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
