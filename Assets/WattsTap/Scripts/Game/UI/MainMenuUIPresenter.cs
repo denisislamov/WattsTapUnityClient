@@ -90,6 +90,11 @@ namespace WattsTap.Game.UI
                 View.BugReportButton.onClick.AddListener(OnBugReportButtonClicked);
             }
 
+            if (View.InventoryButton != null)
+            {
+                View.InventoryButton.onClick.AddListener(OnInventoryButtonClicked);
+            }
+
             View.SetDefaultSkin();
             
             View.UpdateCurrentLevel(Model.Level.Value);
@@ -167,6 +172,18 @@ namespace WattsTap.Game.UI
             }
 
             _uiService?.Open(UIConstants.BugReportScreen);
+        }
+
+        private void OnInventoryButtonClicked()
+        {
+            _hapticService?.ButtonPressed();
+            
+            if (_uiService == null)
+            {
+                ServiceLocator.TryGet(out _uiService);
+            }
+
+            _uiService?.Open(UIConstants.InventoryScreen);
         }
 
         private void ChangeSkinButtonOnClick()
