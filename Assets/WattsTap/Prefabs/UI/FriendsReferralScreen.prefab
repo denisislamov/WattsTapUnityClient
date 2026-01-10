@@ -3227,7 +3227,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2084694426797575695}
   m_HandleRect: {fileID: 3211237648610988673}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -5743,7 +5743,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -0.65008545, y: -19.00003}
+  m_AnchoredPosition: {x: -0.65008545, y: -19}
   m_SizeDelta: {x: -0.3831482, y: 111.8267}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &5279011937135964370
@@ -6786,6 +6786,7 @@ MonoBehaviour:
   - {fileID: 6109861905884370092}
   _miningButton: {fileID: 4495270043021772341}
   _questsButton: {fileID: 4015602140169204826}
+  _inventoryButton: {fileID: 5769891609926640094}
   _shareButton: {fileID: 4636811369156860712}
   _copyLinkButton: {fileID: 7934399801951018813}
   _shareButton2: {fileID: 7654317321349121991}
@@ -8902,6 +8903,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
   m_PrefabInstance: {fileID: 209568322990272413}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5769891609926640094 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5979175700302483011, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
+  m_PrefabInstance: {fileID: 209568322990272413}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1001 &288719201947108623
 PrefabInstance:
   m_ObjectHideFlags: 0

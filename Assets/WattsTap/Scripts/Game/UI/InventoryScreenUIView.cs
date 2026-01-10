@@ -15,6 +15,8 @@ namespace WattsTap.Game.UI
         
         [Header("Navigation")]
         [SerializeField] private Button _miningButton;
+        [SerializeField] private Button _friendsReferralButton;
+        [SerializeField] private Button _questsButton;
         
         [Header("Hits Display")]
         [SerializeField] private TMP_Text _currentHitsText;
@@ -26,6 +28,8 @@ namespace WattsTap.Game.UI
         #region Properties
         
         public Button MiningButton => _miningButton;
+        public Button FriendsReferralButton => _friendsReferralButton;
+        public Button QuestsButton => _questsButton;
         
         #endregion
 

@@ -29,6 +29,16 @@ namespace WattsTap.Game.UI
             {
                 View.MiningButton.onClick.AddListener(OnMiningButtonClicked);
             }
+
+            if (View.FriendsReferralButton != null)
+            {
+                View.FriendsReferralButton.onClick.AddListener(OnFriendsReferralButtonClicked);
+            }
+
+            if (View.QuestsButton != null)
+            {
+                View.QuestsButton.onClick.AddListener(OnQuestsButtonClicked);
+            }
         }
 
         #region Event Handlers - Model
@@ -60,6 +70,34 @@ namespace WattsTap.Game.UI
             _uiService?.Close(UIConstants.InventoryScreen);
         }
 
+        private void OnFriendsReferralButtonClicked()
+        {
+            _hapticService?.ButtonPressed();
+            
+            if (_uiService == null)
+            {
+                ServiceLocator.TryGet(out _uiService);
+            }
+
+            // Close InventoryScreen and open FriendsReferralScreen
+            _uiService?.Close(UIConstants.InventoryScreen);
+            _uiService?.Open(UIConstants.FriendsReferralScreen);
+        }
+
+        private void OnQuestsButtonClicked()
+        {
+            _hapticService?.ButtonPressed();
+            
+            if (_uiService == null)
+            {
+                ServiceLocator.TryGet(out _uiService);
+            }
+
+            // Close InventoryScreen and open QuestsScreen
+            _uiService?.Close(UIConstants.InventoryScreen);
+            _uiService?.Open(UIConstants.QuestsScreen);
+        }
+
         #endregion
 
         protected override void OnDispose()
@@ -76,6 +114,16 @@ namespace WattsTap.Game.UI
             if (View?.MiningButton != null)
             {
                 View.MiningButton.onClick.RemoveListener(OnMiningButtonClicked);
+            }
+
+            if (View?.FriendsReferralButton != null)
+            {
+                View.FriendsReferralButton.onClick.RemoveListener(OnFriendsReferralButtonClicked);
+            }
+
+            if (View?.QuestsButton != null)
+            {
+                View.QuestsButton.onClick.RemoveListener(OnQuestsButtonClicked);
             }
         }
     }
