@@ -10,6 +10,7 @@ using WattsTap.Core.API;
 using WattsTap.Core.Services;
 using WattsTap.Core.Services.BugReport;
 using WattsTap.Core.Telegram;
+using WattsTap.Core.Inventory;
 using WattsTap.Game.Avatars;
 using WattsTap.Game.Player;
 using WattsTap.Game.Tap.Services;
@@ -70,6 +71,10 @@ namespace WattsTap.Core
             
             // Register Bug Report Service
             ServiceLocator.Register<IBugReportService>(new BugReportService());
+            
+            // Register Inventory Services
+            ServiceLocator.Register<ICatalogService>(new CatalogService());
+            ServiceLocator.Register<IInventoryService>(new InventoryService());
             
             _serviceManager.InitializeAll();
             
