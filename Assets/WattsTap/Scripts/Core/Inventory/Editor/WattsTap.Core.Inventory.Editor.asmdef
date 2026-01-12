@@ -1,0 +1,20 @@
+{
+    "name": "WattsTap.Core.Inventory.Editor",
+    "rootNamespace": "WattsTap.Core.Inventory.Editor",
+    "references": [
+        "GUID:ba8a2adcf046e4b5dbd849536a619585",
+        "GUID:456458b2ee6bb4919b59eeb05198fb88"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
+

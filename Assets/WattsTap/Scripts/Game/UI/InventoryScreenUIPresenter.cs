@@ -1,7 +1,9 @@
 using WattsTap.Constants;
 using WattsTap.Core;
+using WattsTap.Core.Inventory;
 using WattsTap.Core.Telegram;
 using WattsTap.Core.UI;
+using WattsTap.Game.UI.Components.Inventory;
 
 namespace WattsTap.Game.UI
 {
@@ -19,10 +21,22 @@ namespace WattsTap.Game.UI
             Model.HitsCurrent.OnValueChanged += OnHitsChanged;
             Model.HitsMax.OnValueChanged += OnHitsChanged;
             Model.CoinsPerTap.OnValueChanged += OnCoinsPerTapChanged;
+            Model.TotalEquipmentBonus.OnValueChanged += OnTotalBonusChanged;
             
             // Initialize view with current values
             View.UpdateHits(Model.HitsCurrent.Value, Model.HitsMax.Value);
             View.UpdateCoinsPerTap(Model.CoinsPerTap.Value);
+            View.UpdateTotalBonus(Model.TotalEquipmentBonus.Value);
+            
+            // Populate inventory
+            PopulateInventory();
+            
+            // Initialize equipment slots
+            InitializeEquipmentSlots();
+
+            // Subscribe to view events
+            View.OnItemDoubleClicked += OnItemDoubleClicked;
+            View.OnEquipmentSlotClicked += OnEquipmentSlotClicked;
 
             // Navigation buttons
             if (View.MiningButton != null)
@@ -40,6 +54,32 @@ namespace WattsTap.Game.UI
                 View.QuestsButton.onClick.AddListener(OnQuestsButtonClicked);
             }
         }
+        
+        private void PopulateInventory()
+        {
+            var items = Model.GetAllItems();
+            View.PopulateInventory(items);
+        }
+        
+        private void InitializeEquipmentSlots()
+        {
+            var equippedItems = Model.GetEquippedItems();
+            
+            // Clear all slots first
+            View.UpdateEquipmentSlot(ItemType.Weapon, null);
+            View.UpdateEquipmentSlot(ItemType.ArmorBody, null);
+            View.UpdateEquipmentSlot(ItemType.ArmorArms, null);
+            View.UpdateEquipmentSlot(ItemType.ArmorLegs, null);
+            
+            // Set equipped items
+            foreach (var item in equippedItems)
+            {
+                if (item?.Data != null)
+                {
+                    View.UpdateEquipmentSlot(item.Data.ItemType, item);
+                }
+            }
+        }
 
         #region Event Handlers - Model
         
@@ -53,9 +93,47 @@ namespace WattsTap.Game.UI
             View.UpdateCoinsPerTap(value);
         }
         
+        private void OnTotalBonusChanged(float value)
+        {
+            View.UpdateTotalBonus(value);
+        }
+        
         #endregion
 
         #region Event Handlers - Buttons
+
+        private void OnItemDoubleClicked(InventoryItemElementView itemView)
+        {
+            _hapticService?.ButtonPressed();
+            
+            var item = itemView.InventoryItem;
+            if (item?.Data == null) return;
+            
+            // Equip the item
+            if (!item.IsEquipped)
+            {
+                Model.EquipItem(item.InstanceId);
+                
+                // Update view
+                View.UpdateItemEquippedState(item.InstanceId, true);
+                View.UpdateEquipmentSlot(item.Data.ItemType, item);
+            }
+        }
+        
+        private void OnEquipmentSlotClicked(EquipmentSlotView slot)
+        {
+            _hapticService?.ButtonPressed();
+            
+            var item = slot.EquippedItem;
+            if (item == null) return;
+            
+            // Unequip the item
+            Model.UnequipItem(item.InstanceId);
+            
+            // Update view
+            View.UpdateItemEquippedState(item.InstanceId, false);
+            View.UpdateEquipmentSlot(slot.SlotType, null);
+        }
 
         private void OnMiningButtonClicked()
         {
@@ -108,6 +186,14 @@ namespace WattsTap.Game.UI
                 Model.HitsCurrent.OnValueChanged -= OnHitsChanged;
                 Model.HitsMax.OnValueChanged -= OnHitsChanged;
                 Model.CoinsPerTap.OnValueChanged -= OnCoinsPerTapChanged;
+                Model.TotalEquipmentBonus.OnValueChanged -= OnTotalBonusChanged;
+            }
+            
+            // Unsubscribe from view events
+            if (View != null)
+            {
+                View.OnItemDoubleClicked -= OnItemDoubleClicked;
+                View.OnEquipmentSlotClicked -= OnEquipmentSlotClicked;
             }
             
             // Remove button listeners

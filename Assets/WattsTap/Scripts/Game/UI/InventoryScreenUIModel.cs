@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 using WattsTap.Core;
+using WattsTap.Core.Inventory;
 using WattsTap.Core.React;
 using WattsTap.Core.UI;
 using WattsTap.Game.Player;
@@ -12,9 +14,13 @@ namespace WattsTap.Game.UI
         public ReactiveProperty<int> HitsCurrent { get; private set; }
         public ReactiveProperty<int> HitsMax { get; private set; }
         public ReactiveProperty<int> CoinsPerTap { get; private set; }
+        public ReactiveProperty<float> TotalEquipmentBonus { get; private set; }
         
         private IPlayerService _playerService;
         private ITapControllerService _tapController;
+        private IInventoryService _inventoryService;
+
+        public IInventoryService InventoryService => _inventoryService;
 
         public override void Initialize()
         {
@@ -23,9 +29,16 @@ namespace WattsTap.Game.UI
             HitsCurrent = new ReactiveProperty<int>(0);
             HitsMax = new ReactiveProperty<int>(0);
             CoinsPerTap = new ReactiveProperty<int>(1);
+            TotalEquipmentBonus = new ReactiveProperty<float>(0f);
             
             _playerService = ServiceLocator.Get<IPlayerService>();
             _tapController = ServiceLocator.Get<ITapControllerService>();
+            
+            if (ServiceLocator.TryGet(out _inventoryService))
+            {
+                _inventoryService.OnItemEquipChanged += OnItemEquipChanged;
+                RecalculateTotalBonus();
+            }
             
             if (_tapController != null)
             {
@@ -58,6 +71,11 @@ namespace WattsTap.Game.UI
         {
             RecalculateCoinsPerTap();
         }
+        
+        private void OnItemEquipChanged(InventoryItem item, bool isEquipped)
+        {
+            RecalculateTotalBonus();
+        }
 
         private void RecalculateCoinsPerTap()
         {
@@ -66,6 +84,54 @@ namespace WattsTap.Game.UI
             var multiplier = _playerService.IncomeMultiplier;
             var effective = Mathf.Max(0, Mathf.RoundToInt(baseIncome * multiplier));
             CoinsPerTap.Value = effective;
+        }
+        
+        private void RecalculateTotalBonus()
+        {
+            if (_inventoryService == null) return;
+            
+            float total = 0f;
+            var equippedItems = _inventoryService.GetEquippedItems();
+            foreach (var item in equippedItems)
+            {
+                if (item?.Data != null)
+                {
+                    total += item.Data.PerTapBonus;
+                }
+            }
+            TotalEquipmentBonus.Value = total;
+        }
+        
+        /// <summary>
+        /// Get all inventory items.
+        /// </summary>
+        public IReadOnlyList<InventoryItem> GetAllItems()
+        {
+            return _inventoryService?.Items ?? new List<InventoryItem>();
+        }
+        
+        /// <summary>
+        /// Get equipped items.
+        /// </summary>
+        public IReadOnlyList<InventoryItem> GetEquippedItems()
+        {
+            return _inventoryService?.GetEquippedItems() ?? new List<InventoryItem>();
+        }
+        
+        /// <summary>
+        /// Equip an item.
+        /// </summary>
+        public bool EquipItem(string instanceId)
+        {
+            return _inventoryService?.EquipItem(instanceId) ?? false;
+        }
+        
+        /// <summary>
+        /// Unequip an item.
+        /// </summary>
+        public bool UnequipItem(string instanceId)
+        {
+            return _inventoryService?.UnequipItem(instanceId) ?? false;
         }
 
         public override void Dispose()
@@ -81,12 +147,17 @@ namespace WattsTap.Game.UI
                 _playerService.OnPlayerDataChanged -= OnPlayerDataChanged;
             }
             
+            if (_inventoryService != null)
+            {
+                _inventoryService.OnItemEquipChanged -= OnItemEquipChanged;
+            }
+            
             HitsCurrent?.Dispose();
             HitsMax?.Dispose();
             CoinsPerTap?.Dispose();
+            TotalEquipmentBonus?.Dispose();
             
             base.Dispose();
         }
     }
 }
-
