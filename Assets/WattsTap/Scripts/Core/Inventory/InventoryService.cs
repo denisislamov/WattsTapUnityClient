@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using WattsTap.Core.Configs;
 
 namespace WattsTap.Core.Inventory
 {
@@ -16,6 +17,8 @@ namespace WattsTap.Core.Inventory
     /// </summary>
     public class InventoryService : IInventoryService
     {
+        private const string StartConfigKey = "InventoryStartConfig";
+        
         private readonly List<InventoryItem> _items = new List<InventoryItem>();
         private ICatalogService _catalogService;
         
@@ -27,6 +30,25 @@ namespace WattsTap.Core.Inventory
             if (IsInitialized) return;
             
             _catalogService = ServiceLocator.Get<ICatalogService>();
+            
+            // Try to load start config and apply it
+            var configService = ServiceLocator.Get<IConfigService>();
+            if (configService != null)
+            {
+                try
+                {
+                    var startConfig = configService.GetConfig<InventoryStartConfig>(StartConfigKey);
+                    if (startConfig != null)
+                    {
+                        IsInitialized = true; // Set before applying to allow AddItem to work
+                        startConfig.ApplyToInventory(this);
+                    }
+                }
+                catch
+                {
+                    // Start config not registered, that's okay
+                }
+            }
             
             IsInitialized = true;
             Debug.Log("<color=#00AA00>[InventoryService] Initialized</color>");
