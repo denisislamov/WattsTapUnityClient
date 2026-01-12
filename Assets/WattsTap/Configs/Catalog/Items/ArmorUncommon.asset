@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 520240fe70494709b259f7a270c37037, type: 3}
   m_Name: ArmorUncommon
   m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.ItemData
-  _id: WeaponUncommon
-  _displayName: Weapon
+  _id: ArmorUncommon
+  _displayName: Armor
   _description: 
   _itemType: 200
   _rarity: 10

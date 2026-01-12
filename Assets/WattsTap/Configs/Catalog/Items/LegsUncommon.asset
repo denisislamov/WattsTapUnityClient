@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 520240fe70494709b259f7a270c37037, type: 3}
   m_Name: LegsUncommon
   m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.ItemData
-  _id: WeaponUncommon
-  _displayName: Weapon
+  _id: LegsUncommon
+  _displayName: Legs
   _description: 
-  _itemType: 202
+  _itemType: 201
   _rarity: 10
   _requiredLevel: 11
   _icon: {fileID: 21300000, guid: 75e794ff871c741d0971e024601a2d1a, type: 3}
