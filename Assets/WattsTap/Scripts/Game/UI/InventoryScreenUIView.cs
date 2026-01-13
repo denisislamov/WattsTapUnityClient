@@ -67,10 +67,11 @@ namespace WattsTap.Game.UI
                 if (_themeManager.CurrentSkin != null)
                 {
                     _themeManager.ApplySkin(_themeManager.CurrentSkin, _skinBindings, this);
-                    return;
                 }
-
-                _themeManager.ApplySkin(null, _skinBindings, this);
+                else
+                {
+                    _themeManager.ApplySkin(null, _skinBindings, this);
+                }
             }
             
             // Subscribe to equipment slot events
