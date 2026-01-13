@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b0c0ee9eeba4ca09c664c6dbc690ae7, type: 3}
-  m_Name: DefaultCatalogConfig
+  m_Name: CatalogConfig
   m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.CatalogConfig
   _items:
   - {fileID: 11400000, guid: c69399ca9d474482493a88944301c9bf, type: 2}
