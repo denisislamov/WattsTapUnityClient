@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 5701121865749548852}
   - component: {fileID: 8730458960765764932}
   - component: {fileID: 2022482014310918433}
-  - component: {fileID: 985425285485624353}
-  - component: {fileID: 8882868337040642932}
   - component: {fileID: 8477305660068333988}
   m_Layer: 5
   m_Name: InventoryItemEmpty
@@ -70,64 +68,6 @@ MonoBehaviour:
   _emptyState: {fileID: 6331984804171482650}
   _filledState: {fileID: 6132161147150723059}
   _slotButton: {fileID: 2578259605426688706}
-  _rarityColors:
-  - Rarity: 0
-    Color: {r: 0.47058824, g: 0.5647059, b: 0.6156863, a: 1}
-  - Rarity: 10
-    Color: {r: 1, g: 1, b: 1, a: 1}
-  - Rarity: 20
-    Color: {r: 0.14901961, g: 0.6509804, b: 0.60784316, a: 1}
-  - Rarity: 30
-    Color: {r: 0.76862746, g: 0.007843138, b: 0.84705883, a: 1}
---- !u!114 &985425285485624353
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3753783683839926952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8468ac1b3c24e899471bf4194cd386e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.Components.Inventory.EquipmentSlotView
-  _slotType: 100
-  _iconImage: {fileID: 0}
-  _backgroundImage: {fileID: 0}
-  _slotTypeIcon: {fileID: 0}
-  _levelText: {fileID: 0}
-  _emptyState: {fileID: 0}
-  _filledState: {fileID: 0}
-  _slotButton: {fileID: 0}
-  _rarityColors:
-  - Rarity: 0
-    Color: {r: 0.47058824, g: 0.5647059, b: 0.6156863, a: 1}
-  - Rarity: 10
-    Color: {r: 1, g: 1, b: 1, a: 1}
-  - Rarity: 20
-    Color: {r: 0.14901961, g: 0.6509804, b: 0.60784316, a: 1}
-  - Rarity: 30
-    Color: {r: 0.76862746, g: 0.007843138, b: 0.84705883, a: 1}
---- !u!114 &8882868337040642932
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3753783683839926952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8468ac1b3c24e899471bf4194cd386e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.Components.Inventory.EquipmentSlotView
-  _slotType: 100
-  _iconImage: {fileID: 0}
-  _backgroundImage: {fileID: 0}
-  _slotTypeIcon: {fileID: 0}
-  _levelText: {fileID: 0}
-  _emptyState: {fileID: 6331984804171482650}
-  _filledState: {fileID: 0}
-  _slotButton: {fileID: 0}
   _rarityColors:
   - Rarity: 0
     Color: {r: 0.47058824, g: 0.5647059, b: 0.6156863, a: 1}

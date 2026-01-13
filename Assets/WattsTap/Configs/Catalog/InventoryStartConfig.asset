@@ -49,3 +49,9 @@ MonoBehaviour:
   - ItemData: {fileID: 11400000, guid: 1afb8f9811f424032b3f769b1ab838ef, type: 2}
     Count: 1
     AutoEquip: 0
+  - ItemData: {fileID: 11400000, guid: 7fa8fde2f378e4714a0aad970e760cb9, type: 2}
+    Count: 1
+    AutoEquip: 0
+  - ItemData: {fileID: 11400000, guid: feb4860caf9d0458daf25484a13d85f0, type: 2}
+    Count: 1
+    AutoEquip: 0

@@ -718,7 +718,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1761111583938332954}
   m_HandleRect: {fileID: 7026941787616694770}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4008,6 +4008,7 @@ GameObject:
   - component: {fileID: 4046346247291231791}
   - component: {fileID: 5907906431885315783}
   - component: {fileID: 879790415597460086}
+  - component: {fileID: 3776573188330341259}
   m_Layer: 5
   m_Name: InventoryScreen
   m_TagString: Untagged
@@ -4101,6 +4102,26 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3776573188330341259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7931661269022662565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff211a02dd9744749c8265d1789d6041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.React.TelegramSafeZoneApplier
+  _sides: 2
+  _applyMode: 0
+  _mobileClientAdditionalOffsets:
+    Top: 110
+    Bottom: 0
+    Left: 0
+    Right: 0
+  _targetRectTransform: {fileID: 4152990402846509120}
 --- !u!1 &8301768921488445680
 GameObject:
   m_ObjectHideFlags: 0
@@ -5230,6 +5251,18 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 7b93e50865b7a489a95879b2929a1e76, type: 3}
+    - target: {fileID: 2022482014310918433, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
+      propertyPath: _rarityColors.Array.data[1].Color.b
+      value: 0.89411765
+      objectReference: {fileID: 0}
+    - target: {fileID: 2022482014310918433, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
+      propertyPath: _rarityColors.Array.data[1].Color.g
+      value: 0.53333336
+      objectReference: {fileID: 0}
+    - target: {fileID: 2022482014310918433, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
+      propertyPath: _rarityColors.Array.data[1].Color.r
+      value: 0.12156863
+      objectReference: {fileID: 0}
     - target: {fileID: 3753783683839926952, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
       propertyPath: m_Name
       value: InventoryItemEmptyHands
@@ -5354,49 +5387,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 985425285485624353, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
+    - {fileID: 8882868337040642932, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
     m_RemovedGameObjects:
     - {fileID: 6294354730967801447, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
     - {fileID: 387947079319921549, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
     - {fileID: 5941368857785233923, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3753783683839926952, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1306789788590228563}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
---- !u!1 &2176563211324011384 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3753783683839926952, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
-  m_PrefabInstance: {fileID: 3038991771855557072}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1306789788590228563
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2176563211324011384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8468ac1b3c24e899471bf4194cd386e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.Components.Inventory.EquipmentSlotView
-  _slotType: 100
-  _iconImage: {fileID: 0}
-  _backgroundImage: {fileID: 0}
-  _slotTypeIcon: {fileID: 0}
-  _levelText: {fileID: 0}
-  _emptyState: {fileID: 0}
-  _filledState: {fileID: 0}
-  _slotButton: {fileID: 0}
-  _rarityColors: []
 --- !u!114 &3908533245978310897 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2022482014310918433, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
   m_PrefabInstance: {fileID: 3038991771855557072}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2176563211324011384}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e8468ac1b3c24e899471bf4194cd386e, type: 3}
@@ -5864,6 +5870,18 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 75a564a946d8948a4bf6910d88fa4619, type: 3}
+    - target: {fileID: 2022482014310918433, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
+      propertyPath: _rarityColors.Array.data[1].Color.b
+      value: 0.89411765
+      objectReference: {fileID: 0}
+    - target: {fileID: 2022482014310918433, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
+      propertyPath: _rarityColors.Array.data[1].Color.g
+      value: 0.53333336
+      objectReference: {fileID: 0}
+    - target: {fileID: 2022482014310918433, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
+      propertyPath: _rarityColors.Array.data[1].Color.r
+      value: 0.12156863
+      objectReference: {fileID: 0}
     - target: {fileID: 3753783683839926952, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
       propertyPath: m_Name
       value: InventoryItemEmptyBoots
@@ -5988,49 +6006,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 985425285485624353, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
+    - {fileID: 8882868337040642932, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
     m_RemovedGameObjects:
     - {fileID: 6294354730967801447, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
     - {fileID: 387947079319921549, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
     - {fileID: 5941368857785233923, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3753783683839926952, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4498118867342216627}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
---- !u!1 &1049335717441536162 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3753783683839926952, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
-  m_PrefabInstance: {fileID: 4222092875398390282}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &4498118867342216627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1049335717441536162}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8468ac1b3c24e899471bf4194cd386e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.Components.Inventory.EquipmentSlotView
-  _slotType: 100
-  _iconImage: {fileID: 0}
-  _backgroundImage: {fileID: 0}
-  _slotTypeIcon: {fileID: 0}
-  _levelText: {fileID: 0}
-  _emptyState: {fileID: 0}
-  _filledState: {fileID: 0}
-  _slotButton: {fileID: 0}
-  _rarityColors: []
 --- !u!114 &2776099410454137643 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2022482014310918433, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
   m_PrefabInstance: {fileID: 4222092875398390282}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1049335717441536162}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e8468ac1b3c24e899471bf4194cd386e, type: 3}
@@ -6203,6 +6194,18 @@ PrefabInstance:
       propertyPath: _rarityColors.Array.data[1].Color.r
       value: 0.12156863
       objectReference: {fileID: 0}
+    - target: {fileID: 2022482014310918433, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
+      propertyPath: _rarityColors.Array.data[1].Color.b
+      value: 0.89411765
+      objectReference: {fileID: 0}
+    - target: {fileID: 2022482014310918433, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
+      propertyPath: _rarityColors.Array.data[1].Color.g
+      value: 0.53333336
+      objectReference: {fileID: 0}
+    - target: {fileID: 2022482014310918433, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
+      propertyPath: _rarityColors.Array.data[1].Color.r
+      value: 0.12156863
+      objectReference: {fileID: 0}
     - target: {fileID: 3753783683839926952, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
       propertyPath: m_Name
       value: InventoryItemEmptyWeapon
@@ -6329,15 +6332,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 437413536472637906, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
+    - {fileID: 985425285485624353, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
+    - {fileID: 8882868337040642932, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
     m_RemovedGameObjects:
     - {fileID: 6294354730967801447, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
     - {fileID: 387947079319921549, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
     - {fileID: 5941368857785233923, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3753783683839926952, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 263780744796008513}
     - targetCorrespondingSourceObject: {fileID: 3753783683839926952, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7803172537522100822}
@@ -6363,35 +6365,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3753783683839926952, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
   m_PrefabInstance: {fileID: 5376560594165342303}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &263780744796008513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9116832662793290487}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8468ac1b3c24e899471bf4194cd386e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.Components.Inventory.EquipmentSlotView
-  _slotType: 100
-  _iconImage: {fileID: 0}
-  _backgroundImage: {fileID: 0}
-  _slotTypeIcon: {fileID: 0}
-  _levelText: {fileID: 0}
-  _emptyState: {fileID: 0}
-  _filledState: {fileID: 0}
-  _slotButton: {fileID: 0}
-  _rarityColors:
-  - Rarity: 0
-    Color: {r: 0.47058824, g: 0.5647059, b: 0.6156863, a: 1}
-  - Rarity: 10
-    Color: {r: 1, g: 1, b: 1, a: 1}
-  - Rarity: 20
-    Color: {r: 0.14901961, g: 0.6509804, b: 0.60784316, a: 1}
-  - Rarity: 30
-    Color: {r: 0.76862746, g: 0.007843138, b: 0.84705883, a: 1}
 --- !u!114 &7803172537522100822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7223,6 +7196,18 @@ PrefabInstance:
       propertyPath: m_Color.a
       value: 0.5019608
       objectReference: {fileID: 0}
+    - target: {fileID: 2022482014310918433, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
+      propertyPath: _rarityColors.Array.data[1].Color.b
+      value: 0.89411765
+      objectReference: {fileID: 0}
+    - target: {fileID: 2022482014310918433, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
+      propertyPath: _rarityColors.Array.data[1].Color.g
+      value: 0.53333336
+      objectReference: {fileID: 0}
+    - target: {fileID: 2022482014310918433, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
+      propertyPath: _rarityColors.Array.data[1].Color.r
+      value: 0.12156863
+      objectReference: {fileID: 0}
     - target: {fileID: 3753783683839926952, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
       propertyPath: m_Name
       value: InventoryItemEmptyArmor
@@ -7347,54 +7332,27 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 985425285485624353, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
+    - {fileID: 8882868337040642932, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
     m_RemovedGameObjects:
     - {fileID: 6294354730967801447, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
     - {fileID: 387947079319921549, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
     - {fileID: 5941368857785233923, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3753783683839926952, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4041782059690073658}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
 --- !u!224 &3669446800101146190 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5701121865749548852, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
   m_PrefabInstance: {fileID: 9075327528675979642}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5326091580650656722 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3753783683839926952, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
-  m_PrefabInstance: {fileID: 9075327528675979642}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &4041782059690073658
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5326091580650656722}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8468ac1b3c24e899471bf4194cd386e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.Components.Inventory.EquipmentSlotView
-  _slotType: 100
-  _iconImage: {fileID: 0}
-  _backgroundImage: {fileID: 0}
-  _slotTypeIcon: {fileID: 0}
-  _levelText: {fileID: 0}
-  _emptyState: {fileID: 0}
-  _filledState: {fileID: 0}
-  _slotButton: {fileID: 0}
-  _rarityColors: []
 --- !u!114 &7053559373382047835 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2022482014310918433, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
   m_PrefabInstance: {fileID: 9075327528675979642}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5326091580650656722}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e8468ac1b3c24e899471bf4194cd386e, type: 3}

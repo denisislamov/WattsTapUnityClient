@@ -69,7 +69,7 @@ namespace WattsTap.Game.UI
                     _themeManager.ApplySkin(_themeManager.CurrentSkin, _skinBindings, this);
                     return;
                 }
-                
+
                 _themeManager.ApplySkin(null, _skinBindings, this);
             }
             
