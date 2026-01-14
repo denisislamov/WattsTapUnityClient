@@ -122,3 +122,15 @@ MonoBehaviour:
     color: {r: 0.101960786, g: 0.101960786, b: 0.101960786, a: 1}
     material: {fileID: 0}
     sprite: {fileID: 0}
+  - tokenId: inventory-bg
+    color: {r: 0.101960786, g: 0.101960786, b: 0.101960786, a: 1}
+    material: {fileID: 0}
+    sprite: {fileID: 0}
+  - tokenId: inventory-filter-button
+    color: {r: 1, g: 1, b: 1, a: 1}
+    material: {fileID: 0}
+    sprite: {fileID: 21300000, guid: b14c3d4e45e8b4ac4b4841f7961c48eb, type: 3}
+  - tokenId: inventory-character-button
+    color: {r: 0.92156863, g: 0.92156863, b: 0.92156863, a: 1}
+    material: {fileID: 0}
+    sprite: {fileID: 0}
