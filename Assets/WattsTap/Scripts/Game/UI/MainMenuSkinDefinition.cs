@@ -11,6 +11,33 @@ namespace WattsTap.Game.UI
 
         public string SkinId => skinId;
 
+        public bool TryGetTokenBySpriteName(string spriteName, out SkinToken token)
+        {
+            token = null;
+
+            if (tokens == null || tokens.Length == 0 || string.IsNullOrEmpty(spriteName))
+            {
+                return false;
+            }
+
+            for (int i = 0; i < tokens.Length; i++)
+            {
+                var current = tokens[i];
+                if (current == null || current.Sprite == null)
+                {
+                    continue;
+                }
+
+                if (current.Sprite.name.IndexOf(spriteName, StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    token = current;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public bool TryGetToken(string tokenId, out SkinToken token)
         {
             token = null;
