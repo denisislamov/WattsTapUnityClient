@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: ShopChestItemConfig3
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.Shop.ShopChestItemConfig
   _itemName: Superior Chest
-  _icon: {fileID: 21300000, guid: 7d6bec4cbbad34b4c9e8799ff2e4974d, type: 3}
-  _primaryColor: {r: 0.5372549, g: 0.77254903, b: 0.9529412, a: 1}
+  _icon: {fileID: 21300000, guid: f29f8daac9354471d84f7f95b8124488, type: 3}
+  _primaryColor: {r: 0.10980392, g: 0.5529412, b: 0.8980392, a: 1}
   _secondaryColor: {r: 1, g: 1, b: 1, a: 0.29803923}

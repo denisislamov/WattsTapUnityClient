@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: ShopChestItemConfig4
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.Shop.ShopChestItemConfig
   _itemName: Relic Chest
-  _icon: {fileID: 21300000, guid: 2605046a5946f4b13ad82237f8296b8b, type: 3}
-  _primaryColor: {r: 0.9254902, g: 0.8039216, b: 0.5137255, a: 1}
+  _icon: {fileID: 21300000, guid: 842ebb47b927f44678405914bd2d05e7, type: 3}
+  _primaryColor: {r: 0.6313726, g: 0.09019608, b: 0.88235295, a: 1}
   _secondaryColor: {r: 1, g: 1, b: 1, a: 0.29803923}
