@@ -66,6 +66,9 @@ namespace WattsTap.Core
             ServiceLocator.Register<IReferralAPIService>(new ReferralAPIService());
             ServiceLocator.Register<IReferralService>(new ReferralService());
             
+            // Register Progress Sync Service
+            ServiceLocator.Register<IProgressSyncService>(new ProgressSyncService());
+            
             // Register Avatars Service
             ServiceLocator.Register<IAvatarsService>(_avatarsService);
             
@@ -184,6 +187,13 @@ namespace WattsTap.Core
                     if (ServiceLocator.TryGet<IReferralService>(out var referralService) && response.player != null)
                     {
                         referralService.SetReferralCodeFromAuth(response.player.referralCode);
+                    }
+                    
+                    // Load progress from server and start auto-sync
+                    if (ServiceLocator.TryGet<IProgressSyncService>(out var progressSyncService))
+                    {
+                        progressSyncService.LoadProgress();
+                        progressSyncService.StartAutoSync();
                     }
                 },
                 onError: (error) =>

@@ -62,5 +62,15 @@ namespace WattsTap.Game.Player
         public int ExperiencePerTap { get; }
         public int EnergyCostPerTap { get; }
         public float IncomeMultiplier { get; }
+        
+        /// <summary>
+        /// Загрузить данные игрока с сервера
+        /// </summary>
+        void LoadFromServer(int level, long watts, long currentXp, long totalXp);
+        
+        /// <summary>
+        /// Сбросить прогресс игрока
+        /// </summary>
+        void ResetProgress();
     }
 }

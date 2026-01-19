@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using WattsTap.Constants;
 using WattsTap.Core;
+using WattsTap.Core.Services;
 using WattsTap.Core.Telegram;
 using WattsTap.Core.UI;
 using WattsTap.Scripts.Game.GlobalConfigs;
@@ -13,6 +14,7 @@ namespace WattsTap.Game.Player
         private PlayerData _playerData;
         private IResourceManager _resourceManager;
         private IHapticFeedbackService _hapticService;
+        private IProgressSyncService _progressSyncService;
         private PlayerLevelConfig _levelConfig;
         private MiningBalanceConfig _miningBalanceConfig;
         private float _energyRestoreTimer;
@@ -41,6 +43,7 @@ namespace WattsTap.Game.Player
             _miningBalanceConfig = configService.GetConfig<MiningBalanceConfig>("MiningBalanceConfig");
             
             ServiceLocator.TryGet(out _hapticService);
+            ServiceLocator.TryGet(out _progressSyncService);
             
             LoadPlayerData();
             
@@ -49,6 +52,13 @@ namespace WattsTap.Game.Player
             _resourceManager.OnResourceTransaction += OnResourceManagerTransaction;
             
             _playerData.resources.xpToNextLevel = _levelConfig.GetExpRequiredForLevel(_playerData.level + 1);
+            
+            // Subscribe to progress sync events
+            if (_progressSyncService != null)
+            {
+                _progressSyncService.OnProgressLoaded += OnProgressLoadedFromServer;
+                _progressSyncService.OnProgressReset += OnProgressResetFromServer;
+            }
             
             Application.targetFrameRate = 60;
             IsInitialized = true;
@@ -65,6 +75,13 @@ namespace WattsTap.Game.Player
                 _resourceManager.OnResourceChanged -= OnResourceManagerChanged;
                 _resourceManager.OnResourceTransaction -= OnResourceManagerTransaction;
             }
+            
+            if (_progressSyncService != null)
+            {
+                _progressSyncService.OnProgressLoaded -= OnProgressLoadedFromServer;
+                _progressSyncService.OnProgressReset -= OnProgressResetFromServer;
+            }
+            
             SavePlayerData();
             IsInitialized = false;
         }
@@ -72,6 +89,14 @@ namespace WattsTap.Game.Player
         private void OnResourceManagerChanged(ResourceType type, long previousValue, long newValue)
         {
             OnResourcesChanged?.Invoke(_playerData.resources);
+            
+            // Update progress sync service with current data
+            _progressSyncService?.SetProgressData(
+                _playerData.level,
+                _playerData.resources.watts,
+                _playerData.resources.currentXP,
+                _playerData.resources.sumExp
+            );
         }
         
         private void OnResourceManagerTransaction(ResourceTransaction transaction)
@@ -191,5 +216,82 @@ namespace WattsTap.Game.Player
 
             uiService.Open(UIConstants.LevelUpPopUp);
         }
+        
+        #region Server Sync Methods
+        
+        /// <summary>
+        /// Load player data from server response
+        /// </summary>
+        public void LoadFromServer(int level, long watts, long currentXp, long totalXp)
+        {
+            _playerData.level = level;
+            _playerData.resources.watts = watts;
+            _playerData.resources.currentXP = currentXp;
+            _playerData.resources.sumExp = totalXp;
+            _playerData.resources.xpToNextLevel = _levelConfig.GetExpRequiredForLevel(_playerData.level + 1);
+            
+            // Re-sync resource manager
+            _resourceManager = new ResourceManager(_playerData.resources);
+            _resourceManager.OnResourceChanged += OnResourceManagerChanged;
+            _resourceManager.OnResourceTransaction += OnResourceManagerTransaction;
+            
+            Debug.Log($"<color=#00FF00>[PlayerService] Loaded from server: Level={level}, Watts={watts}, XP={currentXp}/{totalXp}</color>");
+            
+            OnPlayerDataChanged?.Invoke(_playerData);
+            OnResourcesChanged?.Invoke(_playerData.resources);
+        }
+        
+        /// <summary>
+        /// Reset player progress to defaults
+        /// </summary>
+        public void ResetProgress()
+        {
+            _playerData.level = 1;
+            _playerData.resources.watts = 0;
+            _playerData.resources.currentXP = 0;
+            _playerData.resources.sumExp = 0;
+            _playerData.resources.xpToNextLevel = _levelConfig.GetExpRequiredForLevel(2);
+            
+            // Re-sync resource manager
+            _resourceManager = new ResourceManager(_playerData.resources);
+            _resourceManager.OnResourceChanged += OnResourceManagerChanged;
+            _resourceManager.OnResourceTransaction += OnResourceManagerTransaction;
+            
+            Debug.Log("<color=#FFFF00>[PlayerService] Progress reset</color>");
+            
+            OnPlayerDataChanged?.Invoke(_playerData);
+            OnResourcesChanged?.Invoke(_playerData.resources);
+            
+            // Request server reset
+            _progressSyncService?.ResetProgress();
+        }
+        
+        private void OnProgressLoadedFromServer(Core.API.LoadProgressResponse response)
+        {
+            if (response.progress != null)
+            {
+                LoadFromServer(
+                    response.progress.level,
+                    response.progress.watts,
+                    response.progress.currentXp,
+                    response.progress.totalXp
+                );
+            }
+        }
+        
+        private void OnProgressResetFromServer(Core.API.ResetProgressResponse response)
+        {
+            if (response.progress != null)
+            {
+                LoadFromServer(
+                    response.progress.level,
+                    response.progress.watts,
+                    response.progress.currentXp,
+                    response.progress.totalXp
+                );
+            }
+        }
+        
+        #endregion
     }
 }

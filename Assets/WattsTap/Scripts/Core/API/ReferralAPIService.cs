@@ -28,6 +28,15 @@ namespace WattsTap.Core.API
         
         /// <summary>Get user's friends list</summary>
         IEnumerator GetFriends(Action<FriendsListResponse> onSuccess, Action<string> onError);
+        
+        /// <summary>Load player progress from server</summary>
+        IEnumerator LoadProgress(Action<LoadProgressResponse> onSuccess, Action<string> onError);
+        
+        /// <summary>Save player progress to server</summary>
+        IEnumerator SaveProgress(SaveProgressRequest request, Action<SaveProgressResponse> onSuccess, Action<string> onError);
+        
+        /// <summary>Reset player progress on server</summary>
+        IEnumerator ResetProgress(Action<ResetProgressResponse> onSuccess, Action<string> onError);
     }
     
     /// <summary>
@@ -267,6 +276,143 @@ namespace WattsTap.Core.API
                         {
                             // Cache in SharedData
                             _sharedDataService?.SetData(SharedDataConstants.FriendsData, response);
+                            onSuccess?.Invoke(response);
+                        }
+                        else
+                        {
+                            onError?.Invoke("Empty response");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        onError?.Invoke($"Failed to parse response: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    HandleRequestError(www, onError);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Load player progress from server
+        /// </summary>
+        public IEnumerator LoadProgress(Action<LoadProgressResponse> onSuccess, Action<string> onError)
+        {
+            if (!IsAuthenticated)
+            {
+                onError?.Invoke("Not authenticated");
+                yield break;
+            }
+            
+            using (var www = CreateGetRequest("/progress"))
+            {
+                yield return www.SendWebRequest();
+                
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    try
+                    {
+                        Debug.Log($"<color=#00FFFF>[ReferralAPIService] LoadProgress response: {www.downloadHandler.text}</color>");
+                        
+                        var response = JsonUtility.FromJson<LoadProgressResponse>(www.downloadHandler.text);
+                        
+                        if (response != null)
+                        {
+                            onSuccess?.Invoke(response);
+                        }
+                        else
+                        {
+                            onError?.Invoke("Empty response");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        onError?.Invoke($"Failed to parse response: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    HandleRequestError(www, onError);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Save player progress to server
+        /// </summary>
+        public IEnumerator SaveProgress(SaveProgressRequest request, Action<SaveProgressResponse> onSuccess, Action<string> onError)
+        {
+            if (!IsAuthenticated)
+            {
+                onError?.Invoke("Not authenticated");
+                yield break;
+            }
+            
+            string json = JsonUtility.ToJson(request);
+            
+            using (var www = CreatePostRequest("/progress", json))
+            {
+                yield return www.SendWebRequest();
+                
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    try
+                    {
+                        Debug.Log($"<color=#00FF00>[ReferralAPIService] SaveProgress response: {www.downloadHandler.text}</color>");
+                        
+                        var response = JsonUtility.FromJson<SaveProgressResponse>(www.downloadHandler.text);
+                        
+                        if (response != null)
+                        {
+                            onSuccess?.Invoke(response);
+                        }
+                        else
+                        {
+                            onError?.Invoke("Empty response");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        onError?.Invoke($"Failed to parse response: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    HandleRequestError(www, onError);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Reset player progress on server
+        /// </summary>
+        public IEnumerator ResetProgress(Action<ResetProgressResponse> onSuccess, Action<string> onError)
+        {
+            if (!IsAuthenticated)
+            {
+                onError?.Invoke("Not authenticated");
+                yield break;
+            }
+            
+            var request = new ResetProgressRequest { confirm = true };
+            string json = JsonUtility.ToJson(request);
+            
+            using (var www = CreatePostRequest("/progress/reset", json))
+            {
+                yield return www.SendWebRequest();
+                
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    try
+                    {
+                        Debug.Log($"<color=#FFFF00>[ReferralAPIService] ResetProgress response: {www.downloadHandler.text}</color>");
+                        
+                        var response = JsonUtility.FromJson<ResetProgressResponse>(www.downloadHandler.text);
+                        
+                        if (response != null)
+                        {
                             onSuccess?.Invoke(response);
                         }
                         else
