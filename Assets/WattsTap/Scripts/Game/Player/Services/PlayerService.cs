@@ -112,8 +112,7 @@ namespace WattsTap.Game.Player
             Debug.Log("[PlayerService] No saved data found, creating new player");
             _playerData = new PlayerData();
             
-            // TODO - load
-            OnPlayerDataChanged?.Invoke(_playerData);
+            // Note: OnPlayerDataChanged is called in Initialize() after xpToNextLevel is properly set
         }
 
         /// TODO - implement saving/loading

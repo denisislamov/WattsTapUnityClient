@@ -72,8 +72,9 @@ namespace WattsTap.Game.UI
         private void OnPlayerResourcesChanged(PlayerResources resources)
         {
             TotalCoins.Value = resources.watts;
-            CurrentXp.Value = resources.currentXP;
+            // Update XpToNextLevel BEFORE CurrentXp to ensure correct progress calculation
             XpToNextLevel.Value = resources.xpToNextLevel;
+            CurrentXp.Value = resources.currentXP;
         }
 
         private void OnPlayerDataChanged(PlayerData playerData)
@@ -94,8 +95,10 @@ namespace WattsTap.Game.UI
                 // CoinsPerTap будет рассчитываться отдельно с учётом множителя
                 // PlayerName.Value = playerData.nickname;
                 PlayerLevel.Value = playerData.level;
-                CurrentXp.Value = playerData.resources.currentXP;
+                Level.Value = playerData.level;
+                // Update XpToNextLevel BEFORE CurrentXp to ensure correct progress calculation
                 XpToNextLevel.Value = playerData.resources.xpToNextLevel;
+                CurrentXp.Value = playerData.resources.currentXP;
             }
         }
 

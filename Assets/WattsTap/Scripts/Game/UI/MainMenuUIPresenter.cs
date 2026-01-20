@@ -98,14 +98,18 @@ namespace WattsTap.Game.UI
             View.SetDefaultSkin();
             
             View.UpdateCurrentLevel(Model.Level.Value);
-            View.UpdateLevelProgressBar(Model.CurrentXp.Value);
+            var initialProgress = Model.XpToNextLevel.Value > 0 
+                ? (float) Model.CurrentXp.Value / Model.XpToNextLevel.Value 
+                : 0f;
+            View.UpdateLevelProgressBar(initialProgress);
             
             View.UpdateVersionText(Application.version);
         }
 
         private void OnCurrentXpChanged(long value)
         {
-            var progress = (float) value / Model.XpToNextLevel.Value;
+            var xpToNext = Model.XpToNextLevel.Value;
+            var progress = xpToNext > 0 ? (float) value / xpToNext : 0f;
             View.UpdateLevelProgressBar(progress);
         }
 
