@@ -1386,6 +1386,7 @@ MonoBehaviour:
   _questsButton: {fileID: 2203087659967404820}
   _bugReportButton: {fileID: 7041878845834658248}
   _inventoryButton: {fileID: 8548895478083538127}
+  _updatesPopupButton: {fileID: 7716766647860018811}
   _tapHintObject: {fileID: 2380511892157480176}
 --- !u!114 &682962176018097781
 MonoBehaviour:
@@ -2767,7 +2768,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6665521251845286932, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_Name
-      value: CommonButton (3)
+      value: ReferralButton (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -2920,7 +2921,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6665521251845286932, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_Name
-      value: CommonButton
+      value: InventoryButton
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -3930,7 +3931,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6665521251845286932, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_Name
-      value: CommonButton (2)
+      value: ForgeButton (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -3941,6 +3942,17 @@ PrefabInstance:
       addedObject: {fileID: 7741284484361579051}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
+--- !u!114 &7716766647860018811 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5979175700302483011, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
+  m_PrefabInstance: {fileID: 4174057298117423160}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!224 &8270641298145051837 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
@@ -4896,7 +4908,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6665521251845286932, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_Name
-      value: CommonButton (1)
+      value: QuestButton (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

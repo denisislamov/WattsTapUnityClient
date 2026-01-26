@@ -44,6 +44,7 @@ namespace WattsTap.Game.UI
         [SerializeField] private Button _questsButton;
         [SerializeField] private Button _bugReportButton;
         [SerializeField] private Button _inventoryButton;
+        [SerializeField] private Button _updatesPopupButton;
         
         [Header("Tap Hint")]
         [SerializeField] private GameObject _tapHintObject;
@@ -55,6 +56,7 @@ namespace WattsTap.Game.UI
         public Button QuestsButton => _questsButton;
         public Button BugReportButton => _bugReportButton;
         public Button InventoryButton => _inventoryButton;
+        public Button UpdatesPopupButton => _updatesPopupButton;
 
         private void Awake()
         {

@@ -95,6 +95,11 @@ namespace WattsTap.Game.UI
                 View.InventoryButton.onClick.AddListener(OnInventoryButtonClicked);
             }
 
+            if (View.UpdatesPopupButton != null)
+            {
+                View.UpdatesPopupButton.onClick.AddListener(OnUpdatesPopupButtonClicked);
+            }
+
             View.SetDefaultSkin();
             
             View.UpdateCurrentLevel(Model.Level.Value);
@@ -188,6 +193,18 @@ namespace WattsTap.Game.UI
             }
 
             _uiService?.Open(UIConstants.InventoryScreen);
+        }
+
+        private void OnUpdatesPopupButtonClicked()
+        {
+            _hapticService?.ButtonPressed();
+            
+            if (_uiService == null)
+            {
+                ServiceLocator.TryGet(out _uiService);
+            }
+
+            _uiService?.Open(UIConstants.UpdatesPopup);
         }
 
         private void ChangeSkinButtonOnClick()
@@ -420,6 +437,16 @@ namespace WattsTap.Game.UI
             if (View?.BugReportButton != null)
             {
                 View.BugReportButton.onClick.RemoveListener(OnBugReportButtonClicked);
+            }
+
+            if (View?.InventoryButton != null)
+            {
+                View.InventoryButton.onClick.RemoveListener(OnInventoryButtonClicked);
+            }
+
+            if (View?.UpdatesPopupButton != null)
+            {
+                View.UpdatesPopupButton.onClick.RemoveListener(OnUpdatesPopupButtonClicked);
             }
             
             // Отписка от событий модели
