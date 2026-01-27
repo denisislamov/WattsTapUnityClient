@@ -14,8 +14,14 @@ namespace WattsTap.Game.UI
         
         [Header("Navigation")]
         [SerializeField] private Button _mainMenuButton;
+        [SerializeField] private Button _friendsReferralButton;
+        [SerializeField] private Button _inventoryButton;
+        [SerializeField] private Button _questsButton;
         
         public Button MainMenuButton => _mainMenuButton;
+        public Button FriendsReferralButton => _friendsReferralButton;
+        public Button InventoryButton => _inventoryButton;
+        public Button QuestsButton => _questsButton;
         
         #region Skinning
         
