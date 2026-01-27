@@ -35,6 +35,7 @@ namespace WattsTap.Game.Tap.Services
             if (UnityEngine.Input.GetMouseButtonDown(0))
             {
                 var pos = UnityEngine.Input.mousePosition;
+                Debug.Log($"[InputService] Mouse tap detected at {pos}");
                 OnTap?.Invoke(pos);
                 return;
             }
@@ -45,6 +46,7 @@ namespace WattsTap.Game.Tap.Services
                 var touch = UnityEngine.Input.GetTouch(0);
                 if (touch.phase == TouchPhase.Began)
                 {
+                    Debug.Log($"[InputService] Touch tap detected at {touch.position}, fingerId={touch.fingerId}");
                     OnTap?.Invoke(touch.position);
                 }
             }

@@ -16,7 +16,7 @@ namespace WattsTap.Scripts.Game.Tap.Runtime
         
         private bool _isTapping;
         private float _tapCooldown;
-        private const float TapCooldownDuration = 1.0f;
+        private const float TapCooldownDuration = 0.5f;
 
         private void Start()
         {
@@ -55,6 +55,7 @@ namespace WattsTap.Scripts.Game.Tap.Runtime
                 
                 if (_tapCooldown <= 0 && _isTapping)
                 {
+                    Debug.Log($"[TapUIView] Stopping animation (SetBool false)");
                     _isTapping = false;
                     SetTapAnimation(false);
                 }
@@ -63,9 +64,22 @@ namespace WattsTap.Scripts.Game.Tap.Runtime
 
         private void OnTap(Vector2 screenPos, int i)
         {
+            // Only start animation if not already tapping
+            // This prevents animation from restarting on each tap
+            bool wasAlreadyTapping = _isTapping;
+            
+            Debug.Log($"[TapUIView] OnTap called. wasAlreadyTapping={wasAlreadyTapping}, instanceId={GetInstanceID()}");
+            
             _isTapping = true;
             _tapCooldown = TapCooldownDuration;
-            SetTapAnimation(true);
+            
+            // Only set animation to true when starting a new tap sequence
+            // Subsequent taps just reset the cooldown without restarting animation
+            if (!wasAlreadyTapping)
+            {
+                Debug.Log($"[TapUIView] Starting animation (SetBool true)");
+                SetTapAnimation(true);
+            }
         }
 
         private void SetTapAnimation(bool isTapping)
