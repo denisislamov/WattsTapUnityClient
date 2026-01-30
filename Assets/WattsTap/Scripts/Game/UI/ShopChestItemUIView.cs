@@ -39,14 +39,36 @@ namespace WattsTap.Game.UI
         [SerializeField] private float _glowPulseMax = 1f;
         [SerializeField] private float _glowPulseDuration = 0.8f;
 
+        [Header("Item Fly Out Animation")]
+        [SerializeField] private RectTransform _itemTransform;
+        [SerializeField] private CanvasGroup _itemCanvasGroup;
+        [SerializeField] private RectTransform _itemStartPosition;
+        [SerializeField] private RectTransform _itemEndPosition;
+        [SerializeField] private float _itemFlyDuration = 0.6f;
+        [SerializeField] private float _itemFlyHeight = 100f;
+        [SerializeField] private float _itemFadeInDuration = 0.2f;
+        [SerializeField] private float _itemRotationSpeed = 720f;
+        [SerializeField] private float _itemRotationDuration = 0.8f;
+        [SerializeField] private float _itemBounceScaleMin = 0.8f;
+        [SerializeField] private float _itemBounceScaleMax = 1.2f;
+        [SerializeField] private float _itemFinalScaleDuration = 0.4f;
+
+        [Header("Labels to Hide on Open")]
+        [SerializeField] private CanvasGroup _label1CanvasGroup;
+        [SerializeField] private CanvasGroup _label2CanvasGroup;
+        [SerializeField] private float _labelFadeOutDuration = 0.3f;
+
         [Header("Skinning")]
         [SerializeField] private MainMenuThemeManager.SkinTokenBinding[] _skinBindings;
         
         private MainMenuThemeManager _themeManager;
         private Coroutine _animationCoroutine;
         private Coroutine _glowPulseCoroutine;
+        private Coroutine _itemAnimationCoroutine;
+        private Coroutine _itemRotationCoroutine;
         private Vector3 _originalPosition;
         private Vector3 _originalScale;
+        private Vector3 _itemOriginalScale;
 
         public Button BackButton => _backButton;
         public Button OpenButton => _openButton;
@@ -70,6 +92,12 @@ namespace WattsTap.Game.UI
                 _originalScale = _chestTransform.localScale;
             }
 
+            // Сохраняем начальный масштаб предмета
+            if (_itemTransform != null)
+            {
+                _itemOriginalScale = _itemTransform.localScale;
+            }
+
             // Закрытый сундук - видимый
             SetImageAlpha(_chestClosedImage, 1f);
             
@@ -79,6 +107,9 @@ namespace WattsTap.Game.UI
             
             // Свечение - скрыто
             SetImageAlpha(_glowImage, 0f);
+            
+            // Предмет - скрыт и в начальной позиции
+            InitializeItemState();
         }
 
 
@@ -92,16 +123,17 @@ namespace WattsTap.Game.UI
 
         public void PlayOpenAnimation()
         {
-            if (_animationCoroutine != null)
-            {
-                StopCoroutine(_animationCoroutine);
-            }
+            // Полный сброс анимации перед запуском
+            ResetAnimation();
 
             _animationCoroutine = StartCoroutine(OpenAnimationSequence());
         }
 
         private IEnumerator OpenAnimationSequence()
         {
+            // Скрываем надписи параллельно с прыжками
+            StartCoroutine(FadeOutLabels());
+            
             // Phase 1: Bouncy jumps with scale
             for (int i = 0; i < _jumpCount; i++)
             {
@@ -115,7 +147,48 @@ namespace WattsTap.Game.UI
             yield return StartCoroutine(FadeInGlow());
             _glowPulseCoroutine = StartCoroutine(PulseGlow());
 
+            // Phase 4: Item flies out
+            yield return StartCoroutine(ItemFlyOutSequence());
+
             OnOpenAnimationComplete?.Invoke();
+        }
+
+        /// <summary>
+        /// Плавное скрытие надписей
+        /// </summary>
+        private IEnumerator FadeOutLabels()
+        {
+            float elapsed = 0f;
+
+            while (elapsed < _labelFadeOutDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / _labelFadeOutDuration;
+                float alpha = 1f - EaseOutQuad(t);
+
+                if (_label1CanvasGroup != null)
+                {
+                    _label1CanvasGroup.alpha = alpha;
+                }
+
+                if (_label2CanvasGroup != null)
+                {
+                    _label2CanvasGroup.alpha = alpha;
+                }
+
+                yield return null;
+            }
+
+            // Финальные значения
+            if (_label1CanvasGroup != null)
+            {
+                _label1CanvasGroup.alpha = 0f;
+            }
+
+            if (_label2CanvasGroup != null)
+            {
+                _label2CanvasGroup.alpha = 0f;
+            }
         }
 
         private IEnumerator JumpAndSquash()
@@ -247,6 +320,202 @@ namespace WattsTap.Game.UI
             }
         }
 
+        /// <summary>
+        /// Инициализирует начальное состояние предмета (скрыт, в начальной позиции)
+        /// </summary>
+        private void InitializeItemState()
+        {
+            if (_itemTransform != null && _itemStartPosition != null)
+            {
+                _itemTransform.anchoredPosition = _itemStartPosition.anchoredPosition;
+                _itemTransform.localRotation = Quaternion.identity;
+                _itemTransform.localScale = _itemOriginalScale;
+            }
+
+            if (_itemCanvasGroup != null)
+            {
+                _itemCanvasGroup.alpha = 0f;
+            }
+        }
+
+        /// <summary>
+        /// Последовательность анимации вылета предмета
+        /// </summary>
+        private IEnumerator ItemFlyOutSequence()
+        {
+            if (_itemTransform == null || _itemCanvasGroup == null || 
+                _itemStartPosition == null || _itemEndPosition == null)
+            {
+                yield break;
+            }
+
+            // Появление предмета (fade in)
+            yield return StartCoroutine(ItemFadeIn());
+
+            // Вылет предмета по дуге
+            _itemRotationCoroutine = StartCoroutine(ItemRotation());
+            yield return StartCoroutine(ItemFlyToTarget());
+
+            // Остановка вращения и веселый скейл bounce
+            if (_itemRotationCoroutine != null)
+            {
+                StopCoroutine(_itemRotationCoroutine);
+                _itemRotationCoroutine = null;
+            }
+
+            yield return StartCoroutine(ItemBounceScale());
+        }
+
+        /// <summary>
+        /// Fade in предмета
+        /// </summary>
+        private IEnumerator ItemFadeIn()
+        {
+            float elapsed = 0f;
+
+            while (elapsed < _itemFadeInDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / _itemFadeInDuration;
+
+                if (_itemCanvasGroup != null)
+                {
+                    _itemCanvasGroup.alpha = EaseOutQuad(t);
+                }
+
+                yield return null;
+            }
+
+            if (_itemCanvasGroup != null)
+            {
+                _itemCanvasGroup.alpha = 1f;
+            }
+        }
+
+        /// <summary>
+        /// Вылет предмета от стартовой до конечной позиции с дугой
+        /// </summary>
+        private IEnumerator ItemFlyToTarget()
+        {
+            if (_itemTransform == null || _itemStartPosition == null || _itemEndPosition == null)
+            {
+                yield break;
+            }
+
+            float elapsed = 0f;
+            Vector2 startPos = _itemStartPosition.anchoredPosition;
+            Vector2 endPos = _itemEndPosition.anchoredPosition;
+
+            while (elapsed < _itemFlyDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / _itemFlyDuration;
+                float smoothT = EaseOutQuad(t);
+
+                // Линейная интерполяция позиции
+                Vector2 currentPos = Vector2.Lerp(startPos, endPos, smoothT);
+
+                // Дуга (параболическое смещение по Y)
+                float arcProgress = 1f - (2f * t - 1f) * (2f * t - 1f);
+                currentPos.y += arcProgress * _itemFlyHeight;
+
+                _itemTransform.anchoredPosition = currentPos;
+
+                yield return null;
+            }
+
+            _itemTransform.anchoredPosition = endPos;
+        }
+
+        /// <summary>
+        /// Веселое вращение предмета вокруг оси Y (как монетка)
+        /// </summary>
+        private IEnumerator ItemRotation()
+        {
+            if (_itemTransform == null)
+            {
+                yield break;
+            }
+
+            float elapsed = 0f;
+            float totalRotation = 0f;
+            
+            // Количество полных оборотов (360 * n)
+            int fullSpins = Mathf.FloorToInt(_itemRotationSpeed * _itemRotationDuration / 360f);
+            float targetRotation = fullSpins * 360f; // Гарантируем кратность 360
+
+            while (elapsed < _itemRotationDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / _itemRotationDuration;
+                
+                // Ease out для замедления к концу
+                float easedT = EaseOutCubic(t);
+                totalRotation = easedT * targetRotation;
+
+                _itemTransform.localRotation = Quaternion.Euler(0f, totalRotation, 0f);
+
+                yield return null;
+            }
+
+            // Финальный snap к нулевому углу (0 градусов = начальная позиция)
+            _itemTransform.localRotation = Quaternion.identity;
+        }
+
+        private float EaseOutCubic(float t)
+        {
+            return 1f - Mathf.Pow(1f - t, 3f);
+        }
+
+        /// <summary>
+        /// Веселый bounce скейл в конце
+        /// </summary>
+        private IEnumerator ItemBounceScale()
+        {
+            if (_itemTransform == null)
+            {
+                yield break;
+            }
+
+            float elapsed = 0f;
+            int bounceCount = 3;
+            float bounceDuration = _itemFinalScaleDuration / bounceCount;
+
+            for (int i = 0; i < bounceCount; i++)
+            {
+                elapsed = 0f;
+                float bounceIntensity = 1f - (float)i / bounceCount; // Уменьшаем интенсивность
+
+                while (elapsed < bounceDuration)
+                {
+                    elapsed += Time.deltaTime;
+                    float t = elapsed / bounceDuration;
+
+                    // Синусоидальный bounce
+                    float scaleMultiplier = Mathf.Lerp(
+                        _itemBounceScaleMax - (_itemBounceScaleMax - 1f) * (1f - bounceIntensity),
+                        _itemBounceScaleMin + (1f - _itemBounceScaleMin) * (1f - bounceIntensity),
+                        (Mathf.Sin(t * Mathf.PI) + 1f) / 2f
+                    );
+
+                    // К концу стремимся к 1
+                    scaleMultiplier = Mathf.Lerp(scaleMultiplier, 1f, t * (1f - bounceIntensity));
+
+                    _itemTransform.localScale = _itemOriginalScale * scaleMultiplier;
+
+                    yield return null;
+                }
+            }
+
+            // Финальный snap к оригинальному масштабу
+            _itemTransform.localScale = _itemOriginalScale;
+        }
+
+        private float EaseInQuad(float t)
+        {
+            return t * t;
+        }
+
         private void SetImageAlpha(Image image, float alpha)
         {
             if (image != null)
@@ -276,6 +545,7 @@ namespace WattsTap.Game.UI
 
         public void ResetAnimation()
         {
+            // Останавливаем все корутины
             if (_animationCoroutine != null)
             {
                 StopCoroutine(_animationCoroutine);
@@ -288,6 +558,19 @@ namespace WattsTap.Game.UI
                 _glowPulseCoroutine = null;
             }
 
+            if (_itemAnimationCoroutine != null)
+            {
+                StopCoroutine(_itemAnimationCoroutine);
+                _itemAnimationCoroutine = null;
+            }
+
+            if (_itemRotationCoroutine != null)
+            {
+                StopCoroutine(_itemRotationCoroutine);
+                _itemRotationCoroutine = null;
+            }
+
+            // Сброс сундука к начальному состоянию
             if (_chestTransform != null)
             {
                 _chestTransform.anchoredPosition = _originalPosition;
@@ -299,6 +582,20 @@ namespace WattsTap.Game.UI
             SetImageAlpha(_chestOpenImage1, 0f);
             SetImageAlpha(_chestOpenImage2, 0f);
             SetImageAlpha(_glowImage, 0f);
+
+            // Сброс предмета к начальному состоянию
+            InitializeItemState();
+            
+            // Восстанавливаем видимость надписей
+            if (_label1CanvasGroup != null)
+            {
+                _label1CanvasGroup.alpha = 1f;
+            }
+
+            if (_label2CanvasGroup != null)
+            {
+                _label2CanvasGroup.alpha = 1f;
+            }
         }
 
         public void UpdateFromConfig(ShopChestItemConfig config)
