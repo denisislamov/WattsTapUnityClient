@@ -100,7 +100,7 @@ namespace WattsTap.Core
             }
             
             uiService.Open(UIConstants.MainMenu);
-            uiService.Open(UIConstants.WelcomeScreen);
+            // Welcome screen will be shown after authentication based on isNewPlayer
         }
         
         private void TelegramServiceOnReceivedInitData(string initData)
@@ -195,12 +195,37 @@ namespace WattsTap.Core
                         progressSyncService.LoadProgress();
                         progressSyncService.StartAutoSync();
                     }
+                    
+                    // Show appropriate welcome screen based on whether this is the first login
+                    ShowWelcomeScreen(response.player?.isNewPlayer ?? true);
                 },
                 onError: (error) =>
                 {
                     Debug.LogError($"[ApplicationEntry] Referral API auth failed: {error}");
+                    // Show WelcomeScreen as fallback on error
+                    ShowWelcomeScreen(true);
                 }
             ));
+        }
+        
+        private void ShowWelcomeScreen(bool isNewPlayer)
+        {
+            if (!ServiceLocator.TryGet<IUIService>(out var uiService))
+            {
+                Debug.LogWarning("[ApplicationEntry] IUIService not found, cannot show welcome screen");
+                return;
+            }
+            
+            if (isNewPlayer)
+            {
+                Debug.Log("<color=#00FF00>[ApplicationEntry] First login - showing WelcomeScreen</color>");
+                uiService.Open(UIConstants.WelcomeScreen);
+            }
+            else
+            {
+                Debug.Log("<color=#00FF00>[ApplicationEntry] Returning player - showing WelcomeBackScreen</color>");
+                uiService.Open(UIConstants.WelcomeBackScreen);
+            }
         }
         
         private string ExtractReferralCodeFromInitData(string initData)
