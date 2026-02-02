@@ -58,6 +58,12 @@ namespace WattsTap.Game.UI
         [SerializeField] private CanvasGroup _label2CanvasGroup;
         [SerializeField] private float _labelFadeOutDuration = 0.3f;
 
+        [Header("WebGL/Mobile Optimization")]
+        [SerializeField] private bool _useOptimizedMode = true;
+        [SerializeField] private float _targetFrameInterval = 0.016f; // ~60fps cap for smooth animation
+        [SerializeField] private bool _useUnscaledTime = true;
+        [SerializeField] private int _rotationSteps = 12; // Количество дискретных шагов вращения для WebGL
+
         [Header("Skinning")]
         [SerializeField] private MainMenuThemeManager.SkinTokenBinding[] _skinBindings;
         
@@ -69,6 +75,11 @@ namespace WattsTap.Game.UI
         private Vector3 _originalPosition;
         private Vector3 _originalScale;
         private Vector3 _itemOriginalScale;
+        
+        // Кэшированные значения для оптимизации WebGL
+        private WaitForEndOfFrame _waitForEndOfFrame;
+        private float _cachedDeltaTime;
+        private bool _isWebGL;
 
         public Button BackButton => _backButton;
         public Button OpenButton => _openButton;
@@ -77,6 +88,8 @@ namespace WattsTap.Game.UI
 
         private void Awake()
         {
+            _isWebGL = Application.platform == RuntimePlatform.WebGLPlayer;
+            _waitForEndOfFrame = new WaitForEndOfFrame();
             InitializeAnimationState();
         }
 
@@ -154,7 +167,7 @@ namespace WattsTap.Game.UI
         }
 
         /// <summary>
-        /// Плавное скрытие надписей
+        /// Плавное скрытие надписей (оптимизировано для WebGL)
         /// </summary>
         private IEnumerator FadeOutLabels()
         {
@@ -162,9 +175,9 @@ namespace WattsTap.Game.UI
 
             while (elapsed < _labelFadeOutDuration)
             {
-                elapsed += Time.deltaTime;
-                float t = elapsed / _labelFadeOutDuration;
-                float alpha = 1f - EaseOutQuad(t);
+                elapsed += GetDeltaTime();
+                float t = Mathf.Clamp01(elapsed / _labelFadeOutDuration);
+                float alpha = 1f - t * t; // Простой ease out
 
                 if (_label1CanvasGroup != null)
                 {
@@ -176,7 +189,7 @@ namespace WattsTap.Game.UI
                     _label2CanvasGroup.alpha = alpha;
                 }
 
-                yield return null;
+                yield return GetAnimationYield();
             }
 
             // Финальные значения
@@ -195,20 +208,23 @@ namespace WattsTap.Game.UI
         {
             float elapsed = 0f;
             Vector3 startPos = _originalPosition;
+            
+            // Предрасчитанные значения для оптимизации
+            float piValue = Mathf.PI;
 
             while (elapsed < _jumpDuration)
             {
-                elapsed += Time.deltaTime;
-                float t = elapsed / _jumpDuration;
+                elapsed += GetDeltaTime();
+                float t = Mathf.Clamp01(elapsed / _jumpDuration);
 
                 // Parabolic jump curve
                 float jumpProgress = 1f - (2f * t - 1f) * (2f * t - 1f);
                 float yOffset = jumpProgress * _jumpHeight;
 
-                // Squash and stretch
-                float scaleT = Mathf.Sin(t * Mathf.PI);
-                float scaleX = Mathf.Lerp(1f, 1f / _scaleAmount, scaleT * 0.3f);
-                float scaleY = Mathf.Lerp(1f, _scaleAmount, scaleT * 0.5f);
+                // Squash and stretch - упрощенный расчет
+                float scaleT = Mathf.Sin(t * piValue);
+                float scaleX = 1f - (1f - 1f / _scaleAmount) * scaleT * 0.3f;
+                float scaleY = 1f + (_scaleAmount - 1f) * scaleT * 0.5f;
 
                 if (_chestTransform != null)
                 {
@@ -220,7 +236,7 @@ namespace WattsTap.Game.UI
                     );
                 }
 
-                yield return null;
+                yield return GetAnimationYield();
             }
 
             // Landing squash
@@ -231,14 +247,20 @@ namespace WattsTap.Game.UI
         {
             float elapsed = 0f;
             float duration = 0.1f;
+            float startSquash = _scaleAmount * 0.9f;
+            float startStretch = 1f / startSquash;
+            
+            // Используем упрощенный elastic на WebGL
+            bool useSimpleEasing = _useOptimizedMode && _isWebGL;
 
             while (elapsed < duration)
             {
-                elapsed += Time.deltaTime;
-                float t = elapsed / duration;
+                elapsed += GetDeltaTime();
+                float t = Mathf.Clamp01(elapsed / duration);
 
-                float squash = Mathf.Lerp(_scaleAmount * 0.9f, 1f, EaseOutElastic(t));
-                float stretch = Mathf.Lerp(1f / (_scaleAmount * 0.9f), 1f, EaseOutElastic(t));
+                float easeValue = useSimpleEasing ? EaseOutElasticSimple(t) : EaseOutElastic(t);
+                float squash = Mathf.Lerp(startSquash, 1f, easeValue);
+                float stretch = Mathf.Lerp(startStretch, 1f, easeValue);
 
                 if (_chestTransform != null)
                 {
@@ -250,7 +272,7 @@ namespace WattsTap.Game.UI
                     );
                 }
 
-                yield return null;
+                yield return GetAnimationYield();
             }
 
             if (_chestTransform != null)
@@ -265,18 +287,26 @@ namespace WattsTap.Game.UI
 
             while (elapsed < _crossfadeDuration)
             {
-                elapsed += Time.deltaTime;
-                float t = elapsed / _crossfadeDuration;
-                float smoothT = EaseInOutQuad(t);
-
-                // Закрытый сундук исчезает
-                SetImageAlpha(_chestClosedImage, 1f - smoothT);
+                elapsed += GetDeltaTime();
+                float t = Mathf.Clamp01(elapsed / _crossfadeDuration);
                 
-                // Открытые картинки появляются
-                SetImageAlpha(_chestOpenImage1, smoothT);
-                SetImageAlpha(_chestOpenImage2, smoothT);
+                // Открытый сундук появляется в 2 раза быстрее и с опережением
+                // При t=0.5 открытый уже полностью виден (alpha=1)
+                float openAlpha = Mathf.Clamp01(t * 2f);
+                
+                // Закрытый сундук исчезает медленнее и с задержкой
+                // Начинает исчезать только когда открытый уже наполовину виден
+                float closeAlpha = 1f - Mathf.Clamp01((t - 0.25f) * 1.33f);
+                
+                // Применяем smooth step для плавности
+                openAlpha = openAlpha * openAlpha * (3f - 2f * openAlpha);
+                closeAlpha = closeAlpha * closeAlpha * (3f - 2f * closeAlpha);
 
-                yield return null;
+                SetImageAlpha(_chestClosedImage, closeAlpha);
+                SetImageAlpha(_chestOpenImage1, openAlpha);
+                SetImageAlpha(_chestOpenImage2, openAlpha);
+
+                yield return GetAnimationYield();
             }
 
             // Финальные значения
@@ -288,34 +318,51 @@ namespace WattsTap.Game.UI
         private IEnumerator FadeInGlow()
         {
             float elapsed = 0f;
+            
+            // Целевое значение - минимум пульсации, чтобы плавно перейти в PulseGlow
+            // PulseGlow начинается с _glowPulseMin (синус начинается с -1 при сдвиге на -PI/2)
+            float targetAlpha = _glowPulseMin;
 
             while (elapsed < _glowFadeInDuration)
             {
-                elapsed += Time.deltaTime;
-                float t = elapsed / _glowFadeInDuration;
+                elapsed += GetDeltaTime();
+                float t = Mathf.Clamp01(elapsed / _glowFadeInDuration);
 
-                SetImageAlpha(_glowImage, EaseOutQuad(t) * _glowPulseMax);
+                // Плавный ease out к минимальному значению пульсации
+                float easeT = t * (2f - t);
+                SetImageAlpha(_glowImage, easeT * targetAlpha);
 
-                yield return null;
+                yield return GetAnimationYield();
             }
+            
+            SetImageAlpha(_glowImage, targetAlpha);
         }
 
         private IEnumerator PulseGlow()
         {
+            // Предрасчитанные константы
+            float piTimesTwo = Mathf.PI * 2f;
+            float range = _glowPulseMax - _glowPulseMin;
+            float center = (_glowPulseMax + _glowPulseMin) * 0.5f;
+            float halfRange = range * 0.5f;
+
             while (true)
             {
                 float elapsed = 0f;
 
                 while (elapsed < _glowPulseDuration)
                 {
-                    elapsed += Time.deltaTime;
+                    elapsed += GetDeltaTime();
                     float t = elapsed / _glowPulseDuration;
 
-                    float alpha = Mathf.Lerp(_glowPulseMin, _glowPulseMax, 
-                        (Mathf.Sin(t * Mathf.PI * 2f - Mathf.PI / 2f) + 1f) / 2f);
+                    // Синус начинается с 0 и идёт вверх (от min к max и обратно)
+                    // sin(0) = 0, поэтому начальное значение = center = (min+max)/2
+                    // Но нам нужно начать с min, поэтому используем косинус со сдвигом
+                    // cos(PI) = -1, значит начинаем с min
+                    float alpha = center + Mathf.Cos(Mathf.PI + t * piTimesTwo) * halfRange;
                     SetImageAlpha(_glowImage, alpha);
 
-                    yield return null;
+                    yield return GetAnimationYield();
                 }
             }
         }
@@ -367,7 +414,7 @@ namespace WattsTap.Game.UI
         }
 
         /// <summary>
-        /// Fade in предмета
+        /// Fade in предмета (оптимизировано для WebGL)
         /// </summary>
         private IEnumerator ItemFadeIn()
         {
@@ -375,15 +422,16 @@ namespace WattsTap.Game.UI
 
             while (elapsed < _itemFadeInDuration)
             {
-                elapsed += Time.deltaTime;
-                float t = elapsed / _itemFadeInDuration;
+                elapsed += GetDeltaTime();
+                float t = Mathf.Clamp01(elapsed / _itemFadeInDuration);
 
                 if (_itemCanvasGroup != null)
                 {
-                    _itemCanvasGroup.alpha = EaseOutQuad(t);
+                    // Простой квадратичный ease out
+                    _itemCanvasGroup.alpha = t * (2f - t);
                 }
 
-                yield return null;
+                yield return GetAnimationYield();
             }
 
             if (_itemCanvasGroup != null)
@@ -393,7 +441,7 @@ namespace WattsTap.Game.UI
         }
 
         /// <summary>
-        /// Вылет предмета от стартовой до конечной позиции с дугой
+        /// Вылет предмета от стартовой до конечной позиции с дугой (оптимизировано для WebGL)
         /// </summary>
         private IEnumerator ItemFlyToTarget()
         {
@@ -408,9 +456,11 @@ namespace WattsTap.Game.UI
 
             while (elapsed < _itemFlyDuration)
             {
-                elapsed += Time.deltaTime;
-                float t = elapsed / _itemFlyDuration;
-                float smoothT = EaseOutQuad(t);
+                elapsed += GetDeltaTime();
+                float t = Mathf.Clamp01(elapsed / _itemFlyDuration);
+                
+                // Упрощенный ease out
+                float smoothT = t * (2f - t);
 
                 // Линейная интерполяция позиции
                 Vector2 currentPos = Vector2.Lerp(startPos, endPos, smoothT);
@@ -421,14 +471,14 @@ namespace WattsTap.Game.UI
 
                 _itemTransform.anchoredPosition = currentPos;
 
-                yield return null;
+                yield return GetAnimationYield();
             }
 
             _itemTransform.anchoredPosition = endPos;
         }
 
         /// <summary>
-        /// Веселое вращение предмета вокруг оси Y (как монетка)
+        /// Веселое вращение предмета вокруг оси Y (оптимизировано для WebGL)
         /// </summary>
         private IEnumerator ItemRotation()
         {
@@ -438,24 +488,45 @@ namespace WattsTap.Game.UI
             }
 
             float elapsed = 0f;
-            float totalRotation = 0f;
             
             // Количество полных оборотов (360 * n)
             int fullSpins = Mathf.FloorToInt(_itemRotationSpeed * _itemRotationDuration / 360f);
             float targetRotation = fullSpins * 360f; // Гарантируем кратность 360
 
-            while (elapsed < _itemRotationDuration)
+            // Для WebGL используем меньше обновлений для плавности
+            if (_useOptimizedMode && _isWebGL)
             {
-                elapsed += Time.deltaTime;
-                float t = elapsed / _itemRotationDuration;
+                // Дискретное вращение с фиксированными шагами
+                int totalSteps = _rotationSteps * fullSpins;
+                float stepDuration = _itemRotationDuration / totalSteps;
                 
-                // Ease out для замедления к концу
-                float easedT = EaseOutCubic(t);
-                totalRotation = easedT * targetRotation;
+                for (int step = 0; step < totalSteps; step++)
+                {
+                    float t = (float)(step + 1) / totalSteps;
+                    float easedT = 1f - (1f - t) * (1f - t) * (1f - t); // EaseOutCubic inline
+                    float currentAngle = easedT * targetRotation;
+                    
+                    _itemTransform.localRotation = Quaternion.Euler(0f, currentAngle, 0f);
+                    
+                    yield return new WaitForSecondsRealtime(stepDuration);
+                }
+            }
+            else
+            {
+                // Стандартное плавное вращение
+                while (elapsed < _itemRotationDuration)
+                {
+                    elapsed += GetDeltaTime();
+                    float t = Mathf.Clamp01(elapsed / _itemRotationDuration);
+                    
+                    // Ease out для замедления к концу
+                    float easedT = 1f - (1f - t) * (1f - t) * (1f - t);
+                    float totalRotation = easedT * targetRotation;
 
-                _itemTransform.localRotation = Quaternion.Euler(0f, totalRotation, 0f);
+                    _itemTransform.localRotation = Quaternion.Euler(0f, totalRotation, 0f);
 
-                yield return null;
+                    yield return GetAnimationYield();
+                }
             }
 
             // Финальный snap к нулевому углу (0 градусов = начальная позиция)
@@ -468,7 +539,7 @@ namespace WattsTap.Game.UI
         }
 
         /// <summary>
-        /// Веселый bounce скейл в конце
+        /// Веселый bounce скейл в конце (оптимизировано для WebGL)
         /// </summary>
         private IEnumerator ItemBounceScale()
         {
@@ -477,33 +548,32 @@ namespace WattsTap.Game.UI
                 yield break;
             }
 
-            float elapsed = 0f;
             int bounceCount = 3;
             float bounceDuration = _itemFinalScaleDuration / bounceCount;
 
             for (int i = 0; i < bounceCount; i++)
             {
-                elapsed = 0f;
+                float elapsed = 0f;
                 float bounceIntensity = 1f - (float)i / bounceCount; // Уменьшаем интенсивность
 
                 while (elapsed < bounceDuration)
                 {
-                    elapsed += Time.deltaTime;
-                    float t = elapsed / bounceDuration;
+                    elapsed += GetDeltaTime();
+                    float t = Mathf.Clamp01(elapsed / bounceDuration);
 
-                    // Синусоидальный bounce
-                    float scaleMultiplier = Mathf.Lerp(
-                        _itemBounceScaleMax - (_itemBounceScaleMax - 1f) * (1f - bounceIntensity),
-                        _itemBounceScaleMin + (1f - _itemBounceScaleMin) * (1f - bounceIntensity),
-                        (Mathf.Sin(t * Mathf.PI) + 1f) / 2f
-                    );
-
+                    // Упрощенный bounce - используем простой синус
+                    float sinValue = Mathf.Sin(t * Mathf.PI);
+                    float maxScale = _itemBounceScaleMax - (_itemBounceScaleMax - 1f) * (1f - bounceIntensity);
+                    float minScale = _itemBounceScaleMin + (1f - _itemBounceScaleMin) * (1f - bounceIntensity);
+                    
+                    float scaleMultiplier = Mathf.Lerp(maxScale, minScale, sinValue);
+                    
                     // К концу стремимся к 1
                     scaleMultiplier = Mathf.Lerp(scaleMultiplier, 1f, t * (1f - bounceIntensity));
 
                     _itemTransform.localScale = _itemOriginalScale * scaleMultiplier;
 
-                    yield return null;
+                    yield return GetAnimationYield();
                 }
             }
 
@@ -541,6 +611,44 @@ namespace WattsTap.Game.UI
         private float EaseOutQuad(float t)
         {
             return 1f - (1f - t) * (1f - t);
+        }
+
+        /// <summary>
+        /// Упрощенный elastic для WebGL - меньше вычислений
+        /// </summary>
+        private float EaseOutElasticSimple(float t)
+        {
+            if (t <= 0f) return 0f;
+            if (t >= 1f) return 1f;
+            
+            // Упрощенная версия без тяжелых Pow и Sin
+            float bounce = 1f - t;
+            return 1f - bounce * bounce * Mathf.Cos(t * 3f * Mathf.PI) * 0.3f;
+        }
+
+        /// <summary>
+        /// Получает delta time в зависимости от настроек оптимизации
+        /// </summary>
+        private float GetDeltaTime()
+        {
+            if (_useOptimizedMode && _useUnscaledTime)
+            {
+                return Time.unscaledDeltaTime;
+            }
+            return Time.deltaTime;
+        }
+
+        /// <summary>
+        /// Возвращает объект ожидания для анимации в зависимости от настроек
+        /// </summary>
+        private object GetAnimationYield()
+        {
+            if (_useOptimizedMode && _isWebGL)
+            {
+                // На WebGL используем WaitForEndOfFrame для более стабильной анимации
+                return _waitForEndOfFrame;
+            }
+            return null;
         }
 
         public void ResetAnimation()
