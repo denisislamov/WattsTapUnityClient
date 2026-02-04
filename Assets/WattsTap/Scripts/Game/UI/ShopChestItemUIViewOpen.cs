@@ -61,10 +61,10 @@ namespace WattsTap.Game.UI
         [SerializeField] private float _itemBounceScaleMax = 1.2f;
         [SerializeField] private float _itemFinalScaleDuration = 0.4f;
 
-        [Header("Labels to Hide on Open")]
+        [Header("Labels Animation")]
         [SerializeField] private CanvasGroup _label1CanvasGroup;
         [SerializeField] private CanvasGroup _label2CanvasGroup;
-        [SerializeField] private float _labelFadeOutDuration = 0.3f;
+        [SerializeField] private float _labelFadeDuration = 0.3f;
 
         [Header("WebGL/Mobile Optimization")]
         [SerializeField] private bool _useOptimizedMode = true;
@@ -132,6 +132,25 @@ namespace WattsTap.Game.UI
             
             // Предмет - скрыт и в начальной позиции
             InitializeItemState();
+            
+            // Надписи - скрыты изначально (появятся после анимации предмета)
+            InitializeLabelsState();
+        }
+        
+        /// <summary>
+        /// Инициализирует начальное состояние надписей (скрыты)
+        /// </summary>
+        private void InitializeLabelsState()
+        {
+            if (_label1CanvasGroup != null)
+            {
+                _label1CanvasGroup.alpha = 0f;
+            }
+
+            if (_label2CanvasGroup != null)
+            {
+                _label2CanvasGroup.alpha = 0f;
+            }
         }
 
 
@@ -297,9 +316,6 @@ namespace WattsTap.Game.UI
 
         private IEnumerator OpenAnimationSequence()
         {
-            // Скрываем надписи параллельно с прыжками
-            StartCoroutine(FadeOutLabels());
-            
             // Phase 1: Bouncy jumps with scale
             for (int i = 0; i < _jumpCount; i++)
             {
@@ -320,17 +336,17 @@ namespace WattsTap.Game.UI
         }
 
         /// <summary>
-        /// Плавное скрытие надписей (оптимизировано для WebGL)
+        /// Плавное появление надписей после анимации предмета (оптимизировано для WebGL)
         /// </summary>
-        private IEnumerator FadeOutLabels()
+        private IEnumerator FadeInLabels()
         {
             float elapsed = 0f;
 
-            while (elapsed < _labelFadeOutDuration)
+            while (elapsed < _labelFadeDuration)
             {
                 elapsed += GetDeltaTime();
-                float t = Mathf.Clamp01(elapsed / _labelFadeOutDuration);
-                float alpha = 1f - t * t; // Простой ease out
+                float t = Mathf.Clamp01(elapsed / _labelFadeDuration);
+                float alpha = t * (2f - t); // Простой ease out для появления
 
                 if (_label1CanvasGroup != null)
                 {
@@ -348,12 +364,12 @@ namespace WattsTap.Game.UI
             // Финальные значения
             if (_label1CanvasGroup != null)
             {
-                _label1CanvasGroup.alpha = 0f;
+                _label1CanvasGroup.alpha = 1f;
             }
 
             if (_label2CanvasGroup != null)
             {
-                _label2CanvasGroup.alpha = 0f;
+                _label2CanvasGroup.alpha = 1f;
             }
         }
 
@@ -498,8 +514,11 @@ namespace WattsTap.Game.UI
             float range = _glowPulseMax - _glowPulseMin;
             float center = (_glowPulseMax + _glowPulseMin) * 0.5f;
             float halfRange = range * 0.5f;
+            
+            // Количество тактов пульсации перед исчезновением
+            int pulseCount = 2;
 
-            while (true)
+            for (int i = 0; i < pulseCount; i++)
             {
                 float elapsed = 0f;
 
@@ -518,6 +537,34 @@ namespace WattsTap.Game.UI
                     yield return GetAnimationYield();
                 }
             }
+            
+            // Плавное исчезновение свечения после двух тактов
+            yield return StartCoroutine(FadeOutGlow());
+        }
+        
+        /// <summary>
+        /// Плавное исчезновение свечения
+        /// </summary>
+        private IEnumerator FadeOutGlow()
+        {
+            float elapsed = 0f;
+            float startAlpha = _glowImage != null ? _glowImage.color.a : _glowPulseMin;
+            float fadeOutDuration = _glowFadeInDuration; // Используем ту же длительность что и для появления
+
+            while (elapsed < fadeOutDuration)
+            {
+                elapsed += GetDeltaTime();
+                float t = Mathf.Clamp01(elapsed / fadeOutDuration);
+
+                // Плавный ease out для исчезновения
+                float easeT = t * t;
+                float alpha = Mathf.Lerp(startAlpha, 0f, easeT);
+                SetImageAlpha(_glowImage, alpha);
+
+                yield return GetAnimationYield();
+            }
+            
+            SetImageAlpha(_glowImage, 0f);
         }
 
         /// <summary>
@@ -564,6 +611,9 @@ namespace WattsTap.Game.UI
             }
 
             yield return StartCoroutine(ItemBounceScale());
+            
+            // Показываем надписи после завершения анимации предмета
+            yield return StartCoroutine(FadeInLabels());
         }
 
         /// <summary>
@@ -849,16 +899,8 @@ namespace WattsTap.Game.UI
             // Сброс предмета к начальному состоянию
             InitializeItemState();
             
-            // Восстанавливаем видимость надписей
-            if (_label1CanvasGroup != null)
-            {
-                _label1CanvasGroup.alpha = 1f;
-            }
-
-            if (_label2CanvasGroup != null)
-            {
-                _label2CanvasGroup.alpha = 1f;
-            }
+            // Сброс надписей к начальному состоянию (скрыты)
+            InitializeLabelsState();
         }
 
         public void UpdateFromConfig(ShopChestItemConfig config)

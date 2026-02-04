@@ -654,7 +654,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3233726241373627430}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -1542,7 +1542,7 @@ MonoBehaviour:
   _itemFinalScaleDuration: 0.4
   _label1CanvasGroup: {fileID: 4855136272561881366}
   _label2CanvasGroup: {fileID: 690513142156623532}
-  _labelFadeOutDuration: 0.3
+  _labelFadeDuration: 0.3
   _useOptimizedMode: 1
   _targetFrameInterval: 0.016
   _useUnscaledTime: 1
@@ -1714,7 +1714,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6943064809884705279}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
