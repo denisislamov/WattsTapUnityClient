@@ -61,6 +61,13 @@ namespace WattsTap.Game.UI
         [SerializeField] private float _itemBounceScaleMax = 1.2f;
         [SerializeField] private float _itemFinalScaleDuration = 0.4f;
 
+        [Header("Item Crossfade Animation")]
+        [SerializeField] private RectTransform _finalItemTransform;
+        [SerializeField] private CanvasGroup _finalItemCanvasGroup;
+        [SerializeField] private float _itemCrossfadeDuration = 0.4f;
+        [SerializeField] private float _itemCrossfadeScaleMin = 0.8f;
+        [SerializeField] private float _itemCrossfadeScaleMax = 1.2f;
+
         [Header("Labels Animation")]
         [SerializeField] private CanvasGroup _label1CanvasGroup;
         [SerializeField] private CanvasGroup _label2CanvasGroup;
@@ -84,6 +91,7 @@ namespace WattsTap.Game.UI
         private Vector3 _originalPosition;
         private Vector3 _originalScale;
         private Vector3 _itemOriginalScale;
+        private Vector3 _finalItemOriginalScale;
         
         // Кэшированные значения для оптимизации WebGL
         private WaitForEndOfFrame _waitForEndOfFrame;
@@ -119,6 +127,12 @@ namespace WattsTap.Game.UI
             {
                 _itemOriginalScale = _itemTransform.localScale;
             }
+            
+            // Сохраняем начальный масштаб финального предмета
+            if (_finalItemTransform != null)
+            {
+                _finalItemOriginalScale = _finalItemTransform.localScale;
+            }
 
             // Закрытый сундук - видимый
             SetImageAlpha(_chestClosedImage, 1f);
@@ -132,6 +146,9 @@ namespace WattsTap.Game.UI
             
             // Предмет - скрыт и в начальной позиции
             InitializeItemState();
+            
+            // Финальный предмет - скрыт
+            InitializeFinalItemState();
             
             // Надписи - скрыты изначально (появятся после анимации предмета)
             InitializeLabelsState();
@@ -150,6 +167,22 @@ namespace WattsTap.Game.UI
             if (_label2CanvasGroup != null)
             {
                 _label2CanvasGroup.alpha = 0f;
+            }
+        }
+        
+        /// <summary>
+        /// Инициализирует начальное состояние финального предмета (скрыт)
+        /// </summary>
+        private void InitializeFinalItemState()
+        {
+            if (_finalItemTransform != null)
+            {
+                _finalItemTransform.localScale = _finalItemOriginalScale * _itemCrossfadeScaleMin;
+            }
+
+            if (_finalItemCanvasGroup != null)
+            {
+                _finalItemCanvasGroup.alpha = 0f;
             }
         }
 
@@ -612,8 +645,102 @@ namespace WattsTap.Game.UI
 
             yield return StartCoroutine(ItemBounceScale());
             
-            // Показываем надписи после завершения анимации предмета
-            yield return StartCoroutine(FadeInLabels());
+            // Crossfade на финальный предмет с появлением надписей
+            yield return StartCoroutine(CrossfadeToFinalItem());
+        }
+        
+        /// <summary>
+        /// Crossfade анимация замены предмета на финальный с появлением надписей
+        /// </summary>
+        private IEnumerator CrossfadeToFinalItem()
+        {
+            if (_finalItemTransform == null || _finalItemCanvasGroup == null)
+            {
+                // Если финальный предмет не назначен, просто показываем надписи
+                yield return StartCoroutine(FadeInLabels());
+                yield break;
+            }
+
+            float elapsed = 0f;
+            
+            // Начальные значения
+            float itemStartAlpha = 1f;
+            Vector3 itemStartScale = _itemOriginalScale;
+            Vector3 itemEndScale = _itemOriginalScale * _itemCrossfadeScaleMax;
+            
+            float finalItemStartAlpha = 0f;
+            Vector3 finalItemStartScale = _finalItemOriginalScale * _itemCrossfadeScaleMin;
+            Vector3 finalItemEndScale = _finalItemOriginalScale;
+
+            while (elapsed < _itemCrossfadeDuration)
+            {
+                elapsed += GetDeltaTime();
+                float t = Mathf.Clamp01(elapsed / _itemCrossfadeDuration);
+                
+                // Smooth step для плавности
+                float smoothT = t * t * (3f - 2f * t);
+                
+                // Исходный предмет: исчезает и увеличивается
+                if (_itemCanvasGroup != null)
+                {
+                    _itemCanvasGroup.alpha = Mathf.Lerp(itemStartAlpha, 0f, smoothT);
+                }
+                if (_itemTransform != null)
+                {
+                    _itemTransform.localScale = Vector3.Lerp(itemStartScale, itemEndScale, smoothT);
+                }
+                
+                // Финальный предмет: появляется и увеличивается от маленького к нормальному
+                if (_finalItemCanvasGroup != null)
+                {
+                    _finalItemCanvasGroup.alpha = Mathf.Lerp(finalItemStartAlpha, 1f, smoothT);
+                }
+                if (_finalItemTransform != null)
+                {
+                    _finalItemTransform.localScale = Vector3.Lerp(finalItemStartScale, finalItemEndScale, smoothT);
+                }
+                
+                // Надписи появляются параллельно с crossfade
+                float labelAlpha = smoothT;
+                if (_label1CanvasGroup != null)
+                {
+                    _label1CanvasGroup.alpha = labelAlpha;
+                }
+                if (_label2CanvasGroup != null)
+                {
+                    _label2CanvasGroup.alpha = labelAlpha;
+                }
+
+                yield return GetAnimationYield();
+            }
+
+            // Финальные значения
+            if (_itemCanvasGroup != null)
+            {
+                _itemCanvasGroup.alpha = 0f;
+            }
+            if (_itemTransform != null)
+            {
+                _itemTransform.localScale = itemEndScale;
+            }
+            
+            if (_finalItemCanvasGroup != null)
+            {
+                _finalItemCanvasGroup.alpha = 1f;
+            }
+            if (_finalItemTransform != null)
+            {
+                _finalItemTransform.localScale = _finalItemOriginalScale;
+            }
+            
+            if (_label1CanvasGroup != null)
+            {
+                _label1CanvasGroup.alpha = 1f;
+            }
+            if (_label2CanvasGroup != null)
+            {
+                _label2CanvasGroup.alpha = 1f;
+            }
         }
 
         /// <summary>
@@ -898,6 +1025,9 @@ namespace WattsTap.Game.UI
 
             // Сброс предмета к начальному состоянию
             InitializeItemState();
+            
+            // Сброс финального предмета к начальному состоянию
+            InitializeFinalItemState();
             
             // Сброс надписей к начальному состоянию (скрыты)
             InitializeLabelsState();
