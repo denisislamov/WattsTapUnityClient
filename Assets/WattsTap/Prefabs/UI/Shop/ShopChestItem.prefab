@@ -799,7 +799,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6938868222681976107
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1120,7 +1120,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4804089843460850830
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3340,39 +3340,6 @@ MonoBehaviour:
   _secondaryColorImage: {fileID: 0}
   _backButton: {fileID: 3494934352079888280}
   _openButton: {fileID: 2411809495430978550}
-  _chestTransform: {fileID: 4624605013618611624}
-  _chestClosedImage: {fileID: 7054130879712952832}
-  _chestOpenImage1: {fileID: 1534150052373036235}
-  _chestOpenImage2: {fileID: 8276132444861037434}
-  _glowImage: {fileID: 4283620446693572971}
-  _jumpHeight: 50
-  _jumpDuration: 0.3
-  _jumpCount: 1
-  _scaleAmount: 1.15
-  _crossfadeDuration: 0.4
-  _glowFadeInDuration: 0.3
-  _glowPulseMin: 0.4
-  _glowPulseMax: 1
-  _glowPulseDuration: 0.8
-  _itemTransform: {fileID: 7237730791887071508}
-  _itemCanvasGroup: {fileID: 5892284307188206757}
-  _itemStartPosition: {fileID: 6938868222681976107}
-  _itemEndPosition: {fileID: 4254444015882554837}
-  _itemFlyDuration: 0.6
-  _itemFlyHeight: 100
-  _itemFadeInDuration: 0.2
-  _itemRotationSpeed: 720
-  _itemRotationDuration: 0.8
-  _itemBounceScaleMin: 0.8
-  _itemBounceScaleMax: 1.2
-  _itemFinalScaleDuration: 0.4
-  _label1CanvasGroup: {fileID: 4855136272561881366}
-  _label2CanvasGroup: {fileID: 690513142156623532}
-  _labelFadeOutDuration: 0.3
-  _useOptimizedMode: 1
-  _targetFrameInterval: 0.016
-  _useUnscaledTime: 1
-  _rotationSteps: 12
   _skinBindings: []
 --- !u!114 &1174968724190769213
 MonoBehaviour:
@@ -3800,7 +3767,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
   m_AspectMode: 0
-  m_AspectRatio: 6.7011786
+  m_AspectRatio: 19.943783
 --- !u!1 &8991093466775697863
 GameObject:
   m_ObjectHideFlags: 0
@@ -3816,7 +3783,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4254444015882554837
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3935,6 +3902,10 @@ PrefabInstance:
     - target: {fileID: 3753783683839926952, guid: d9730df8d0b1d40c3a06d0b82c2fed42, type: 3}
       propertyPath: m_Name
       value: InventoryItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 3753783683839926952, guid: d9730df8d0b1d40c3a06d0b82c2fed42, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5701121865749548852, guid: d9730df8d0b1d40c3a06d0b82c2fed42, type: 3}
       propertyPath: m_Pivot.x

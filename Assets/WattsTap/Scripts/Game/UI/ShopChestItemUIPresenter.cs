@@ -32,6 +32,11 @@ namespace WattsTap.Game.UI
                 View.BackButton.onClick.AddListener(OnBackButtonClicked);
             }
 
+            if (View.OpenButton != null)
+            {
+                View.OpenButton.onClick.AddListener(OnOpenButtonClicked);
+            }
+
             // Apply pending config if set
             if (_pendingConfig != null)
             {
@@ -53,13 +58,36 @@ namespace WattsTap.Game.UI
             _uiService?.Close(UIConstants.ShopChestItem);
         }
 
+        private void OnOpenButtonClicked()
+        {
+            _hapticService?.ButtonPressed();
+
+            if (_uiService == null)
+            {
+                ServiceLocator.TryGet(out _uiService);
+            }
+
+            // Передаём конфиг в новый экран
+            ShopChestItemUIPresenterOpen.SetPendingConfig(Model.Config);
+
+            // Открываем экран с анимацией открытия сундука
+            _uiService?.Open(UIConstants.ShopChestItemOpen);
+
+            // Закрываем текущий экран
+            _uiService?.Close(UIConstants.ShopChestItem);
+        }
+
         protected override void OnDispose()
         {
             if (View?.BackButton != null)
             {
                 View.BackButton.onClick.RemoveListener(OnBackButtonClicked);
             }
+
+            if (View?.OpenButton != null)
+            {
+                View.OpenButton.onClick.RemoveListener(OnOpenButtonClicked);
+            }
         }
     }
 }
-
