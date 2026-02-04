@@ -10,6 +10,7 @@ namespace WattsTap.Constants
         public const string FriendsReferralScreen = "FriendsReferralScreen";
         public const string ShopScreen = "ShopScreen";
         public const string ShopChestItem = "ShopChestItem";
+        public const string ShopChestItemOpen = "ShopChestItemOpen";
         public const string ShopBoosterItem = "ShopBoosterItem";
         public const string RotateScreen = "RotateScreen";
         public const string AvatarScreen = "AvatarScreen";
