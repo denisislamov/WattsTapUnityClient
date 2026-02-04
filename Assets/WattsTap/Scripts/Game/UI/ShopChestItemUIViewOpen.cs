@@ -34,6 +34,14 @@ namespace WattsTap.Game.UI
         [SerializeField] private int _jumpCount = 3;
         [SerializeField] private float _scaleAmount = 1.15f;
         [SerializeField] private float _crossfadeDuration = 0.4f;
+        
+        [Header("Idle Animation Settings")]
+        [SerializeField] private float _idleJumpHeight = 50f;
+        [SerializeField] private float _idleJumpDuration = 0.3f;
+        [SerializeField] private int _idleJumpCount = 3;
+        [SerializeField] private float _idleScaleAmount = 1.15f;
+        [SerializeField] private float _idleInitialDelay = 1f;
+        [SerializeField] private float _idleJumpInterval = 2f;
         [SerializeField] private float _glowFadeInDuration = 0.3f;
         [SerializeField] private float _glowPulseMin = 0.4f;
         [SerializeField] private float _glowPulseMax = 1f;
@@ -72,6 +80,7 @@ namespace WattsTap.Game.UI
         private Coroutine _glowPulseCoroutine;
         private Coroutine _itemAnimationCoroutine;
         private Coroutine _itemRotationCoroutine;
+        private Coroutine _idleAnimationCoroutine;
         private Vector3 _originalPosition;
         private Vector3 _originalScale;
         private Vector3 _itemOriginalScale;
@@ -132,10 +141,154 @@ namespace WattsTap.Game.UI
             {
                 _openButton.onClick.AddListener(PlayOpenAnimation);
             }
+            
+            StartIdleAnimation();
+        }
+        
+        /// <summary>
+        /// Запускает idle анимацию подпрыгивания сундука
+        /// </summary>
+        public void StartIdleAnimation()
+        {
+            StopIdleAnimation();
+            _idleAnimationCoroutine = StartCoroutine(IdleAnimationLoop());
+        }
+        
+        /// <summary>
+        /// Останавливает idle анимацию
+        /// </summary>
+        public void StopIdleAnimation()
+        {
+            if (_idleAnimationCoroutine != null)
+            {
+                StopCoroutine(_idleAnimationCoroutine);
+                _idleAnimationCoroutine = null;
+            }
+        }
+        
+        /// <summary>
+        /// Цикл idle анимации с интервалами между прыжками
+        /// </summary>
+        private IEnumerator IdleAnimationLoop()
+        {
+            // Начальная задержка перед первым прыжком
+            if (_useUnscaledTime)
+            {
+                yield return new WaitForSecondsRealtime(_idleInitialDelay);
+            }
+            else
+            {
+                yield return new WaitForSeconds(_idleInitialDelay);
+            }
+            
+            while (true)
+            {
+                // Выполняем серию прыжков
+                for (int i = 0; i < _idleJumpCount; i++)
+                {
+                    yield return StartCoroutine(IdleJumpAndSquash());
+                }
+                
+                // Ждём интервал перед следующей серией прыжков
+                if (_useUnscaledTime)
+                {
+                    yield return new WaitForSecondsRealtime(_idleJumpInterval);
+                }
+                else
+                {
+                    yield return new WaitForSeconds(_idleJumpInterval);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Один прыжок для idle анимации (использует idle параметры)
+        /// </summary>
+        private IEnumerator IdleJumpAndSquash()
+        {
+            float elapsed = 0f;
+            Vector3 startPos = _originalPosition;
+            
+            // Предрасчитанные значения для оптимизации
+            float piValue = Mathf.PI;
+
+            while (elapsed < _idleJumpDuration)
+            {
+                elapsed += GetDeltaTime();
+                float t = Mathf.Clamp01(elapsed / _idleJumpDuration);
+
+                // Parabolic jump curve
+                float jumpProgress = 1f - (2f * t - 1f) * (2f * t - 1f);
+                float yOffset = jumpProgress * _idleJumpHeight;
+
+                // Squash and stretch - упрощенный расчет
+                float scaleT = Mathf.Sin(t * piValue);
+                float scaleX = 1f - (1f - 1f / _idleScaleAmount) * scaleT * 0.3f;
+                float scaleY = 1f + (_idleScaleAmount - 1f) * scaleT * 0.5f;
+
+                if (_chestTransform != null)
+                {
+                    _chestTransform.anchoredPosition = new Vector2(startPos.x, startPos.y + yOffset);
+                    _chestTransform.localScale = new Vector3(
+                        _originalScale.x * scaleX,
+                        _originalScale.y * scaleY,
+                        _originalScale.z
+                    );
+                }
+
+                yield return GetAnimationYield();
+            }
+
+            // Landing squash
+            yield return StartCoroutine(IdleLandingSquash());
+        }
+        
+        /// <summary>
+        /// Landing squash для idle анимации (использует idle параметры)
+        /// </summary>
+        private IEnumerator IdleLandingSquash()
+        {
+            float elapsed = 0f;
+            float duration = 0.1f;
+            float startSquash = _idleScaleAmount * 0.9f;
+            float startStretch = 1f / startSquash;
+            
+            // Используем упрощенный elastic на WebGL
+            bool useSimpleEasing = _useOptimizedMode && _isWebGL;
+
+            while (elapsed < duration)
+            {
+                elapsed += GetDeltaTime();
+                float t = Mathf.Clamp01(elapsed / duration);
+
+                float easeValue = useSimpleEasing ? EaseOutElasticSimple(t) : EaseOutElastic(t);
+                float squash = Mathf.Lerp(startSquash, 1f, easeValue);
+                float stretch = Mathf.Lerp(startStretch, 1f, easeValue);
+
+                if (_chestTransform != null)
+                {
+                    _chestTransform.anchoredPosition = _originalPosition;
+                    _chestTransform.localScale = new Vector3(
+                        _originalScale.x * squash,
+                        _originalScale.y * stretch,
+                        _originalScale.z
+                    );
+                }
+
+                yield return GetAnimationYield();
+            }
+
+            if (_chestTransform != null)
+            {
+                _chestTransform.localScale = _originalScale;
+            }
         }
 
         public void PlayOpenAnimation()
         {
+            // Останавливаем idle анимацию
+            StopIdleAnimation();
+            
             // Полный сброс анимации перед запуском
             ResetAnimation();
 
@@ -677,6 +830,8 @@ namespace WattsTap.Game.UI
                 StopCoroutine(_itemRotationCoroutine);
                 _itemRotationCoroutine = null;
             }
+            
+            StopIdleAnimation();
 
             // Сброс сундука к начальному состоянию
             if (_chestTransform != null)
