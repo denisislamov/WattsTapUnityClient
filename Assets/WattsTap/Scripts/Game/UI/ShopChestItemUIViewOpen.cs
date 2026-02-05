@@ -357,6 +357,9 @@ namespace WattsTap.Game.UI
 
         public void PlayOpenAnimation()
         {
+            // Отключаем кнопку на время анимации
+            SetOpenButtonInteractable(false);
+            
             // Останавливаем idle анимацию
             StopIdleAnimation();
             
@@ -404,6 +407,9 @@ namespace WattsTap.Game.UI
             _currentFinalItemIndex = 0;
             _isFirstAnimation = false;
 
+            // Включаем кнопку обратно после завершения анимации
+            SetOpenButtonInteractable(true);
+
             OnOpenAnimationComplete?.Invoke();
         }
 
@@ -423,6 +429,9 @@ namespace WattsTap.Game.UI
 
             // Переходим к следующему элементу
             _currentFinalItemIndex++;
+
+            // Включаем кнопку обратно после завершения анимации
+            SetOpenButtonInteractable(true);
 
             OnOpenAnimationComplete?.Invoke();
         }
@@ -1065,6 +1074,17 @@ namespace WattsTap.Game.UI
             }
         }
 
+        /// <summary>
+        /// Устанавливает состояние интерактивности кнопки открытия
+        /// </summary>
+        private void SetOpenButtonInteractable(bool interactable)
+        {
+            if (_openButton != null)
+            {
+                _openButton.interactable = interactable;
+            }
+        }
+
         // Easing functions
         private float EaseOutElastic(float t)
         {
@@ -1174,6 +1194,9 @@ namespace WattsTap.Game.UI
             // Сброс состояния индексов
             _currentFinalItemIndex = -1;
             _isFirstAnimation = true;
+            
+            // Включаем кнопку обратно при сбросе
+            SetOpenButtonInteractable(true);
             
             // Вызов события сброса анимации
             OnAnimationReset?.Invoke();
