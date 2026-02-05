@@ -31,6 +31,9 @@ namespace WattsTap.Game.UI
             {
                 View.BackButton.onClick.AddListener(OnBackButtonClicked);
             }
+            
+            // Subscribe to animation reset event
+            View.OnAnimationReset += OnAnimationReset;
 
             // Apply pending config if set
             if (_pendingConfig != null)
@@ -53,8 +56,19 @@ namespace WattsTap.Game.UI
             _uiService?.Close(UIConstants.ShopChestItemOpen);
         }
 
+        private void OnAnimationReset()
+        {
+            _uiService?.Close(View);
+            _uiService?.Open(UIConstants.ShopChestItemFinal);
+        }
+
         protected override void OnDispose()
         {
+            if (View != null)
+            {
+                View.OnAnimationReset -= OnAnimationReset;
+            }
+            
             if (View?.BackButton != null)
             {
                 View.BackButton.onClick.RemoveListener(OnBackButtonClicked);

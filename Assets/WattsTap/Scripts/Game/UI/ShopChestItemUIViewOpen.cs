@@ -106,6 +106,7 @@ namespace WattsTap.Game.UI
         public Button OpenButton => _openButton;
 
         public event Action OnOpenAnimationComplete;
+        public event Action OnAnimationReset;
 
         private void Awake()
         {
@@ -1173,6 +1174,9 @@ namespace WattsTap.Game.UI
             // Сброс состояния индексов
             _currentFinalItemIndex = -1;
             _isFirstAnimation = true;
+            
+            // Вызов события сброса анимации
+            OnAnimationReset?.Invoke();
         }
 
         public void UpdateFromConfig(ShopChestItemConfig config)
