@@ -12,16 +12,14 @@ namespace WattsTap.Game.UI
         private IHapticFeedbackService _hapticService;
 
         private static ShopChestItemConfig _pendingConfig;
-        private static bool _autoPlayAnimation = true;
 
         /// <summary>
         /// Set the config before opening the UI.
         /// Call this before opening ShopChestItemOpen screen.
         /// </summary>
-        public static void SetPendingConfig(ShopChestItemConfig config, bool autoPlayAnimation = true)
+        public static void SetPendingConfig(ShopChestItemConfig config)
         {
             _pendingConfig = config;
-            _autoPlayAnimation = autoPlayAnimation;
         }
 
         protected override void OnInit()
@@ -34,9 +32,6 @@ namespace WattsTap.Game.UI
                 View.BackButton.onClick.AddListener(OnBackButtonClicked);
             }
 
-            // Подписываемся на событие завершения анимации
-            View.OnOpenAnimationComplete += OnOpenAnimationComplete;
-
             // Apply pending config if set
             if (_pendingConfig != null)
             {
@@ -44,34 +39,6 @@ namespace WattsTap.Game.UI
                 View.UpdateFromConfig(_pendingConfig);
                 _pendingConfig = null;
             }
-            
-            // Запускаем анимацию открытия сундука только если установлен флаг
-            if (_autoPlayAnimation)
-            {
-                View.PlayOpenAnimation();
-            }
-            
-            // Сбрасываем флаг для следующего использования
-            _autoPlayAnimation = true;
-        }
-
-        private void OnOpenAnimationComplete()
-        {
-            _hapticService?.ButtonPressed();
-
-            if (_uiService == null)
-            {
-                ServiceLocator.TryGet(out _uiService);
-            }
-
-            // Передаём конфиг в финальный экран
-            ShopChestItemUIPresenterFinal.SetPendingConfig(Model.Config);
-
-            // Открываем финальный экран
-            _uiService?.Open(UIConstants.ShopChestItemFinal);
-
-            // Закрываем текущий экран
-            _uiService?.Close(UIConstants.ShopChestItemOpen);
         }
 
         private void OnBackButtonClicked()
@@ -91,11 +58,6 @@ namespace WattsTap.Game.UI
             if (View?.BackButton != null)
             {
                 View.BackButton.onClick.RemoveListener(OnBackButtonClicked);
-            }
-
-            if (View != null)
-            {
-                View.OnOpenAnimationComplete -= OnOpenAnimationComplete;
             }
         }
     }

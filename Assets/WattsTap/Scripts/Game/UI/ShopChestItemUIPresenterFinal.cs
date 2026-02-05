@@ -54,8 +54,7 @@ namespace WattsTap.Game.UI
             _uiService?.Close(UIConstants.ShopChestItemFinal);
 
             // Возвращаемся на экран ShopChestItemOpen без автозапуска анимации
-            ShopChestItemUIPresenterOpen.SetPendingConfig(Model.Config, autoPlayAnimation: false);
-            _uiService?.Open(UIConstants.ShopChestItemOpen);
+            _uiService?.Open(UIConstants.ShopScreen);
         }
 
         protected override void OnDispose()
