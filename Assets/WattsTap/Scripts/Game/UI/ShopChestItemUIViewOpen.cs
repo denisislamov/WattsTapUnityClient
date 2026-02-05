@@ -1212,6 +1212,7 @@ namespace WattsTap.Game.UI
             UpdateItemName(config.ItemName);
             UpdateIcon(config.Icon);
             UpdateColors(config.PrimaryColor, config.SecondaryColor);
+            UpdateChestSprites(config.ChestClosedSprite, config.ChestOpenSprite1, config.ChestOpenSprite2);
         }
 
         public void UpdateItemName(string itemName)
@@ -1240,6 +1241,24 @@ namespace WattsTap.Game.UI
             if (_secondaryColorImage != null)
             {
                 _secondaryColorImage.color = secondaryColor;
+            }
+        }
+
+        public void UpdateChestSprites(Sprite closedSprite, Sprite openSprite1, Sprite openSprite2)
+        {
+            if (_chestClosedImage != null && closedSprite != null)
+            {
+                _chestClosedImage.sprite = closedSprite;
+            }
+
+            if (_chestOpenImage1 != null && openSprite1 != null)
+            {
+                _chestOpenImage1.sprite = openSprite1;
+            }
+
+            if (_chestOpenImage2 != null && openSprite2 != null)
+            {
+                _chestOpenImage2.sprite = openSprite2;
             }
         }
         
