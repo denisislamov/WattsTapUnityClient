@@ -62,8 +62,8 @@ namespace WattsTap.Game.UI
         [SerializeField] private float _itemFinalScaleDuration = 0.4f;
 
         [Header("Item Crossfade Animation")]
-        [SerializeField] private RectTransform _finalItemTransform;
-        [SerializeField] private CanvasGroup _finalItemCanvasGroup;
+        [SerializeField] private RectTransform[] _finalItemTransforms;
+        [SerializeField] private CanvasGroup[] _finalItemCanvasGroups;
         [SerializeField] private float _itemCrossfadeDuration = 0.35f;
         [SerializeField] private float _itemCrossfadeScaleMin = 0.8f;
         [SerializeField] private float _itemCrossfadeScaleMax = 1.05f;
@@ -92,6 +92,10 @@ namespace WattsTap.Game.UI
         private Vector3 _originalScale;
         private Vector3 _itemOriginalScale;
         private Vector3 _finalItemOriginalScale;
+        
+        // Состояние анимации для массива элементов
+        private int _currentFinalItemIndex = -1; // -1 означает, что анимация еще не запускалась
+        private bool _isFirstAnimation = true;
         
         // Кэшированные значения для оптимизации WebGL
         private WaitForEndOfFrame _waitForEndOfFrame;
@@ -128,9 +132,9 @@ namespace WattsTap.Game.UI
                 _itemOriginalScale = _itemTransform.localScale;
             }
 
-            if (_finalItemTransform != null)
+            if (_finalItemTransforms != null && _finalItemTransforms.Length > 0 && _finalItemTransforms[0] != null)
             {
-                _finalItemOriginalScale = _finalItemTransform.localScale;
+                _finalItemOriginalScale = _finalItemTransforms[0].localScale;
             }
 
             // Закрытый сундук - видимый
@@ -171,20 +175,32 @@ namespace WattsTap.Game.UI
 
         private void InitializeFinalItemState()
         {
-            if (_finalItemTransform != null)
+            if (_finalItemTransforms != null)
             {
-                // Совмещаем позицию с конечной позицией основного предмета
-                if (_itemEndPosition != null)
+                for (int i = 0; i < _finalItemTransforms.Length; i++)
                 {
-                    _finalItemTransform.anchoredPosition = _itemEndPosition.anchoredPosition;
+                    if (_finalItemTransforms[i] != null)
+                    {
+                        // Совмещаем позицию с конечной позицией основного предмета
+                        if (_itemEndPosition != null)
+                        {
+                            _finalItemTransforms[i].anchoredPosition = _itemEndPosition.anchoredPosition;
+                        }
+                        _finalItemTransforms[i].localRotation = Quaternion.identity;
+                        _finalItemTransforms[i].localScale = _itemOriginalScale * _itemCrossfadeScaleMin;
+                    }
                 }
-                _finalItemTransform.localRotation = Quaternion.identity;
-                _finalItemTransform.localScale = _itemOriginalScale * _itemCrossfadeScaleMin;
             }
 
-            if (_finalItemCanvasGroup != null)
+            if (_finalItemCanvasGroups != null)
             {
-                _finalItemCanvasGroup.alpha = 0f;
+                for (int i = 0; i < _finalItemCanvasGroups.Length; i++)
+                {
+                    if (_finalItemCanvasGroups[i] != null)
+                    {
+                        _finalItemCanvasGroups[i].alpha = 0f;
+                    }
+                }
             }
         }
 
@@ -343,10 +359,26 @@ namespace WattsTap.Game.UI
             // Останавливаем idle анимацию
             StopIdleAnimation();
             
-            // Полный сброс анимации перед запуском
-            ResetAnimation();
-
-            _animationCoroutine = StartCoroutine(OpenAnimationSequence());
+            // Проверяем, нужно ли перезапустить с начала
+            if (_finalItemTransforms == null || _finalItemTransforms.Length == 0 || 
+                _currentFinalItemIndex >= _finalItemTransforms.Length - 1)
+            {
+                // Массив закончился или не инициализирован - перезапускаем с начала
+                _currentFinalItemIndex = -1;
+                _isFirstAnimation = true;
+                ResetAnimation();
+                _animationCoroutine = StartCoroutine(OpenAnimationSequence());
+            }
+            else if (_isFirstAnimation)
+            {
+                // Первый запуск - полная анимация до первого элемента
+                _animationCoroutine = StartCoroutine(OpenAnimationSequence());
+            }
+            else
+            {
+                // Последующие нажатия - показываем следующий элемент
+                _animationCoroutine = StartCoroutine(ShowNextItemSequence());
+            }
         }
 
         private IEnumerator OpenAnimationSequence()
@@ -367,7 +399,91 @@ namespace WattsTap.Game.UI
             // Phase 4: Item flies out
             yield return StartCoroutine(ItemFlyOutSequence());
 
+            // Устанавливаем индекс на первый элемент и отмечаем, что первая анимация завершена
+            _currentFinalItemIndex = 0;
+            _isFirstAnimation = false;
+
             OnOpenAnimationComplete?.Invoke();
+        }
+
+        /// <summary>
+        /// Последовательность для показа следующего элемента (без полной анимации сундука)
+        /// </summary>
+        private IEnumerator ShowNextItemSequence()
+        {
+            // 1. Прячем предыдущий элемент и текст
+            yield return StartCoroutine(HidePreviousItemAndLabels());
+
+            // 2. Сбрасываем состояние летящего предмета
+            InitializeItemState();
+
+            // 3. Проигрываем анимацию вылета предмета
+            yield return StartCoroutine(ItemFlyOutSequence());
+
+            // Переходим к следующему элементу
+            _currentFinalItemIndex++;
+
+            OnOpenAnimationComplete?.Invoke();
+        }
+
+        /// <summary>
+        /// Прячем предыдущий finalItem и надписи
+        /// </summary>
+        private IEnumerator HidePreviousItemAndLabels()
+        {
+            if (_currentFinalItemIndex < 0 || _finalItemTransforms == null || 
+                _currentFinalItemIndex >= _finalItemTransforms.Length)
+            {
+                yield break;
+            }
+
+            float elapsed = 0f;
+            float fadeDuration = 0.2f;
+
+            CanvasGroup previousCanvasGroup = (_finalItemCanvasGroups != null && _currentFinalItemIndex < _finalItemCanvasGroups.Length) 
+                ? _finalItemCanvasGroups[_currentFinalItemIndex] 
+                : null;
+
+            float startAlpha = previousCanvasGroup != null ? previousCanvasGroup.alpha : 1f;
+
+            while (elapsed < fadeDuration)
+            {
+                elapsed += GetDeltaTime();
+                float t = Mathf.Clamp01(elapsed / fadeDuration);
+                float alpha = Mathf.Lerp(startAlpha, 0f, t);
+
+                // Прячем предыдущий элемент
+                if (previousCanvasGroup != null)
+                {
+                    previousCanvasGroup.alpha = alpha;
+                }
+
+                // Прячем надписи
+                if (_label1CanvasGroup != null)
+                {
+                    _label1CanvasGroup.alpha = Mathf.Lerp(1f, 0f, t);
+                }
+                if (_label2CanvasGroup != null)
+                {
+                    _label2CanvasGroup.alpha = Mathf.Lerp(1f, 0f, t);
+                }
+
+                yield return GetAnimationYield();
+            }
+
+            // Финальные значения
+            if (previousCanvasGroup != null)
+            {
+                previousCanvasGroup.alpha = 0f;
+            }
+            if (_label1CanvasGroup != null)
+            {
+                _label1CanvasGroup.alpha = 0f;
+            }
+            if (_label2CanvasGroup != null)
+            {
+                _label2CanvasGroup.alpha = 0f;
+            }
         }
 
         /// <summary>
@@ -656,9 +772,23 @@ namespace WattsTap.Game.UI
         /// </summary>
         private IEnumerator CrossfadeToFinalItem()
         {
-            if (_finalItemTransform == null || _finalItemCanvasGroup == null)
+            // Получаем следующий индекс для отображения
+            int targetIndex = _isFirstAnimation ? 0 : _currentFinalItemIndex + 1;
+            
+            if (_finalItemTransforms == null || targetIndex >= _finalItemTransforms.Length ||
+                _finalItemCanvasGroups == null || targetIndex >= _finalItemCanvasGroups.Length)
             {
                 // Если финальный предмет не назначен, просто показываем надписи
+                yield return StartCoroutine(FadeInLabels());
+                yield break;
+            }
+
+            RectTransform currentFinalTransform = _finalItemTransforms[targetIndex];
+            CanvasGroup currentFinalCanvasGroup = _finalItemCanvasGroups[targetIndex];
+
+            if (currentFinalTransform == null || currentFinalCanvasGroup == null)
+            {
+                // Если элемент не настроен, показываем надписи
                 yield return StartCoroutine(FadeInLabels());
                 yield break;
             }
@@ -676,9 +806,9 @@ namespace WattsTap.Game.UI
             Vector3 finalEndScale = _itemOriginalScale; // конечный размер идентичен исходному
 
             // Синхронизируем позицию финального предмета с текущим положением исходного
-            if (_finalItemTransform != null && _itemTransform != null)
+            if (currentFinalTransform != null && _itemTransform != null)
             {
-                _finalItemTransform.anchoredPosition = _itemTransform.anchoredPosition;
+                currentFinalTransform.anchoredPosition = _itemTransform.anchoredPosition;
             }
 
             while (elapsed < _itemCrossfadeDuration)
@@ -698,13 +828,13 @@ namespace WattsTap.Game.UI
                 }
 
                 // Финальный предмет: появляется и растёт до целевого масштаба
-                if (_finalItemCanvasGroup != null)
+                if (currentFinalCanvasGroup != null)
                 {
-                    _finalItemCanvasGroup.alpha = Mathf.Lerp(finalStartAlpha, 1f, smoothT);
+                    currentFinalCanvasGroup.alpha = Mathf.Lerp(finalStartAlpha, 1f, smoothT);
                 }
-                if (_finalItemTransform != null)
+                if (currentFinalTransform != null)
                 {
-                    _finalItemTransform.localScale = Vector3.Lerp(finalStartScale, finalEndScale, smoothT);
+                    currentFinalTransform.localScale = Vector3.Lerp(finalStartScale, finalEndScale, smoothT);
                 }
 
                 // Надписи появляются синхронно
@@ -722,14 +852,14 @@ namespace WattsTap.Game.UI
             }
 
             // Финальные значения: оба элемента совпадают по позиции/масштабу
-            if (_finalItemTransform != null && _itemTransform != null)
+            if (currentFinalTransform != null && _itemTransform != null)
             {
-                _finalItemTransform.anchoredPosition = _itemTransform.anchoredPosition;
-                _finalItemTransform.localScale = _itemOriginalScale;
+                currentFinalTransform.anchoredPosition = _itemTransform.anchoredPosition;
+                currentFinalTransform.localScale = _itemOriginalScale;
             }
-            if (_finalItemCanvasGroup != null)
+            if (currentFinalCanvasGroup != null)
             {
-                _finalItemCanvasGroup.alpha = 1f;
+                currentFinalCanvasGroup.alpha = 1f;
             }
 
             if (_itemCanvasGroup != null)
@@ -1039,6 +1169,10 @@ namespace WattsTap.Game.UI
             
             // Сброс надписей к начальному состоянию (скрыты)
             InitializeLabelsState();
+            
+            // Сброс состояния индексов
+            _currentFinalItemIndex = -1;
+            _isFirstAnimation = true;
         }
 
         public void UpdateFromConfig(ShopChestItemConfig config)
