@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.Shop.ShopChestItemConfig
   _itemName: Fine Chest
   _icon: {fileID: 21300000, guid: 855e26e4e37fb428a826f242aca1b31d, type: 3}
+  _chestClosedSprite: {fileID: 21300000, guid: 855e26e4e37fb428a826f242aca1b31d, type: 3}
+  _chestOpenSprite1: {fileID: 21300000, guid: ff115ecc132244ecc81b5d35347715e2, type: 3}
+  _chestOpenSprite2: {fileID: 21300000, guid: fa348620d1b5b4250a731cd45d43dbda, type: 3}
   _primaryColor: {r: 0.12156863, g: 0.6745098, b: 0.62352943, a: 1}
   _secondaryColor: {r: 1, g: 1, b: 1, a: 0.29803923}

@@ -14,6 +14,9 @@ namespace WattsTap.Game.UI
         [SerializeField] private Image _iconImage;
         [SerializeField] private Image _primaryColorImage;
         [SerializeField] private Image _secondaryColorImage;
+        
+        [Header("Chest Sprite")]
+        [SerializeField] private Image _chestClosedImage;
 
         [Header("Controls")]
         [SerializeField] private Button _backButton;
@@ -37,6 +40,7 @@ namespace WattsTap.Game.UI
             UpdateItemName(config.ItemName);
             UpdateIcon(config.Icon);
             UpdateColors(config.PrimaryColor, config.SecondaryColor);
+            UpdateChestClosedSprite(config.ChestClosedSprite);
         }
 
         public void UpdateItemName(string itemName)
@@ -65,6 +69,14 @@ namespace WattsTap.Game.UI
             if (_secondaryColorImage != null)
             {
                 _secondaryColorImage.color = secondaryColor;
+            }
+        }
+        
+        public void UpdateChestClosedSprite(Sprite closedSprite)
+        {
+            if (_chestClosedImage != null && closedSprite != null)
+            {
+                _chestClosedImage.sprite = closedSprite;
             }
         }
         

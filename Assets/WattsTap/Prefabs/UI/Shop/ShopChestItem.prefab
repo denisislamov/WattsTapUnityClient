@@ -3338,6 +3338,7 @@ MonoBehaviour:
   _iconImage: {fileID: 0}
   _primaryColorImage: {fileID: 0}
   _secondaryColorImage: {fileID: 0}
+  _chestClosedImage: {fileID: 7054130879712952832}
   _backButton: {fileID: 3494934352079888280}
   _openButton: {fileID: 2411809495430978550}
   _skinBindings: []
