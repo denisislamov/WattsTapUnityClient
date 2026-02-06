@@ -757,20 +757,20 @@ namespace WattsTap.Game.UI
                 yield break;
             }
 
-            // Появление предмета (fade in)
-            yield return StartCoroutine(ItemFadeIn());
-
-            // Вылет предмета по дуге
-            _itemRotationCoroutine = StartCoroutine(ItemRotation());
-            yield return StartCoroutine(ItemFlyToTarget());
-
-            // Остановка вращения и веселый скейл bounce
-            if (_itemRotationCoroutine != null)
+            // Мгновенное появление предмета с начальным масштабом 0.5
+            if (_itemCanvasGroup != null)
             {
-                StopCoroutine(_itemRotationCoroutine);
-                _itemRotationCoroutine = null;
+                _itemCanvasGroup.alpha = 1f;
+            }
+            if (_itemTransform != null)
+            {
+                _itemTransform.localScale = _itemOriginalScale * 0.5f;
             }
 
+            // Вылет предмета по дуге с вращением и увеличением масштаба
+            yield return StartCoroutine(ItemFlyWithRotationAndScale());
+
+            // Веселый скейл bounce
             yield return StartCoroutine(ItemBounceScale());
             
             // Замена на финальный предмет с появлением текста
@@ -919,9 +919,9 @@ namespace WattsTap.Game.UI
         }
 
         /// <summary>
-        /// Вылет предмета от стартовой до конечной позиции с дугой (оптимизировано для WebGL)
+        /// Вылет предмета от стартовой до конечной позиции с дугой, вращением и увеличением масштаба (оптимизировано для WebGL)
         /// </summary>
-        private IEnumerator ItemFlyToTarget()
+        private IEnumerator ItemFlyWithRotationAndScale()
         {
             if (_itemTransform == null || _itemStartPosition == null || _itemEndPosition == null)
             {
@@ -931,6 +931,14 @@ namespace WattsTap.Game.UI
             float elapsed = 0f;
             Vector2 startPos = _itemStartPosition.anchoredPosition;
             Vector2 endPos = _itemEndPosition.anchoredPosition;
+            
+            // Масштаб от 0.5 до 1.0
+            Vector3 startScale = _itemOriginalScale * 0.5f;
+            Vector3 endScale = _itemOriginalScale;
+            
+            // Количество полных оборотов для вращения
+            int fullSpins = Mathf.FloorToInt(_itemRotationSpeed * _itemFlyDuration / 360f);
+            float targetRotation = fullSpins * 360f;
 
             while (elapsed < _itemFlyDuration)
             {
@@ -948,11 +956,22 @@ namespace WattsTap.Game.UI
                 currentPos.y += arcProgress * _itemFlyHeight;
 
                 _itemTransform.anchoredPosition = currentPos;
+                
+                // Масштабирование от 0.5 до 1.0
+                _itemTransform.localScale = Vector3.Lerp(startScale, endScale, smoothT);
+                
+                // Вращение
+                float easedRotationT = 1f - (1f - t) * (1f - t) * (1f - t); // EaseOutCubic
+                float currentAngle = easedRotationT * targetRotation;
+                _itemTransform.localRotation = Quaternion.Euler(0f, currentAngle, 0f);
 
                 yield return GetAnimationYield();
             }
 
+            // Финальные значения
             _itemTransform.anchoredPosition = endPos;
+            _itemTransform.localScale = endScale;
+            _itemTransform.localRotation = Quaternion.identity;
         }
 
         /// <summary>
