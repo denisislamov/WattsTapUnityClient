@@ -1503,16 +1503,16 @@ MonoBehaviour:
   _finalItemCanvasGroups:
   - {fileID: 247926572399283078}
   - {fileID: 1681440522494045438}
-  _itemCrossfadeDuration: 0
+  _itemCrossfadeDuration: 0.3
   _itemCrossfadeScaleMin: 1
   _itemCrossfadeScaleMax: 1
   _label1CanvasGroup: {fileID: 4855136272561881366}
   _label2CanvasGroup: {fileID: 690513142156623532}
   _labelFadeDuration: 0.3
   _useOptimizedMode: 1
-  _targetFrameInterval: 0.016
+  _targetFrameInterval: 0.008
   _useUnscaledTime: 1
-  _rotationSteps: 12
+  _rotationSteps: 36
   _skinBindings: []
 --- !u!1 &6943064809884705279
 GameObject:

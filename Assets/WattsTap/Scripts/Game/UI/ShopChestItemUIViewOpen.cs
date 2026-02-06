@@ -778,7 +778,7 @@ namespace WattsTap.Game.UI
         }
         
         /// <summary>
-        /// Crossfade анимация замены предмета на финальный с появлением надписей
+        /// Анимация замены предмета на финальный: FinalItem появляется мгновенно за _item, затем _item исчезает
         /// </summary>
         private IEnumerator CrossfadeToFinalItem()
         {
@@ -803,51 +803,36 @@ namespace WattsTap.Game.UI
                 yield break;
             }
 
-            float elapsed = 0f;
-
-            // Стартовые значения исходного предмета
-            float itemStartAlpha = 1f;
-            Vector3 itemStartScale = _itemOriginalScale;
-            Vector3 itemEndScale = _itemOriginalScale * _itemCrossfadeScaleMax;
-
-            // Стартовые значения финального предмета
-            float finalStartAlpha = 0f;
-            Vector3 finalStartScale = _itemOriginalScale * _itemCrossfadeScaleMin;
-            Vector3 finalEndScale = _itemOriginalScale; // конечный размер идентичен исходному
-
-            // Синхронизируем позицию финального предмета с текущим положением исходного
+            // Синхронизируем позицию и масштаб финального предмета с текущим _item
             if (currentFinalTransform != null && _itemTransform != null)
             {
                 currentFinalTransform.anchoredPosition = _itemTransform.anchoredPosition;
+                currentFinalTransform.localScale = _itemOriginalScale;
             }
+            
+            // Мгновенно показываем финальный предмет (он будет за _item)
+            if (currentFinalCanvasGroup != null)
+            {
+                currentFinalCanvasGroup.alpha = 1f;
+            }
+
+            // Теперь анимируем исчезновение _item и появление надписей
+            float elapsed = 0f;
+            float itemStartAlpha = 1f;
 
             while (elapsed < _itemCrossfadeDuration)
             {
                 elapsed += GetDeltaTime();
                 float t = Mathf.Clamp01(elapsed / _itemCrossfadeDuration);
-                float smoothT = t * t * (3f - 2f * t);
+                float smoothT = t * t * (3f - 2f * t); // Smoothstep
 
-                // Исходный предмет: исчезает и слегка увеличивается
+                // Исходный предмет: только исчезает
                 if (_itemCanvasGroup != null)
                 {
                     _itemCanvasGroup.alpha = Mathf.Lerp(itemStartAlpha, 0f, smoothT);
                 }
-                if (_itemTransform != null)
-                {
-                    _itemTransform.localScale = Vector3.Lerp(itemStartScale, itemEndScale, smoothT);
-                }
 
-                // Финальный предмет: появляется и растёт до целевого масштаба
-                if (currentFinalCanvasGroup != null)
-                {
-                    currentFinalCanvasGroup.alpha = Mathf.Lerp(finalStartAlpha, 1f, smoothT);
-                }
-                if (currentFinalTransform != null)
-                {
-                    currentFinalTransform.localScale = Vector3.Lerp(finalStartScale, finalEndScale, smoothT);
-                }
-
-                // Надписи появляются синхронно
+                // Надписи появляются синхронно с исчезновением _item
                 float labelAlpha = smoothT;
                 if (_label1CanvasGroup != null)
                 {
@@ -861,24 +846,15 @@ namespace WattsTap.Game.UI
                 yield return GetAnimationYield();
             }
 
-            // Финальные значения: оба элемента совпадают по позиции/масштабу
-            if (currentFinalTransform != null && _itemTransform != null)
-            {
-                currentFinalTransform.anchoredPosition = _itemTransform.anchoredPosition;
-                currentFinalTransform.localScale = _itemOriginalScale;
-            }
-            if (currentFinalCanvasGroup != null)
-            {
-                currentFinalCanvasGroup.alpha = 1f;
-            }
-
+            // Финальные значения
             if (_itemCanvasGroup != null)
             {
                 _itemCanvasGroup.alpha = 0f;
             }
-            if (_itemTransform != null)
+
+            if (currentFinalCanvasGroup != null)
             {
-                _itemTransform.localScale = _itemOriginalScale;
+                currentFinalCanvasGroup.alpha = 1f;
             }
 
             if (_label1CanvasGroup != null)
