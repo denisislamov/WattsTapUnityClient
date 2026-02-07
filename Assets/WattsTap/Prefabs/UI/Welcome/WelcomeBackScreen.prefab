@@ -381,7 +381,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 968028165853066673}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -1752,6 +1752,50 @@ MonoBehaviour:
   _timerText: {fileID: 138272718411668126}
   _valueText: {fileID: 6482426587123478805}
   _closeButton: {fileID: 8389552427490196489}
+  _skinBindings:
+  - tokenId: level-up-bgblur
+    imageTargets:
+    - {fileID: 7498197930426306531}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: collect-btn
+    imageTargets:
+    - {fileID: 2776410407615107842}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: text-primary
+    imageTargets: []
+    textTargets:
+    - {fileID: 6606755191898936022}
+    - {fileID: 138272718411668126}
+    - {fileID: 3499057355428346780}
+    - {fileID: 9146993261514667327}
+    suppressMissingTokenWarning: 0
+  - tokenId: text-secondary
+    imageTargets: []
+    textTargets:
+    - {fileID: 3066389045291968282}
+    suppressMissingTokenWarning: 0
+  - tokenId: timer-bd
+    imageTargets:
+    - {fileID: 2864592054254691679}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: timer-fillarea-bd
+    imageTargets:
+    - {fileID: 4402561496932385466}
+    textTargets: []
+    suppressMissingTokenWarning: 0
+  - tokenId: text-primary-flip
+    imageTargets: []
+    textTargets:
+    - {fileID: 545621184610055863}
+    suppressMissingTokenWarning: 0
+  - tokenId: second-background
+    imageTargets:
+    - {fileID: 727681895318359007}
+    textTargets: []
+    suppressMissingTokenWarning: 0
 --- !u!1 &5834183764660508891
 GameObject:
   m_ObjectHideFlags: 0
@@ -1908,7 +1952,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
   m_AspectMode: 0
-  m_AspectRatio: 18.875
+  m_AspectRatio: 6.0515656
 --- !u!1 &6739640524248942435
 GameObject:
   m_ObjectHideFlags: 0
@@ -2492,7 +2536,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8455543758565893966}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -2693,7 +2737,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8669312364249224546}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
