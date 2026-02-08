@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3fbde82a5404378a732568aa4bb5f97, type: 3}
+  m_Name: AvatarConfig37
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.Avatars.AvatarConfig
+  _avatarId: 37
+  _displayName: 37
+  _avatarSprite: {fileID: 21300000, guid: 59b960cbc8dc34aae95e1c13368f938a, type: 3}
+  _isUnlockedByDefault: 0
+  _unlockRequirement: 
