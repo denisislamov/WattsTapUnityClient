@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using WattsTap.Core.Configs;
@@ -108,87 +107,5 @@ namespace WattsTap.Scripts.Game.GlobalConfigs
                 }
             }
         }
-    }
-    
-    /// <summary>
-    /// Типы доступных улучшений
-    /// </summary>
-    public enum UpgradeType
-    {
-        GoldHammer,         // Увеличивает профит от каждого удара
-        FastTime,           // Уменьшает кулдаун каждого удара
-        Endurance,          // Увеличивает вместимость ударов
-        CriticalChance,     // Увеличивает шанс получения x2 профита с удара
-        CriticalMultiplier, // Увеличивает множитель критического удара
-        WorkExperience,     // Увеличивает опыт от каждого удара
-        Economist,          // Уменьшает цену апгрейдов
-        StrongFriendship,   // Увеличивает бонус от друзей
-        Investor,           // Увеличивает доход в час
-        ItemMaster,         // Уменьшает цену предметов для повышения уровня
-        ShareProfit,        // Увеличивает награду монетами от % профита друзей
-        GoldFriends         // Увеличивает награду монетами за приглашенного друга
-    }
-    
-    /// <summary>
-    /// Данные одного типа апгрейда (скилла)
-    /// </summary>
-    [Serializable]
-    public class UpgradeSkillData
-    {
-        [Tooltip("Тип апгрейда")]
-        public UpgradeType upgradeType;
-        
-        [Tooltip("Название навыка")]
-        public string title;
-        
-        [Tooltip("Описание эффекта")]
-        public string description;
-        
-        [Tooltip("Множитель стоимости на каждом уровне")]
-        public float stepCostMultiplier = 1.3f;
-        
-        [Tooltip("Прирост параметра на каждом уровне")]
-        public float stepParameter = 0.1f;
-        
-        [Tooltip("Стартовая стоимость")]
-        public long startCost = 1000;
-        
-        [Tooltip("Стартовое значение параметра")]
-        public float startParameter;
-        
-        [Tooltip("Данные всех уровней этого апгрейда")]
-        public List<UpgradeLevelData> levels = new List<UpgradeLevelData>();
-        
-        /// <summary>
-        /// Получить данные конкретного уровня
-        /// </summary>
-        public UpgradeLevelData GetLevel(int level)
-        {
-            if (level < 1 || level > levels.Count)
-                return null;
-            return levels[level - 1];
-        }
-    }
-    
-    /// <summary>
-    /// Данные одного уровня апгрейда
-    /// Соответствует строкам из WattsBalanceUpgrades.csv
-    /// </summary>
-    [Serializable]
-    public class UpgradeLevelData
-    {
-        [Tooltip("Уровень апгрейда")]
-        public int level;
-        
-        [Tooltip("Стоимость покупки этого уровня")]
-        public long price;
-        
-        [Tooltip("Значение параметра на этом уровне")]
-        public float parameter;
-        
-        /// <summary>
-        /// Является ли это стартовым уровнем
-        /// </summary>
-        public bool IsStartLevel => level == 1;
     }
 }

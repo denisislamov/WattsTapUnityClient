@@ -79,6 +79,9 @@ namespace WattsTap.Core
             ServiceLocator.Register<ICatalogService>(new CatalogService());
             ServiceLocator.Register<IInventoryService>(new InventoryService());
             
+            // Register Upgrades Service
+            ServiceLocator.Register<IUpgradesService>(new UpgradesService());
+            
             _serviceManager.InitializeAll();
             
             // Register Orientation Service

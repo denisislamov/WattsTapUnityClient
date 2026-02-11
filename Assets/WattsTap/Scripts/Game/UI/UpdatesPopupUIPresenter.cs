@@ -9,11 +9,13 @@ namespace WattsTap.Game.UI
     {
         private IUIService _uiService;
         private IHapticFeedbackService _hapticService;
+        private IUpgradesService _upgradesService;
 
         protected override void OnInit()
         {
             ServiceLocator.TryGet(out _uiService);
             ServiceLocator.TryGet(out _hapticService);
+            ServiceLocator.TryGet(out _upgradesService);
 
             // Navigation buttons
             if (View.MainMenuButton != null)
@@ -35,6 +37,27 @@ namespace WattsTap.Game.UI
             {
                 View.QuestsButton.onClick.AddListener(OnQuestsButtonClicked);
             }
+            
+            // Load and display upgrades data
+            LoadUpgradesData();
+        }
+        
+        /// <summary>
+        /// Load upgrades data from service and populate the list
+        /// </summary>
+        private void LoadUpgradesData()
+        {
+            if (_upgradesService == null)
+            {
+                UnityEngine.Debug.LogWarning("[UpdatesPopupUIPresenter] UpgradesService not found");
+                return;
+            }
+            
+            var upgradesData = _upgradesService.GetAllUpgradesForDisplay();
+            View.PopulateUpgradesList(upgradesData);
+            
+            // Store in model for potential future use
+            Model.SetUpgradesData(upgradesData);
         }
 
         #region Event Handlers - Buttons
