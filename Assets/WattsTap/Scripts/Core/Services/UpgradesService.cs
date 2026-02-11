@@ -29,7 +29,7 @@ namespace WattsTap.Core.Services
             {
                 try
                 {
-                    _upgradesConfig = configService.GetConfig<UpgradesConfig>();
+                    _upgradesConfig = configService.GetConfig<UpgradesConfig>("UpgradesConfig");
                     Debug.Log($"<color=#00FFFF>[UpgradesService] Loaded UpgradesConfig with {_upgradesConfig?.skills?.Count ?? 0} skills</color>");
                 }
                 catch (System.Exception e)

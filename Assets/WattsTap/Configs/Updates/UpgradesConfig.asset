@@ -16,6 +16,7 @@ MonoBehaviour:
   - upgradeType: 0
     title: GOLD HAMMER
     description: Increases profit by X coins from each hit from character
+    icon: {fileID: 21300000, guid: 2ed00cbe0d9f94064a7a603bfccb7871, type: 3}
     stepCostMultiplier: 1.3
     stepParameter: 0.1
     startCost: 1000
@@ -183,6 +184,7 @@ MonoBehaviour:
   - upgradeType: 1
     title: FAST TIME
     description: Reduces the cooldown of each hit by X%
+    icon: {fileID: 21300000, guid: 4c237ed4f3c7841d0b0d9b5c943cf8c4, type: 3}
     stepCostMultiplier: 1.22
     stepParameter: 1
     startCost: 1000
@@ -350,6 +352,7 @@ MonoBehaviour:
   - upgradeType: 2
     title: ENDURANCE
     description: Increases Hits capacity by X%
+    icon: {fileID: 21300000, guid: 32f7fa7f3f913470a87352df19cfbfe8, type: 3}
     stepCostMultiplier: 1.22
     stepParameter: 0.3
     startCost: 1000
@@ -517,6 +520,7 @@ MonoBehaviour:
   - upgradeType: 3
     title: CRITICAL CHANCE
     description: Increases the chance of receiving x2 profit per hit by X%
+    icon: {fileID: 21300000, guid: e9dfb8ed8e2e249b89e1af868b831ee0, type: 3}
     stepCostMultiplier: 1.22
     stepParameter: 0.05
     startCost: 1000
@@ -684,6 +688,7 @@ MonoBehaviour:
   - upgradeType: 4
     title: CRITICAL MULTIPLIER
     description: Increases the chance of receiving x2 profit per hit by X%
+    icon: {fileID: 21300000, guid: 76a52391a033e4d3f9bd39ae82eb4958, type: 3}
     stepCostMultiplier: 1.22
     stepParameter: 0.03
     startCost: 1000
@@ -851,6 +856,7 @@ MonoBehaviour:
   - upgradeType: 5
     title: WORK EXPERIENCE
     description: Increases experience gained from each hit by X%
+    icon: {fileID: 21300000, guid: 6a69237f26a184325aa452de3809e4ff, type: 3}
     stepCostMultiplier: 1.3
     stepParameter: 0.5
     startCost: 1000
@@ -1018,6 +1024,7 @@ MonoBehaviour:
   - upgradeType: 6
     title: ECONOMIST
     description: Reduces the price of upgrades by X%
+    icon: {fileID: 21300000, guid: 5f76a0d4ea1d34dbe8a79f88fa61552d, type: 3}
     stepCostMultiplier: 1.3
     stepParameter: 0.2
     startCost: 1000
@@ -1185,6 +1192,7 @@ MonoBehaviour:
   - upgradeType: 7
     title: STRONG FRIENDSHIP
     description: Increases bonus from friends by X%
+    icon: {fileID: 21300000, guid: 39210eb4b60bb434caa7c243cf657e04, type: 3}
     stepCostMultiplier: 1.3
     stepParameter: 0.1
     startCost: 1000
@@ -1352,6 +1360,7 @@ MonoBehaviour:
   - upgradeType: 8
     title: INVESTOR
     description: Increases income per hour by X%
+    icon: {fileID: 21300000, guid: 3c57f28cb4fa045f08383f6777137636, type: 3}
     stepCostMultiplier: 1.3
     stepParameter: 100
     startCost: 1000
@@ -1519,6 +1528,7 @@ MonoBehaviour:
   - upgradeType: 9
     title: ITEM MASTER
     description: Reduces the price of level up items by X%
+    icon: {fileID: 21300000, guid: 0b762c035b3044109857aed4b286e532, type: 3}
     stepCostMultiplier: 1.3
     stepParameter: 0.5
     startCost: 1000
@@ -1686,6 +1696,7 @@ MonoBehaviour:
   - upgradeType: 10
     title: SHARE PROFIT
     description: Increases coin reward by X% of friends' profits
+    icon: {fileID: 21300000, guid: 3fc13a69828b54ab7b324d43e6496b0a, type: 3}
     stepCostMultiplier: 1.3
     stepParameter: 0.174
     startCost: 1000
@@ -1853,6 +1864,7 @@ MonoBehaviour:
   - upgradeType: 11
     title: GOLD FRIENDS
     description: Increases the reward by X coins for the invited friend
+    icon: {fileID: 21300000, guid: 1e89df7e6e04c467ea0f3cd74320bc64, type: 3}
     stepCostMultiplier: 1.3
     stepParameter: 1000
     startCost: 1000
