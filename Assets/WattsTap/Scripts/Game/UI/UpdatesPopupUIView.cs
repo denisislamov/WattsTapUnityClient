@@ -76,6 +76,10 @@ namespace WattsTap.Game.UI
         /// </summary>
         public void PopulateUpgradesList(List<UpgradeDisplayData> upgrades)
         {
+            Debug.Log($"[UpdatesPopupUIView] PopulateUpgradesList called with {upgrades?.Count ?? 0} items");
+            Debug.Log($"[UpdatesPopupUIView] _upgradesListContainer is {(_upgradesListContainer != null ? "NOT null" : "null")}");
+            Debug.Log($"[UpdatesPopupUIView] _upgradeItemPrefab is {(_upgradeItemPrefab != null ? "NOT null" : "null")}");
+            
             // Clear existing items
             ClearUpgradesList();
             
@@ -89,6 +93,7 @@ namespace WattsTap.Game.UI
             
             if (!hasUpgrades || _upgradeItemPrefab == null || _upgradesListContainer == null)
             {
+                Debug.LogWarning($"[UpdatesPopupUIView] Early return: hasUpgrades={hasUpgrades}, prefab={_upgradeItemPrefab != null}, container={_upgradesListContainer != null}");
                 return;
             }
             
@@ -104,6 +109,8 @@ namespace WattsTap.Game.UI
                     _upgradeItemViews.Add(upgradeItemView);
                 }
             }
+            
+            Debug.Log($"[UpdatesPopupUIView] Created {_upgradeItemViews.Count} upgrade items");
         }
         
         /// <summary>
@@ -113,9 +120,19 @@ namespace WattsTap.Game.UI
         {
             if (_upgradesListContainer != null)
             {
-                foreach (Transform child in _upgradesListContainer)
+                // Collect children to destroy (iterate in reverse to avoid issues)
+                var childCount = _upgradesListContainer.childCount;
+                for (int i = childCount - 1; i >= 0; i--)
                 {
-                    Destroy(child.gameObject);
+                    var child = _upgradesListContainer.GetChild(i);
+                    if (Application.isPlaying)
+                    {
+                        Destroy(child.gameObject);
+                    }
+                    else
+                    {
+                        DestroyImmediate(child.gameObject);
+                    }
                 }
             }
             

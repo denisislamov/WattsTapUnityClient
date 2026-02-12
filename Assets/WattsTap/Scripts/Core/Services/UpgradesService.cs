@@ -62,11 +62,16 @@ namespace WattsTap.Core.Services
         
         public List<UpgradeDisplayData> GetAllUpgradesForDisplay()
         {
-            if (_cachedDisplayData == null)
+            Debug.Log($"[UpgradesService] GetAllUpgradesForDisplay called. IsInitialized={IsInitialized}, _cachedDisplayData is {(_cachedDisplayData != null ? $"NOT null ({_cachedDisplayData.Count} items)" : "null")}");
+            
+            // Re-cache if cache is null or empty (config might have been loaded later)
+            if (_cachedDisplayData == null || _cachedDisplayData.Count == 0)
             {
+                Debug.Log("[UpgradesService] Cache is null or empty, calling CacheDisplayData...");
                 CacheDisplayData();
             }
             
+            Debug.Log($"[UpgradesService] Returning {_cachedDisplayData?.Count ?? 0} items");
             return _cachedDisplayData;
         }
         
@@ -104,11 +109,22 @@ namespace WattsTap.Core.Services
         {
             _cachedDisplayData = new List<UpgradeDisplayData>();
             
+            // Try to reload config if it's null
+            if (_upgradesConfig == null)
+            {
+                Debug.Log("[UpgradesService] CacheDisplayData: _upgradesConfig is null, attempting to reload...");
+                TryReloadConfig();
+            }
+            
+            Debug.Log($"[UpgradesService] CacheDisplayData: _upgradesConfig is {(_upgradesConfig != null ? "NOT null" : "null")}");
+            
             if (_upgradesConfig?.skills == null)
             {
-                Debug.LogWarning("[UpgradesService] No skills found in UpgradesConfig");
+                Debug.LogWarning($"[UpgradesService] No skills found in UpgradesConfig. Config is {(_upgradesConfig != null ? "NOT null but skills is null" : "null")}");
                 return;
             }
+            
+            Debug.Log($"[UpgradesService] Found {_upgradesConfig.skills.Count} skills in config");
             
             foreach (var skill in _upgradesConfig.skills)
             {
@@ -122,6 +138,29 @@ namespace WattsTap.Core.Services
             }
             
             Debug.Log($"[UpgradesService] Cached {_cachedDisplayData.Count} upgrade display items");
+        }
+        
+        /// <summary>
+        /// Try to reload config from ConfigService
+        /// </summary>
+        private void TryReloadConfig()
+        {
+            if (ServiceLocator.TryGet<IConfigService>(out var configService))
+            {
+                try
+                {
+                    _upgradesConfig = configService.GetConfig<UpgradesConfig>("UpgradesConfig");
+                    Debug.Log($"[UpgradesService] Reloaded UpgradesConfig with {_upgradesConfig?.skills?.Count ?? 0} skills");
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"[UpgradesService] Failed to reload UpgradesConfig: {e.Message}");
+                }
+            }
+            else
+            {
+                Debug.LogError("[UpgradesService] IConfigService not found for reload!");
+            }
         }
         
         /// <summary>

@@ -13,6 +13,8 @@ namespace WattsTap.Game.UI
 
         protected override void OnInit()
         {
+            UnityEngine.Debug.Log("[UpdatesPopupUIPresenter] OnInit called");
+            
             ServiceLocator.TryGet(out _uiService);
             ServiceLocator.TryGet(out _hapticService);
             ServiceLocator.TryGet(out _upgradesService);
@@ -47,6 +49,8 @@ namespace WattsTap.Game.UI
         /// </summary>
         private void LoadUpgradesData()
         {
+            UnityEngine.Debug.Log($"[UpdatesPopupUIPresenter] LoadUpgradesData called. _upgradesService is {(_upgradesService != null ? "NOT null" : "null")}");
+            
             if (_upgradesService == null)
             {
                 UnityEngine.Debug.LogWarning("[UpdatesPopupUIPresenter] UpgradesService not found");
@@ -54,7 +58,10 @@ namespace WattsTap.Game.UI
             }
             
             var upgradesData = _upgradesService.GetAllUpgradesForDisplay();
+            UnityEngine.Debug.Log($"[UpdatesPopupUIPresenter] Got {upgradesData?.Count ?? 0} upgrades from service");
+            
             View.PopulateUpgradesList(upgradesData);
+            UnityEngine.Debug.Log($"[UpdatesPopupUIPresenter] PopulateUpgradesList called");
             
             // Store in model for potential future use
             Model.SetUpgradesData(upgradesData);
