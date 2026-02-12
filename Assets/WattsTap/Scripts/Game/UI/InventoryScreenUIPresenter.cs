@@ -53,6 +53,11 @@ namespace WattsTap.Game.UI
             {
                 View.QuestsButton.onClick.AddListener(OnQuestsButtonClicked);
             }
+
+            if (View.UpdatesButton != null)
+            {
+                View.UpdatesButton.onClick.AddListener(OnUpdatesButtonClicked);
+            }
         }
         
         private void PopulateInventory()
@@ -176,6 +181,20 @@ namespace WattsTap.Game.UI
             _uiService?.Open(UIConstants.QuestsScreen);
         }
 
+        private void OnUpdatesButtonClicked()
+        {
+            _hapticService?.ButtonPressed();
+            
+            if (_uiService == null)
+            {
+                ServiceLocator.TryGet(out _uiService);
+            }
+
+            // Close InventoryScreen and open UpdatesPopup
+            _uiService?.Close(UIConstants.InventoryScreen);
+            _uiService?.Open(UIConstants.UpdatesPopup);
+        }
+
         #endregion
 
         protected override void OnDispose()
@@ -210,6 +229,11 @@ namespace WattsTap.Game.UI
             if (View?.QuestsButton != null)
             {
                 View.QuestsButton.onClick.RemoveListener(OnQuestsButtonClicked);
+            }
+
+            if (View?.UpdatesButton != null)
+            {
+                View.UpdatesButton.onClick.RemoveListener(OnUpdatesButtonClicked);
             }
         }
     }

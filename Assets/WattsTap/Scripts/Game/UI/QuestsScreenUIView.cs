@@ -16,6 +16,7 @@ namespace WattsTap.Game.UI
         [SerializeField] private Button _mainMenuButton;
         [SerializeField] private Button _friendsReferralButton;
         [SerializeField] private Button _inventoryButton;
+        [SerializeField] private Button _updatesButton;
         
         [Header("Quest List")]
         [SerializeField] private Transform _questListContainer;
@@ -25,6 +26,7 @@ namespace WattsTap.Game.UI
         public Button MainMenuButton => _mainMenuButton;
         public Button FriendsReferralButton => _friendsReferralButton;
         public Button InventoryButton => _inventoryButton;
+        public Button UpdatesButton => _updatesButton;
         public Transform QuestListContainer => _questListContainer;
         public GameObject QuestItemPrefab => _questItemPrefab;
         

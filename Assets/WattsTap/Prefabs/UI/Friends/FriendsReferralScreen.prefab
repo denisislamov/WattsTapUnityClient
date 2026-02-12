@@ -6787,6 +6787,7 @@ MonoBehaviour:
   _miningButton: {fileID: 4495270043021772341}
   _questsButton: {fileID: 4015602140169204826}
   _inventoryButton: {fileID: 5769891609926640094}
+  _updatesButton: {fileID: 3752685438444829036}
   _shareButton: {fileID: 4636811369156860712}
   _copyLinkButton: {fileID: 7934399801951018813}
   _shareButton2: {fileID: 7654317321349121991}
@@ -9564,6 +9565,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
   m_PrefabInstance: {fileID: 7417000982596663087}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3752685438444829036 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5979175700302483011, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
+  m_PrefabInstance: {fileID: 7417000982596663087}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1001 &7825044859767081078
 PrefabInstance:
   m_ObjectHideFlags: 0

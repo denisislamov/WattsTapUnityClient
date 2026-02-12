@@ -1026,6 +1026,7 @@ MonoBehaviour:
   _mainMenuButton: {fileID: 7615849288182301774}
   _friendsReferralButton: {fileID: 6116941672040471171}
   _inventoryButton: {fileID: 5376997556088817308}
+  _updatesButton: {fileID: 1918920541294965225}
   _questListContainer: {fileID: 0}
   _questItemPrefab: {fileID: 0}
   _noQuestsPlaceholder: {fileID: 0}
@@ -1425,7 +1426,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5872183254109324216}
   m_HandleRect: {fileID: 7860744798535013146}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -6980,6 +6981,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
   m_PrefabInstance: {fileID: 5213809982314348458}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1918920541294965225 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5979175700302483011, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
+  m_PrefabInstance: {fileID: 5213809982314348458}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1001 &5302590601511153329
 PrefabInstance:
   m_ObjectHideFlags: 0

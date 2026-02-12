@@ -718,7 +718,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1761111583938332954}
   m_HandleRect: {fileID: 7026941787616694770}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3962,6 +3962,7 @@ MonoBehaviour:
   _miningButton: {fileID: 3260496025425226424}
   _friendsReferralButton: {fileID: 9158898216079838911}
   _questsButton: {fileID: 3069323069871148423}
+  _updatesButton: {fileID: 6799635551544283900}
   _currentHitsText: {fileID: 1746827694055682074}
   _maxHitsText: {fileID: 0}
   _coinsPerTapText: {fileID: 6460509753754934074}
@@ -5016,6 +5017,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
   m_PrefabInstance: {fileID: 911807524238744767}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6799635551544283900 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5979175700302483011, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
+  m_PrefabInstance: {fileID: 911807524238744767}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1001 &2333177886926029186
 PrefabInstance:
   m_ObjectHideFlags: 0

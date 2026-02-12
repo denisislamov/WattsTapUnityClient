@@ -44,6 +44,11 @@ namespace WattsTap.Game.UI
             {
                 View.InventoryButton.onClick.AddListener(OnInventoryButtonClicked);
             }
+
+            if (View.UpdatesButton != null)
+            {
+                View.UpdatesButton.onClick.AddListener(OnUpdatesButtonClicked);
+            }
             
             // Referral action buttons
             if (View.ShareButton != null)
@@ -170,6 +175,20 @@ namespace WattsTap.Game.UI
             _uiService?.Close(UIConstants.FriendsReferralScreen);
             _uiService?.Open(UIConstants.InventoryScreen);
         }
+
+        private void OnUpdatesButtonClicked()
+        {
+            _hapticService?.ButtonPressed();
+            
+            if (_uiService == null)
+            {
+                ServiceLocator.TryGet(out _uiService);
+            }
+
+            // Close FriendsReferralScreen and open UpdatesPopup
+            _uiService?.Close(UIConstants.FriendsReferralScreen);
+            _uiService?.Open(UIConstants.UpdatesPopup);
+        }
         
         private void OnShareButtonClicked()
         {
@@ -220,6 +239,11 @@ namespace WattsTap.Game.UI
             if (View?.InventoryButton != null)
             {
                 View.InventoryButton.onClick.RemoveListener(OnInventoryButtonClicked);
+            }
+
+            if (View?.UpdatesButton != null)
+            {
+                View.UpdatesButton.onClick.RemoveListener(OnUpdatesButtonClicked);
             }
             
             if (View?.ShareButton != null)

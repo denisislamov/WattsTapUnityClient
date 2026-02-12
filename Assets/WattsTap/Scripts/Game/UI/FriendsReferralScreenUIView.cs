@@ -27,6 +27,7 @@ namespace WattsTap.Game.UI
         [SerializeField] private Button _miningButton;
         [SerializeField] private Button _questsButton;
         [SerializeField] private Button _inventoryButton;
+        [SerializeField] private Button _updatesButton;
         
         [Header("Referral Tab - Actions")]
         [SerializeField] private Button _shareButton;
@@ -56,6 +57,7 @@ namespace WattsTap.Game.UI
         public Button MiningButton => _miningButton;
         public Button QuestsButton => _questsButton;
         public Button InventoryButton => _inventoryButton;
+        public Button UpdatesButton => _updatesButton;
         public Button ShareButton => _shareButton;
         public Button ShareButton2 => _shareButton2;
         public Button CopyLinkButton => _copyLinkButton;
