@@ -15,6 +15,7 @@ using WattsTap.Game.Avatars;
 using WattsTap.Game.Player;
 using WattsTap.Game.Tap.Services;
 using WattsTap.Game.UI;
+using WattsTap.Scripts.Game.GlobalConfigs;
 
 namespace WattsTap.Core
 {
@@ -82,9 +83,33 @@ namespace WattsTap.Core
             // Register Upgrades Service
             ServiceLocator.Register<IUpgradesService>(new UpgradesService());
             
+            // Load mining balance from server before initializing game services.
+            // Falls back to local config (from CSV) if server is unavailable.
+            StartCoroutine(InitializeWithRemoteBalance());
+        }
+
+        private IEnumerator InitializeWithRemoteBalance()
+        {
+            var apiService = ServiceLocator.Get<IReferralAPIService>();
+            apiService.Initialize();
+
+            var configService = ServiceLocator.Get<IConfigService>();
+            var miningConfig = configService.GetConfig<MiningBalanceConfig>("MiningBalanceConfig");
+            
+            if (miningConfig != null)
+            {
+                var remoteLoader = new MiningBalanceRemoteLoader(miningConfig, apiService);
+                yield return remoteLoader.LoadFromServer();
+                
+                Debug.Log($"<color=#00FFFF>[ApplicationEntry] MiningBalance source: {remoteLoader.Source}</color>");
+            }
+            else
+            {
+                Debug.LogWarning("[ApplicationEntry] MiningBalanceConfig not found in ConfigService!");
+            }
+            
             _serviceManager.InitializeAll();
             
-            // Register Orientation Service
             ServiceLocator.Register<IOrientationService>(new OrientationService());
             _serviceManager.InitializeUninitialized();
         }

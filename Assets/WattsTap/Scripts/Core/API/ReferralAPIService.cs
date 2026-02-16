@@ -37,6 +37,9 @@ namespace WattsTap.Core.API
         
         /// <summary>Reset player progress on server</summary>
         IEnumerator ResetProgress(Action<ResetProgressResponse> onSuccess, Action<string> onError);
+        
+        /// <summary>Load mining balance configuration from server</summary>
+        IEnumerator LoadMiningBalance(Action<MiningBalancePublicResponse> onSuccess, Action<string> onError);
     }
     
     /// <summary>
@@ -427,6 +430,47 @@ namespace WattsTap.Core.API
                 }
                 else
                 {
+                    HandleRequestError(www, onError);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Load mining balance configuration from server.
+        /// This is a public endpoint — no auth required.
+        /// </summary>
+        public IEnumerator LoadMiningBalance(Action<MiningBalancePublicResponse> onSuccess, Action<string> onError)
+        {
+            using (var www = CreateGetRequest("/balance/mining"))
+            {
+                yield return www.SendWebRequest();
+                
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    try
+                    {
+                        Debug.Log($"<color=#00FFFF>[ReferralAPIService] LoadMiningBalance response: {www.downloadHandler.text}</color>");
+                        
+                        var response = JsonUtility.FromJson<MiningBalancePublicResponse>(www.downloadHandler.text);
+                        
+                        if (response != null && response.success && response.balance != null)
+                        {
+                            onSuccess?.Invoke(response);
+                        }
+                        else
+                        {
+                            onError?.Invoke("Empty or unsuccessful response");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogWarning($"[ReferralAPIService] Failed to parse mining balance: {ex.Message}");
+                        onError?.Invoke($"Failed to parse response: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"[ReferralAPIService] LoadMiningBalance failed: {www.error}");
                     HandleRequestError(www, onError);
                 }
             }
