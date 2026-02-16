@@ -802,7 +802,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 88874a51b5c4f4845bdccdbab526e85f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ca095f0bc92bd42c6bae42c2c53e0adf, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1279,54 +1279,7 @@ MonoBehaviour:
   _secondaryColorImage: {fileID: 0}
   _backButton: {fileID: 9166165587639821304}
   _openButton: {fileID: 7405894501292601043}
-  _chestTransform: {fileID: 4624605013618611624}
-  _chestClosedImage: {fileID: 0}
-  _chestOpenImage1: {fileID: 0}
-  _chestOpenImage2: {fileID: 0}
-  _glowImage: {fileID: 0}
-  _jumpHeight: 60
-  _jumpDuration: 0.4
-  _jumpCount: 1
-  _scaleAmount: 1.15
-  _crossfadeDuration: 0
-  _idleJumpHeight: 25
-  _idleJumpDuration: 0.2
-  _idleJumpCount: 1
-  _idleScaleAmount: 1.1
-  _idleInitialDelay: 0.5
-  _idleJumpInterval: 1.5
-  _glowFadeInDuration: 0.3
-  _glowPulseMin: 0.4
-  _glowPulseMax: 1
-  _glowPulseDuration: 0.8
-  _itemTransform: {fileID: 0}
-  _itemCanvasGroup: {fileID: 0}
-  _itemStartPosition: {fileID: 0}
-  _itemEndPosition: {fileID: 0}
-  _itemFlyDuration: 0.6
-  _itemFlyHeight: 100
-  _itemFadeInDuration: 0.2
-  _itemRotationSpeed: 720
-  _itemRotationDuration: 0.8
-  _itemBounceScaleMin: 0.5
-  _itemBounceScaleMax: 1
-  _itemFinalScaleDuration: 1
-  _finalItemTransforms:
-  - {fileID: 0}
-  - {fileID: 0}
-  _finalItemCanvasGroups:
-  - {fileID: 0}
-  - {fileID: 0}
-  _itemCrossfadeDuration: 0.3
-  _itemCrossfadeScaleMin: 1
-  _itemCrossfadeScaleMax: 1
-  _label1CanvasGroup: {fileID: 4855136272561881366}
-  _label2CanvasGroup: {fileID: 690513142156623532}
-  _labelFadeDuration: 0.3
-  _useOptimizedMode: 1
-  _targetFrameInterval: 0.008
-  _useUnscaledTime: 1
-  _rotationSteps: 36
+  _chestAnimator: {fileID: 587347583726445522}
   _skinBindings: []
 --- !u!1 &6943064809884705279
 GameObject:
