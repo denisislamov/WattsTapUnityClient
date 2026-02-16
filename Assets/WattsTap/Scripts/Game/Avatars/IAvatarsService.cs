@@ -56,6 +56,14 @@ namespace WattsTap.Game.Avatars
         IReadOnlyList<AvatarConfig> GetAllAvatarConfigs();
         
         /// <summary>
+        /// Gets all avatar configurations sorted by:
+        /// 1. Level unlock type (free by level first)
+        /// 2. Coins price (ascending)
+        /// 3. BTN price (ascending)
+        /// </summary>
+        IReadOnlyList<AvatarConfig> GetSortedAvatarConfigs();
+        
+        /// <summary>
         /// Gets the configuration for a specific avatar.
         /// </summary>
         AvatarConfig GetAvatarConfig(string avatarId);

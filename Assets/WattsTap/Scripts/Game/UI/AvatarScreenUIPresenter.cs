@@ -63,8 +63,8 @@ namespace WattsTap.Game.UI
             // Create Telegram avatar first (default)
             CreateTelegramAvatarItem();
             
-            // Create avatars from configs
-            var avatarConfigs = _avatarsService.GetAllAvatarConfigs();
+            // Create avatars from configs (sorted by unlock type and price)
+            var avatarConfigs = _avatarsService.GetSortedAvatarConfigs();
             foreach (var config in avatarConfigs)
             {
                 if (config != null)

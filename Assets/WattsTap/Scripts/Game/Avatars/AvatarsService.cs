@@ -191,6 +191,34 @@ namespace WattsTap.Game.Avatars
             return _avatarConfigs ?? Array.Empty<AvatarConfig>();
         }
         
+        public IReadOnlyList<AvatarConfig> GetSortedAvatarConfigs()
+        {
+            if (_avatarConfigs == null || _avatarConfigs.Length == 0)
+            {
+                return Array.Empty<AvatarConfig>();
+            }
+            
+            return _avatarConfigs
+                .Where(c => c != null)
+                .OrderBy(c => GetUnlockTypeSortOrder(c.UnlockType))
+                .ThenBy(c => c.UnlockType == AvatarUnlockType.Level ? c.RequiredLevel : int.MaxValue)
+                .ThenBy(c => c.UnlockType == AvatarUnlockType.Coins ? c.CoinPrice : long.MaxValue)
+                .ThenBy(c => c.UnlockType == AvatarUnlockType.BTN ? c.BtnPrice : long.MaxValue)
+                .ToList();
+        }
+        
+        private static int GetUnlockTypeSortOrder(AvatarUnlockType unlockType)
+        {
+            return unlockType switch
+            {
+                AvatarUnlockType.Free => 0,
+                AvatarUnlockType.Level => 1,
+                AvatarUnlockType.Coins => 2,
+                AvatarUnlockType.BTN => 3,
+                _ => 4
+            };
+        }
+        
         public AvatarConfig GetAvatarConfig(string avatarId)
         {
             if (string.IsNullOrEmpty(avatarId))
