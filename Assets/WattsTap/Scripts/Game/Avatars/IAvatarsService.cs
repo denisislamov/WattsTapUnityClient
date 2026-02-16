@@ -5,6 +5,29 @@ using UnityEngine;
 namespace WattsTap.Game.Avatars
 {
     /// <summary>
+    /// Результат покупки аватара
+    /// </summary>
+    public enum AvatarPurchaseResult
+    {
+        /// <summary>Покупка успешна</summary>
+        Success,
+        /// <summary>Аватар уже разблокирован</summary>
+        AlreadyUnlocked,
+        /// <summary>Недостаточно монет</summary>
+        NotEnoughCoins,
+        /// <summary>Недостаточно BTN токенов</summary>
+        NotEnoughBTN,
+        /// <summary>Уровень игрока недостаточен</summary>
+        LevelTooLow,
+        /// <summary>Аватар не существует</summary>
+        AvatarNotFound,
+        /// <summary>Покупка за BTN недоступна</summary>
+        BTNPurchaseNotAvailable,
+        /// <summary>Неизвестная ошибка</summary>
+        Error
+    }
+    
+    /// <summary>
     /// Interface for the Avatars Service.
     /// </summary>
     public interface IAvatarsService : WattsTap.Core.IService
@@ -20,6 +43,12 @@ namespace WattsTap.Game.Avatars
         /// Provides the loaded sprite.
         /// </summary>
         event Action<Sprite> OnTelegramAvatarLoaded;
+        
+        /// <summary>
+        /// Event fired when an avatar is purchased/unlocked.
+        /// Provides the avatar ID and result.
+        /// </summary>
+        event Action<string, AvatarPurchaseResult> OnAvatarPurchased;
         
         /// <summary>
         /// Gets all available avatar configurations.
@@ -68,6 +97,41 @@ namespace WattsTap.Game.Avatars
         /// Returns true if the Telegram avatar has been loaded.
         /// </summary>
         bool IsTelegramAvatarLoaded { get; }
+        
+        /// <summary>
+        /// Проверяет, можно ли купить аватар за монеты при текущем уровне игрока
+        /// </summary>
+        bool CanPurchaseAvatarWithCoins(string avatarId, int playerLevel, long playerCoins);
+        
+        /// <summary>
+        /// Проверяет, можно ли разблокировать аватар по уровню
+        /// </summary>
+        bool CanUnlockByLevel(string avatarId, int playerLevel);
+        
+        /// <summary>
+        /// Покупает аватар за монеты (Watts)
+        /// </summary>
+        AvatarPurchaseResult PurchaseAvatarWithCoins(string avatarId);
+        
+        /// <summary>
+        /// Покупает аватар за BTN токены (пока недоступно)
+        /// </summary>
+        AvatarPurchaseResult PurchaseAvatarWithBTN(string avatarId);
+        
+        /// <summary>
+        /// Разблокирует аватар по достижении уровня (бесплатно)
+        /// </summary>
+        AvatarPurchaseResult UnlockAvatarByLevel(string avatarId);
+        
+        /// <summary>
+        /// Получить список разблокированных аватаров
+        /// </summary>
+        IReadOnlyCollection<string> GetUnlockedAvatars();
+        
+        /// <summary>
+        /// Принудительно разблокировать аватар (для тестов или наград)
+        /// </summary>
+        void UnlockAvatar(string avatarId);
     }
 }
 

@@ -1,22 +1,25 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 using WattsTap.Constants;
 using WattsTap.Core;
 using WattsTap.Core.React;
+using WattsTap.Game.Player;
 
 namespace WattsTap.Game.Avatars
 {
     /// <summary>
     /// Service for managing avatars.
-    /// Handles avatar configurations, selection, and Telegram avatar loading.
+    /// Handles avatar configurations, selection, purchase, and Telegram avatar loading.
     /// </summary>
     public class AvatarsService : MonoBehaviour, IAvatarsService
     {
         private const string TelegramAvatarIdConst = "telegram_avatar";
         private const string CurrentAvatarPlayerPrefsKey = "current_avatar_id";
+        private const string UnlockedAvatarsPlayerPrefsKey = "unlocked_avatars";
         
         [Header("Avatar Configurations")]
         [SerializeField] private AvatarConfig[] _avatarConfigs;
@@ -32,6 +35,7 @@ namespace WattsTap.Game.Avatars
         
         public event Action<string> OnAvatarChanged;
         public event Action<Sprite> OnTelegramAvatarLoaded;
+        public event Action<string, AvatarPurchaseResult> OnAvatarPurchased;
         
         public int InitializationOrder => 100;
         public bool IsInitialized { get; private set; }
@@ -104,7 +108,11 @@ namespace WattsTap.Game.Avatars
                 }
             }
             
-            // TODO: Load unlocked avatars from server/player prefs
+            // Load unlocked avatars from PlayerPrefs
+            LoadUnlockedAvatarsFromPrefs();
+            
+            // TODO: Load unlocked avatars from server when API is available
+            // SyncUnlockedAvatarsFromServer();
         }
         
         private void LoadCurrentAvatarFromPrefs()
@@ -262,6 +270,190 @@ namespace WattsTap.Game.Avatars
         }
         
         /// <summary>
+        /// Получить список разблокированных аватаров
+        /// </summary>
+        public IReadOnlyCollection<string> GetUnlockedAvatars()
+        {
+            return _unlockedAvatars;
+        }
+        
+        /// <summary>
+        /// Проверяет, можно ли купить аватар за монеты при текущем уровне игрока
+        /// </summary>
+        public bool CanPurchaseAvatarWithCoins(string avatarId, int playerLevel, long playerCoins)
+        {
+            if (string.IsNullOrEmpty(avatarId))
+                return false;
+                
+            if (IsAvatarUnlocked(avatarId))
+                return false;
+                
+            var config = GetAvatarConfig(avatarId);
+            if (config == null)
+                return false;
+                
+            if (!config.CanBuyWithCoins)
+                return false;
+                
+            if (!config.IsAvailableAtLevel(playerLevel))
+                return false;
+                
+            return playerCoins >= config.CoinPrice;
+        }
+        
+        /// <summary>
+        /// Проверяет, можно ли разблокировать аватар по уровню
+        /// </summary>
+        public bool CanUnlockByLevel(string avatarId, int playerLevel)
+        {
+            if (string.IsNullOrEmpty(avatarId))
+                return false;
+                
+            if (IsAvatarUnlocked(avatarId))
+                return false;
+                
+            var config = GetAvatarConfig(avatarId);
+            if (config == null)
+                return false;
+                
+            if (config.UnlockType != AvatarUnlockType.Level)
+                return false;
+                
+            return config.IsAvailableAtLevel(playerLevel);
+        }
+        
+        /// <summary>
+        /// Покупает аватар за монеты (Watts)
+        /// </summary>
+        public AvatarPurchaseResult PurchaseAvatarWithCoins(string avatarId)
+        {
+            if (string.IsNullOrEmpty(avatarId))
+            {
+                Debug.LogWarning("[AvatarsService] Cannot purchase avatar with empty ID");
+                return AvatarPurchaseResult.AvatarNotFound;
+            }
+            
+            if (IsAvatarUnlocked(avatarId))
+            {
+                Debug.Log($"[AvatarsService] Avatar '{avatarId}' is already unlocked");
+                return AvatarPurchaseResult.AlreadyUnlocked;
+            }
+            
+            var config = GetAvatarConfig(avatarId);
+            if (config == null)
+            {
+                Debug.LogWarning($"[AvatarsService] Avatar config '{avatarId}' not found");
+                return AvatarPurchaseResult.AvatarNotFound;
+            }
+            
+            if (!config.CanBuyWithCoins)
+            {
+                Debug.LogWarning($"[AvatarsService] Avatar '{avatarId}' cannot be purchased with coins");
+                return AvatarPurchaseResult.Error;
+            }
+            
+            // Get player service to check level and spend coins
+            if (!ServiceLocator.TryGet<IPlayerService>(out var playerService))
+            {
+                Debug.LogError("[AvatarsService] IPlayerService not found");
+                return AvatarPurchaseResult.Error;
+            }
+            
+            var playerData = playerService.GetPlayerData();
+            
+            // Check level requirement
+            if (!config.IsAvailableAtLevel(playerData.level))
+            {
+                Debug.Log($"[AvatarsService] Player level {playerData.level} is below required {config.RequiredLevel} for avatar '{avatarId}'");
+                return AvatarPurchaseResult.LevelTooLow;
+            }
+            
+            // Check if player has enough coins
+            if (playerData.resources.watts < config.CoinPrice)
+            {
+                Debug.Log($"[AvatarsService] Not enough coins. Has: {playerData.resources.watts}, Needs: {config.CoinPrice}");
+                return AvatarPurchaseResult.NotEnoughCoins;
+            }
+            
+            // Spend coins
+            if (!playerService.SpendWatts(config.CoinPrice))
+            {
+                Debug.LogError($"[AvatarsService] Failed to spend {config.CoinPrice} Watts for avatar '{avatarId}'");
+                return AvatarPurchaseResult.Error;
+            }
+            
+            // Unlock avatar
+            UnlockAvatarInternal(avatarId);
+            
+            Debug.Log($"<color=#00FF00>[AvatarsService] Avatar '{avatarId}' purchased for {config.CoinPrice} Watts</color>");
+            OnAvatarPurchased?.Invoke(avatarId, AvatarPurchaseResult.Success);
+            
+            return AvatarPurchaseResult.Success;
+        }
+        
+        /// <summary>
+        /// Покупает аватар за BTN токены (пока недоступно)
+        /// </summary>
+        public AvatarPurchaseResult PurchaseAvatarWithBTN(string avatarId)
+        {
+            // TODO: Implement BTN purchase when BTN tokens are available
+            Debug.LogWarning("[AvatarsService] BTN purchase is not available yet");
+            OnAvatarPurchased?.Invoke(avatarId, AvatarPurchaseResult.BTNPurchaseNotAvailable);
+            return AvatarPurchaseResult.BTNPurchaseNotAvailable;
+        }
+        
+        /// <summary>
+        /// Разблокирует аватар по достижении уровня (бесплатно)
+        /// </summary>
+        public AvatarPurchaseResult UnlockAvatarByLevel(string avatarId)
+        {
+            if (string.IsNullOrEmpty(avatarId))
+            {
+                return AvatarPurchaseResult.AvatarNotFound;
+            }
+            
+            if (IsAvatarUnlocked(avatarId))
+            {
+                return AvatarPurchaseResult.AlreadyUnlocked;
+            }
+            
+            var config = GetAvatarConfig(avatarId);
+            if (config == null)
+            {
+                return AvatarPurchaseResult.AvatarNotFound;
+            }
+            
+            if (config.UnlockType != AvatarUnlockType.Level)
+            {
+                Debug.LogWarning($"[AvatarsService] Avatar '{avatarId}' is not unlockable by level");
+                return AvatarPurchaseResult.Error;
+            }
+            
+            // Get player level
+            if (!ServiceLocator.TryGet<IPlayerService>(out var playerService))
+            {
+                Debug.LogError("[AvatarsService] IPlayerService not found");
+                return AvatarPurchaseResult.Error;
+            }
+            
+            var playerData = playerService.GetPlayerData();
+            
+            if (!config.IsAvailableAtLevel(playerData.level))
+            {
+                Debug.Log($"[AvatarsService] Player level {playerData.level} is below required {config.RequiredLevel} for avatar '{avatarId}'");
+                return AvatarPurchaseResult.LevelTooLow;
+            }
+            
+            // Unlock avatar for free
+            UnlockAvatarInternal(avatarId);
+            
+            Debug.Log($"<color=#00FF00>[AvatarsService] Avatar '{avatarId}' unlocked by reaching level {config.RequiredLevel}</color>");
+            OnAvatarPurchased?.Invoke(avatarId, AvatarPurchaseResult.Success);
+            
+            return AvatarPurchaseResult.Success;
+        }
+
+        /// <summary>
         /// Unlocks an avatar. Call this when player earns a new avatar.
         /// </summary>
         public void UnlockAvatar(string avatarId)
@@ -271,12 +463,85 @@ namespace WattsTap.Game.Avatars
                 return;
             }
             
+            UnlockAvatarInternal(avatarId);
+        }
+        
+        #region Private Methods
+        
+        private void UnlockAvatarInternal(string avatarId)
+        {
             if (_unlockedAvatars.Add(avatarId))
             {
                 Debug.Log($"[AvatarsService] Avatar '{avatarId}' unlocked");
-                // TODO: Save to server/player prefs
+                SaveUnlockedAvatarsToPrefs();
+                
+                // TODO: Sync unlocked avatars to server when API is available
+                // SyncUnlockedAvatarsToServer();
             }
         }
+        
+        private void LoadUnlockedAvatarsFromPrefs()
+        {
+            string savedAvatars = PlayerPrefs.GetString(UnlockedAvatarsPlayerPrefsKey, string.Empty);
+            
+            if (!string.IsNullOrEmpty(savedAvatars))
+            {
+                string[] avatarIds = savedAvatars.Split(',');
+                foreach (var id in avatarIds)
+                {
+                    if (!string.IsNullOrEmpty(id))
+                    {
+                        _unlockedAvatars.Add(id.Trim());
+                    }
+                }
+                Debug.Log($"[AvatarsService] Loaded {avatarIds.Length} unlocked avatars from PlayerPrefs");
+            }
+        }
+        
+        private void SaveUnlockedAvatarsToPrefs()
+        {
+            // Filter out always-unlocked avatars (telegram, defaults)
+            var purchasedAvatars = _unlockedAvatars
+                .Where(id => !IsAlwaysUnlocked(id))
+                .ToArray();
+            
+            string avatarsString = string.Join(",", purchasedAvatars);
+            PlayerPrefs.SetString(UnlockedAvatarsPlayerPrefsKey, avatarsString);
+            PlayerPrefs.Save();
+            
+            Debug.Log($"[AvatarsService] Saved {purchasedAvatars.Length} purchased avatars to PlayerPrefs");
+        }
+        
+        private bool IsAlwaysUnlocked(string avatarId)
+        {
+            if (avatarId == TelegramAvatarIdConst)
+                return true;
+                
+            var config = GetAvatarConfig(avatarId);
+            return config != null && config.IsUnlockedByDefault;
+        }
+        
+        #endregion
+        
+        #region Server Sync (TODO)
+        
+        // TODO: Implement server sync when API endpoints are available
+        
+        // Синхронизирует разблокированные аватары с сервером (загрузка)
+        // private void SyncUnlockedAvatarsFromServer()
+        // {
+        //     // TODO: Call API to get list of unlocked avatars
+        //     // Example: apiService.GetUnlockedAvatars(onSuccess: (avatars) => { ... });
+        // }
+        
+        // Синхронизирует разблокированные аватары с сервером (сохранение)
+        // private void SyncUnlockedAvatarsToServer()
+        // {
+        //     // TODO: Call API to save unlocked avatars
+        //     // Example: apiService.SaveUnlockedAvatars(_unlockedAvatars.ToList(), onSuccess: () => { ... });
+        // }
+        
+        #endregion
     }
 }
 

@@ -17,3 +17,7 @@ MonoBehaviour:
   _avatarSprite: {fileID: 21300000, guid: 8d59aa2384f174813838d31b4fa86363, type: 3}
   _isUnlockedByDefault: 0
   _unlockRequirement: 
+  _unlockType: 0
+  _requiredLevel: 10
+  _coinPrice: 0
+  _btnPrice: 0

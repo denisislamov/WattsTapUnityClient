@@ -15,5 +15,9 @@ MonoBehaviour:
   _avatarId: 38
   _displayName: 38
   _avatarSprite: {fileID: 21300000, guid: 63cd710baf67249ce90e948630f3bf4e, type: 3}
-  _isUnlockedByDefault: 0
+  _isUnlockedByDefault: 1
   _unlockRequirement: 
+  _unlockType: 3
+  _requiredLevel: 1
+  _coinPrice: 0
+  _btnPrice: 0
