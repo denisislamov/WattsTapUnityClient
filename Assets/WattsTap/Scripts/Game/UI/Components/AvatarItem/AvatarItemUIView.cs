@@ -1,6 +1,8 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using WattsTap.Game.Avatars;
 
 namespace WattsTap.Game.UI
 {
@@ -14,6 +16,9 @@ namespace WattsTap.Game.UI
         [SerializeField] private string _avatarId;
         [SerializeField] private Image _avatarImage;
         [SerializeField] private Button _avatarButton;
+        
+        [Header("Cost Display")]
+        [SerializeField] private TMP_Text _costText;
         
         [Header("State GameObjects")]
         [Tooltip("GameObjects to show when this is the current (equipped) avatar")]
@@ -164,6 +169,100 @@ namespace WattsTap.Game.UI
             {
                 _avatarButton.interactable = interactable;
             }
+        }
+        
+        /// <summary>
+        /// Sets the cost display based on unlock type and price.
+        /// </summary>
+        public void SetCost(AvatarUnlockType unlockType, long price, int requiredLevel)
+        {
+            if (_costText == null)
+            {
+                return;
+            }
+            
+            switch (unlockType)
+            {
+                case AvatarUnlockType.Level:
+                    _costText.text = $"{requiredLevel} lvl";
+                    break;
+                    
+                case AvatarUnlockType.Coins:
+                    _costText.text = FormatNumber(price);
+                    break;
+                    
+                case AvatarUnlockType.BTN:
+                    _costText.text = $"{price} BTN";
+                    break;
+                    
+                case AvatarUnlockType.Free:
+                default:
+                    _costText.text = string.Empty;
+                    break;
+            }
+        }
+        
+        /// <summary>
+        /// Sets raw cost text directly.
+        /// </summary>
+        public void SetCostText(string text)
+        {
+            if (_costText != null)
+            {
+                _costText.text = text;
+            }
+        }
+        
+        /// <summary>
+        /// Shows or hides the cost text.
+        /// </summary>
+        public void SetCostVisible(bool visible)
+        {
+            if (_costText != null)
+            {
+                _costText.gameObject.SetActive(visible);
+            }
+        }
+        
+        /// <summary>
+        /// Sets the cost text opacity based on affordability.
+        /// Full opacity (1.0) if affordable, 50% opacity (0.5) if not.
+        /// </summary>
+        public void SetCostAffordable(bool canAfford)
+        {
+            if (_costText == null)
+            {
+                return;
+            }
+            
+            var color = _costText.color;
+            color.a = canAfford ? 1f : 0.5f;
+            _costText.color = color;
+        }
+        
+        /// <summary>
+        /// Formats a number with K/M abbreviations.
+        /// Examples: 999 -> "999", 1500 -> "1.5K", 1000000 -> "1M", 1500000 -> "1.5M"
+        /// </summary>
+        private static string FormatNumber(long number)
+        {
+            if (number >= 1_000_000)
+            {
+                double millions = number / 1_000_000.0;
+                return millions % 1 == 0 
+                    ? $"{millions:0}M" 
+                    : $"{millions:0.##}M";
+            }
+            
+            if (number >= 1_000)
+            {
+                double thousands = number / 1_000.0;
+                return thousands % 1 == 0 
+                    ? $"{thousands:0}K" 
+                    : $"{thousands:0.##}K";
+            }
+            
+            return number.ToString();
         }
     }
 }

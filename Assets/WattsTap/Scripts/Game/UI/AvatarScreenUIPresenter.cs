@@ -4,6 +4,7 @@ using WattsTap.Core;
 using WattsTap.Core.Telegram;
 using WattsTap.Core.UI;
 using WattsTap.Game.Avatars;
+using WattsTap.Game.Player;
 
 namespace WattsTap.Game.UI
 {
@@ -12,12 +13,14 @@ namespace WattsTap.Game.UI
         private IUIService _uiService;
         private IHapticFeedbackService _hapticService;
         private IAvatarsService _avatarsService;
+        private IPlayerService _playerService;
 
         protected override void OnInit()
         {
             ServiceLocator.TryGet(out _hapticService);
             ServiceLocator.TryGet(out _uiService);
             ServiceLocator.TryGet(out _avatarsService);
+            ServiceLocator.TryGet(out _playerService);
 
             if (View.BackButton != null)
             {
@@ -39,6 +42,7 @@ namespace WattsTap.Game.UI
                 // Subscribe to avatar changes from external sources
                 _avatarsService.OnAvatarChanged += OnAvatarChangedExternally;
                 _avatarsService.OnTelegramAvatarLoaded += OnTelegramAvatarLoaded;
+                _avatarsService.OnAvatarPurchased += OnAvatarPurchased;
                 
                 // Create avatar items
                 CreateAvatarItems();
@@ -80,6 +84,9 @@ namespace WattsTap.Game.UI
             var presenter = new AvatarItemUIPresenter(view, model);
             presenter.OnAvatarClicked += OnAvatarItemClicked;
             
+            // Telegram avatar is always free - hide cost
+            view.SetCostVisible(false);
+            
             Model.AvatarPresenters.Add(presenter);
         }
         
@@ -92,7 +99,62 @@ namespace WattsTap.Game.UI
             var presenter = new AvatarItemUIPresenter(view, model);
             presenter.OnAvatarClicked += OnAvatarItemClicked;
             
+            // Set cost display based on unlock type
+            if (config.IsUnlockedByDefault || _avatarsService.IsAvatarUnlocked(config.AvatarId))
+            {
+                // Already unlocked - hide cost
+                view.SetCostVisible(false);
+            }
+            else
+            {
+                // Show cost based on unlock type
+                long price = config.UnlockType == AvatarUnlockType.BTN ? config.BtnPrice : config.CoinPrice;
+                view.SetCost(config.UnlockType, price, config.RequiredLevel);
+                view.SetCostVisible(true);
+                
+                // Set affordability (opacity)
+                bool canAfford = CanAffordAvatar(config);
+                view.SetCostAffordable(canAfford);
+            }
+            
             Model.AvatarPresenters.Add(presenter);
+        }
+        
+        private bool CanAffordAvatar(AvatarConfig config)
+        {
+            if (_playerService == null)
+            {
+                return false;
+            }
+            
+            var playerData = _playerService.GetPlayerData();
+            
+            // Check level requirement first
+            if (playerData.level < config.RequiredLevel)
+            {
+                return false;
+            }
+            
+            // Check currency based on unlock type
+            switch (config.UnlockType)
+            {
+                case AvatarUnlockType.Coins:
+                    return playerData.resources.watts >= config.CoinPrice;
+                    
+                case AvatarUnlockType.BTN:
+                    // BTN not implemented yet
+                    return false;
+                    
+                case AvatarUnlockType.Level:
+                    // Level unlock is free if level requirement is met
+                    return true;
+                    
+                case AvatarUnlockType.Free:
+                    return true;
+                    
+                default:
+                    return false;
+            }
         }
         
         private AvatarItemState GetAvatarState(string avatarId)
@@ -121,8 +183,21 @@ namespace WattsTap.Game.UI
             
             if (currentState == AvatarItemState.Locked)
             {
-                // TODO: Show unlock requirements popup
-                Debug.Log($"[AvatarScreenUIPresenter] Avatar '{avatarId}' is locked");
+                // Check if we can afford this locked avatar
+                var config = _avatarsService.GetAvatarConfig(avatarId);
+                if (config != null && CanAffordAvatar(config))
+                {
+                    // Select locked avatar so user can click Equip to purchase
+                    Model.SelectedAvatarId.Value = avatarId;
+                    UpdateAllAvatarStates();
+                    UpdateEquipButtonState();
+                    Debug.Log($"[AvatarScreenUIPresenter] Locked avatar '{avatarId}' selected for purchase");
+                }
+                else
+                {
+                    Debug.Log($"[AvatarScreenUIPresenter] Avatar '{avatarId}' is locked and cannot be afforded");
+                    // TODO: Show "not enough resources" feedback
+                }
                 return;
             }
             
@@ -165,6 +240,13 @@ namespace WattsTap.Game.UI
                 return;
             }
             
+            // Check if avatar is locked - try to purchase
+            if (!_avatarsService.IsAvatarUnlocked(selectedId))
+            {
+                TryPurchaseAvatar(selectedId);
+                return;
+            }
+            
             // Equip the selected avatar via service
             if (_avatarsService.SelectAvatar(selectedId))
             {
@@ -173,6 +255,100 @@ namespace WattsTap.Game.UI
                 UpdateEquipButtonState();
                 
                 Debug.Log($"[AvatarScreenUIPresenter] Avatar '{selectedId}' equipped!");
+            }
+        }
+        
+        private void TryPurchaseAvatar(string avatarId)
+        {
+            var config = _avatarsService.GetAvatarConfig(avatarId);
+            if (config == null)
+            {
+                Debug.LogWarning($"[AvatarScreenUIPresenter] Avatar config '{avatarId}' not found");
+                return;
+            }
+            
+            if (!CanAffordAvatar(config))
+            {
+                Debug.Log($"[AvatarScreenUIPresenter] Cannot afford avatar '{avatarId}'");
+                // TODO: Show "not enough resources" feedback
+                return;
+            }
+            
+            AvatarPurchaseResult result;
+            
+            switch (config.UnlockType)
+            {
+                case AvatarUnlockType.Coins:
+                    result = _avatarsService.PurchaseAvatarWithCoins(avatarId);
+                    break;
+                    
+                case AvatarUnlockType.BTN:
+                    result = _avatarsService.PurchaseAvatarWithBTN(avatarId);
+                    break;
+                    
+                case AvatarUnlockType.Level:
+                    result = _avatarsService.UnlockAvatarByLevel(avatarId);
+                    break;
+                    
+                case AvatarUnlockType.Free:
+                    _avatarsService.UnlockAvatar(avatarId);
+                    result = AvatarPurchaseResult.Success;
+                    break;
+                    
+                default:
+                    result = AvatarPurchaseResult.Error;
+                    break;
+            }
+            
+            if (result == AvatarPurchaseResult.Success)
+            {
+                Debug.Log($"[AvatarScreenUIPresenter] Avatar '{avatarId}' purchased successfully!");
+                
+                // Auto-equip after purchase
+                if (_avatarsService.SelectAvatar(avatarId))
+                {
+                    Model.CurrentAvatarId.Value = avatarId;
+                    UpdateAllAvatarStates();
+                    UpdateEquipButtonState();
+                }
+                
+                // Update all affordability states (resources changed)
+                UpdateAllAffordabilityStates();
+            }
+            else
+            {
+                Debug.Log($"[AvatarScreenUIPresenter] Failed to purchase avatar '{avatarId}': {result}");
+            }
+        }
+        
+        private void UpdateAllAffordabilityStates()
+        {
+            var avatarConfigs = _avatarsService.GetAllAvatarConfigs();
+            
+            foreach (var presenter in Model.AvatarPresenters)
+            {
+                // Skip telegram avatar
+                if (presenter.AvatarId == _avatarsService.TelegramAvatarId)
+                {
+                    continue;
+                }
+                
+                // Skip unlocked avatars
+                if (_avatarsService.IsAvatarUnlocked(presenter.AvatarId))
+                {
+                    continue;
+                }
+                
+                // Find config and update affordability
+                foreach (var config in avatarConfigs)
+                {
+                    if (config.AvatarId == presenter.AvatarId)
+                    {
+                        bool canAfford = CanAffordAvatar(config);
+                        presenter.View.SetCostAffordable(canAfford);
+                        break;
+                    }
+                }
             }
         }
         
@@ -215,6 +391,27 @@ namespace WattsTap.Game.UI
                 }
             }
         }
+        
+        private void OnAvatarPurchased(string avatarId, AvatarPurchaseResult result)
+        {
+            if (result != AvatarPurchaseResult.Success)
+            {
+                return;
+            }
+            
+            // Find the presenter for this avatar and hide cost
+            foreach (var presenter in Model.AvatarPresenters)
+            {
+                if (presenter.AvatarId == avatarId)
+                {
+                    presenter.View.SetCostVisible(false);
+                    presenter.SetState(AvatarItemState.Unselected);
+                    break;
+                }
+            }
+            
+            UpdateAllAvatarStates();
+        }
 
         private void OnBackClicked()
         {
@@ -244,6 +441,7 @@ namespace WattsTap.Game.UI
             {
                 _avatarsService.OnAvatarChanged -= OnAvatarChangedExternally;
                 _avatarsService.OnTelegramAvatarLoaded -= OnTelegramAvatarLoaded;
+                _avatarsService.OnAvatarPurchased -= OnAvatarPurchased;
             }
             
             // Cleanup avatar presenters

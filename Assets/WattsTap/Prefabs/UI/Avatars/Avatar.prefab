@@ -728,6 +728,7 @@ MonoBehaviour:
   _avatarId: 
   _avatarImage: {fileID: 6492362934981162124}
   _avatarButton: {fileID: 7485082727526065595}
+  _costText: {fileID: 4136601006911014817}
   _currentStateObjects:
   - {fileID: 7644945539423766971}
   - {fileID: 1026356548049714304}
