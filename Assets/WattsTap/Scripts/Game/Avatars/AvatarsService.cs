@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using WattsTap.Constants;
 using WattsTap.Core;
+using WattsTap.Core.API;
 using WattsTap.Core.React;
 using WattsTap.Game.Player;
 
@@ -551,23 +552,250 @@ namespace WattsTap.Game.Avatars
         
         #endregion
         
-        #region Server Sync (TODO)
+        #region Server-Side Purchase
         
-        // TODO: Implement server sync when API endpoints are available
+        /// <summary>
+        /// Purchase avatar via server (async). Deducts currency server-side.
+        /// </summary>
+        public void PurchaseAvatarWithCoinsAsync(string avatarId, Action<bool, AvatarPurchaseResult> onComplete)
+        {
+            if (string.IsNullOrEmpty(avatarId))
+            {
+                onComplete?.Invoke(false, AvatarPurchaseResult.AvatarNotFound);
+                return;
+            }
+            
+            if (IsAvatarUnlocked(avatarId))
+            {
+                onComplete?.Invoke(false, AvatarPurchaseResult.AlreadyUnlocked);
+                return;
+            }
+            
+            var config = GetAvatarConfig(avatarId);
+            if (config == null)
+            {
+                onComplete?.Invoke(false, AvatarPurchaseResult.AvatarNotFound);
+                return;
+            }
+            
+            if (!config.CanBuyWithCoins)
+            {
+                onComplete?.Invoke(false, AvatarPurchaseResult.Error);
+                return;
+            }
+            
+            if (!ServiceLocator.TryGet<IReferralAPIService>(out var apiService))
+            {
+                Debug.LogWarning("[AvatarsService] IReferralAPIService not found, falling back to local purchase");
+                var localResult = PurchaseAvatarWithCoins(avatarId);
+                onComplete?.Invoke(localResult == AvatarPurchaseResult.Success, localResult);
+                return;
+            }
+            
+            if (!apiService.IsAuthenticated)
+            {
+                Debug.LogWarning("[AvatarsService] Not authenticated, falling back to local purchase");
+                var localResult = PurchaseAvatarWithCoins(avatarId);
+                onComplete?.Invoke(localResult == AvatarPurchaseResult.Success, localResult);
+                return;
+            }
+            
+            var request = new PurchaseAvatarRequest
+            {
+                avatarId = avatarId,
+                price = (int)config.CoinPrice,
+                currency = "watts"
+            };
+            
+            CoroutineRunner.Instance.StartCoroutine(PurchaseAvatarCoroutine(apiService, request, onComplete));
+        }
         
-        // Синхронизирует разблокированные аватары с сервером (загрузка)
-        // private void SyncUnlockedAvatarsFromServer()
-        // {
-        //     // TODO: Call API to get list of unlocked avatars
-        //     // Example: apiService.GetUnlockedAvatars(onSuccess: (avatars) => { ... });
-        // }
+        private IEnumerator PurchaseAvatarCoroutine(
+            IReferralAPIService apiService,
+            PurchaseAvatarRequest request,
+            Action<bool, AvatarPurchaseResult> onComplete)
+        {
+            bool completed = false;
+            bool success = false;
+            AvatarPurchaseResult result = AvatarPurchaseResult.Error;
+            
+            yield return apiService.PurchaseAvatar(
+                request,
+                onSuccess: (response) =>
+                {
+                    if (response.success)
+                    {
+                        // Server confirmed purchase - unlock locally
+                        UnlockAvatarInternal(request.avatarId);
+                        
+                        // Update local watts balance from server
+                        if (ServiceLocator.TryGet<IPlayerService>(out var playerService))
+                        {
+                            var playerData = playerService.GetPlayerData();
+                            playerData.resources.watts = response.newWattsBalance;
+                        }
+                        
+                        Debug.Log($"<color=#00FF00>[AvatarsService] Avatar '{request.avatarId}' purchased via server for {request.price} Watts</color>");
+                        OnAvatarPurchased?.Invoke(request.avatarId, AvatarPurchaseResult.Success);
+                        
+                        success = true;
+                        result = AvatarPurchaseResult.Success;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[AvatarsService] Server purchase failed: {response.message}");
+                        result = AvatarPurchaseResult.Error;
+                    }
+                    completed = true;
+                },
+                onError: (error) =>
+                {
+                    Debug.LogError($"[AvatarsService] Server purchase error: {error}");
+                    
+                    if (error.Contains("Not enough watts"))
+                    {
+                        result = AvatarPurchaseResult.NotEnoughCoins;
+                    }
+                    else if (error.Contains("already unlocked"))
+                    {
+                        result = AvatarPurchaseResult.AlreadyUnlocked;
+                    }
+                    else
+                    {
+                        result = AvatarPurchaseResult.Error;
+                    }
+                    
+                    completed = true;
+                }
+            );
+            
+            yield return new WaitUntil(() => completed);
+            onComplete?.Invoke(success, result);
+        }
         
-        // Синхронизирует разблокированные аватары с сервером (сохранение)
-        // private void SyncUnlockedAvatarsToServer()
-        // {
-        //     // TODO: Call API to save unlocked avatars
-        //     // Example: apiService.SaveUnlockedAvatars(_unlockedAvatars.ToList(), onSuccess: () => { ... });
-        // }
+        /// <summary>
+        /// Unlock avatar by level via server (async, free).
+        /// </summary>
+        public void UnlockAvatarByLevelAsync(string avatarId, Action<bool, AvatarPurchaseResult> onComplete)
+        {
+            if (string.IsNullOrEmpty(avatarId))
+            {
+                onComplete?.Invoke(false, AvatarPurchaseResult.AvatarNotFound);
+                return;
+            }
+            
+            if (IsAvatarUnlocked(avatarId))
+            {
+                onComplete?.Invoke(false, AvatarPurchaseResult.AlreadyUnlocked);
+                return;
+            }
+            
+            var config = GetAvatarConfig(avatarId);
+            if (config == null || config.UnlockType != AvatarUnlockType.Level)
+            {
+                onComplete?.Invoke(false, AvatarPurchaseResult.AvatarNotFound);
+                return;
+            }
+            
+            if (!ServiceLocator.TryGet<IReferralAPIService>(out var apiService))
+            {
+                Debug.LogWarning("[AvatarsService] IReferralAPIService not found, falling back to local unlock");
+                var localResult = UnlockAvatarByLevel(avatarId);
+                onComplete?.Invoke(localResult == AvatarPurchaseResult.Success, localResult);
+                return;
+            }
+            
+            if (!apiService.IsAuthenticated)
+            {
+                Debug.LogWarning("[AvatarsService] Not authenticated, falling back to local unlock");
+                var localResult = UnlockAvatarByLevel(avatarId);
+                onComplete?.Invoke(localResult == AvatarPurchaseResult.Success, localResult);
+                return;
+            }
+            
+            var request = new UnlockAvatarByLevelRequest
+            {
+                avatarId = avatarId
+            };
+            
+            CoroutineRunner.Instance.StartCoroutine(UnlockAvatarByLevelCoroutine(apiService, request, onComplete));
+        }
+        
+        private IEnumerator UnlockAvatarByLevelCoroutine(
+            IReferralAPIService apiService,
+            UnlockAvatarByLevelRequest request,
+            Action<bool, AvatarPurchaseResult> onComplete)
+        {
+            bool completed = false;
+            bool success = false;
+            AvatarPurchaseResult result = AvatarPurchaseResult.Error;
+            
+            yield return apiService.UnlockAvatarByLevel(
+                request,
+                onSuccess: (response) =>
+                {
+                    if (response.success)
+                    {
+                        UnlockAvatarInternal(request.avatarId);
+                        
+                        Debug.Log($"<color=#00FF00>[AvatarsService] Avatar '{request.avatarId}' unlocked by level via server</color>");
+                        OnAvatarPurchased?.Invoke(request.avatarId, AvatarPurchaseResult.Success);
+                        
+                        success = true;
+                        result = AvatarPurchaseResult.Success;
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"[AvatarsService] Server unlock failed: {response.message}");
+                        result = AvatarPurchaseResult.Error;
+                    }
+                    completed = true;
+                },
+                onError: (error) =>
+                {
+                    Debug.LogError($"[AvatarsService] Server unlock error: {error}");
+                    result = AvatarPurchaseResult.Error;
+                    completed = true;
+                }
+            );
+            
+            yield return new WaitUntil(() => completed);
+            onComplete?.Invoke(success, result);
+        }
+        
+        /// <summary>
+        /// Auto-unlock all level-based avatars the player qualifies for.
+        /// Called during initialization to check current level.
+        /// </summary>
+        public void AutoUnlockLevelAvatars()
+        {
+            if (_avatarConfigs == null) return;
+            
+            if (!ServiceLocator.TryGet<IPlayerService>(out var playerService))
+            {
+                Debug.LogWarning("[AvatarsService] IPlayerService not found for auto-unlock");
+                return;
+            }
+            
+            var playerData = playerService.GetPlayerData();
+            
+            foreach (var config in _avatarConfigs)
+            {
+                if (config == null) continue;
+                if (config.UnlockType != AvatarUnlockType.Level) continue;
+                if (IsAvatarUnlocked(config.AvatarId)) continue;
+                if (!config.IsAvailableAtLevel(playerData.level)) continue;
+                
+                // Auto-unlock via server
+                UnlockAvatarByLevelAsync(config.AvatarId, (success, result) =>
+                {
+                    if (success)
+                    {
+                        Debug.Log($"<color=#00FF00>[AvatarsService] Auto-unlocked level avatar '{config.AvatarId}' at level {playerData.level}</color>");
+                    }
+                });
+            }
+        }
         
         #endregion
     }

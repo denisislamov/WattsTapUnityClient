@@ -60,13 +60,7 @@ namespace WattsTap.Game.UI
         
         private void HandleViewClicked(AvatarItemUIView view)
         {
-            if (_model.State == AvatarItemState.Locked)
-            {
-                // Optionally handle locked click differently
-                Debug.Log($"[AvatarItem] Avatar '{_model.AvatarId}' is locked");
-                return;
-            }
-            
+            // Allow clicking on locked avatars - the presenter will check affordability
             OnAvatarClicked?.Invoke(_model.AvatarId, _model.State);
         }
         

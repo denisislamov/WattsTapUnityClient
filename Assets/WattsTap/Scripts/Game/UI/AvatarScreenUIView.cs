@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using WattsTap.Core;
@@ -10,6 +11,7 @@ namespace WattsTap.Game.UI
         [Header("Controls")]
         [SerializeField] private Button _backButton;
         [SerializeField] private Button _equipButton;
+        [SerializeField] private TMP_Text _equipButtonText;
         
         [Header("Avatar Display")]
         [SerializeField] private Transform _avatarsContainer;
@@ -70,6 +72,17 @@ namespace WattsTap.Game.UI
             if (_equipButton != null)
             {
                 _equipButton.interactable = interactable;
+            }
+        }
+        
+        /// <summary>
+        /// Sets the equip button text (e.g. "Equip" or "Buy").
+        /// </summary>
+        public void SetEquipButtonText(string text)
+        {
+            if (_equipButtonText != null)
+            {
+                _equipButtonText.text = text;
             }
         }
         

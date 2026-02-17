@@ -10,10 +10,14 @@ namespace WattsTap.Game.UI
 {
     public class AvatarScreenUIPresenter : UIBasePresenter<AvatarScreenUIView, AvatarScreenUIModel>
     {
+        private const string EquipButtonText = "Equip";
+        private const string BuyButtonText = "Buy";
+        
         private IUIService _uiService;
         private IHapticFeedbackService _hapticService;
         private IAvatarsService _avatarsService;
         private IPlayerService _playerService;
+        private bool _isPurchaseInProgress;
 
         protected override void OnInit()
         {
@@ -34,6 +38,9 @@ namespace WattsTap.Game.UI
             
             if (_avatarsService != null)
             {
+                // Auto-unlock level-based avatars for current player level
+                _avatarsService.AutoUnlockLevelAvatars();
+                
                 // Set initial current avatar
                 Model.CurrentAvatarId.Value = _avatarsService.GetCurrentAvatarId();
                 // Initially, selected is same as current (no pending selection)
@@ -47,7 +54,7 @@ namespace WattsTap.Game.UI
                 // Create avatar items
                 CreateAvatarItems();
                 
-                // Update equip button visibility
+                // Update equip button state
                 UpdateEquipButtonState();
             }
         }
@@ -179,7 +186,7 @@ namespace WattsTap.Game.UI
         
         private void OnAvatarItemClicked(string avatarId, AvatarItemState currentState)
         {
-            // _hapticService?.ButtonPressed();
+            if (_isPurchaseInProgress) return;
             
             if (currentState == AvatarItemState.Locked)
             {
@@ -187,7 +194,7 @@ namespace WattsTap.Game.UI
                 var config = _avatarsService.GetAvatarConfig(avatarId);
                 if (config != null && CanAffordAvatar(config))
                 {
-                    // Select locked avatar so user can click Equip to purchase
+                    // Select locked avatar so user can click Buy to purchase
                     Model.SelectedAvatarId.Value = avatarId;
                     UpdateAllAvatarStates();
                     UpdateEquipButtonState();
@@ -196,7 +203,6 @@ namespace WattsTap.Game.UI
                 else
                 {
                     Debug.Log($"[AvatarScreenUIPresenter] Avatar '{avatarId}' is locked and cannot be afforded");
-                    // TODO: Show "not enough resources" feedback
                 }
                 return;
             }
@@ -229,6 +235,8 @@ namespace WattsTap.Game.UI
         
         private void OnEquipClicked()
         {
+            if (_isPurchaseInProgress) return;
+            
             _hapticService?.ButtonPressed();
             
             var selectedId = Model.SelectedAvatarId.Value;
@@ -243,7 +251,7 @@ namespace WattsTap.Game.UI
             // Check if avatar is locked - try to purchase
             if (!_avatarsService.IsAvatarUnlocked(selectedId))
             {
-                TryPurchaseAvatar(selectedId);
+                TryPurchaseAvatarAsync(selectedId);
                 return;
             }
             
@@ -258,7 +266,7 @@ namespace WattsTap.Game.UI
             }
         }
         
-        private void TryPurchaseAvatar(string avatarId)
+        private void TryPurchaseAvatarAsync(string avatarId)
         {
             var config = _avatarsService.GetAvatarConfig(avatarId);
             if (config == null)
@@ -270,47 +278,54 @@ namespace WattsTap.Game.UI
             if (!CanAffordAvatar(config))
             {
                 Debug.Log($"[AvatarScreenUIPresenter] Cannot afford avatar '{avatarId}'");
-                // TODO: Show "not enough resources" feedback
                 return;
             }
             
-            AvatarPurchaseResult result;
+            _isPurchaseInProgress = true;
+            View.SetEquipButtonInteractable(false);
             
             switch (config.UnlockType)
             {
                 case AvatarUnlockType.Coins:
-                    result = _avatarsService.PurchaseAvatarWithCoins(avatarId);
+                    _avatarsService.PurchaseAvatarWithCoinsAsync(avatarId, OnPurchaseComplete);
                     break;
                     
                 case AvatarUnlockType.BTN:
-                    result = _avatarsService.PurchaseAvatarWithBTN(avatarId);
+                    Debug.LogWarning("[AvatarScreenUIPresenter] BTN purchase not available");
+                    _isPurchaseInProgress = false;
+                    UpdateEquipButtonState();
                     break;
                     
                 case AvatarUnlockType.Level:
-                    result = _avatarsService.UnlockAvatarByLevel(avatarId);
+                    _avatarsService.UnlockAvatarByLevelAsync(avatarId, OnPurchaseComplete);
                     break;
                     
                 case AvatarUnlockType.Free:
                     _avatarsService.UnlockAvatar(avatarId);
-                    result = AvatarPurchaseResult.Success;
+                    OnPurchaseComplete(true, AvatarPurchaseResult.Success);
                     break;
                     
                 default:
-                    result = AvatarPurchaseResult.Error;
+                    _isPurchaseInProgress = false;
+                    UpdateEquipButtonState();
                     break;
             }
+        }
+        
+        private void OnPurchaseComplete(bool success, AvatarPurchaseResult result)
+        {
+            _isPurchaseInProgress = false;
             
-            if (result == AvatarPurchaseResult.Success)
+            var avatarId = Model.SelectedAvatarId.Value;
+            
+            if (success)
             {
                 Debug.Log($"[AvatarScreenUIPresenter] Avatar '{avatarId}' purchased successfully!");
                 
-                // Auto-equip after purchase
-                if (_avatarsService.SelectAvatar(avatarId))
-                {
-                    Model.CurrentAvatarId.Value = avatarId;
-                    UpdateAllAvatarStates();
-                    UpdateEquipButtonState();
-                }
+                // After purchase, avatar is unlocked but NOT auto-equipped.
+                // The button text changes back to "Equip" so user can equip it.
+                UpdateAllAvatarStates();
+                UpdateEquipButtonState();
                 
                 // Update all affordability states (resources changed)
                 UpdateAllAffordabilityStates();
@@ -318,6 +333,7 @@ namespace WattsTap.Game.UI
             else
             {
                 Debug.Log($"[AvatarScreenUIPresenter] Failed to purchase avatar '{avatarId}': {result}");
+                UpdateEquipButtonState();
             }
         }
         
@@ -363,10 +379,21 @@ namespace WattsTap.Game.UI
         
         private void UpdateEquipButtonState()
         {
-            // Show equip button only if selected avatar is different from current
-            bool hasNewSelection = Model.SelectedAvatarId.Value != Model.CurrentAvatarId.Value;
-            // View.SetEquipButtonVisible(hasNewSelection);
-            View.SetEquipButtonInteractable(hasNewSelection);
+            var selectedId = Model.SelectedAvatarId.Value;
+            var currentId = Model.CurrentAvatarId.Value;
+            
+            bool hasNewSelection = selectedId != currentId;
+            View.SetEquipButtonInteractable(hasNewSelection && !_isPurchaseInProgress);
+            
+            // Determine button text: "Buy" if selected avatar is locked, "Equip" if unlocked
+            if (hasNewSelection && !_avatarsService.IsAvatarUnlocked(selectedId))
+            {
+                View.SetEquipButtonText(BuyButtonText);
+            }
+            else
+            {
+                View.SetEquipButtonText(EquipButtonText);
+            }
         }
         
         private void OnAvatarChangedExternally(string newAvatarId)
@@ -405,18 +432,16 @@ namespace WattsTap.Game.UI
                 if (presenter.AvatarId == avatarId)
                 {
                     presenter.View.SetCostVisible(false);
-                    presenter.SetState(AvatarItemState.Unselected);
                     break;
                 }
             }
             
             UpdateAllAvatarStates();
+            UpdateEquipButtonState();
         }
 
         private void OnBackClicked()
         {
-            // _hapticService?.ButtonPressed();
-
             if (_uiService == null)
             {
                 ServiceLocator.TryGet(out _uiService);
@@ -452,4 +477,3 @@ namespace WattsTap.Game.UI
         }
     }
 }
-

@@ -1265,6 +1265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.AvatarScreenUIView
   _backButton: {fileID: 2613146786345162016}
   _equipButton: {fileID: 5209296883715568203}
+  _equipButtonText: {fileID: 5652128027144372438}
   _avatarsContainer: {fileID: 7038360411380240683}
   _avatarItemPrefab: {fileID: 5155886812433817548, guid: 1d0a0c77567814d37a5f6d5f344bf8fb, type: 3}
   _skinBindings:

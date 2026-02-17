@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -140,6 +141,24 @@ namespace WattsTap.Game.Avatars
         /// Принудительно разблокировать аватар (для тестов или наград)
         /// </summary>
         void UnlockAvatar(string avatarId);
+        
+        /// <summary>
+        /// Purchase avatar via server (async). Deducts currency server-side.
+        /// Callback returns (success, result).
+        /// </summary>
+        void PurchaseAvatarWithCoinsAsync(string avatarId, Action<bool, AvatarPurchaseResult> onComplete);
+        
+        /// <summary>
+        /// Unlock avatar by level via server (async, free).
+        /// Callback returns (success, result).
+        /// </summary>
+        void UnlockAvatarByLevelAsync(string avatarId, Action<bool, AvatarPurchaseResult> onComplete);
+        
+        /// <summary>
+        /// Auto-unlock all level-based avatars the player qualifies for.
+        /// Called during initialization to check current level.
+        /// </summary>
+        void AutoUnlockLevelAvatars();
     }
 }
 

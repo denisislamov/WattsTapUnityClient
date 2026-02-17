@@ -43,6 +43,15 @@ namespace WattsTap.Core.API
         
         /// <summary>Add XP and/or watts to the player (debug, dev only)</summary>
         IEnumerator AddResources(AddResourcesRequest request, Action<AddResourcesResponse> onSuccess, Action<string> onError);
+        
+        /// <summary>Purchase an avatar with currency (server-side validation)</summary>
+        IEnumerator PurchaseAvatar(PurchaseAvatarRequest request, Action<PurchaseAvatarResponse> onSuccess, Action<string> onError);
+        
+        /// <summary>Unlock an avatar by level (free, server records the unlock)</summary>
+        IEnumerator UnlockAvatarByLevel(UnlockAvatarByLevelRequest request, Action<UnlockAvatarByLevelResponse> onSuccess, Action<string> onError);
+        
+        /// <summary>Get player's unlocked avatars and current avatar from server</summary>
+        IEnumerator GetAvatars(Action<GetAvatarsResponse> onSuccess, Action<string> onError);
     }
     
     /// <summary>
@@ -503,6 +512,142 @@ namespace WattsTap.Core.API
                         Debug.Log($"<color=#FF00FF>[ReferralAPIService] AddResources response: {www.downloadHandler.text}</color>");
                         
                         var response = JsonUtility.FromJson<AddResourcesResponse>(www.downloadHandler.text);
+                        
+                        if (response != null)
+                        {
+                            onSuccess?.Invoke(response);
+                        }
+                        else
+                        {
+                            onError?.Invoke("Empty response");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        onError?.Invoke($"Failed to parse response: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    HandleRequestError(www, onError);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Purchase an avatar with currency (server-side validation)
+        /// </summary>
+        public IEnumerator PurchaseAvatar(PurchaseAvatarRequest request, Action<PurchaseAvatarResponse> onSuccess, Action<string> onError)
+        {
+            if (!IsAuthenticated)
+            {
+                onError?.Invoke("Not authenticated");
+                yield break;
+            }
+            
+            string json = JsonUtility.ToJson(request);
+            
+            using (var www = CreatePostRequest("/avatars/purchase", json))
+            {
+                yield return www.SendWebRequest();
+                
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    try
+                    {
+                        Debug.Log($"<color=#00FF00>[ReferralAPIService] PurchaseAvatar response: {www.downloadHandler.text}</color>");
+                        
+                        var response = JsonUtility.FromJson<PurchaseAvatarResponse>(www.downloadHandler.text);
+                        
+                        if (response != null)
+                        {
+                            onSuccess?.Invoke(response);
+                        }
+                        else
+                        {
+                            onError?.Invoke("Empty response");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        onError?.Invoke($"Failed to parse response: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    HandleRequestError(www, onError);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Unlock an avatar by level (free, server records the unlock)
+        /// </summary>
+        public IEnumerator UnlockAvatarByLevel(UnlockAvatarByLevelRequest request, Action<UnlockAvatarByLevelResponse> onSuccess, Action<string> onError)
+        {
+            if (!IsAuthenticated)
+            {
+                onError?.Invoke("Not authenticated");
+                yield break;
+            }
+            
+            string json = JsonUtility.ToJson(request);
+            
+            using (var www = CreatePostRequest("/avatars/unlock-by-level", json))
+            {
+                yield return www.SendWebRequest();
+                
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    try
+                    {
+                        Debug.Log($"<color=#00FF00>[ReferralAPIService] UnlockAvatarByLevel response: {www.downloadHandler.text}</color>");
+                        
+                        var response = JsonUtility.FromJson<UnlockAvatarByLevelResponse>(www.downloadHandler.text);
+                        
+                        if (response != null)
+                        {
+                            onSuccess?.Invoke(response);
+                        }
+                        else
+                        {
+                            onError?.Invoke("Empty response");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        onError?.Invoke($"Failed to parse response: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    HandleRequestError(www, onError);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Get player's unlocked avatars and current avatar from server
+        /// </summary>
+        public IEnumerator GetAvatars(Action<GetAvatarsResponse> onSuccess, Action<string> onError)
+        {
+            if (!IsAuthenticated)
+            {
+                onError?.Invoke("Not authenticated");
+                yield break;
+            }
+            
+            using (var www = CreateGetRequest("/avatars"))
+            {
+                yield return www.SendWebRequest();
+                
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    try
+                    {
+                        Debug.Log($"<color=#00FF00>[ReferralAPIService] GetAvatars response: {www.downloadHandler.text}</color>");
+                        
+                        var response = JsonUtility.FromJson<GetAvatarsResponse>(www.downloadHandler.text);
                         
                         if (response != null)
                         {
