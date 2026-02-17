@@ -71,5 +71,32 @@ namespace WattsTap.Core.API
     }
     
     #endregion
+    
+    #region Debug DTOs
+    
+    /// <summary>
+    /// Request to add XP and/or watts to the player (debug)
+    /// </summary>
+    [Serializable]
+    public class AddResourcesRequest
+    {
+        public int watts;
+        public int xp;
+    }
+    
+    /// <summary>
+    /// Response after adding resources (debug)
+    /// </summary>
+    [Serializable]
+    public class AddResourcesResponse
+    {
+        public bool success;
+        public PlayerProgressDTO progress;
+        public int addedWatts;
+        public int addedXp;
+        public string message;
+    }
+    
+    #endregion
 }
 

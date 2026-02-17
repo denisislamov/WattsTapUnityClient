@@ -40,6 +40,9 @@ namespace WattsTap.Core.API
         
         /// <summary>Load mining balance configuration from server</summary>
         IEnumerator LoadMiningBalance(Action<MiningBalancePublicResponse> onSuccess, Action<string> onError);
+        
+        /// <summary>Add XP and/or watts to the player (debug, dev only)</summary>
+        IEnumerator AddResources(AddResourcesRequest request, Action<AddResourcesResponse> onSuccess, Action<string> onError);
     }
     
     /// <summary>
@@ -471,6 +474,52 @@ namespace WattsTap.Core.API
                 else
                 {
                     Debug.LogWarning($"[ReferralAPIService] LoadMiningBalance failed: {www.error}");
+                    HandleRequestError(www, onError);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Add XP and/or watts to the player (debug endpoint, dev only).
+        /// </summary>
+        public IEnumerator AddResources(AddResourcesRequest request, Action<AddResourcesResponse> onSuccess, Action<string> onError)
+        {
+            if (!IsAuthenticated)
+            {
+                onError?.Invoke("Not authenticated");
+                yield break;
+            }
+            
+            string json = JsonUtility.ToJson(request);
+            
+            using (var www = CreatePostRequest("/dev/add-resources", json))
+            {
+                yield return www.SendWebRequest();
+                
+                if (www.result == UnityWebRequest.Result.Success)
+                {
+                    try
+                    {
+                        Debug.Log($"<color=#FF00FF>[ReferralAPIService] AddResources response: {www.downloadHandler.text}</color>");
+                        
+                        var response = JsonUtility.FromJson<AddResourcesResponse>(www.downloadHandler.text);
+                        
+                        if (response != null)
+                        {
+                            onSuccess?.Invoke(response);
+                        }
+                        else
+                        {
+                            onError?.Invoke("Empty response");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        onError?.Invoke($"Failed to parse response: {ex.Message}");
+                    }
+                }
+                else
+                {
                     HandleRequestError(www, onError);
                 }
             }
