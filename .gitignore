@@ -70,3 +70,6 @@ crashlytics-build.properties
 
 # Game Design Document (private)
 GameDesignDocument.md
+
+# Referral service (separate repo)
+Assets/wattstap-referral-service/
