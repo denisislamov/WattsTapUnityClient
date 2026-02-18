@@ -27,6 +27,10 @@ namespace WattsTap.Game.UI
         [SerializeField] private Image _chestOpenImage1;
         [SerializeField] private Image _chestOpenImage2;
         [SerializeField] private Image _glowImage;
+        
+        [Header("Back Glow (Behind Chest)")]
+        [SerializeField] private Image _backGlowImage1;
+        [SerializeField] private Image _backGlowImage2;
 
         [Header("Animation Settings")]
         [SerializeField] private float _jumpHeight = 50f;
@@ -46,6 +50,12 @@ namespace WattsTap.Game.UI
         [SerializeField] private float _glowPulseMin = 0.4f;
         [SerializeField] private float _glowPulseMax = 1f;
         [SerializeField] private float _glowPulseDuration = 0.8f;
+        
+        [Header("Back Glow Animation Settings")]
+        [SerializeField] private AnimationCurve _backGlow1Curve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+        [SerializeField] private float _backGlow1Duration = 2.5f;
+        [SerializeField] private AnimationCurve _backGlow2Curve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+        [SerializeField] private float _backGlow2Duration = 3f;
 
         [Header("Item Fly Out Animation")]
         [SerializeField] private RectTransform _itemTransform;
@@ -88,6 +98,8 @@ namespace WattsTap.Game.UI
         private Coroutine _itemAnimationCoroutine;
         private Coroutine _itemRotationCoroutine;
         private Coroutine _idleAnimationCoroutine;
+        private Coroutine _backGlow1Coroutine;
+        private Coroutine _backGlow2Coroutine;
         private Vector3 _originalPosition;
         private Vector3 _originalScale;
         private Vector3 _itemOriginalScale;
@@ -147,6 +159,10 @@ namespace WattsTap.Game.UI
             
             // Свечение - скрыто
             SetImageAlpha(_glowImage, 0f);
+            
+            // Свечения сзади - скрыты
+            SetImageAlpha(_backGlowImage1, 0f);
+            SetImageAlpha(_backGlowImage2, 0f);
             
             // Предмет - скрыт и в начальной позиции
             InitializeItemState();
@@ -371,11 +387,18 @@ namespace WattsTap.Game.UI
                 _currentFinalItemIndex = -1;
                 _isFirstAnimation = true;
                 ResetAnimation();
+                
+                // Запускаем свечения сзади сразу при тапе
+                StartBackGlowAnimations();
+                
                 _animationCoroutine = StartCoroutine(OpenAnimationSequence());
             }
             else if (_isFirstAnimation)
             {
                 // Первый запуск - полная анимация до первого элемента
+                // Запускаем свечения сзади сразу при тапе
+                StartBackGlowAnimations();
+                
                 _animationCoroutine = StartCoroutine(OpenAnimationSequence());
             }
             else
@@ -383,6 +406,75 @@ namespace WattsTap.Game.UI
                 // Последующие нажатия - показываем следующий элемент
                 _animationCoroutine = StartCoroutine(ShowNextItemSequence());
             }
+        }
+        
+        /// <summary>
+        /// Запускает анимации свечений сзади сундука (вызывается сразу при тапе)
+        /// </summary>
+        private void StartBackGlowAnimations()
+        {
+            StopBackGlowAnimations();
+            _backGlow1Coroutine = StartCoroutine(BackGlow1AnimationSequence());
+            _backGlow2Coroutine = StartCoroutine(BackGlow2AnimationSequence());
+        }
+        
+        /// <summary>
+        /// Останавливает анимации свечений сзади
+        /// </summary>
+        private void StopBackGlowAnimations()
+        {
+            if (_backGlow1Coroutine != null)
+            {
+                StopCoroutine(_backGlow1Coroutine);
+                _backGlow1Coroutine = null;
+            }
+            if (_backGlow2Coroutine != null)
+            {
+                StopCoroutine(_backGlow2Coroutine);
+                _backGlow2Coroutine = null;
+            }
+        }
+        
+        /// <summary>
+        /// Анимация первого свечения сзади по кривой
+        /// </summary>
+        private IEnumerator BackGlow1AnimationSequence()
+        {
+            if (_backGlowImage1 == null || _backGlow1Curve == null) yield break;
+            
+            float elapsed = 0f;
+
+            while (elapsed < _backGlow1Duration)
+            {
+                elapsed += GetDeltaTime();
+                float t = Mathf.Clamp01(elapsed / _backGlow1Duration);
+                float alpha = _backGlow1Curve.Evaluate(t);
+                SetImageAlpha(_backGlowImage1, alpha);
+                yield return GetAnimationYield();
+            }
+            
+            SetImageAlpha(_backGlowImage1, _backGlow1Curve.Evaluate(1f));
+        }
+        
+        /// <summary>
+        /// Анимация второго свечения сзади по кривой
+        /// </summary>
+        private IEnumerator BackGlow2AnimationSequence()
+        {
+            if (_backGlowImage2 == null || _backGlow2Curve == null) yield break;
+            
+            float elapsed = 0f;
+
+            while (elapsed < _backGlow2Duration)
+            {
+                elapsed += GetDeltaTime();
+                float t = Mathf.Clamp01(elapsed / _backGlow2Duration);
+                float alpha = _backGlow2Curve.Evaluate(t);
+                SetImageAlpha(_backGlowImage2, alpha);
+                yield return GetAnimationYield();
+            }
+            
+            SetImageAlpha(_backGlowImage2, _backGlow2Curve.Evaluate(1f));
         }
 
         private IEnumerator OpenAnimationSequence()
@@ -1163,6 +1255,7 @@ namespace WattsTap.Game.UI
             }
             
             StopIdleAnimation();
+            StopBackGlowAnimations();
 
             // Сброс сундука к начальному состоянию
             if (_chestTransform != null)
@@ -1176,6 +1269,8 @@ namespace WattsTap.Game.UI
             SetImageAlpha(_chestOpenImage1, 0f);
             SetImageAlpha(_chestOpenImage2, 0f);
             SetImageAlpha(_glowImage, 0f);
+            SetImageAlpha(_backGlowImage1, 0f);
+            SetImageAlpha(_backGlowImage2, 0f);
 
             // Сброс предмета к начальному состоянию
             InitializeItemState();
