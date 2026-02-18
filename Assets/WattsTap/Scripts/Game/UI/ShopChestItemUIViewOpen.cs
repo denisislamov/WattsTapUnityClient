@@ -67,9 +67,11 @@ namespace WattsTap.Game.UI
         [SerializeField] private float _itemFadeInDuration = 0.2f;
         [SerializeField] private float _itemRotationSpeed = 720f;
         [SerializeField] private float _itemRotationDuration = 0.8f;
-        [SerializeField] private float _itemBounceScaleMin = 0.8f;
-        [SerializeField] private float _itemBounceScaleMax = 1.2f;
-        [SerializeField] private float _itemFinalScaleDuration = 0.4f;
+        [SerializeField] private float _itemBounceScaleMinX = 0.85f;
+        [SerializeField] private float _itemBounceScaleMaxX = 1.15f;
+        [SerializeField] private float _itemBounceScaleMinY = 0.8f;
+        [SerializeField] private float _itemBounceScaleMaxY = 1.2f;
+        [SerializeField] private int _itemBounceCount = 3;
 
         [Header("Item Crossfade Animation")]
         [SerializeField] private RectTransform[] _finalItemTransforms;
@@ -859,11 +861,8 @@ namespace WattsTap.Game.UI
                 _itemTransform.localScale = _itemOriginalScale * 0.5f;
             }
 
-            // Вылет предмета по дуге с вращением и увеличением масштаба
+            // Вылет предмета по дуге с вращением, bounce и увеличением масштаба
             yield return StartCoroutine(ItemFlyWithRotationAndScale());
-
-            // Веселый скейл bounce
-            yield return StartCoroutine(ItemBounceScale());
             
             // Замена на финальный предмет с появлением текста
             yield return StartCoroutine(CrossfadeToFinalItem());
@@ -1001,12 +1000,15 @@ namespace WattsTap.Game.UI
             Vector2 endPos = _itemEndPosition.anchoredPosition;
             
             // Масштаб от 0.5 до 1.0
-            Vector3 startScale = _itemOriginalScale * 0.5f;
-            Vector3 endScale = _itemOriginalScale;
+            float startScaleMultiplier = 0.5f;
+            float endScaleMultiplier = 1f;
             
             // Количество полных оборотов для вращения
             int fullSpins = Mathf.FloorToInt(_itemRotationSpeed * _itemFlyDuration / 360f);
             float targetRotation = fullSpins * 360f;
+            
+            // Bounce параметры - количество bounce циклов за время полёта
+            float bounceCycleDuration = _itemFlyDuration / _itemBounceCount;
 
             while (elapsed < _itemFlyDuration)
             {
@@ -1025,8 +1027,31 @@ namespace WattsTap.Game.UI
 
                 _itemTransform.anchoredPosition = currentPos;
                 
-                // Масштабирование от 0.5 до 1.0
-                _itemTransform.localScale = Vector3.Lerp(startScale, endScale, smoothT);
+                // Базовый масштаб от 0.5 до 1.0
+                float baseScale = Mathf.Lerp(startScaleMultiplier, endScaleMultiplier, smoothT);
+                
+                // Bounce эффект поверх базового масштаба
+                float bounceProgress = (elapsed % bounceCycleDuration) / bounceCycleDuration;
+                float bounceIntensity = 1f - smoothT; // Bounce затухает к концу полёта
+                float sinValue = Mathf.Sin(bounceProgress * Mathf.PI);
+                
+                // X axis bounce
+                float maxScaleX = _itemBounceScaleMaxX - (_itemBounceScaleMaxX - 1f) * (1f - bounceIntensity);
+                float minScaleX = _itemBounceScaleMinX + (1f - _itemBounceScaleMinX) * (1f - bounceIntensity);
+                float bounceX = Mathf.Lerp(maxScaleX, minScaleX, sinValue);
+                bounceX = Mathf.Lerp(bounceX, 1f, smoothT);
+                
+                // Y axis bounce
+                float maxScaleY = _itemBounceScaleMaxY - (_itemBounceScaleMaxY - 1f) * (1f - bounceIntensity);
+                float minScaleY = _itemBounceScaleMinY + (1f - _itemBounceScaleMinY) * (1f - bounceIntensity);
+                float bounceY = Mathf.Lerp(maxScaleY, minScaleY, sinValue);
+                bounceY = Mathf.Lerp(bounceY, 1f, smoothT);
+                
+                _itemTransform.localScale = new Vector3(
+                    _itemOriginalScale.x * baseScale * bounceX,
+                    _itemOriginalScale.y * baseScale * bounceY,
+                    _itemOriginalScale.z * baseScale
+                );
                 
                 // Вращение
                 float easedRotationT = 1f - (1f - t) * (1f - t) * (1f - t); // EaseOutCubic
@@ -1038,7 +1063,7 @@ namespace WattsTap.Game.UI
 
             // Финальные значения
             _itemTransform.anchoredPosition = endPos;
-            _itemTransform.localScale = endScale;
+            _itemTransform.localScale = _itemOriginalScale;
             _itemTransform.localRotation = Quaternion.identity;
         }
 
@@ -1106,46 +1131,6 @@ namespace WattsTap.Game.UI
         /// <summary>
         /// Веселый bounce скейл в конце (оптимизировано для WebGL)
         /// </summary>
-        private IEnumerator ItemBounceScale()
-        {
-            if (_itemTransform == null)
-            {
-                yield break;
-            }
-
-            int bounceCount = 3;
-            float bounceDuration = _itemFinalScaleDuration / bounceCount;
-
-            for (int i = 0; i < bounceCount; i++)
-            {
-                float elapsed = 0f;
-                float bounceIntensity = 1f - (float)i / bounceCount; // Уменьшаем интенсивность
-
-                while (elapsed < bounceDuration)
-                {
-                    elapsed += GetDeltaTime();
-                    float t = Mathf.Clamp01(elapsed / bounceDuration);
-
-                    // Упрощенный bounce - используем простой синус
-                    float sinValue = Mathf.Sin(t * Mathf.PI);
-                    float maxScale = _itemBounceScaleMax - (_itemBounceScaleMax - 1f) * (1f - bounceIntensity);
-                    float minScale = _itemBounceScaleMin + (1f - _itemBounceScaleMin) * (1f - bounceIntensity);
-                    
-                    float scaleMultiplier = Mathf.Lerp(maxScale, minScale, sinValue);
-                    
-                    // К концу стремимся к 1
-                    scaleMultiplier = Mathf.Lerp(scaleMultiplier, 1f, t * (1f - bounceIntensity));
-
-                    _itemTransform.localScale = _itemOriginalScale * scaleMultiplier;
-
-                    yield return GetAnimationYield();
-                }
-            }
-
-            // Финальный snap к оригинальному масштабу
-            _itemTransform.localScale = _itemOriginalScale;
-        }
-
         private float EaseInQuad(float t)
         {
             return t * t;

@@ -1716,8 +1716,10 @@ MonoBehaviour:
   _itemFadeInDuration: 0.2
   _itemRotationSpeed: 900
   _itemRotationDuration: 1
-  _itemBounceScaleMin: 0.5
-  _itemBounceScaleMax: 1
+  _itemBounceScaleMinX: 0.6
+  _itemBounceScaleMaxX: 1.15
+  _itemBounceScaleMinY: 0.9
+  _itemBounceScaleMaxY: 1.1
   _itemFinalScaleDuration: 1
   _finalItemTransforms:
   - {fileID: 6334457484956004575}
