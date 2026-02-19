@@ -38,9 +38,13 @@ namespace WattsTap.Game.UI
         [SerializeField] private RectTransform _dustRightTransform;
         [SerializeField] private CanvasGroup _dustRightCanvasGroup;
 
-        [Header("Sparkle Particles")]
+        [Header("Sparkle Particles (Item Flight)")]
         [SerializeField] private RectTransform[] _sparkleTransforms;
         [SerializeField] private CanvasGroup[] _sparkleCanvasGroups;
+
+        [Header("Sparkle Particles (Dust Landing)")]
+        [SerializeField] private RectTransform[] _dustSparkleTransforms;
+        [SerializeField] private CanvasGroup[] _dustSparkleCanvasGroups;
 
         [Header("Animation Settings")]
         [SerializeField] private float _jumpHeight = 50f;
@@ -48,6 +52,9 @@ namespace WattsTap.Game.UI
         [SerializeField] private int _jumpCount = 3;
         [SerializeField] private float _scaleAmount = 1.15f;
         [SerializeField] private float _crossfadeDuration = 0.4f;
+        [SerializeField] private float _finalLandingSquashY = 0.78f;
+        [SerializeField] private float _finalLandingSquashDuration = 0.1f;
+        [SerializeField] private float _finalLandingRecoverDuration = 0.2f;
         
         [Header("Idle Animation Settings")]
         [SerializeField] private float _idleJumpHeight = 50f;
@@ -79,6 +86,13 @@ namespace WattsTap.Game.UI
         [SerializeField] private float _sparkleDuration = 0.35f;
         [SerializeField] private float _sparkleInterval = 0.1f;
         [SerializeField] private float _sparkleRadius = 45f;
+
+        [Header("Dust Sparkle Animation Settings")]
+        [SerializeField] private AnimationCurve _dustSparkleAlphaCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
+        [SerializeField] private AnimationCurve _dustSparkleScaleCurve = AnimationCurve.Linear(0f, 0.3f, 1f, 1.5f);
+        [SerializeField] private float _dustSparkleDuration = 0.5f;
+        [SerializeField] private float _dustSparkleInterval = 0.08f;
+        [SerializeField] private float _dustSparkleRadius = 20f;
 
         [Header("Item Fly Out Animation")]
         [SerializeField] private RectTransform _itemTransform;
@@ -127,9 +141,11 @@ namespace WattsTap.Game.UI
         private Coroutine _backGlow2Coroutine;
         private Coroutine _dustCoroutine;
         private Coroutine _sparkleCoroutine;
+        private Coroutine _dustSparkleCoroutine;
         private Vector2 _dustLeftOrigin;
         private Vector2 _dustRightOrigin;
         private Vector3[] _sparkleOriginalScales;
+        private Vector3[] _dustSparkleOriginalScales;
         private Vector3 _originalPosition;
         private Vector3 _originalScale;
         private Vector3 _itemOriginalScale;
@@ -172,6 +188,17 @@ namespace WattsTap.Game.UI
                 {
                     _sparkleOriginalScales[i] = _sparkleTransforms[i] != null
                         ? _sparkleTransforms[i].localScale
+                        : Vector3.one;
+                }
+            }
+
+            if (_dustSparkleTransforms != null)
+            {
+                _dustSparkleOriginalScales = new Vector3[_dustSparkleTransforms.Length];
+                for (int i = 0; i < _dustSparkleTransforms.Length; i++)
+                {
+                    _dustSparkleOriginalScales[i] = _dustSparkleTransforms[i] != null
+                        ? _dustSparkleTransforms[i].localScale
                         : Vector3.one;
                 }
             }
@@ -219,6 +246,7 @@ namespace WattsTap.Game.UI
 
             // Искры - скрыты
             ResetSparklesState();
+            ResetDustSparklesState();
             
             // Предмет - скрыт и в начальной позиции
             InitializeItemState();
@@ -541,8 +569,10 @@ namespace WattsTap.Game.UI
                 yield return StartCoroutine(JumpAndSquash());
             }
 
-            // Сундук приземлился — запускаем пыль
+            // Сундук приземлился — сплющивание, затем пыль и dust-искры
+            yield return StartCoroutine(FinalLandingSquash());
             _dustCoroutine = StartCoroutine(DustImpactAnimation());
+            _dustSparkleCoroutine = StartCoroutine(DustSparklesAnimation());
 
             // Phase 2: Crossfade chest sprites
             yield return StartCoroutine(CrossfadeChestSprites());
@@ -760,6 +790,38 @@ namespace WattsTap.Game.UI
             {
                 _chestTransform.localScale = _originalScale;
             }
+        }
+
+        /// <summary>
+        /// Сплющивание по Y сразу после финального приземления сундука
+        /// </summary>
+        private IEnumerator FinalLandingSquash()
+        {
+            if (_chestTransform == null) yield break;
+
+            float elapsed = 0f;
+            while (elapsed < _finalLandingSquashDuration)
+            {
+                elapsed += GetDeltaTime();
+                float t = Mathf.Clamp01(elapsed / _finalLandingSquashDuration);
+                float scaleY = Mathf.Lerp(1f, _finalLandingSquashY, t * (2f - t));
+                _chestTransform.localScale = new Vector3(_originalScale.x, _originalScale.y * scaleY, _originalScale.z);
+                yield return GetAnimationYield();
+            }
+
+            elapsed = 0f;
+            bool useSimpleEasing = _useOptimizedMode && _isWebGL;
+            while (elapsed < _finalLandingRecoverDuration)
+            {
+                elapsed += GetDeltaTime();
+                float t = Mathf.Clamp01(elapsed / _finalLandingRecoverDuration);
+                float easeValue = useSimpleEasing ? EaseOutElasticSimple(t) : EaseOutElastic(t);
+                float scaleY = Mathf.Lerp(_finalLandingSquashY, 1f, easeValue);
+                _chestTransform.localScale = new Vector3(_originalScale.x, _originalScale.y * scaleY, _originalScale.z);
+                yield return GetAnimationYield();
+            }
+
+            _chestTransform.localScale = _originalScale;
         }
 
         private IEnumerator CrossfadeChestSprites()
@@ -1219,6 +1281,16 @@ namespace WattsTap.Game.UI
             }
         }
 
+        private void ResetDustSparklesState()
+        {
+            if (_dustSparkleCanvasGroups == null) return;
+            for (int i = 0; i < _dustSparkleCanvasGroups.Length; i++)
+            {
+                if (_dustSparkleCanvasGroups[i] != null)
+                    _dustSparkleCanvasGroups[i].alpha = 0f;
+            }
+        }
+
         /// <summary>
         /// Пыль разлетается в стороны от основания сундука при вылете предмета
         /// </summary>
@@ -1307,13 +1379,13 @@ namespace WattsTap.Game.UI
             CanvasGroup sparkleGroup = _sparkleCanvasGroups[index];
             RectTransform sparkleTransform = _sparkleTransforms[index];
 
-            if (sparkleGroup == null || sparkleTransform == null || _itemTransform == null) yield break;
+            if (sparkleGroup == null || sparkleTransform == null) yield break;
 
-            // Случайный угол и дистанция вокруг предмета
+            // Небольшой случайный сдвиг вокруг собственной позиции transform
+            Vector2 origin = sparkleTransform.anchoredPosition;
             float angle = UnityEngine.Random.Range(0f, 360f) * Mathf.Deg2Rad;
-            float distance = UnityEngine.Random.Range(_sparkleRadius * 0.3f, _sparkleRadius);
+            float distance = UnityEngine.Random.Range(0f, _sparkleRadius);
             Vector2 offset = new Vector2(Mathf.Cos(angle) * distance, Mathf.Sin(angle) * distance);
-            Vector2 basePos = _itemTransform.anchoredPosition + offset;
 
             Vector3 originalScale = (_sparkleOriginalScales != null && index < _sparkleOriginalScales.Length)
                 ? _sparkleOriginalScales[index]
@@ -1328,14 +1400,92 @@ namespace WattsTap.Game.UI
 
                 sparkleGroup.alpha = _sparkleAlphaCurve.Evaluate(t);
                 sparkleTransform.localScale = originalScale * _sparkleScaleCurve.Evaluate(t);
-                // Лёгкий дрейф вверх вместе с предметом
-                sparkleTransform.anchoredPosition = basePos + new Vector2(0f, t * 12f);
+                sparkleTransform.anchoredPosition = origin + offset * t;
 
                 yield return GetAnimationYield();
             }
 
             sparkleGroup.alpha = 0f;
             sparkleTransform.localScale = originalScale;
+            sparkleTransform.anchoredPosition = origin;
+        }
+
+        /// <summary>
+        /// Искры которые появляются вместе с пылью при приземлении сундука
+        /// </summary>
+        private IEnumerator DustSparklesAnimation()
+        {
+            if (_dustSparkleCanvasGroups == null || _dustSparkleCanvasGroups.Length == 0 ||
+                _dustSparkleTransforms == null || _dustSparkleTransforms.Length == 0) yield break;
+
+            int count = Mathf.Min(_dustSparkleCanvasGroups.Length, _dustSparkleTransforms.Length);
+            ResetDustSparklesState();
+
+            float totalDuration = _dustDuration;
+            float elapsed = 0f;
+            int nextIndex = 0;
+
+            while (elapsed < totalDuration)
+            {
+                StartCoroutine(AnimateSingleDustSparkle(nextIndex % count));
+                nextIndex++;
+
+                float intervalElapsed = 0f;
+                while (intervalElapsed < _dustSparkleInterval)
+                {
+                    float dt = GetDeltaTime();
+                    intervalElapsed += dt;
+                    elapsed += dt;
+                    yield return GetAnimationYield();
+                    if (elapsed >= totalDuration) break;
+                }
+            }
+
+            if (_useUnscaledTime)
+                yield return new WaitForSecondsRealtime(_dustSparkleDuration);
+            else
+                yield return new WaitForSeconds(_dustSparkleDuration);
+
+            ResetDustSparklesState();
+            _dustSparkleCoroutine = null;
+        }
+
+        private IEnumerator AnimateSingleDustSparkle(int index)
+        {
+            if (_dustSparkleCanvasGroups == null || index >= _dustSparkleCanvasGroups.Length ||
+                _dustSparkleTransforms == null || index >= _dustSparkleTransforms.Length) yield break;
+
+            CanvasGroup sparkleGroup = _dustSparkleCanvasGroups[index];
+            RectTransform sparkleTransform = _dustSparkleTransforms[index];
+
+            if (sparkleGroup == null || sparkleTransform == null) yield break;
+
+            Vector2 origin = sparkleTransform.anchoredPosition;
+            float angle = UnityEngine.Random.Range(0f, 360f) * Mathf.Deg2Rad;
+            float distance = UnityEngine.Random.Range(0f, _dustSparkleRadius);
+            Vector2 offset = new Vector2(Mathf.Cos(angle) * distance, Mathf.Sin(angle) * distance);
+
+            Vector3 originalScale = (_dustSparkleOriginalScales != null && index < _dustSparkleOriginalScales.Length)
+                ? _dustSparkleOriginalScales[index]
+                : Vector3.one;
+
+            float elapsed = 0f;
+
+            while (elapsed < _dustSparkleDuration)
+            {
+                elapsed += GetDeltaTime();
+                float t = Mathf.Clamp01(elapsed / _dustSparkleDuration);
+
+                sparkleGroup.alpha = _dustSparkleAlphaCurve.Evaluate(t);
+                sparkleTransform.localScale = originalScale * _dustSparkleScaleCurve.Evaluate(t);
+                sparkleTransform.anchoredPosition = origin + offset * t;
+
+                yield return GetAnimationYield();
+            }
+
+            sparkleGroup.alpha = 0f;
+            sparkleTransform.localScale = originalScale;
+            sparkleTransform.anchoredPosition = origin;
         }
 
         private void SetImageAlpha(Image image, float alpha)
@@ -1455,6 +1605,12 @@ namespace WattsTap.Game.UI
                 _sparkleCoroutine = null;
             }
 
+            if (_dustSparkleCoroutine != null)
+            {
+                StopCoroutine(_dustSparkleCoroutine);
+                _dustSparkleCoroutine = null;
+            }
+
             // Сброс сундука к начальному состоянию
             if (_chestTransform != null)
             {
@@ -1471,6 +1627,7 @@ namespace WattsTap.Game.UI
             SetImageAlpha(_backGlowImage2, 0f);
             ResetDustState();
             ResetSparklesState();
+            ResetDustSparklesState();
 
             // Сброс предмета к начальному состоянию
             InitializeItemState();

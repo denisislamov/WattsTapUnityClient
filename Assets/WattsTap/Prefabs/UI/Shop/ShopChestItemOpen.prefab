@@ -75,6 +75,94 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &850027630739235838
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1831334650415439331}
+  - component: {fileID: 3621527936723677341}
+  - component: {fileID: 5519968776406277486}
+  - component: {fileID: 617091589726721439}
+  m_Layer: 5
+  m_Name: Sparkles (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1831334650415439331
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850027630739235838}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7322664, w: 0.6810183}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6301150746728385350}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 94.153}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -143, y: -50}
+  m_SizeDelta: {x: 91.8248, y: 78.507}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &3621527936723677341
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850027630739235838}
+  m_CullTransparentMesh: 1
+--- !u!114 &5519968776406277486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850027630739235838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 08a93d74036664346b17d147ac2a0e8f, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!225 &617091589726721439
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 850027630739235838}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &855889592923852505
 GameObject:
   m_ObjectHideFlags: 0
@@ -397,6 +485,94 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &2123653052992216863
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3679473566881349734}
+  - component: {fileID: 4223987475446173905}
+  - component: {fileID: 172639815431033573}
+  - component: {fileID: 1655697982651010844}
+  m_Layer: 5
+  m_Name: Sparkles (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3679473566881349734
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2123653052992216863}
+  m_LocalRotation: {x: 0.7957258, y: 0.605657, z: -0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6301150746728385350}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 105.448}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 133, y: -70}
+  m_SizeDelta: {x: 58.3059, y: 72.0763}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &4223987475446173905
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2123653052992216863}
+  m_CullTransparentMesh: 1
+--- !u!114 &172639815431033573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2123653052992216863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: ee478d5618c504435b9593af8a2699f5, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!225 &1655697982651010844
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2123653052992216863}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &2152865000935000244
 GameObject:
   m_ObjectHideFlags: 0
@@ -1557,6 +1733,8 @@ RectTransform:
   m_Children:
   - {fileID: 971993974637840716}
   - {fileID: 7730477355558542309}
+  - {fileID: 1831334650415439331}
+  - {fileID: 3679473566881349734}
   m_Father: {fileID: 4804089843460850830}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1802,11 +1980,20 @@ MonoBehaviour:
   _sparkleCanvasGroups:
   - {fileID: 1835234617100360396}
   - {fileID: 161277045622869000}
-  _jumpHeight: 60
-  _jumpDuration: 0.4
+  _dustSparkleTransforms:
+  - {fileID: 1831334650415439331}
+  - {fileID: 3679473566881349734}
+  _dustSparkleCanvasGroups:
+  - {fileID: 617091589726721439}
+  - {fileID: 1655697982651010844}
+  _jumpHeight: 50
+  _jumpDuration: 0.3
   _jumpCount: 1
   _scaleAmount: 1.15
   _crossfadeDuration: 0
+  _finalLandingSquashY: 1
+  _finalLandingSquashDuration: 0
+  _finalLandingRecoverDuration: 0
   _idleJumpHeight: 25
   _idleJumpDuration: 0.2
   _idleJumpCount: 1
@@ -1969,9 +2156,78 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _sparkleDuration: 1
+  _sparkleDuration: 0.5
   _sparkleInterval: 0.3
-  _sparkleRadius: 5
+  _sparkleRadius: 1
+  _dustSparkleAlphaCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.13554841
+      value: 0.43546087
+      inSlope: -0.078134604
+      outSlope: -0.078134604
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.15916692
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9883932
+      value: -0.015492342
+      inSlope: -1.2339873
+      outSlope: -1.2339873
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.11796549
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _dustSparkleScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.13554841
+      value: 0.43546087
+      inSlope: -0.078134604
+      outSlope: -0.078134604
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.15916692
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9883932
+      value: -0.015492342
+      inSlope: -1.2339873
+      outSlope: -1.2339873
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.11796549
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _dustSparkleDuration: 0.5
+  _dustSparkleInterval: 0.5
+  _dustSparkleRadius: 10
   _itemTransform: {fileID: 7237730791887071508}
   _itemCanvasGroup: {fileID: 5892284307188206757}
   _itemStartPosition: {fileID: 6938868222681976107}
