@@ -48,6 +48,8 @@ namespace WattsTap.Game.UI
         [SerializeField] private Transform _friendsListContainer;
         [SerializeField] private GameObject _friendItemPrefab;
         [SerializeField] private GameObject _noFriendsPlaceholder;
+        [SerializeField] private GameObject _friendsPlaceholder;
+
         [SerializeField] private TMP_Text _friendsListTotalText;
 
         #region Properties
@@ -206,7 +208,12 @@ namespace WattsTap.Game.UI
             {
                 _noFriendsPlaceholder.SetActive(!hasFriends);
             }
-            
+
+            if (_friendsPlaceholder != null)
+            {
+                _friendsPlaceholder.SetActive(hasFriends);
+            }
+
             // Update total text
             if (_friendsListTotalText != null)
             {
