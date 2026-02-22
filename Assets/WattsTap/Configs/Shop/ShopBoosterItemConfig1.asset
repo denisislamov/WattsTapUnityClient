@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ShopBoosterItemConfig1
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.Shop.ShopBoosterItemConfig
   _itemName: FULL HITS
-  _icon: {fileID: 21300000, guid: d43b444a53d344527be200ed38e065fb, type: 3}
+  _icon: {fileID: 21300000, guid: 3db46e674cf424d7a9136bcf64db92cb, type: 3}
   _description: For a limited time, this booster enhances your earnings by doubling
     the profit from tapping, allowing you to enjoy twice the income for a specified
     duration. This boost can significantly increase your overall gains, making it
