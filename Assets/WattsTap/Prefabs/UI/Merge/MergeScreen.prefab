@@ -354,7 +354,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1840367323195978269}
   m_HandleRect: {fileID: 3627150124908056744}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -702,7 +702,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1761111583938332954}
   m_HandleRect: {fileID: 7026941787616694770}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3477,6 +3477,8 @@ MonoBehaviour:
     suppressMissingTokenWarning: 0
   _backButton: {fileID: 5252757636428489672}
   _inventoryButton: {fileID: 8138810845338837656}
+  _inventoryContainer: {fileID: 6927483303239880639}
+  _itemPrefab: {fileID: 2629496247651656174, guid: 7932e3e31a71e4ea8b4469df8f34a8a4, type: 3}
 --- !u!1 &8232741544169785832
 GameObject:
   m_ObjectHideFlags: 0

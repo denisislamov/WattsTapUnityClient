@@ -1,7 +1,11 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using WattsTap.Core;
+using WattsTap.Core.Inventory;
 using WattsTap.Core.UI;
+using WattsTap.Game.UI.Components.Inventory;
 
 namespace WattsTap.Game.UI
 {
@@ -16,8 +20,56 @@ namespace WattsTap.Game.UI
         [SerializeField] private Button _backButton;
         [SerializeField] private Button _inventoryButton;
 
+        [Header("Inventory Grid")]
+        [SerializeField] private Transform _inventoryContainer;
+        [SerializeField] private InventoryItemElementView _itemPrefab;
+
+        private readonly List<InventoryItemElementView> _itemViews = new List<InventoryItemElementView>();
+
+        public event Action<InventoryItemElementView> OnItemClicked;
+
         public Button BackButton => _backButton;
         public Button InventoryButton => _inventoryButton;
+
+        /// <summary>
+        /// Populate the inventory grid with items.
+        /// </summary>
+        public void PopulateInventory(IReadOnlyList<InventoryItem> items)
+        {
+            ClearInventoryViews();
+            
+            if (_itemPrefab == null || _inventoryContainer == null)
+            {
+                Debug.LogWarning("[MergeScreenUIView] Item prefab or container not set");
+                return;
+            }
+            
+            foreach (var item in items)
+            {
+                var itemView = Instantiate(_itemPrefab, _inventoryContainer);
+                itemView.Setup(item);
+                itemView.OnSingleClick += HandleItemClick;
+                _itemViews.Add(itemView);
+            }
+        }
+
+        private void HandleItemClick(InventoryItemElementView itemView)
+        {
+            OnItemClicked?.Invoke(itemView);
+        }
+
+        private void ClearInventoryViews()
+        {
+            foreach (var view in _itemViews)
+            {
+                if (view != null)
+                {
+                    view.OnSingleClick -= HandleItemClick;
+                    Destroy(view.gameObject);
+                }
+            }
+            _itemViews.Clear();
+        }
 
         #region Skinning
 
@@ -56,6 +108,12 @@ namespace WattsTap.Game.UI
         }
 
         #endregion
+
+        protected override void OnDestroy()
+        {
+            ClearInventoryViews();
+            base.OnDestroy();
+        }
     }
 }
 

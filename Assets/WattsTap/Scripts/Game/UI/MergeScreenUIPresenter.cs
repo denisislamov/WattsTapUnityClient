@@ -2,6 +2,7 @@ using WattsTap.Constants;
 using WattsTap.Core;
 using WattsTap.Core.Telegram;
 using WattsTap.Core.UI;
+using WattsTap.Game.UI.Components.Inventory;
 
 namespace WattsTap.Game.UI
 {
@@ -15,6 +16,12 @@ namespace WattsTap.Game.UI
             ServiceLocator.TryGet(out _uiService);
             ServiceLocator.TryGet(out _hapticService);
 
+            // Populate inventory
+            PopulateInventory();
+
+            // Subscribe to view events
+            View.OnItemClicked += OnItemClicked;
+
             if (View.BackButton != null)
             {
                 View.BackButton.onClick.AddListener(OnBackButtonClicked);
@@ -24,6 +31,17 @@ namespace WattsTap.Game.UI
             {
                 View.InventoryButton.onClick.AddListener(OnInventoryButtonClicked);
             }
+        }
+
+        private void PopulateInventory()
+        {
+            var items = Model.GetAllItems();
+            View.PopulateInventory(items);
+        }
+
+        private void OnItemClicked(InventoryItemElementView itemView)
+        {
+            _hapticService?.ButtonPressed();
         }
 
         private void OnBackButtonClicked()
@@ -54,6 +72,11 @@ namespace WattsTap.Game.UI
 
         protected override void OnDispose()
         {
+            if (View != null)
+            {
+                View.OnItemClicked -= OnItemClicked;
+            }
+
             if (View?.BackButton != null)
             {
                 View.BackButton.onClick.RemoveListener(OnBackButtonClicked);
