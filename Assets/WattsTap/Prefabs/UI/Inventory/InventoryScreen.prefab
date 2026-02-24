@@ -3963,6 +3963,7 @@ MonoBehaviour:
   _friendsReferralButton: {fileID: 9158898216079838911}
   _questsButton: {fileID: 3069323069871148423}
   _updatesButton: {fileID: 6799635551544283900}
+  _mergeButton: {fileID: 8138810845338837656}
   _currentHitsText: {fileID: 1746827694055682074}
   _maxHitsText: {fileID: 0}
   _coinsPerTapText: {fileID: 6460509753754934074}

@@ -58,6 +58,11 @@ namespace WattsTap.Game.UI
             {
                 View.UpdatesButton.onClick.AddListener(OnUpdatesButtonClicked);
             }
+
+            if (View.MergeButton != null)
+            {
+                View.MergeButton.onClick.AddListener(OnMergeButtonClicked);
+            }
         }
         
         private void PopulateInventory()
@@ -195,6 +200,20 @@ namespace WattsTap.Game.UI
             _uiService?.Open(UIConstants.UpdatesPopup);
         }
 
+        private void OnMergeButtonClicked()
+        {
+            _hapticService?.ButtonPressed();
+            
+            if (_uiService == null)
+            {
+                ServiceLocator.TryGet(out _uiService);
+            }
+
+            // Close InventoryScreen and open MergeScreen
+            _uiService?.Close(UIConstants.InventoryScreen);
+            _uiService?.Open(UIConstants.MergeScreen);
+        }
+
         #endregion
 
         protected override void OnDispose()
@@ -234,6 +253,11 @@ namespace WattsTap.Game.UI
             if (View?.UpdatesButton != null)
             {
                 View.UpdatesButton.onClick.RemoveListener(OnUpdatesButtonClicked);
+            }
+
+            if (View?.MergeButton != null)
+            {
+                View.MergeButton.onClick.RemoveListener(OnMergeButtonClicked);
             }
         }
     }

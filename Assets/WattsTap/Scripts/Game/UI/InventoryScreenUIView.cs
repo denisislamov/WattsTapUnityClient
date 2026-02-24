@@ -22,6 +22,7 @@ namespace WattsTap.Game.UI
         [SerializeField] private Button _friendsReferralButton;
         [SerializeField] private Button _questsButton;
         [SerializeField] private Button _updatesButton;
+        [SerializeField] private Button _mergeButton;
         
         [Header("Hits Display")]
         [SerializeField] private TMP_Text _currentHitsText;
@@ -52,6 +53,7 @@ namespace WattsTap.Game.UI
         public Button FriendsReferralButton => _friendsReferralButton;
         public Button QuestsButton => _questsButton;
         public Button UpdatesButton => _updatesButton;
+        public Button MergeButton => _mergeButton;
         
         public EquipmentSlotView WeaponSlot => _weaponSlot;
         public EquipmentSlotView BodyArmorSlot => _bodyArmorSlot;
