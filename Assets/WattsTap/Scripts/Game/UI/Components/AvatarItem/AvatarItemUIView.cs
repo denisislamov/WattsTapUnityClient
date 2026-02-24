@@ -121,13 +121,19 @@ namespace WattsTap.Game.UI
         {
             // Disable all state objects first
             SetStateObjectsActive(AvatarItemState.Current, false);
-            SetStateObjectsActive(AvatarItemState.Selected, false);
             SetStateObjectsActive(AvatarItemState.Unselected, false);
             SetStateObjectsActive(AvatarItemState.Locked, false);
+            SetSelectedObjectsActive(false);
             
             // Enable only the target state
             _currentState = state;
             SetStateObjectsActive(_currentState, true);
+            
+            // Show selected objects if state is Selected
+            if (state == AvatarItemState.Selected)
+            {
+                SetSelectedObjectsActive(true);
+            }
         }
         
         private void SetStateObjectsActive(AvatarItemState state, bool active)
@@ -153,11 +159,32 @@ namespace WattsTap.Game.UI
             return state switch
             {
                 AvatarItemState.Current => _currentStateObjects,
-                AvatarItemState.Selected => _selectedStateObjects,
                 AvatarItemState.Unselected => _unselectedStateObjects,
                 AvatarItemState.Locked => _lockedStateObjects,
                 _ => null
             };
+        }
+        
+        /// <summary>
+        /// Shows or hides the selected visual overlay independently of avatar state.
+        /// This allows showing selection highlight on any avatar, including locked ones.
+        /// </summary>
+        public void SetSelected(bool selected)
+        {
+            SetSelectedObjectsActive(selected);
+        }
+        
+        private void SetSelectedObjectsActive(bool active)
+        {
+            if (_selectedStateObjects == null) return;
+            
+            foreach (var obj in _selectedStateObjects)
+            {
+                if (obj != null)
+                {
+                    obj.SetActive(active);
+                }
+            }
         }
         
         /// <summary>

@@ -358,10 +358,16 @@ namespace WattsTap.Game.UI
         
         private void UpdateAllAvatarStates()
         {
+            var selectedId = Model.SelectedAvatarId.Value;
+            
             foreach (var presenter in Model.AvatarPresenters)
             {
                 var state = GetAvatarState(presenter.AvatarId);
                 presenter.SetState(state);
+                
+                // Show selected overlay for any selected avatar, including locked ones
+                bool isSelected = presenter.AvatarId == selectedId;
+                presenter.SetSelected(isSelected);
             }
         }
         

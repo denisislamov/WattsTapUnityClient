@@ -75,6 +75,14 @@ namespace WattsTap.Game.UI
         }
         
         /// <summary>
+        /// Shows or hides the selection overlay independently of avatar state.
+        /// </summary>
+        public void SetSelected(bool selected)
+        {
+            _view.SetSelected(selected);
+        }
+        
+        /// <summary>
         /// Updates the avatar's sprite.
         /// </summary>
         public void SetSprite(Sprite sprite)
