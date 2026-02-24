@@ -13,6 +13,10 @@ namespace WattsTap.Game.UI
         [SerializeField] private Button _equipButton;
         [SerializeField] private TMP_Text _equipButtonText;
         
+        [Header("Equip Button Currency Icons")]
+        [SerializeField] private GameObject _coinsIcon;
+        [SerializeField] private GameObject _btnIcon;
+        
         [Header("Avatar Display")]
         [SerializeField] private Transform _avatarsContainer;
         [SerializeField] private AvatarItemUIView _avatarItemPrefab;
@@ -76,13 +80,59 @@ namespace WattsTap.Game.UI
         }
         
         /// <summary>
-        /// Sets the equip button text (e.g. "Equip" or "Buy").
+        /// Sets the equip button text (e.g. "Equip" or price).
         /// </summary>
         public void SetEquipButtonText(string text)
         {
             if (_equipButtonText != null)
             {
                 _equipButtonText.text = text;
+            }
+        }
+        
+        /// <summary>
+        /// Shows the equip button with "Equip" text and hides currency icons.
+        /// Used when the avatar is already owned.
+        /// </summary>
+        public void SetEquipButtonAsEquip()
+        {
+            SetEquipButtonText("Equip");
+            SetCurrencyIconsVisible(false, false);
+        }
+        
+        /// <summary>
+        /// Shows the equip button with price and the appropriate currency icon.
+        /// Used when the avatar needs to be purchased.
+        /// </summary>
+        public void SetEquipButtonAsPrice(string formattedPrice, bool isCoins)
+        {
+            SetEquipButtonText(formattedPrice);
+            SetCurrencyIconsVisible(isCoins, !isCoins);
+        }
+        
+        /// <summary>
+        /// Shows the equip button with "Level N" text and hides currency icons.
+        /// Used when the avatar requires a certain player level.
+        /// </summary>
+        public void SetEquipButtonAsLevel(int requiredLevel)
+        {
+            SetEquipButtonText($"Level {requiredLevel}");
+            SetCurrencyIconsVisible(false, false);
+        }
+        
+        /// <summary>
+        /// Sets visibility of currency icons on the equip button.
+        /// </summary>
+        private void SetCurrencyIconsVisible(bool showCoins, bool showBtn)
+        {
+            if (_coinsIcon != null)
+            {
+                _coinsIcon.SetActive(showCoins);
+            }
+            
+            if (_btnIcon != null)
+            {
+                _btnIcon.SetActive(showBtn);
             }
         }
         

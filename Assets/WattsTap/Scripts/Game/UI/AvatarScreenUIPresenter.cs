@@ -10,9 +10,6 @@ namespace WattsTap.Game.UI
 {
     public class AvatarScreenUIPresenter : UIBasePresenter<AvatarScreenUIView, AvatarScreenUIModel>
     {
-        private const string EquipButtonText = "Equip";
-        private const string BuyButtonText = "Buy";
-        
         private IUIService _uiService;
         private IHapticFeedbackService _hapticService;
         private IAvatarsService _avatarsService;
@@ -190,20 +187,11 @@ namespace WattsTap.Game.UI
             
             if (currentState == AvatarItemState.Locked)
             {
-                // Check if we can afford this locked avatar
-                var config = _avatarsService.GetAvatarConfig(avatarId);
-                if (config != null && CanAffordAvatar(config))
-                {
-                    // Select locked avatar so user can click Buy to purchase
-                    Model.SelectedAvatarId.Value = avatarId;
-                    UpdateAllAvatarStates();
-                    UpdateEquipButtonState();
-                    Debug.Log($"[AvatarScreenUIPresenter] Locked avatar '{avatarId}' selected for purchase");
-                }
-                else
-                {
-                    Debug.Log($"[AvatarScreenUIPresenter] Avatar '{avatarId}' is locked and cannot be afforded");
-                }
+                // Select locked avatar — button will show price/level and be interactive only if affordable
+                Model.SelectedAvatarId.Value = avatarId;
+                UpdateAllAvatarStates();
+                UpdateEquipButtonState();
+                Debug.Log($"[AvatarScreenUIPresenter] Locked avatar '{avatarId}' selected");
                 return;
             }
             
@@ -383,17 +371,71 @@ namespace WattsTap.Game.UI
             var currentId = Model.CurrentAvatarId.Value;
             
             bool hasNewSelection = selectedId != currentId;
-            View.SetEquipButtonInteractable(hasNewSelection && !_isPurchaseInProgress);
             
-            // Determine button text: "Buy" if selected avatar is locked, "Equip" if unlocked
             if (hasNewSelection && !_avatarsService.IsAvatarUnlocked(selectedId))
             {
-                View.SetEquipButtonText(BuyButtonText);
+                // Avatar is not purchased — show price/level with appropriate display
+                var config = _avatarsService.GetAvatarConfig(selectedId);
+                if (config != null)
+                {
+                    bool canAfford = CanAffordAvatar(config);
+                    
+                    switch (config.UnlockType)
+                    {
+                        case AvatarUnlockType.Level:
+                            View.SetEquipButtonAsLevel(config.RequiredLevel);
+                            View.SetEquipButtonInteractable(canAfford && !_isPurchaseInProgress);
+                            break;
+                        
+                        case AvatarUnlockType.BTN:
+                            View.SetEquipButtonAsPrice(FormatPrice(config.BtnPrice), false);
+                            View.SetEquipButtonInteractable(canAfford && !_isPurchaseInProgress);
+                            break;
+                        
+                        case AvatarUnlockType.Coins:
+                            View.SetEquipButtonAsPrice(FormatPrice(config.CoinPrice), true);
+                            View.SetEquipButtonInteractable(canAfford && !_isPurchaseInProgress);
+                            break;
+                        
+                        default:
+                            View.SetEquipButtonAsEquip();
+                            View.SetEquipButtonInteractable(canAfford && !_isPurchaseInProgress);
+                            break;
+                    }
+                }
+                else
+                {
+                    View.SetEquipButtonAsEquip();
+                    View.SetEquipButtonInteractable(false);
+                }
             }
             else
             {
-                View.SetEquipButtonText(EquipButtonText);
+                // Avatar is purchased — show "Equip"
+                View.SetEquipButtonAsEquip();
+                View.SetEquipButtonInteractable(hasNewSelection && !_isPurchaseInProgress);
             }
+        }
+        
+        private static string FormatPrice(long number)
+        {
+            if (number >= 1_000_000)
+            {
+                double millions = number / 1_000_000.0;
+                return millions % 1 == 0 
+                    ? $"{millions:0}M" 
+                    : $"{millions:0.##}M";
+            }
+            
+            if (number >= 1_000)
+            {
+                double thousands = number / 1_000.0;
+                return thousands % 1 == 0 
+                    ? $"{thousands:0}K" 
+                    : $"{thousands:0.##}K";
+            }
+            
+            return number.ToString();
         }
         
         private void OnAvatarChangedExternally(string newAvatarId)
