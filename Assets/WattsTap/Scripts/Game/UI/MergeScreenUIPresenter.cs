@@ -1,3 +1,5 @@
+using System.Linq;
+using UnityEngine;
 using WattsTap.Constants;
 using WattsTap.Core;
 using WattsTap.Core.Telegram;
@@ -22,6 +24,7 @@ namespace WattsTap.Game.UI
             // Subscribe to view events
             View.OnItemClicked += OnItemClicked;
             View.OnItemSelectionChanged += OnItemSelectionChanged;
+            View.OnMergeButtonClicked += OnMergeButtonClicked;
 
             if (View.BackButton != null)
             {
@@ -48,6 +51,19 @@ namespace WattsTap.Game.UI
         private void OnItemSelectionChanged(MergeItemElementView itemView, bool isSelected)
         {
             _hapticService?.ButtonPressed();
+        }
+
+        private void OnMergeButtonClicked()
+        {
+            _hapticService?.ButtonPressed();
+
+            var selected = View.SelectedItems;
+            if (selected == null || selected.Count < 3) return;
+
+            var items = selected.Select(v => v.InventoryItem).ToList();
+            Debug.Log($"[MergeScreenUIPresenter] Merge requested: {string.Join(", ", items.Select(i => i.Data.DisplayName))}");
+
+            // TODO: call merge service / model logic here
         }
 
         private void OnBackButtonClicked()
@@ -82,6 +98,7 @@ namespace WattsTap.Game.UI
             {
                 View.OnItemClicked -= OnItemClicked;
                 View.OnItemSelectionChanged -= OnItemSelectionChanged;
+                View.OnMergeButtonClicked -= OnMergeButtonClicked;
             }
 
             if (View?.BackButton != null)
@@ -96,4 +113,3 @@ namespace WattsTap.Game.UI
         }
     }
 }
-
