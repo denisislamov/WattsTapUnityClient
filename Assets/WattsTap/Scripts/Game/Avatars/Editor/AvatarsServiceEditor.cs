@@ -1,5 +1,4 @@
 #if UNITY_EDITOR
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -15,7 +14,6 @@ namespace WattsTap.Game.Avatars.Editor
         private const int Columns = 3;
         private const float CellSize = 110f;
         private const float SpriteSize = 72f;
-        private const float Padding = 6f;
 
         // Serialized properties
         private SerializedProperty _avatarConfigs;
@@ -31,9 +29,9 @@ namespace WattsTap.Game.Avatars.Editor
         private GUIStyle _cellStyle;
         private GUIStyle _nameLabelStyle;
         private GUIStyle _indexLabelStyle;
-        private GUIStyle _badgeStyle;
 
-        // Reorderable list for custom sort
+        // Reorderable lists
+        private ReorderableList _configsReorderableList;
         private ReorderableList _sortReorderableList;
 
         private void OnEnable()
@@ -42,7 +40,8 @@ namespace WattsTap.Game.Avatars.Editor
             _customSortOrder = serializedObject.FindProperty("_customSortOrder");
             _defaultAvatarConfig = serializedObject.FindProperty("_defaultAvatarConfig");
 
-            RebuildReorderableList();
+            RebuildConfigsReorderableList();
+            RebuildSortReorderableList();
         }
 
         private void InitStyles()
@@ -67,13 +66,6 @@ namespace WattsTap.Game.Avatars.Editor
                 alignment = TextAnchor.MiddleCenter,
                 fontSize = 9,
                 normal = { textColor = new Color(0.7f, 0.85f, 1f) }
-            };
-
-            _badgeStyle = new GUIStyle(EditorStyles.miniLabel)
-            {
-                alignment = TextAnchor.MiddleCenter,
-                fontSize = 9,
-                fontStyle = FontStyle.Bold
             };
         }
 
@@ -143,6 +135,74 @@ namespace WattsTap.Game.Avatars.Editor
 
         #region Avatar Configs Grid
 
+        private void RebuildConfigsReorderableList()
+        {
+            const float elementHeight = 52f;
+
+            _configsReorderableList = new ReorderableList(serializedObject, _avatarConfigs, true, true, true, true)
+            {
+                elementHeightCallback = _ => elementHeight,
+                drawHeaderCallback = rect =>
+                {
+                    EditorGUI.LabelField(rect, $"Avatar Configs ({_avatarConfigs.arraySize})  — drag to reorder, +/− to add/remove");
+                },
+                drawElementCallback = DrawConfigElement,
+                onAddCallback = list =>
+                {
+                    int index = list.serializedProperty.arraySize;
+                    list.serializedProperty.InsertArrayElementAtIndex(index);
+                    list.serializedProperty.GetArrayElementAtIndex(index).objectReferenceValue = null;
+                }
+            };
+        }
+
+        private void DrawConfigElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            var element = _avatarConfigs.GetArrayElementAtIndex(index);
+            var config = element.objectReferenceValue as AvatarConfig;
+
+            float x = rect.x;
+            float y = rect.y + 2f;
+            float spriteSmall = 46f;
+
+            // Index label
+            float idxWidth = 22f;
+            EditorGUI.LabelField(new Rect(x, y + (spriteSmall - 16f) * 0.5f, idxWidth, 16f),
+                $"{index}", EditorStyles.miniBoldLabel);
+            x += idxWidth + 2f;
+
+            // Sprite preview
+            Rect spriteRect = new Rect(x, y, spriteSmall, spriteSmall);
+            EditorGUI.DrawRect(spriteRect, new Color(0.15f, 0.15f, 0.15f, 1f));
+
+            if (config != null && config.AvatarSprite != null)
+            {
+                Texture2D tex = AssetPreview.GetAssetPreview(config.AvatarSprite);
+                if (tex != null)
+                    GUI.DrawTexture(spriteRect, tex, ScaleMode.ScaleToFit);
+                else
+                    GUI.DrawTexture(spriteRect, config.AvatarSprite.texture, ScaleMode.ScaleToFit);
+            }
+
+            x += spriteSmall + 6f;
+            float fieldWidth = rect.xMax - x;
+
+            // Object field
+            EditorGUI.PropertyField(
+                new Rect(x, y, fieldWidth, EditorGUIUtility.singleLineHeight),
+                element, GUIContent.none);
+
+            // Info under the field
+            if (config != null)
+            {
+                string displayName = !string.IsNullOrEmpty(config.DisplayName) ? config.DisplayName : config.AvatarId;
+                string badge = GetBadgeText(config);
+                EditorGUI.LabelField(
+                    new Rect(x, y + EditorGUIUtility.singleLineHeight + 2f, fieldWidth, EditorGUIUtility.singleLineHeight),
+                    $"{displayName}  •  {badge}", EditorStyles.miniLabel);
+            }
+        }
+
         private void DrawAvatarConfigsSection()
         {
             _avatarConfigsFoldout = EditorGUILayout.Foldout(_avatarConfigsFoldout,
@@ -150,25 +210,16 @@ namespace WattsTap.Game.Avatars.Editor
 
             if (!_avatarConfigsFoldout) return;
 
-            // Default array field (for adding/removing)
-            EditorGUILayout.PropertyField(_avatarConfigs, new GUIContent("Configs Array"), false);
-            if (_avatarConfigs.isExpanded)
+            // Reorderable list with +/- buttons
+            _configsReorderableList.DoLayoutList();
+
+            // Grid preview below
+            if (_avatarConfigs.arraySize > 0)
             {
-                EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(_avatarConfigs.FindPropertyRelative("Array.size"));
-                for (int i = 0; i < _avatarConfigs.arraySize; i++)
-                {
-                    EditorGUILayout.PropertyField(_avatarConfigs.GetArrayElementAtIndex(i),
-                        new GUIContent($"Element {i}"));
-                }
-                EditorGUI.indentLevel--;
+                EditorGUILayout.Space(4);
+                EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
+                DrawAvatarGrid(_avatarConfigs, showSortIndex: false);
             }
-
-            EditorGUILayout.Space(4);
-            EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
-
-            // Draw grid
-            DrawAvatarGrid(_avatarConfigs, showSortIndex: false);
         }
 
         private void DrawAvatarGrid(SerializedProperty arrayProp, bool showSortIndex)
@@ -337,7 +388,7 @@ namespace WattsTap.Game.Avatars.Editor
 
         #region Custom Sort Order
 
-        private void RebuildReorderableList()
+        private void RebuildSortReorderableList()
         {
             _sortReorderableList = new ReorderableList(serializedObject, _customSortOrder, true, true, true, true)
             {
