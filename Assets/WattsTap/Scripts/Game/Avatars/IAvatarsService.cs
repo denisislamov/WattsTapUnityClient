@@ -103,6 +103,11 @@ namespace WattsTap.Game.Avatars
         string TelegramAvatarId { get; }
         
         /// <summary>
+        /// Конфиг аватара по умолчанию. Экипируется при первом запуске и является fallback.
+        /// </summary>
+        AvatarConfig DefaultAvatarConfig { get; }
+        
+        /// <summary>
         /// Returns true if the Telegram avatar has been loaded.
         /// </summary>
         bool IsTelegramAvatarLoaded { get; }

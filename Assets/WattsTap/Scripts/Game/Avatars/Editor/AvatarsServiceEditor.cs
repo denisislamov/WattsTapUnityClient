@@ -20,7 +20,7 @@ namespace WattsTap.Game.Avatars.Editor
         // Serialized properties
         private SerializedProperty _avatarConfigs;
         private SerializedProperty _customSortOrder;
-        private SerializedProperty _defaultAvatarSprite;
+        private SerializedProperty _defaultAvatarConfig;
 
         // Foldouts
         private bool _avatarConfigsFoldout = true;
@@ -40,7 +40,7 @@ namespace WattsTap.Game.Avatars.Editor
         {
             _avatarConfigs = serializedObject.FindProperty("_avatarConfigs");
             _customSortOrder = serializedObject.FindProperty("_customSortOrder");
-            _defaultAvatarSprite = serializedObject.FindProperty("_defaultAvatarSprite");
+            _defaultAvatarConfig = serializedObject.FindProperty("_defaultAvatarConfig");
 
             RebuildReorderableList();
         }
@@ -92,12 +92,49 @@ namespace WattsTap.Game.Avatars.Editor
 
             EditorGUILayout.Space(8);
 
-            // --- Default sprite ---
+            // --- Default avatar config ---
             _defaultsFoldout = EditorGUILayout.Foldout(_defaultsFoldout, "Default Avatar", true, EditorStyles.foldoutHeader);
             if (_defaultsFoldout)
             {
                 EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(_defaultAvatarSprite, new GUIContent("Default Sprite"));
+                EditorGUILayout.PropertyField(_defaultAvatarConfig, new GUIContent("Default Avatar Config", "Конфиг аватара по умолчанию. Экипируется при первом запуске."));
+                
+                // Show visual preview of the default avatar config
+                var defaultConfig = _defaultAvatarConfig.objectReferenceValue as AvatarConfig;
+                if (defaultConfig != null)
+                {
+                    EditorGUILayout.Space(4);
+                    EditorGUILayout.BeginHorizontal();
+                    GUILayout.Space(EditorGUI.indentLevel * 15f);
+                    
+                    // Sprite preview
+                    Rect previewRect = GUILayoutUtility.GetRect(SpriteSize, SpriteSize, GUILayout.Width(SpriteSize), GUILayout.Height(SpriteSize));
+                    EditorGUI.DrawRect(previewRect, new Color(0.15f, 0.15f, 0.15f, 1f));
+                    
+                    if (defaultConfig.AvatarSprite != null)
+                    {
+                        Texture2D tex = AssetPreview.GetAssetPreview(defaultConfig.AvatarSprite);
+                        if (tex != null)
+                            GUI.DrawTexture(previewRect, tex, ScaleMode.ScaleToFit);
+                        else
+                            GUI.DrawTexture(previewRect, defaultConfig.AvatarSprite.texture, ScaleMode.ScaleToFit);
+                    }
+                    
+                    // Info next to sprite
+                    EditorGUILayout.BeginVertical();
+                    string displayName = !string.IsNullOrEmpty(defaultConfig.DisplayName) ? defaultConfig.DisplayName : defaultConfig.AvatarId;
+                    EditorGUILayout.LabelField(displayName, EditorStyles.boldLabel);
+                    EditorGUILayout.LabelField($"ID: {defaultConfig.AvatarId}", EditorStyles.miniLabel);
+                    EditorGUILayout.LabelField("✓ Экипируется по умолчанию", EditorStyles.miniLabel);
+                    EditorGUILayout.EndVertical();
+                    
+                    EditorGUILayout.EndHorizontal();
+                }
+                else
+                {
+                    EditorGUILayout.HelpBox("Не указан дефолтный аватар! Будет использован Telegram аватар как fallback.", MessageType.Warning);
+                }
+                
                 EditorGUI.indentLevel--;
             }
 

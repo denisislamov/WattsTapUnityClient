@@ -30,7 +30,8 @@ namespace WattsTap.Game.Avatars
         [SerializeField] private AvatarSortEntry[] _customSortOrder;
         
         [Header("Default Avatar")]
-        [SerializeField] private Sprite _defaultAvatarSprite;
+        [Tooltip("Конфиг аватара по умолчанию. Экипируется при первом запуске и используется как fallback.")]
+        [SerializeField] private AvatarConfig _defaultAvatarConfig;
         
         private Dictionary<string, int> _customSortIndexMap;
         private Dictionary<string, AvatarConfig> _avatarConfigsMap;
@@ -45,6 +46,10 @@ namespace WattsTap.Game.Avatars
         
         public int InitializationOrder => 100;
         public bool IsInitialized { get; private set; }
+        
+        public AvatarConfig DefaultAvatarConfig => _defaultAvatarConfig;
+        private Sprite DefaultAvatarSprite => _defaultAvatarConfig != null ? _defaultAvatarConfig.AvatarSprite : null;
+        private string DefaultAvatarId => _defaultAvatarConfig != null ? _defaultAvatarConfig.AvatarId : TelegramAvatarIdConst;
         
         public string TelegramAvatarId => TelegramAvatarIdConst;
         public bool IsTelegramAvatarLoaded => _isTelegramAvatarLoaded;
@@ -115,6 +120,12 @@ namespace WattsTap.Game.Avatars
             // Telegram avatar is always unlocked
             _unlockedAvatars.Add(TelegramAvatarIdConst);
             
+            // Default avatar config is always unlocked
+            if (_defaultAvatarConfig != null && !string.IsNullOrEmpty(_defaultAvatarConfig.AvatarId))
+            {
+                _unlockedAvatars.Add(_defaultAvatarConfig.AvatarId);
+            }
+            
             // Add avatars that are unlocked by default
             if (_avatarConfigs != null)
             {
@@ -136,12 +147,12 @@ namespace WattsTap.Game.Avatars
         
         private void LoadCurrentAvatarFromPrefs()
         {
-            _currentAvatarId = PlayerPrefs.GetString(CurrentAvatarPlayerPrefsKey, TelegramAvatarIdConst);
+            _currentAvatarId = PlayerPrefs.GetString(CurrentAvatarPlayerPrefsKey, DefaultAvatarId);
             
             // Validate that the avatar is unlocked
             if (!IsAvatarUnlocked(_currentAvatarId))
             {
-                _currentAvatarId = TelegramAvatarIdConst;
+                _currentAvatarId = DefaultAvatarId;
             }
         }
         
@@ -153,7 +164,7 @@ namespace WattsTap.Game.Avatars
         
         private void LoadTelegramAvatar()
         {
-            _telegramAvatarSprite = _defaultAvatarSprite;
+            _telegramAvatarSprite = DefaultAvatarSprite;
             _isTelegramAvatarLoaded = false;
             
             // Try to get user data from SharedDataService
@@ -199,7 +210,7 @@ namespace WattsTap.Game.Avatars
                 else
                 {
                     Debug.LogWarning($"[AvatarsService] Failed to load Telegram avatar: {request.error}");
-                    _telegramAvatarSprite = _defaultAvatarSprite;
+                    _telegramAvatarSprite = DefaultAvatarSprite;
                     _isTelegramAvatarLoaded = true;
                 }
             }
@@ -272,7 +283,7 @@ namespace WattsTap.Game.Avatars
             }
             
             var config = GetAvatarConfig(_currentAvatarId);
-            return config != null ? config.AvatarSprite : _defaultAvatarSprite;
+            return config != null ? config.AvatarSprite : DefaultAvatarSprite;
         }
         
         public bool SelectAvatar(string avatarId)
@@ -323,7 +334,7 @@ namespace WattsTap.Game.Avatars
         
         public Sprite GetTelegramAvatarSprite()
         {
-            return _telegramAvatarSprite ?? _defaultAvatarSprite;
+            return _telegramAvatarSprite ?? DefaultAvatarSprite;
         }
         
         /// <summary>
@@ -572,6 +583,9 @@ namespace WattsTap.Game.Avatars
         private bool IsAlwaysUnlocked(string avatarId)
         {
             if (avatarId == TelegramAvatarIdConst)
+                return true;
+            
+            if (_defaultAvatarConfig != null && avatarId == _defaultAvatarConfig.AvatarId)
                 return true;
                 
             var config = GetAvatarConfig(avatarId);
