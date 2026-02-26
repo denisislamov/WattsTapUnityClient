@@ -407,7 +407,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 04a13b01f5664ec57556a6861f6b7a93, type: 2}
   - {fileID: 11400000, guid: ca6dacd3f62905eee7f7e8d66d59836b, type: 2}
   - {fileID: 11400000, guid: ae0a90d8553356db80eaf193418695a6, type: 2}
-  _defaultAvatarSprite: {fileID: 21300000, guid: 6f61f9db08e5d40a8b22d5d028f725c9, type: 3}
+  _defaultAvatarSprite: {fileID: 21300000, guid: 63cd710baf67249ce90e948630f3bf4e, type: 3}
 --- !u!1 &427421224
 GameObject:
   m_ObjectHideFlags: 0
