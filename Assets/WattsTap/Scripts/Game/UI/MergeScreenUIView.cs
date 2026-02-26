@@ -22,6 +22,7 @@ namespace WattsTap.Game.UI
         [SerializeField] private Button _inventoryButton;
 
         [Header("Inventory Grid")]
+        [SerializeField] private ScrollRect _inventoryScrollRect;
         [SerializeField] private Transform _inventoryContainer;
         [SerializeField] private MergeItemElementView _itemPrefab;
 
@@ -205,6 +206,8 @@ namespace WattsTap.Game.UI
                     if (view != null)
                         view.gameObject.SetActive(true);
                 }
+
+                ScrollToTop();
                 return;
             }
 
@@ -225,6 +228,16 @@ namespace WattsTap.Game.UI
 
                 bool matches = data.ItemType == requiredType && data.Rarity == requiredRarity;
                 view.gameObject.SetActive(matches);
+            }
+
+            ScrollToTop();
+        }
+
+        private void ScrollToTop()
+        {
+            if (_inventoryScrollRect != null)
+            {
+                _inventoryScrollRect.verticalNormalizedPosition = 1f;
             }
         }
 

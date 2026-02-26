@@ -3479,6 +3479,7 @@ MonoBehaviour:
     suppressMissingTokenWarning: 0
   _backButton: {fileID: 5252757636428489672}
   _inventoryButton: {fileID: 8138810845338837656}
+  _inventoryScrollRect: {fileID: 5248277222713579609}
   _inventoryContainer: {fileID: 6927483303239880639}
   _itemPrefab: {fileID: 7307277848981594468, guid: 2a142c85d8fde45838ca49153a657b3a, type: 3}
   _mergeSlot1: {fileID: 8187241523718541404}
