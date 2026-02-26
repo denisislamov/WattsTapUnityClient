@@ -21,6 +21,7 @@ namespace WattsTap.Game.UI
 
             // Subscribe to view events
             View.OnItemClicked += OnItemClicked;
+            View.OnItemSelectionChanged += OnItemSelectionChanged;
 
             if (View.BackButton != null)
             {
@@ -39,7 +40,12 @@ namespace WattsTap.Game.UI
             View.PopulateInventory(items);
         }
 
-        private void OnItemClicked(InventoryItemElementView itemView)
+        private void OnItemClicked(MergeItemElementView itemView)
+        {
+            _hapticService?.ButtonPressed();
+        }
+
+        private void OnItemSelectionChanged(MergeItemElementView itemView, bool isSelected)
         {
             _hapticService?.ButtonPressed();
         }
@@ -75,6 +81,7 @@ namespace WattsTap.Game.UI
             if (View != null)
             {
                 View.OnItemClicked -= OnItemClicked;
+                View.OnItemSelectionChanged -= OnItemSelectionChanged;
             }
 
             if (View?.BackButton != null)

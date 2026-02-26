@@ -22,11 +22,12 @@ namespace WattsTap.Game.UI
 
         [Header("Inventory Grid")]
         [SerializeField] private Transform _inventoryContainer;
-        [SerializeField] private InventoryItemElementView _itemPrefab;
+        [SerializeField] private MergeItemElementView _itemPrefab;
 
-        private readonly List<InventoryItemElementView> _itemViews = new List<InventoryItemElementView>();
+        private readonly List<MergeItemElementView> _itemViews = new List<MergeItemElementView>();
 
-        public event Action<InventoryItemElementView> OnItemClicked;
+        public event Action<MergeItemElementView> OnItemClicked;
+        public event Action<MergeItemElementView, bool> OnItemSelectionChanged;
 
         public Button BackButton => _backButton;
         public Button InventoryButton => _inventoryButton;
@@ -49,13 +50,19 @@ namespace WattsTap.Game.UI
                 var itemView = Instantiate(_itemPrefab, _inventoryContainer);
                 itemView.Setup(item);
                 itemView.OnSingleClick += HandleItemClick;
+                itemView.OnSelectionChanged += HandleItemSelectionChanged;
                 _itemViews.Add(itemView);
             }
         }
 
-        private void HandleItemClick(InventoryItemElementView itemView)
+        private void HandleItemClick(MergeItemElementView itemView)
         {
             OnItemClicked?.Invoke(itemView);
+        }
+
+        private void HandleItemSelectionChanged(MergeItemElementView itemView, bool isSelected)
+        {
+            OnItemSelectionChanged?.Invoke(itemView, isSelected);
         }
 
         private void ClearInventoryViews()
@@ -65,6 +72,7 @@ namespace WattsTap.Game.UI
                 if (view != null)
                 {
                     view.OnSingleClick -= HandleItemClick;
+                    view.OnSelectionChanged -= HandleItemSelectionChanged;
                     Destroy(view.gameObject);
                 }
             }
