@@ -25,9 +25,14 @@ namespace WattsTap.Game.Avatars
         [Header("Avatar Configurations")]
         [SerializeField] private AvatarConfig[] _avatarConfigs;
         
+        [Header("Custom Sort Order")]
+        [Tooltip("Кастомная сортировка аватаров. Если заполнен — используется вместо автоматической сортировки.")]
+        [SerializeField] private AvatarSortEntry[] _customSortOrder;
+        
         [Header("Default Avatar")]
         [SerializeField] private Sprite _defaultAvatarSprite;
         
+        private Dictionary<string, int> _customSortIndexMap;
         private Dictionary<string, AvatarConfig> _avatarConfigsMap;
         private string _currentAvatarId;
         private Sprite _telegramAvatarSprite;
@@ -85,6 +90,19 @@ namespace WattsTap.Game.Avatars
                     if (config != null && !string.IsNullOrEmpty(config.AvatarId))
                     {
                         _avatarConfigsMap[config.AvatarId] = config;
+                    }
+                }
+            }
+            
+            // Build custom sort index lookup
+            _customSortIndexMap = new Dictionary<string, int>();
+            if (_customSortOrder != null)
+            {
+                foreach (var entry in _customSortOrder)
+                {
+                    if (entry?.AvatarConfig != null && !string.IsNullOrEmpty(entry.AvatarConfig.AvatarId))
+                    {
+                        _customSortIndexMap[entry.AvatarConfig.AvatarId] = entry.SortIndex;
                     }
                 }
             }
@@ -199,6 +217,16 @@ namespace WattsTap.Game.Avatars
                 return Array.Empty<AvatarConfig>();
             }
             
+            // If custom sort order is defined, use it
+            if (_customSortOrder != null && _customSortOrder.Length > 0 && _customSortIndexMap != null && _customSortIndexMap.Count > 0)
+            {
+                return _avatarConfigs
+                    .Where(c => c != null)
+                    .OrderBy(c => _customSortIndexMap.TryGetValue(c.AvatarId, out var idx) ? idx : int.MaxValue)
+                    .ToList();
+            }
+            
+            // Fallback: automatic sorting by unlock type and price
             return _avatarConfigs
                 .Where(c => c != null)
                 .OrderBy(c => GetUnlockTypeSortOrder(c.UnlockType))
