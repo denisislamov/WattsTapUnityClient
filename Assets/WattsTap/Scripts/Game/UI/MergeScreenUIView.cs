@@ -126,6 +126,7 @@ namespace WattsTap.Game.UI
             _selectedItems.Add(itemView);
             RefreshSlots();
             UpdateMergeButtonState();
+            FilterInventoryGrid();
             return true;
         }
 
@@ -137,6 +138,7 @@ namespace WattsTap.Game.UI
             _selectedItems.Remove(itemView);
             RefreshSlots();
             UpdateMergeButtonState();
+            FilterInventoryGrid();
         }
 
         /// <summary>
@@ -185,6 +187,45 @@ namespace WattsTap.Game.UI
             }
 
             UpdateMergeButtonState();
+            FilterInventoryGrid();
+        }
+
+        /// <summary>
+        /// Filters the inventory grid based on the current selection.
+        /// When at least one item is selected, only items with matching ItemType and Rarity are visible.
+        /// When no items are selected, all items are visible.
+        /// </summary>
+        private void FilterInventoryGrid()
+        {
+            if (_selectedItems.Count == 0)
+            {
+                // No selection — show all items
+                foreach (var view in _itemViews)
+                {
+                    if (view != null)
+                        view.gameObject.SetActive(true);
+                }
+                return;
+            }
+
+            var firstData = _selectedItems[0].InventoryItem.Data;
+            var requiredType = firstData.ItemType;
+            var requiredRarity = firstData.Rarity;
+
+            foreach (var view in _itemViews)
+            {
+                if (view == null) continue;
+
+                var data = view.InventoryItem?.Data;
+                if (data == null)
+                {
+                    view.gameObject.SetActive(false);
+                    continue;
+                }
+
+                bool matches = data.ItemType == requiredType && data.Rarity == requiredRarity;
+                view.gameObject.SetActive(matches);
+            }
         }
 
         private void UpdateMergeButtonState()
