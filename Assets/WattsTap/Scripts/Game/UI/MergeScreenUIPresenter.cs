@@ -63,7 +63,17 @@ namespace WattsTap.Game.UI
             var items = selected.Select(v => v.InventoryItem).ToList();
             Debug.Log($"[MergeScreenUIPresenter] Merge requested: {string.Join(", ", items.Select(i => i.Data.DisplayName))}");
 
-            // TODO: call merge service / model logic here
+            // Pass selected items to the animation screen
+            MergeScreenUIPresenterAnimation.SetPendingMergeItems(items);
+
+            if (_uiService == null)
+            {
+                ServiceLocator.TryGet(out _uiService);
+            }
+
+            // Open merge animation screen and close current screen
+            _uiService?.Open(UIConstants.MergeScreenAnimation);
+            _uiService?.Close(UIConstants.MergeScreen);
         }
 
         private void OnBackButtonClicked()

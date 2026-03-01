@@ -49,3 +49,5 @@ MonoBehaviour:
     Prefab: {fileID: 8236003786446030728, guid: d301d50a40a584823bb2abbf696fbddb, type: 3}
   - Id: MergeScreen
     Prefab: {fileID: 7931661269022662565, guid: 149d62ed1894e430db24b3d6479c9c28, type: 3}
+  - Id: MergeScreenAnimation
+    Prefab: {fileID: 7931661269022662565, guid: 03c652bbae7ec44498d51a9c1d5db632, type: 3}

@@ -438,7 +438,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1761111583938332954}
   m_HandleRect: {fileID: 7026941787616694770}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1641,81 +1641,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &7374527339416343708
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8652786813307413576}
-  - component: {fileID: 9114817826687092834}
-  - component: {fileID: 4476905015692453836}
-  m_Layer: 5
-  m_Name: Raw
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &8652786813307413576
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7374527339416343708}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2361251264560565366}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &9114817826687092834
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7374527339416343708}
-  m_CullTransparentMesh: 1
---- !u!114 &4476905015692453836
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7374527339416343708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.80784315}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4e726e606e06c417d9e11c147050bca9, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &7681237475384416340
 GameObject:
   m_ObjectHideFlags: 0
@@ -1988,7 +1913,7 @@ GameObject:
   - component: {fileID: 4046346247291231791}
   - component: {fileID: 879790415597460086}
   - component: {fileID: 3776573188330341259}
-  - component: {fileID: 4816952153980880131}
+  - component: {fileID: 4238738206657995404}
   m_Layer: 5
   m_Name: MergeScreenAnimation
   m_TagString: Untagged
@@ -2008,7 +1933,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8652786813307413576}
   - {fileID: 4152990402846509120}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2075,7 +1999,7 @@ MonoBehaviour:
     Left: 0
     Right: 0
   _targetRectTransform: {fileID: 4152990402846509120}
---- !u!114 &4816952153980880131
+--- !u!114 &4238738206657995404
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2084,24 +2008,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 7931661269022662565}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74fa28c0621a4264ba5772ad61751ae4, type: 3}
+  m_Script: {fileID: 11500000, guid: 53b4a44d35bb4c19b8d4ed0d31346896, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.MergeScreenUIView
-  _skinBindings:
-  - tokenId: inventory-bg
-    imageTargets:
-    - {fileID: 879790415597460086}
-    textTargets: []
-    suppressMissingTokenWarning: 0
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.MergeScreenUIViewAnimation
+  _skinBindings: []
   _backButton: {fileID: 5252757636428489672}
-  _inventoryButton: {fileID: 0}
-  _inventoryScrollRect: {fileID: 5248277222713579609}
-  _inventoryContainer: {fileID: 6927483303239880639}
-  _itemPrefab: {fileID: 7307277848981594468, guid: 2a142c85d8fde45838ca49153a657b3a, type: 3}
-  _mergeSlot1: {fileID: 0}
-  _mergeSlot2: {fileID: 0}
-  _mergeSlot3: {fileID: 9017161738147559781}
-  _mergeButton: {fileID: 0}
+  _mergeSlot1: {fileID: 9017161738147559781}
+  _mergeSlot2: {fileID: 8931708666375467092}
+  _mergeSlot3: {fileID: 1264558096458043469}
+  _resultIconImage: {fileID: 0}
+  _resultNameText: {fileID: 0}
+  _resultDescriptionText: {fileID: 0}
+  _resultContainer: {fileID: 0}
+  _confirmMergeButton: {fileID: 0}
+  _statusText: {fileID: 0}
 --- !u!1 &8548010354015196565
 GameObject:
   m_ObjectHideFlags: 0
@@ -3187,6 +3107,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f45e99b451bc2445da575751e9c0471a, type: 3}
+--- !u!114 &1264558096458043469 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 917403352162347290, guid: f45e99b451bc2445da575751e9c0471a, type: 3}
+  m_PrefabInstance: {fileID: 2105390629627001175}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd999388f2134f66b76687fd4c172d9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.Components.Inventory.MergeSlotView
 --- !u!224 &5920454220962379363 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5701121865749548852, guid: f45e99b451bc2445da575751e9c0471a, type: 3}
@@ -4709,6 +4640,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5701121865749548852, guid: f45e99b451bc2445da575751e9c0471a, type: 3}
   m_PrefabInstance: {fileID: 8595270286813026638}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8931708666375467092 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 917403352162347290, guid: f45e99b451bc2445da575751e9c0471a, type: 3}
+  m_PrefabInstance: {fileID: 8595270286813026638}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd999388f2134f66b76687fd4c172d9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.Components.Inventory.MergeSlotView
 --- !u!1001 &8674532730915619780
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -19,6 +19,7 @@ namespace WattsTap.Constants
         public const string BugReportScreen = "BugReportScreen";
         public const string InventoryScreen = "InventoryScreen";
         public const string MergeScreen = "MergeScreen";
+        public const string MergeScreenAnimation = "MergeScreenAnimation";
         public const string UpdatesPopup = "UpdatesPopup";
     }
 }
