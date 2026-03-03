@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using WattsTap.Core;
 using WattsTap.Core.Inventory;
 using WattsTap.Core.UI;
@@ -34,10 +35,20 @@ namespace WattsTap.Game.UI
         [Header("Merge Action")]
         [SerializeField] private Button _mergeButton;
 
+        [Header("Result Slot")]
+        [SerializeField] private GameObject _resultSlotContainer;
+        [SerializeField] private Image _resultIconImage;
+        [SerializeField] private Image _resultBackgroundImage;
+        [SerializeField] private TMP_Text _resultLevelText;
+        [SerializeField] private TMP_Text _resultNameText;
+        [SerializeField] private RarityColorMapping[] _resultRarityColors;
+
         private const int MaxMergeSlots = 3;
 
         private readonly List<MergeItemElementView> _itemViews = new List<MergeItemElementView>();
         private readonly List<MergeItemElementView> _selectedItems = new List<MergeItemElementView>();
+
+        private MergeResultInfo _currentMergeResult;
 
         public event Action<MergeItemElementView> OnItemClicked;
         public event Action<MergeItemElementView, bool> OnItemSelectionChanged;
@@ -47,6 +58,11 @@ namespace WattsTap.Game.UI
         public Button InventoryButton => _inventoryButton;
         public Button MergeButton => _mergeButton;
         public IReadOnlyList<MergeItemElementView> SelectedItems => _selectedItems;
+
+        /// <summary>
+        /// The computed merge result info when all 3 slots are filled. Null otherwise.
+        /// </summary>
+        public MergeResultInfo CurrentMergeResult => _currentMergeResult;
 
         private MergeSlotView[] MergeSlots => new[] { _mergeSlot1, _mergeSlot2, _mergeSlot3 };
 
@@ -247,6 +263,112 @@ namespace WattsTap.Game.UI
             {
                 _mergeButton.interactable = _selectedItems.Count >= MaxMergeSlots;
             }
+
+            UpdateResultSlot();
+        }
+
+        /// <summary>
+        /// Recomputes and displays or hides the result slot based on current selection.
+        /// </summary>
+        private void UpdateResultSlot()
+        {
+            if (_selectedItems.Count >= MaxMergeSlots)
+            {
+                _currentMergeResult = ComputeMergeResult();
+                if (_currentMergeResult != null)
+                {
+                    ShowResultSlot(_currentMergeResult);
+                }
+                else
+                {
+                    HideResultSlot();
+                }
+            }
+            else
+            {
+                _currentMergeResult = null;
+                HideResultSlot();
+            }
+        }
+
+        /// <summary>
+        /// Computes the expected merge result from currently selected items.
+        /// - Level = max RequiredLevel among selected items
+        /// - ItemType = same as selected items
+        /// - Rarity = next tier above the selected items' rarity
+        /// </summary>
+        private MergeResultInfo ComputeMergeResult()
+        {
+            if (_selectedItems.Count < MaxMergeSlots) return null;
+
+            var firstData = _selectedItems[0].InventoryItem.Data;
+            var itemType = firstData.ItemType;
+            var currentRarity = firstData.Rarity;
+
+            var nextRarity = MergeResultInfo.GetNextRarity(currentRarity);
+            if (nextRarity == null)
+            {
+                Debug.LogWarning("[MergeScreenUIView] Already at max rarity, cannot merge higher.");
+                return null;
+            }
+
+            int maxLevel = _selectedItems.Max(s => s.InventoryItem.Data.RequiredLevel);
+
+            // Use the first item's icon as a preview
+            var previewIcon = firstData.Icon;
+
+            string displayName = $"{nextRarity.Value} {itemType}";
+
+            return new MergeResultInfo(itemType, nextRarity.Value, maxLevel, displayName, previewIcon);
+        }
+
+        /// <summary>
+        /// Shows the result slot with the computed merge result info.
+        /// </summary>
+        private void ShowResultSlot(MergeResultInfo result)
+        {
+            if (_resultSlotContainer != null)
+                _resultSlotContainer.SetActive(true);
+
+            if (_resultIconImage != null)
+            {
+                _resultIconImage.sprite = result.Icon;
+                _resultIconImage.enabled = result.Icon != null;
+            }
+
+            if (_resultLevelText != null)
+                _resultLevelText.text = $"Lv.{result.Level}";
+
+            if (_resultNameText != null)
+                _resultNameText.text = result.DisplayName;
+
+            // Apply rarity color to result background
+            if (_resultBackgroundImage != null && _resultRarityColors != null)
+            {
+                bool found = false;
+                foreach (var mapping in _resultRarityColors)
+                {
+                    if (mapping.Rarity == result.ResultRarity)
+                    {
+                        _resultBackgroundImage.color = mapping.Color;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    _resultBackgroundImage.color = new Color(0.5f, 0.5f, 0.5f, 1f);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Hides the result slot.
+        /// </summary>
+        private void HideResultSlot()
+        {
+            if (_resultSlotContainer != null)
+                _resultSlotContainer.SetActive(false);
         }
 
         private void SubscribeSlots()

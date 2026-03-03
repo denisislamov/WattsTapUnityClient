@@ -32,9 +32,12 @@ namespace WattsTap.Game.UI
 
         [Header("Result Display")]
         [SerializeField] private Image _resultIconImage;
+        [SerializeField] private Image _resultBackgroundImage;
         [SerializeField] private TMP_Text _resultNameText;
+        [SerializeField] private TMP_Text _resultLevelText;
         [SerializeField] private TMP_Text _resultDescriptionText;
         [SerializeField] private GameObject _resultContainer;
+        [SerializeField] private RarityColorMapping[] _resultRarityColors;
 
         [Header("Animation")]
         [SerializeField] private Button _confirmMergeButton;
@@ -76,6 +79,57 @@ namespace WattsTap.Game.UI
 
             if (_statusText != null)
                 _statusText.text = "Ready to merge!";
+        }
+
+        /// <summary>
+        /// Display the expected merge result from computed MergeResultInfo.
+        /// Called when the animation screen is opened with pre-computed merge data.
+        /// </summary>
+        public void DisplayMergeResult(MergeResultInfo result)
+        {
+            if (result == null)
+            {
+                if (_resultContainer != null)
+                    _resultContainer.SetActive(false);
+                return;
+            }
+
+            if (_resultContainer != null)
+                _resultContainer.SetActive(true);
+
+            if (_resultIconImage != null)
+            {
+                _resultIconImage.sprite = result.Icon;
+                _resultIconImage.enabled = result.Icon != null;
+            }
+
+            if (_resultNameText != null)
+                _resultNameText.text = result.DisplayName;
+
+            if (_resultLevelText != null)
+                _resultLevelText.text = $"Lv.{result.Level}";
+
+            if (_resultDescriptionText != null)
+                _resultDescriptionText.text = $"{result.ResultRarity} {result.ItemType}";
+
+            // Apply rarity color to result background
+            if (_resultBackgroundImage != null && _resultRarityColors != null)
+            {
+                bool found = false;
+                foreach (var mapping in _resultRarityColors)
+                {
+                    if (mapping.Rarity == result.ResultRarity)
+                    {
+                        _resultBackgroundImage.color = mapping.Color;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    _resultBackgroundImage.color = new Color(0.5f, 0.5f, 0.5f, 1f);
+                }
+            }
         }
 
         /// <summary>

@@ -11,11 +11,17 @@ namespace WattsTap.Game.UI
     public class MergeScreenUIModelAnimation : UIBaseModel
     {
         private List<InventoryItem> _mergeSlotItems;
+        private MergeResultInfo _mergeResult;
 
         /// <summary>
         /// Items placed in merge slots (up to 3).
         /// </summary>
         public IReadOnlyList<InventoryItem> MergeSlotItems => _mergeSlotItems;
+
+        /// <summary>
+        /// The expected result of the merge operation.
+        /// </summary>
+        public MergeResultInfo MergeResult => _mergeResult;
 
         public override void Initialize()
         {
@@ -29,6 +35,14 @@ namespace WattsTap.Game.UI
         public void SetMergeItems(IReadOnlyList<InventoryItem> items)
         {
             _mergeSlotItems = new List<InventoryItem>(items);
+        }
+
+        /// <summary>
+        /// Set the expected merge result info.
+        /// </summary>
+        public void SetMergeResult(MergeResultInfo result)
+        {
+            _mergeResult = result;
         }
 
         /// <summary>
@@ -51,6 +65,7 @@ namespace WattsTap.Game.UI
         {
             _mergeSlotItems?.Clear();
             _mergeSlotItems = null;
+            _mergeResult = null;
             base.Dispose();
         }
     }

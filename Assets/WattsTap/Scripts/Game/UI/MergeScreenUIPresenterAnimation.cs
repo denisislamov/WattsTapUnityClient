@@ -19,6 +19,7 @@ namespace WattsTap.Game.UI
         private IHapticFeedbackService _hapticService;
 
         private static List<InventoryItem> _pendingMergeItems;
+        private static MergeResultInfo _pendingMergeResult;
 
         /// <summary>
         /// Set the items selected for merge before opening the animation screen.
@@ -27,6 +28,14 @@ namespace WattsTap.Game.UI
         public static void SetPendingMergeItems(IReadOnlyList<InventoryItem> items)
         {
             _pendingMergeItems = items?.ToList();
+        }
+
+        /// <summary>
+        /// Set the computed merge result info before opening the animation screen.
+        /// </summary>
+        public static void SetPendingMergeResult(MergeResultInfo result)
+        {
+            _pendingMergeResult = result;
         }
 
         protected override void OnInit()
@@ -44,7 +53,16 @@ namespace WattsTap.Game.UI
             {
                 Model.SetMergeItems(_pendingMergeItems);
                 View.DisplayMergeItems(Model.MergeSlotItems);
+
+                // Apply merge result info
+                if (_pendingMergeResult != null)
+                {
+                    Model.SetMergeResult(_pendingMergeResult);
+                    View.DisplayMergeResult(_pendingMergeResult);
+                }
+
                 _pendingMergeItems = null;
+                _pendingMergeResult = null;
             }
             else
             {
