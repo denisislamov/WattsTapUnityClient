@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
   m_AspectMode: 0
-  m_AspectRatio: 20.281603
+  m_AspectRatio: 6.9441767
 --- !u!1 &871682134659201780
 GameObject:
   m_ObjectHideFlags: 0
@@ -777,7 +777,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1761111583938332954}
   m_HandleRect: {fileID: 7026941787616694770}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3899,9 +3899,9 @@ MonoBehaviour:
   _inventoryScrollRect: {fileID: 5248277222713579609}
   _inventoryContainer: {fileID: 6927483303239880639}
   _itemPrefab: {fileID: 7307277848981594468, guid: 2a142c85d8fde45838ca49153a657b3a, type: 3}
-  _mergeSlot1: {fileID: 8187241523718541404}
+  _mergeSlot1: {fileID: 9017161738147559781}
   _mergeSlot2: {fileID: 4908288609576277481}
-  _mergeSlot3: {fileID: 9017161738147559781}
+  _mergeSlot3: {fileID: 8187241523718541404}
   _mergeButton: {fileID: 7963577080317333309}
   _resultSlotContainer: {fileID: 7363729442534142172}
   _resultIconImage: {fileID: 631186166334668489}
