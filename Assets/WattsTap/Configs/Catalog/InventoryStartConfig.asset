@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.InventoryStartConfig
   _startItems:
   - ItemData: {fileID: 11400000, guid: c69399ca9d474482493a88944301c9bf, type: 2}
-    Count: 1
+    Count: 3
     AutoEquip: 0
   - ItemData: {fileID: 11400000, guid: 997aa2a779b4c4ae5a46db282c9e2c4b, type: 2}
     Count: 1
