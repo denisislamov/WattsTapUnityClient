@@ -14,10 +14,9 @@ namespace WattsTap.Game.UI
     /// Receives merge slot items via static pending data (same pattern as ShopChestItemUIPresenterOpen).
     ///
     /// Flow:
-    /// 1. Screen opens showing merge slots and a tap zone.
-    /// 2. User taps the tap zone → merge animation plays (tap zone disabled during animation).
-    /// 3. Animation completes → tap zone re-enabled.
-    /// 4. User taps the tap zone again → screen closes, returns to MergeScreen.
+    /// 1. Screen opens → merge animation starts automatically.
+    /// 2. Animation completes → tap zone becomes active.
+    /// 3. User taps the tap zone → screen closes, returns to MergeScreen.
     /// </summary>
     public class MergeScreenUIPresenterAnimation : UIBasePresenter<MergeScreenUIViewAnimation, MergeScreenUIModelAnimation>
     {
@@ -26,8 +25,6 @@ namespace WattsTap.Game.UI
 
         private static List<InventoryItem> _pendingMergeItems;
         private static MergeResultInfo _pendingMergeResult;
-
-        private bool _hasPlayedAnimation;
 
         /// <summary>
         /// Set the items selected for merge before opening the animation screen.
@@ -50,12 +47,12 @@ namespace WattsTap.Game.UI
             ServiceLocator.TryGet(out _uiService);
             ServiceLocator.TryGet(out _hapticService);
 
-            _hasPlayedAnimation = false;
-
             View.OnBackClicked += OnBackClicked;
-            View.OnConfirmMergeClicked += OnConfirmMergeClicked;
             View.OnAnimationComplete += OnAnimationComplete;
             View.OnTapZoneClicked += OnTapZoneClicked;
+
+            View.SetTapZoneActive(false);
+            View.SetConfirmButtonInteractable(false);
 
             if (_pendingMergeItems != null && _pendingMergeItems.Count > 0)
             {
@@ -70,13 +67,20 @@ namespace WattsTap.Game.UI
 
                 _pendingMergeItems = null;
                 _pendingMergeResult = null;
+
+                var items = Model.MergeSlotItems;
+                if (items != null && items.Count >= 3)
+                {
+                    Debug.Log($"[MergeScreenUIPresenterAnimation] Auto-starting merge animation: {string.Join(", ", items.Select(i => i.Data.DisplayName))}");
+                }
+
+                View.SetStatusText("Merging...");
+                View.PlayMergeAnimation();
             }
             else
             {
                 Debug.LogWarning("[MergeScreenUIPresenterAnimation] No pending merge items set.");
             }
-
-            View.SetTapZoneActive(true);
         }
 
         private void OnBackClicked()
@@ -92,50 +96,11 @@ namespace WattsTap.Game.UI
         {
             _hapticService?.ButtonPressed();
 
-            if (!_hasPlayedAnimation)
-            {
-                _hasPlayedAnimation = true;
-                View.SetTapZoneActive(false);
-                View.SetConfirmButtonInteractable(false);
-                View.SetStatusText("Merging...");
-
-                var items = Model.MergeSlotItems;
-                if (items != null && items.Count >= 3)
-                {
-                    Debug.Log($"[MergeScreenUIPresenterAnimation] Starting merge animation: {string.Join(", ", items.Select(i => i.Data.DisplayName))}");
-                }
-
-                View.PlayMergeAnimation();
-            }
-            else if (View.IsAnimationFinished)
+            if (View.IsAnimationFinished)
             {
                 EnsureUIService();
                 _uiService?.Close(UIConstants.MergeScreenAnimation);
                 _uiService?.Open(UIConstants.MergeScreen);
-            }
-        }
-
-        private void OnConfirmMergeClicked()
-        {
-            _hapticService?.ButtonPressed();
-
-            var items = Model.MergeSlotItems;
-            if (items == null || items.Count < 3)
-            {
-                Debug.LogWarning("[MergeScreenUIPresenterAnimation] Not enough items to merge.");
-                return;
-            }
-
-            if (!_hasPlayedAnimation)
-            {
-                _hasPlayedAnimation = true;
-                View.SetConfirmButtonInteractable(false);
-                View.SetTapZoneActive(false);
-                View.SetStatusText("Merging...");
-
-                Debug.Log($"[MergeScreenUIPresenterAnimation] Confirm merge: {string.Join(", ", items.Select(i => i.Data.DisplayName))}");
-
-                View.PlayMergeAnimation();
             }
         }
 
@@ -158,7 +123,6 @@ namespace WattsTap.Game.UI
             if (View != null)
             {
                 View.OnBackClicked -= OnBackClicked;
-                View.OnConfirmMergeClicked -= OnConfirmMergeClicked;
                 View.OnAnimationComplete -= OnAnimationComplete;
                 View.OnTapZoneClicked -= OnTapZoneClicked;
             }

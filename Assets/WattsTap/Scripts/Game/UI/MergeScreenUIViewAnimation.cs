@@ -69,8 +69,11 @@ namespace WattsTap.Game.UI
         [Header("Merge Animation — VFX")]
         [SerializeField] private CanvasGroup _flashOverlayCanvasGroup;
         [SerializeField] private CanvasGroup _glowBorderCanvasGroup;
+        [SerializeField] private RectTransform _glowBorderTransform;
         [SerializeField] private CanvasGroup _lightRaysCanvasGroup;
         [SerializeField] private CanvasGroup _topTriangleVFXCanvasGroup;
+        [SerializeField] private RectTransform _topTriangleVFXTransform;
+        [SerializeField] private Image _topTriangleVFXImage;
         [SerializeField] private RectTransform _shineEffectTransform;
         [SerializeField] private CanvasGroup _shineEffectCanvasGroup;
 
@@ -93,6 +96,10 @@ namespace WattsTap.Game.UI
 
         [Header("Merge Animation — Phase 3 Settings (Flash)")]
         [SerializeField] private float _flashDuration = 0.12f;
+        [SerializeField] private float _triangleRotationSpeed = 120f;
+        [SerializeField] private float _triangleMaxScale = 1.4f;
+        [SerializeField] private float _glowBorderMaxScale = 1.3f;
+        [SerializeField] private float _vfxScaleUpDuration = 0.15f;
 
         [Header("Merge Animation — Phase 4 Settings (Reveal)")]
         [SerializeField] private float _revealDuration = 0.33f;
@@ -115,7 +122,7 @@ namespace WattsTap.Game.UI
         [SerializeField] private bool _useUnscaledTime = true;
 
         public event Action OnBackClicked;
-        public event Action OnConfirmMergeClicked;
+
         public event Action OnAnimationComplete;
         public event Action OnTapZoneClicked;
 
@@ -126,6 +133,7 @@ namespace WattsTap.Game.UI
         private MergeSlotView[] MergeSlots => new[] { _mergeSlot1, _mergeSlot2, _mergeSlot3 };
 
         private Coroutine _mergeAnimationCoroutine;
+        private Coroutine _triangleSpinCoroutine;
         private bool _animationPlaying;
         private bool _animationFinished;
 
@@ -137,6 +145,8 @@ namespace WattsTap.Game.UI
         private float _statLine2OriginalY;
         private float _statLine3OriginalY;
         private float _shineOriginalX;
+        private Vector3 _triangleOriginalScale;
+        private Vector3 _glowBorderOriginalScale;
 
         private bool _isWebGL;
         private WaitForEndOfFrame _waitForEndOfFrame;
@@ -200,22 +210,23 @@ namespace WattsTap.Game.UI
             if (_resultDescriptionText != null)
                 _resultDescriptionText.text = $"{result.ResultRarity} {result.ItemType}";
 
-            if (_resultBackgroundImage != null && _resultRarityColors != null)
+            if (_resultRarityColors != null)
             {
-                bool found = false;
+                Color rarityColor = new Color(0.5f, 0.5f, 0.5f, 1f);
                 foreach (var mapping in _resultRarityColors)
                 {
                     if (mapping.Rarity == result.ResultRarity)
                     {
-                        _resultBackgroundImage.color = mapping.Color;
-                        found = true;
+                        rarityColor = mapping.Color;
                         break;
                     }
                 }
-                if (!found)
-                {
-                    _resultBackgroundImage.color = new Color(0.5f, 0.5f, 0.5f, 1f);
-                }
+
+                if (_resultBackgroundImage != null)
+                    _resultBackgroundImage.color = rarityColor;
+
+                if (_topTriangleVFXImage != null)
+                    _topTriangleVFXImage.color = rarityColor;
             }
         }
 
@@ -293,6 +304,7 @@ namespace WattsTap.Game.UI
                 StopCoroutine(_mergeAnimationCoroutine);
                 _mergeAnimationCoroutine = null;
             }
+            StopTriangleSpin();
             _animationPlaying = false;
         }
 
@@ -314,6 +326,10 @@ namespace WattsTap.Game.UI
                 _statLine3OriginalY = _statLine3Transform.anchoredPosition.y;
             if (_shineEffectTransform != null)
                 _shineOriginalX = _shineEffectTransform.anchoredPosition.x;
+            if (_topTriangleVFXTransform != null)
+                _triangleOriginalScale = _topTriangleVFXTransform.localScale;
+            if (_glowBorderTransform != null)
+                _glowBorderOriginalScale = _glowBorderTransform.localScale;
         }
 
         private void InitializeMergeAnimationState()
@@ -322,8 +338,15 @@ namespace WattsTap.Game.UI
             SetCanvasGroupAlpha(_smallCardRightCanvasGroup, 1f);
             SetCanvasGroupAlpha(_flashOverlayCanvasGroup, 0f);
             SetCanvasGroupAlpha(_glowBorderCanvasGroup, 0f);
+            if (_glowBorderTransform != null)
+                _glowBorderTransform.localScale = _glowBorderOriginalScale;
             SetCanvasGroupAlpha(_lightRaysCanvasGroup, 0f);
             SetCanvasGroupAlpha(_topTriangleVFXCanvasGroup, 0f);
+            if (_topTriangleVFXTransform != null)
+            {
+                _topTriangleVFXTransform.localRotation = Quaternion.identity;
+                _topTriangleVFXTransform.localScale = _triangleOriginalScale;
+            }
             SetCanvasGroupAlpha(_shineEffectCanvasGroup, 0f);
             SetCanvasGroupAlpha(_successTextCanvasGroup, 0f);
             SetCanvasGroupAlpha(_itemNameLabelCanvasGroup, 0f);
@@ -434,17 +457,34 @@ namespace WattsTap.Game.UI
             SetCanvasGroupAlpha(_successTextCanvasGroup, 1f);
             SetCanvasGroupAlpha(_itemNameLabelCanvasGroup, 1f);
 
+            StartTriangleSpin();
+
             float elapsed = 0f;
             float halfDuration = _flashDuration * 0.5f;
+            float scaleDuration = Mathf.Max(halfDuration, _vfxScaleUpDuration);
 
-            while (elapsed < halfDuration)
+            while (elapsed < scaleDuration)
             {
                 elapsed += GetDeltaTime();
-                float t = Mathf.Clamp01(elapsed / halfDuration);
+                float alphaT = Mathf.Clamp01(elapsed / halfDuration);
+                float scaleT = Mathf.Clamp01(elapsed / scaleDuration);
+                float easedScale = EaseOutBack(scaleT);
 
-                SetCanvasGroupAlpha(_flashOverlayCanvasGroup, EaseOutQuad(t));
-                SetCanvasGroupAlpha(_glowBorderCanvasGroup, EaseOutQuad(t) * 0.8f);
-                SetCanvasGroupAlpha(_topTriangleVFXCanvasGroup, EaseOutQuad(t));
+                SetCanvasGroupAlpha(_flashOverlayCanvasGroup, EaseOutQuad(alphaT));
+                SetCanvasGroupAlpha(_glowBorderCanvasGroup, EaseOutQuad(alphaT) * 0.8f);
+                SetCanvasGroupAlpha(_topTriangleVFXCanvasGroup, EaseOutQuad(alphaT));
+
+                if (_topTriangleVFXTransform != null)
+                {
+                    float triScale = Mathf.Lerp(1f, _triangleMaxScale, easedScale);
+                    _topTriangleVFXTransform.localScale = _triangleOriginalScale * triScale;
+                }
+
+                if (_glowBorderTransform != null)
+                {
+                    float glowScale = Mathf.Lerp(1f, _glowBorderMaxScale, easedScale);
+                    _glowBorderTransform.localScale = _glowBorderOriginalScale * glowScale;
+                }
 
                 yield return GetAnimationYield();
             }
@@ -517,6 +557,11 @@ namespace WattsTap.Game.UI
             float startGlow = _glowBorderCanvasGroup != null ? _glowBorderCanvasGroup.alpha : 0f;
             float startTriangle = _topTriangleVFXCanvasGroup != null ? _topTriangleVFXCanvasGroup.alpha : 0f;
 
+            Vector3 startTriangleScale = _topTriangleVFXTransform != null
+                ? _topTriangleVFXTransform.localScale : _triangleOriginalScale;
+            Vector3 startGlowScale = _glowBorderTransform != null
+                ? _glowBorderTransform.localScale : _glowBorderOriginalScale;
+
             while (elapsed < _lightRaysFadeOutDuration)
             {
                 elapsed += GetDeltaTime();
@@ -526,12 +571,22 @@ namespace WattsTap.Game.UI
                 SetCanvasGroupAlpha(_glowBorderCanvasGroup, Mathf.Lerp(startGlow, 0f, t));
                 SetCanvasGroupAlpha(_topTriangleVFXCanvasGroup, Mathf.Lerp(startTriangle, 0f, t));
 
+                if (_topTriangleVFXTransform != null)
+                    _topTriangleVFXTransform.localScale = Vector3.Lerp(startTriangleScale, _triangleOriginalScale, t);
+                if (_glowBorderTransform != null)
+                    _glowBorderTransform.localScale = Vector3.Lerp(startGlowScale, _glowBorderOriginalScale, t);
+
                 yield return GetAnimationYield();
             }
 
             SetCanvasGroupAlpha(_lightRaysCanvasGroup, 0f);
             SetCanvasGroupAlpha(_glowBorderCanvasGroup, 0f);
             SetCanvasGroupAlpha(_topTriangleVFXCanvasGroup, 0f);
+            if (_topTriangleVFXTransform != null)
+                _topTriangleVFXTransform.localScale = _triangleOriginalScale;
+            if (_glowBorderTransform != null)
+                _glowBorderTransform.localScale = _glowBorderOriginalScale;
+            StopTriangleSpin();
         }
 
         #endregion
@@ -615,6 +670,40 @@ namespace WattsTap.Game.UI
 
         #endregion
 
+        #region Triangle Spin
+
+        private void StartTriangleSpin()
+        {
+            StopTriangleSpin();
+            if (_topTriangleVFXTransform != null)
+                _triangleSpinCoroutine = StartCoroutine(TriangleSpinLoop());
+        }
+
+        private void StopTriangleSpin()
+        {
+            if (_triangleSpinCoroutine != null)
+            {
+                StopCoroutine(_triangleSpinCoroutine);
+                _triangleSpinCoroutine = null;
+            }
+            if (_topTriangleVFXTransform != null)
+                _topTriangleVFXTransform.localRotation = Quaternion.identity;
+        }
+
+        private IEnumerator TriangleSpinLoop()
+        {
+            float angle = 0f;
+            while (true)
+            {
+                angle += _triangleRotationSpeed * GetDeltaTime();
+                if (angle > 360f) angle -= 360f;
+                _topTriangleVFXTransform.localRotation = Quaternion.Euler(0f, 0f, angle);
+                yield return GetAnimationYield();
+            }
+        }
+
+        #endregion
+
         #region Animation Utilities
 
         private Vector2 ArcLerp(Vector2 from, Vector2 to, float t, float arcHeight)
@@ -683,9 +772,6 @@ namespace WattsTap.Game.UI
             if (_backButton != null)
                 _backButton.onClick.AddListener(HandleBackClick);
 
-            if (_confirmMergeButton != null)
-                _confirmMergeButton.onClick.AddListener(HandleConfirmMergeClick);
-
             if (_tapZoneButton != null)
                 _tapZoneButton.onClick.AddListener(HandleTapZoneClick);
 
@@ -710,9 +796,6 @@ namespace WattsTap.Game.UI
             if (_backButton != null)
                 _backButton.onClick.RemoveListener(HandleBackClick);
 
-            if (_confirmMergeButton != null)
-                _confirmMergeButton.onClick.RemoveListener(HandleConfirmMergeClick);
-
             if (_tapZoneButton != null)
                 _tapZoneButton.onClick.RemoveListener(HandleTapZoneClick);
 
@@ -735,11 +818,6 @@ namespace WattsTap.Game.UI
         private void HandleBackClick()
         {
             OnBackClicked?.Invoke();
-        }
-
-        private void HandleConfirmMergeClick()
-        {
-            OnConfirmMergeClicked?.Invoke();
         }
 
         private void HandleTapZoneClick()
