@@ -18,5 +18,5 @@ MonoBehaviour:
   _itemType: 202
   _rarity: 20
   _requiredLevel: 5
-  _icon: {fileID: 21300000, guid: faef3c58b4e2348aabcf14fa25c743dc, type: 3}
+  _icon: {fileID: 21300000, guid: c6f77b72538e84fa3aa6cf92613b8f57, type: 3}
   _perTapBonus: 0

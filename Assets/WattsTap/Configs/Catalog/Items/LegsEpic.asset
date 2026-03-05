@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 520240fe70494709b259f7a270c37037, type: 3}
-  m_Name: WeaponRare
+  m_Name: LegsEpic
   m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.ItemData
-  _id: WeaponRare
-  _displayName: Weapon
+  _id: LegsRare
+  _displayName: Legs
   _description: 
-  _itemType: 100
+  _itemType: 201
   _rarity: 20
   _requiredLevel: 5
-  _icon: {fileID: 21300000, guid: e69f4146c982e486191e78f8a4b49712, type: 3}
+  _icon: {fileID: 21300000, guid: 5545dfdfd829d42a092122ba379b0319, type: 3}
   _perTapBonus: 0
