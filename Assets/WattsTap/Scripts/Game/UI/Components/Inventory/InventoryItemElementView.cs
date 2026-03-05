@@ -17,6 +17,7 @@ namespace WattsTap.Game.UI.Components.Inventory
         [Header("Display Elements")]
         [SerializeField] private Image _iconImage;
         [SerializeField] private Image _backgroundImage;
+        [SerializeField] private Image _smallIconBackground;
         [SerializeField] private Image _typeIconImage;
         [SerializeField] private TMP_Text _levelText;
         [SerializeField] private GameObject _equippedIndicator;
@@ -130,6 +131,7 @@ namespace WattsTap.Game.UI.Components.Inventory
                 if (mapping.Rarity == rarity)
                 {
                     _backgroundImage.color = mapping.Color;
+                    _smallIconBackground.color = mapping.Color;
                     return;
                 }
             }

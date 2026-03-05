@@ -304,6 +304,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.Components.Inventory.InventoryItemElementView
   _iconImage: {fileID: 4008865367407474066}
   _backgroundImage: {fileID: 437413536472637906}
+  _smallIconBackground: {fileID: 8720388046839715288}
   _typeIconImage: {fileID: 5114500965959939702}
   _levelText: {fileID: 978766783977597791}
   _equippedIndicator: {fileID: 0}
@@ -467,7 +468,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 54b8502585d246249bd1f7540a8bf2b9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 560b7dd1f1935494591316c764c52ba4, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
