@@ -971,7 +971,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9087007241751921682}
   m_HandleRect: {fileID: 7895047792978719933}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1740,8 +1740,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 29.437012}
-  m_SizeDelta: {x: 0, y: 176.62012}
+  m_AnchoredPosition: {x: 0, y: 39.032425}
+  m_SizeDelta: {x: 0, y: 195.81094}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3097273823096944602
 GameObject:
@@ -2245,8 +2245,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 29.437012}
-  m_SizeDelta: {x: 0, y: 176.62012}
+  m_AnchoredPosition: {x: 0, y: 39.032413}
+  m_SizeDelta: {x: 0, y: 195.8109}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5366666101306388781
 GameObject:
@@ -3228,7 +3228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff211a02dd9744749c8265d1789d6041, type: 3}
   m_Name: 
   m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.React.TelegramSafeZoneApplier
-  _sides: 2
+  _sides: 3
   _applyMode: 0
   _mobileClientAdditionalOffsets:
     Top: 110
@@ -3412,8 +3412,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 24.436504}
-  m_SizeDelta: {x: 0, y: -68.87301}
+  m_AnchoredPosition: {x: 0, y: 29.436504}
+  m_SizeDelta: {x: 0, y: -58.87301}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7975488224355675889
 GameObject:

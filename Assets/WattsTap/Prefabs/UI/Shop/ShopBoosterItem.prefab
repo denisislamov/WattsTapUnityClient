@@ -265,6 +265,7 @@ GameObject:
   - component: {fileID: 1652557746447847118}
   - component: {fileID: 7985117508348821450}
   - component: {fileID: 7571692549526305855}
+  - component: {fileID: 3396199007662233232}
   m_Layer: 5
   m_Name: ShopBoosterItem
   m_TagString: Untagged
@@ -286,7 +287,6 @@ RectTransform:
   m_Children:
   - {fileID: 6486573221846985218}
   - {fileID: 604854976171491100}
-  - {fileID: 5694473421681351265}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -376,6 +376,26 @@ MonoBehaviour:
     - {fileID: 4162049442020347384}
     textTargets: []
     suppressMissingTokenWarning: 0
+--- !u!114 &3396199007662233232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 534711367491500794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff211a02dd9744749c8265d1789d6041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.React.TelegramSafeZoneApplier
+  _sides: 3
+  _applyMode: 0
+  _mobileClientAdditionalOffsets:
+    Top: 110
+    Bottom: 0
+    Left: 0
+    Right: 0
+  _targetRectTransform: {fileID: 604854976171491100}
 --- !u!1 &1129859694807767375
 GameObject:
   m_ObjectHideFlags: 0
@@ -818,7 +838,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6486573221846985218
 RectTransform:
   m_ObjectHideFlags: 0
@@ -908,12 +928,13 @@ RectTransform:
   m_Children:
   - {fileID: 2220633132908602608}
   - {fileID: 6757194983849816952}
+  - {fileID: 5694473421681351265}
   m_Father: {fileID: 8352850498024873639}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -37.716534}
-  m_SizeDelta: {x: 0, y: -193.1791}
+  m_AnchoredPosition: {x: 0, y: 29.436504}
+  m_SizeDelta: {x: 0, y: -58.873016}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7552455174439756568
 CanvasRenderer:
@@ -1378,7 +1399,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14.9
+  m_fontSize: 16
   m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1858,7 +1879,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 8352850498024873639}
+    m_TransformParent: {fileID: 604854976171491100}
     m_Modifications:
     - target: {fileID: 511459481368791110, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_SizeDelta.x
@@ -1886,7 +1907,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: d65227d15ed424674b136a8e657a1a73, type: 3}
     - target: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_Pivot.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_Pivot.y
@@ -1958,11 +1979,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 26
+      value: 47.4
       objectReference: {fileID: 0}
     - target: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -187.97652
+      value: -47.6
       objectReference: {fileID: 0}
     - target: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

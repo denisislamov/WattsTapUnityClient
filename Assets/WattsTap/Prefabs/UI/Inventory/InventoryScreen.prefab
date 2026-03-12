@@ -2192,7 +2192,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -218.29999, y: -134.88867}
+  m_AnchoredPosition: {x: -218.29999, y: -34.8887}
   m_SizeDelta: {x: 137.55371, y: 61.515015}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &4393526309409532466
@@ -2589,8 +2589,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0503006, y: 120.897}
-  m_SizeDelta: {x: 224.6, y: 297.81128}
+  m_AnchoredPosition: {x: 0, y: 120.897}
+  m_SizeDelta: {x: 226, y: 297.8113}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4606916164668315039
 CanvasRenderer:
@@ -2971,7 +2971,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -71, y: -134.88867}
+  m_AnchoredPosition: {x: -71, y: -34.8887}
   m_SizeDelta: {x: 138.55371, y: 61.515015}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &222116808563989611
@@ -4007,7 +4007,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff211a02dd9744749c8265d1789d6041, type: 3}
   m_Name: 
   m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.React.TelegramSafeZoneApplier
-  _sides: 2
+  _sides: 3
   _applyMode: 0
   _mobileClientAdditionalOffsets:
     Top: 110
@@ -4052,7 +4052,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 80.399994, y: -134.88867}
+  m_AnchoredPosition: {x: 80.399994, y: -34.8887}
   m_SizeDelta: {x: 138.55371, y: 61.515015}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &1690295668421612858
@@ -4436,8 +4436,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000061035156, y: -512.564}
-  m_SizeDelta: {x: 0, y: -176.62}
+  m_AnchoredPosition: {x: 0.000061035156, y: -467.127}
+  m_SizeDelta: {x: 0, y: -85.74597}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6711570777823193032
 CanvasRenderer:
@@ -5135,7 +5135,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5701121865749548852, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 186.7
+      value: 220.15
       objectReference: {fileID: 0}
     - target: {fileID: 5701121865749548852, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -5707,7 +5707,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5701121865749548852, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 186.7
+      value: 220.15
       objectReference: {fileID: 0}
     - target: {fileID: 5701121865749548852, guid: 32bd522ce9076417ea13a646f3ac0dad, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

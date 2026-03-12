@@ -2072,6 +2072,7 @@ GameObject:
   - component: {fileID: 2067762232834292019}
   - component: {fileID: 1174968724190769213}
   - component: {fileID: 8914888374234083123}
+  - component: {fileID: 71490170529211754}
   m_Layer: 5
   m_Name: ShopChestItemOpen
   m_TagString: Untagged
@@ -2145,7 +2146,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6358194411342956056}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff211a02dd9744749c8265d1789d6041, type: 3}
   m_Name: 
@@ -2472,6 +2473,18 @@ MonoBehaviour:
   _useUnscaledTime: 1
   _rotationSteps: 36
   _skinBindings: []
+--- !u!225 &71490170529211754
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6358194411342956056}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6887253311591132666
 GameObject:
   m_ObjectHideFlags: 0
@@ -3687,7 +3700,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_Pivot.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_Pivot.y
@@ -3759,11 +3772,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 20
+      value: 48.118507
       objectReference: {fileID: 0}
     - target: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -110
+      value: -46.7
       objectReference: {fileID: 0}
     - target: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

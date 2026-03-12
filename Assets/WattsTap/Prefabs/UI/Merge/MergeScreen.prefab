@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
   m_AspectMode: 0
-  m_AspectRatio: 20.281603
+  m_AspectRatio: 6.9441767
 --- !u!1 &871682134659201780
 GameObject:
   m_ObjectHideFlags: 0
@@ -777,7 +777,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1761111583938332954}
   m_HandleRect: {fileID: 7026941787616694770}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -971,8 +971,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 109}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 171.75801}
+  m_SizeDelta: {x: 0, y: -343.516}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8025322254262099597
 CanvasRenderer:
@@ -3863,7 +3863,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff211a02dd9744749c8265d1789d6041, type: 3}
   m_Name: 
   m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.React.TelegramSafeZoneApplier
-  _sides: 2
+  _sides: 3
   _applyMode: 0
   _mobileClientAdditionalOffsets:
     Top: 110
@@ -4319,8 +4319,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000061035156, y: -512.564}
-  m_SizeDelta: {x: 0, y: -176.62}
+  m_AnchoredPosition: {x: 0.000061035156, y: -467.12708}
+  m_SizeDelta: {x: 0, y: -85.74585}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6711570777823193032
 CanvasRenderer:
@@ -4552,7 +4552,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_Pivot.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_Pivot.y
@@ -4624,11 +4624,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 20
+      value: 47.50999
       objectReference: {fileID: 0}
     - target: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -110
+      value: -47.4
       objectReference: {fileID: 0}
     - target: {fileID: 5416144318273877125, guid: 9e7f14ee9543d42ea8bdddbe3ce23dd7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
