@@ -21,8 +21,13 @@ namespace WattsTap.Game.Shop
         [TextArea(2, 5)]
         [SerializeField] private string _description;
 
+        [Header("Reward")]
+        [Tooltip("Reward amount granted when the booster is purchased")]
+        [SerializeField] private long _rewardAmount;
+
         public string ItemName => _itemName;
         public Sprite Icon => _icon;
         public string Description => _description;
+        public long RewardAmount => _rewardAmount;
     }
 }

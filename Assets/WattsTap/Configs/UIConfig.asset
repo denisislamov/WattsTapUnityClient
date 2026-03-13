@@ -51,3 +51,5 @@ MonoBehaviour:
     Prefab: {fileID: 7931661269022662565, guid: 149d62ed1894e430db24b3d6479c9c28, type: 3}
   - Id: MergeScreenAnimation
     Prefab: {fileID: 7931661269022662565, guid: 03c652bbae7ec44498d51a9c1d5db632, type: 3}
+  - Id: ShopBoosterItemAnimation
+    Prefab: {fileID: 7142151119418472698, guid: f19f45aa750f44374964feae35500b80, type: 3}

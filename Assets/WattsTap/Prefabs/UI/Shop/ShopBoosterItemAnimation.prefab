@@ -213,7 +213,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3830457628464250519}
   - component: {fileID: 5445657046481950686}
-  - component: {fileID: 3555043165505942295}
   - component: {fileID: 3208544313329299044}
   m_Layer: 0
   m_Name: ParentAnimation
@@ -252,36 +251,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2535214849926402852}
   m_CullTransparentMesh: 1
---- !u!114 &3555043165505942295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2535214849926402852}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c05548028dcb34be9906e19d9d8df7dd, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 1
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &3208544313329299044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -922,6 +891,7 @@ GameObject:
   - component: {fileID: 634699617512014203}
   - component: {fileID: 1500717204721706890}
   - component: {fileID: 3638527322920659424}
+  - component: {fileID: 6026789020397686114}
   m_Layer: 5
   m_Name: ShopBoosterItemAnimation
   m_TagString: Untagged
@@ -946,8 +916,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -343.56668, y: 657.0398}
-  m_SizeDelta: {x: 0, y: -0.000015258789}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &634699617512014203
 CanvasRenderer:
@@ -1007,6 +977,65 @@ MonoBehaviour:
     Left: 0
     Right: 0
   _targetRectTransform: {fileID: 187970335862092421}
+--- !u!114 &6026789020397686114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7142151119418472698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 598f84b92fbe4384819a3926321c26a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.UI.ShopBoosterItemUIViewAnimation
+  _itemNameText: {fileID: 0}
+  _boosterIconImage: {fileID: 1644897440337937328}
+  _rewardCounterText: {fileID: 4938601435265948838}
+  _backButton: {fileID: 0}
+  _claimButton: {fileID: 4763178760922895786}
+  _claimButtonCanvasGroup: {fileID: 0}
+  _rotatingTransform: {fileID: 391582564648539139}
+  _rotationSpeed: 90
+  _boosterIconTransform: {fileID: 545369368570730539}
+  _boosterIconCanvasGroup: {fileID: 0}
+  _iconScaleFrom: 0
+  _iconScaleTo: 1
+  _iconRevealDuration: 0.4
+  _iconOvershootScale: 1.2
+  _glowCanvasGroup: {fileID: 0}
+  _glowFadeInDuration: 0.3
+  _glowPulseMin: 0.4
+  _glowPulseMax: 1
+  _glowPulseDuration: 0.8
+  _counterDuration: 4
+  _counterCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _counterCanvasGroup: {fileID: 0}
+  _useUnscaledTime: 1
+  _skinBindings: []
 --- !u!1 &7814106379105232211
 GameObject:
   m_ObjectHideFlags: 0
@@ -1163,7 +1192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
   m_AspectMode: 0
-  m_AspectRatio: 6.1177454
+  m_AspectRatio: 19.35484
 --- !u!1 &8050597868468594455
 GameObject:
   m_ObjectHideFlags: 0

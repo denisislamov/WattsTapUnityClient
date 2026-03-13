@@ -348,6 +348,7 @@ MonoBehaviour:
   _iconImage: {fileID: 6991941504854956773}
   _descriptionText: {fileID: 4269161480174868556}
   _backButton: {fileID: 6257359677997441191}
+  _openButton: {fileID: 5795586677702303786}
   _skinBindings:
   - tokenId: bg-panel
     imageTargets:

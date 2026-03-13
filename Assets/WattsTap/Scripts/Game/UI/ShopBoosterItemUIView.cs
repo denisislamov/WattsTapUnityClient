@@ -16,6 +16,7 @@ namespace WattsTap.Game.UI
 
         [Header("Controls")]
         [SerializeField] private Button _backButton;
+        [SerializeField] private Button _openButton;
 
         [Header("Skinning")]
         [SerializeField] private MainMenuThemeManager.SkinTokenBinding[] _skinBindings;
@@ -23,6 +24,7 @@ namespace WattsTap.Game.UI
         private MainMenuThemeManager _themeManager;
 
         public Button BackButton => _backButton;
+        public Button OpenButton => _openButton;
 
         public void UpdateFromConfig(ShopBoosterItemConfig config)
         {
