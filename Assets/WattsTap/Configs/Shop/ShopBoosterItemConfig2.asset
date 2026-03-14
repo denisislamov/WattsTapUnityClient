@@ -12,10 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7b18710977140f8909c8a3a69b647ef, type: 3}
   m_Name: ShopBoosterItemConfig2
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.Shop.ShopBoosterItemConfig
-  _itemName: Multitap x2
+  _itemName: 300 seconds
   _icon: {fileID: 21300000, guid: 068b0f7fe7eba4474b668a72fb8aa4f8, type: 3}
-  _description: For a limited time, this booster enhances your earnings by doubling
-    the profit from tapping, allowing you to enjoy twice the income for a specified
-    duration. This boost can significantly increase your overall gains, making it
-    a valuable opportunity to maximize your resources.
-  _rewardAmount: 4000
+  _description: When activated, coin income from taps increases x2 times.
+  _rewardAmount: 0

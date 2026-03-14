@@ -12,10 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7b18710977140f8909c8a3a69b647ef, type: 3}
   m_Name: ShopBoosterItemConfig4
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.Shop.ShopBoosterItemConfig
-  _itemName: Instant Profit 300 Min
+  _itemName: 300 Min
   _icon: {fileID: 21300000, guid: ab8c881b0bcd74cc5ae9688de69aad9e, type: 3}
-  _description: For a limited time, this booster enhances your earnings by doubling
-    the profit from tapping, allowing you to enjoy twice the income for a specified
-    duration. This boost can significantly increase your overall gains, making it
-    a valuable opportunity to maximize your resources.
-  _rewardAmount: 4000
+  _description: Buy and activate Fast Forward Now.
+  _rewardAmount: 18000

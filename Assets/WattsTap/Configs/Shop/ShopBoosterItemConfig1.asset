@@ -12,10 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7b18710977140f8909c8a3a69b647ef, type: 3}
   m_Name: ShopBoosterItemConfig1
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.Shop.ShopBoosterItemConfig
-  _itemName: FULL HITS
+  _itemName: +1000 Hits
   _icon: {fileID: 21300000, guid: 3db46e674cf424d7a9136bcf64db92cb, type: 3}
-  _description: For a limited time, this booster enhances your earnings by doubling
-    the profit from tapping, allowing you to enjoy twice the income for a specified
-    duration. This boost can significantly increase your overall gains, making it
-    a valuable opportunity to maximize your resources.
-  _rewardAmount: 4000
+  _description: Adds additional hits equal to your hit capacity.
+  _rewardAmount: 0
