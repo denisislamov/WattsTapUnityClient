@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.Shop.ShopBoosterItemConfig
   _itemName: 300 seconds
   _icon: {fileID: 21300000, guid: 068b0f7fe7eba4474b668a72fb8aa4f8, type: 3}
+  _animationIcon: {fileID: 21300000, guid: c05548028dcb34be9906e19d9d8df7dd, type: 3}
   _description: When activated, coin income from taps increases x2 times.
   _rewardAmount: 0

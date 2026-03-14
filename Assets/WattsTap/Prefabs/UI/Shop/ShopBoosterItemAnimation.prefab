@@ -440,6 +440,7 @@ GameObject:
   - component: {fileID: 8507924517696171341}
   - component: {fileID: 1644897440337937328}
   - component: {fileID: 2341057121039740363}
+  - component: {fileID: 5515563058839139031}
   m_Layer: 0
   m_Name: Item
   m_TagString: Untagged
@@ -524,6 +525,18 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!225 &5515563058839139031
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3091777340470695925}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &3145736465668675854
 GameObject:
   m_ObjectHideFlags: 0
@@ -994,11 +1007,11 @@ MonoBehaviour:
   _rewardCounterText: {fileID: 4938601435265948838}
   _backButton: {fileID: 0}
   _claimButton: {fileID: 4763178760922895786}
-  _claimButtonCanvasGroup: {fileID: 0}
+  _claimButtonCanvasGroup: {fileID: 6176402796632458183}
   _rotatingTransform: {fileID: 391582564648539139}
   _rotationSpeed: 90
   _boosterIconTransform: {fileID: 545369368570730539}
-  _boosterIconCanvasGroup: {fileID: 0}
+  _boosterIconCanvasGroup: {fileID: 5515563058839139031}
   _iconScaleFrom: 0
   _iconScaleTo: 1
   _iconRevealDuration: 0.4
@@ -1050,6 +1063,7 @@ GameObject:
   - component: {fileID: 4763178760922895786}
   - component: {fileID: 4459102079544742500}
   - component: {fileID: 6872240996609300290}
+  - component: {fileID: 6176402796632458183}
   m_Layer: 0
   m_Name: ClaimButtonBlack
   m_TagString: Untagged
@@ -1140,7 +1154,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1192,7 +1206,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
   m_AspectMode: 0
-  m_AspectRatio: 6.1177454
+  m_AspectRatio: 19.35484
+--- !u!225 &6176402796632458183
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7814106379105232211}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &8050597868468594455
 GameObject:
   m_ObjectHideFlags: 0

@@ -140,8 +140,8 @@ namespace WattsTap.Game.UI
             if (_itemNameText != null)
                 _itemNameText.text = config.ItemName;
 
-            if (_boosterIconImage != null && config.Icon != null)
-                _boosterIconImage.sprite = config.Icon;
+            if (_boosterIconImage != null && config.AnimationIcon != null)
+                _boosterIconImage.sprite = config.AnimationIcon;
 
             _targetRewardAmount = config.RewardAmount;
         }

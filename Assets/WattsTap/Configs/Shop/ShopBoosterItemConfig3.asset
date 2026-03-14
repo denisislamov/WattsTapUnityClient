@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.Shop.ShopBoosterItemConfig
   _itemName: 120 Min
   _icon: {fileID: 21300000, guid: 23dc0cc2db7914a4e94cbc97e23c55ba, type: 3}
+  _animationIcon: {fileID: 21300000, guid: c05548028dcb34be9906e19d9d8df7dd, type: 3}
   _description: Buy and activate Fast Forward Now.
   _rewardAmount: 7200

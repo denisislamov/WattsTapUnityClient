@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.Shop.ShopBoosterItemConfig
   _itemName: +1000 Hits
   _icon: {fileID: 21300000, guid: 3db46e674cf424d7a9136bcf64db92cb, type: 3}
+  _animationIcon: {fileID: 21300000, guid: c05548028dcb34be9906e19d9d8df7dd, type: 3}
   _description: Adds additional hits equal to your hit capacity.
   _rewardAmount: 0

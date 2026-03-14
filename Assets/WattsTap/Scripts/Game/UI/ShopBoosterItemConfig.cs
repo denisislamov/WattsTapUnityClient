@@ -16,6 +16,9 @@ namespace WattsTap.Game.Shop
         
         [Tooltip("Icon sprite for the booster item")]
         [SerializeField] private Sprite _icon;
+
+        [Tooltip("Icon sprite shown on the reward animation screen")]
+        [SerializeField] private Sprite _animationIcon;
         
         [Tooltip("Description of the booster item")]
         [TextArea(2, 5)]
@@ -27,6 +30,7 @@ namespace WattsTap.Game.Shop
 
         public string ItemName => _itemName;
         public Sprite Icon => _icon;
+        public Sprite AnimationIcon => _animationIcon != null ? _animationIcon : _icon;
         public string Description => _description;
         public long RewardAmount => _rewardAmount;
     }
