@@ -413,7 +413,24 @@ namespace WattsTap.Game.UI
         private void SetCounterText(long value)
         {
             if (_rewardCounterText != null)
-                _rewardCounterText.text = value.ToString("N0");
+                _rewardCounterText.text = FormatNumberAbbreviated(value);
+        }
+
+        private static string FormatNumberAbbreviated(long value)
+        {
+            if (value >= 1_000_000)
+            {
+                double m = value / 1_000_000.0;
+                return m % 1 == 0 ? $"{(long)m}M" : $"{m:0.#}M";
+            }
+
+            if (value >= 1_000)
+            {
+                double k = value / 1_000.0;
+                return k % 1 == 0 ? $"{(long)k}K" : $"{k:0.#}K";
+            }
+
+            return value.ToString("N0");
         }
 
         private void SetCanvasGroupAlpha(CanvasGroup cg, float alpha)

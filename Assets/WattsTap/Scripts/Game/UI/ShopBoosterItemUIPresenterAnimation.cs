@@ -1,8 +1,11 @@
+using System.Collections;
 using UnityEngine;
 using WattsTap.Constants;
 using WattsTap.Core;
+using WattsTap.Core.API;
 using WattsTap.Core.Telegram;
 using WattsTap.Core.UI;
+using WattsTap.Game.Player;
 using WattsTap.Game.Shop;
 
 namespace WattsTap.Game.UI
@@ -72,10 +75,102 @@ namespace WattsTap.Game.UI
 
             if (!View.IsAnimationFinished) return;
 
-            EnsureUIService();
+            if (Model.Config != null && Model.Config.RewardAmount > 0)
+            {
+                ClaimReward(Model.Config.RewardAmount);
+            }
+            else
+            {
+                CloseAndReturn();
+            }
+        }
 
+        private void ClaimReward(long rewardAmount)
+        {
+            if (!ServiceLocator.TryGet<IReferralAPIService>(out var apiService) || !apiService.IsAuthenticated)
+            {
+                Debug.LogWarning("[ShopBoosterItemAnimation] API service not available or not authenticated, adding locally");
+                AddRewardLocally(rewardAmount);
+                CloseAndReturn();
+                return;
+            }
+
+            var runner = GetCoroutineRunner();
+            if (runner == null)
+            {
+                Debug.LogWarning("[ShopBoosterItemAnimation] No coroutine runner available, adding locally");
+                AddRewardLocally(rewardAmount);
+                CloseAndReturn();
+                return;
+            }
+
+            View.SetClaimButtonInteractable(false);
+
+            var request = new AddResourcesRequest
+            {
+                watts = (int)rewardAmount,
+                xp = 0
+            };
+
+            Debug.Log($"[ShopBoosterItemAnimation] Claiming reward: {rewardAmount} watts");
+            runner.StartCoroutine(ClaimRewardCoroutine(apiService, request));
+        }
+
+        private IEnumerator ClaimRewardCoroutine(IReferralAPIService apiService, AddResourcesRequest request)
+        {
+            yield return apiService.AddResources(
+                request,
+                onSuccess: response =>
+                {
+                    Debug.Log($"<color=#00FF00>[ShopBoosterItemAnimation] Reward claimed: {response.message}</color>");
+
+                    if (response.progress != null && ServiceLocator.TryGet<IPlayerService>(out var playerService))
+                    {
+                        playerService.LoadFromServer(
+                            response.progress.level,
+                            response.progress.watts,
+                            response.progress.currentXp,
+                            response.progress.totalXp
+                        );
+                    }
+
+                    CloseAndReturn();
+                },
+                onError: error =>
+                {
+                    Debug.LogError($"[ShopBoosterItemAnimation] Failed to claim reward: {error}");
+                    // Fallback: add locally on error
+                    AddRewardLocally(request.watts);
+                    CloseAndReturn();
+                }
+            );
+        }
+
+        private void AddRewardLocally(long amount)
+        {
+            if (ServiceLocator.TryGet<IPlayerService>(out var playerService))
+            {
+                playerService.AddWatts(amount);
+                Debug.Log($"[ShopBoosterItemAnimation] Added {amount} watts locally");
+            }
+        }
+
+        private void CloseAndReturn()
+        {
+            EnsureUIService();
             _uiService?.Close(UIConstants.ShopBoosterItemAnimation);
             _uiService?.Open(UIConstants.ShopScreen);
+        }
+
+        private MonoBehaviour GetCoroutineRunner()
+        {
+            if (View is MonoBehaviour viewMb)
+                return viewMb;
+
+            if (ServiceLocator.TryGet<IApplicationEntry>(out var appEntry) && appEntry is MonoBehaviour mb)
+                return mb;
+
+            return Object.FindObjectOfType<MonoBehaviour>();
         }
 
         private void EnsureUIService()
