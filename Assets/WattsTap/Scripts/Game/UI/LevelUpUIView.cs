@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using WattsTap.Core;
 using WattsTap.Core.UI;
+using WattsTap.Scripts.Game.UI.Components;
 
 namespace WattsTap.Game.UI
 {
@@ -17,6 +18,9 @@ namespace WattsTap.Game.UI
 
         [Header("Controls")]
         [SerializeField] private Button _collectButton;
+
+        [Header("Effects")]
+        [SerializeField] private ConfettiAnimation _confettiAnimation;
 
         [Header("Skinning")]
         [SerializeField] private MainMenuThemeManager.SkinTokenBinding[] _skinBindings;
@@ -36,10 +40,16 @@ namespace WattsTap.Game.UI
                 if (_themeManager.CurrentSkin != null)
                 {
                     _themeManager.ApplySkin(_themeManager.CurrentSkin, _skinBindings, this);
-                    return;
                 }
-                
-                _themeManager.ApplySkin(null, _skinBindings, this);
+                else
+                {
+                    _themeManager.ApplySkin(null, _skinBindings, this);
+                }
+            }
+
+            if (_confettiAnimation != null)
+            {
+                _confettiAnimation.Play();
             }
         }
 
