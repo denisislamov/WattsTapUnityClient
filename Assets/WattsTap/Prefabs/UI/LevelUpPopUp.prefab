@@ -484,6 +484,42 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!1 &3675142879824639918
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2951155656400855995}
+  m_Layer: 5
+  m_Name: Confetti
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2951155656400855995
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3675142879824639918}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 509698630759014102}
+  m_Father: {fileID: 235210653580571016}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 56}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3723005178643010383
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,6 +689,7 @@ GameObject:
   - component: {fileID: 6825769545153820290}
   - component: {fileID: 7464527492354977753}
   - component: {fileID: 8198283067829301567}
+  - component: {fileID: 3473491732216331988}
   m_Layer: 5
   m_Name: LevelUpPopUp
   m_TagString: Untagged
@@ -792,6 +829,88 @@ MonoBehaviour:
     - {fileID: 44068340799550779}
     textTargets: []
     suppressMissingTokenWarning: 0
+--- !u!114 &3473491732216331988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3866579325697092498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09b8662ae43c4a87bfe88aeb3166e8fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Scripts.Game.UI.Components.ConfettiAnimation
+  _spawnSource: {fileID: 509698630759014102}
+  _container: {fileID: 509698630759014102}
+  _confettiSprites:
+  - {fileID: 21300000, guid: 1320bfdede02e4b1ba2b7ae8304cc02c, type: 3}
+  - {fileID: 21300000, guid: 52bd2059a78dc47488cfdbd878f42138, type: 3}
+  - {fileID: 21300000, guid: d61274b0ab9b94c15bd47cf0dc5c7ca7, type: 3}
+  - {fileID: 21300000, guid: 04467c30dbcbe4089869b5e5d92133b1, type: 3}
+  - {fileID: 21300000, guid: b4d0caa9aa1e94814b1351cbc0c13f03, type: 3}
+  - {fileID: 21300000, guid: af37adad1c04b4210a6144c75afa7db2, type: 3}
+  - {fileID: 21300000, guid: 69fed63cbce9742b3957115bb83d5fac, type: 3}
+  - {fileID: 21300000, guid: 73e794e183685490f839d3240396e138, type: 3}
+  - {fileID: 21300000, guid: 466f46074b20f451e926b394e59ca2a2, type: 3}
+  - {fileID: 21300000, guid: 34742f42c950340328ccb934cdada50e, type: 3}
+  - {fileID: 21300000, guid: cc007fbbd34a64e4dbe5a03f8a806fcc, type: 3}
+  - {fileID: 21300000, guid: 869d75a496cae44a5aba9ff6c21a9f92, type: 3}
+  - {fileID: 21300000, guid: f222245721d524402b31c2253cecb0bf, type: 3}
+  - {fileID: 21300000, guid: ea521e28edb9d49f28951f3dcb5c5494, type: 3}
+  - {fileID: 21300000, guid: b95f16adb0aa34cc9810d13ee1166b0f, type: 3}
+  - {fileID: 21300000, guid: 8c55dc1887ec5483db5fab3a08925ee2, type: 3}
+  _spawnCount: 30
+  _spawnRandomOffset: 10
+  _flightDuration: 2
+  _flightDurationVariance: 0.4
+  _minDistance: 150
+  _maxDistance: 300
+  _arcHeight: 60
+  _gravity: 200
+  _minRotationSpeed: 180
+  _maxRotationSpeed: 720
+  _startScale: 0.9
+  _endScale: 0.3
+  _confettiSize: {x: 40, y: 40}
+  _fadeStartNormalized: 0.5
+  _poolSize: 40
+  _useUnscaledTime: 1
+--- !u!1 &3911902109402473182
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 509698630759014102}
+  m_Layer: 5
+  m_Name: ConfettiSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &509698630759014102
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3911902109402473182}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2951155656400855995}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4869748963223322325
 GameObject:
   m_ObjectHideFlags: 0
@@ -1519,7 +1638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.AspectRatioFitter
   m_AspectMode: 0
-  m_AspectRatio: 18.875
+  m_AspectRatio: 6.0515656
 --- !u!1 &7378035601045706341
 GameObject:
   m_ObjectHideFlags: 0
@@ -1550,7 +1669,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2951155656400855995}
   m_Father: {fileID: 7464678055703400381}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

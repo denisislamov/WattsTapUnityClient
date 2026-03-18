@@ -201,6 +201,7 @@ GameObject:
   - component: {fileID: 1764006979403085248}
   - component: {fileID: 8161151701368854694}
   - component: {fileID: 1321307753630265426}
+  - component: {fileID: 2179101698870798976}
   m_Layer: 5
   m_Name: UpdatesPopupScreen
   m_TagString: Untagged
@@ -321,6 +322,37 @@ MonoBehaviour:
   _upgradesListContainer: {fileID: 3451001108371896518}
   _upgradeItemPrefab: {fileID: 8459480332711719236, guid: c3a6a32ddc47a45abb090ffa97fa952d, type: 3}
   _noUpgradesPlaceholder: {fileID: 0}
+--- !u!114 &2179101698870798976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1389517353547243433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09b8662ae43c4a87bfe88aeb3166e8fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Scripts.Game.UI.Components.ConfettiAnimation
+  _spawnSource: {fileID: 0}
+  _container: {fileID: 0}
+  _confettiSprites: []
+  _spawnCount: 30
+  _spawnRandomOffset: 20
+  _flightDuration: 1.4
+  _flightDurationVariance: 0.4
+  _minDistance: 150
+  _maxDistance: 500
+  _arcHeight: 120
+  _gravity: 600
+  _minRotationSpeed: 180
+  _maxRotationSpeed: 720
+  _startScale: 0.6
+  _endScale: 0.3
+  _confettiSize: {x: 40, y: 40}
+  _fadeStartNormalized: 0.5
+  _poolSize: 40
+  _useUnscaledTime: 1
 --- !u!1 &1431465473886858707
 GameObject:
   m_ObjectHideFlags: 0
