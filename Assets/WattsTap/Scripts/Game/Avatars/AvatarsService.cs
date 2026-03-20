@@ -626,9 +626,25 @@ namespace WattsTap.Game.Avatars
                 return;
             }
             
+            // Build request (price kept for legacy compat — new server ignores it)
+            var request = new PurchaseAvatarRequest
+            {
+                avatarId = avatarId,
+                price = (int)config.CoinPrice,
+                currency = "watts"
+            };
+            
+            // Try new CoreServerService first
+            if (ServiceLocator.TryGet<ICoreServerService>(out var coreService) && coreService.IsAuthenticated)
+            {
+                CoroutineRunner.Instance.StartCoroutine(PurchaseAvatarCoroutine(coreService, request, onComplete));
+                return;
+            }
+            
+            // Fallback to legacy IReferralAPIService
             if (!ServiceLocator.TryGet<IReferralAPIService>(out var apiService))
             {
-                Debug.LogWarning("[AvatarsService] IReferralAPIService not found, falling back to local purchase");
+                Debug.LogWarning("[AvatarsService] No API service found, falling back to local purchase");
                 var localResult = PurchaseAvatarWithCoins(avatarId);
                 onComplete?.Invoke(localResult == AvatarPurchaseResult.Success, localResult);
                 return;
@@ -642,18 +658,11 @@ namespace WattsTap.Game.Avatars
                 return;
             }
             
-            var request = new PurchaseAvatarRequest
-            {
-                avatarId = avatarId,
-                price = (int)config.CoinPrice,
-                currency = "watts"
-            };
-            
-            CoroutineRunner.Instance.StartCoroutine(PurchaseAvatarCoroutine(apiService, request, onComplete));
+            CoroutineRunner.Instance.StartCoroutine(PurchaseAvatarLegacyCoroutine(apiService, request, onComplete));
         }
         
         private IEnumerator PurchaseAvatarCoroutine(
-            IReferralAPIService apiService,
+            ICoreServerService coreService,
             PurchaseAvatarRequest request,
             Action<bool, AvatarPurchaseResult> onComplete)
         {
@@ -661,23 +670,21 @@ namespace WattsTap.Game.Avatars
             bool success = false;
             AvatarPurchaseResult result = AvatarPurchaseResult.Error;
             
-            yield return apiService.PurchaseAvatar(
+            yield return coreService.PurchaseAvatar(
                 request,
                 onSuccess: (response) =>
                 {
                     if (response.success)
                     {
-                        // Server confirmed purchase - unlock locally
                         UnlockAvatarInternal(request.avatarId);
                         
-                        // Update local watts balance from server
                         if (ServiceLocator.TryGet<IPlayerService>(out var playerService))
                         {
                             var playerData = playerService.GetPlayerData();
                             playerData.resources.watts = response.newWattsBalance;
                         }
                         
-                        Debug.Log($"<color=#00FF00>[AvatarsService] Avatar '{request.avatarId}' purchased via server for {request.price} Watts</color>");
+                        Debug.Log($"<color=#00FF00>[AvatarsService] Avatar '{request.avatarId}' purchased via CoreServer</color>");
                         OnAvatarPurchased?.Invoke(request.avatarId, AvatarPurchaseResult.Success);
                         
                         success = true;
@@ -693,20 +700,62 @@ namespace WattsTap.Game.Avatars
                 onError: (error) =>
                 {
                     Debug.LogError($"[AvatarsService] Server purchase error: {error}");
-                    
                     if (error.Contains("Not enough watts"))
-                    {
                         result = AvatarPurchaseResult.NotEnoughCoins;
-                    }
                     else if (error.Contains("already unlocked"))
-                    {
                         result = AvatarPurchaseResult.AlreadyUnlocked;
+                    else
+                        result = AvatarPurchaseResult.Error;
+                    completed = true;
+                }
+            );
+            
+            yield return new WaitUntil(() => completed);
+            onComplete?.Invoke(success, result);
+        }
+        
+        private IEnumerator PurchaseAvatarLegacyCoroutine(
+            IReferralAPIService apiService,
+            PurchaseAvatarRequest request,
+            Action<bool, AvatarPurchaseResult> onComplete)
+        {
+            bool completed = false;
+            bool success = false;
+            AvatarPurchaseResult result = AvatarPurchaseResult.Error;
+            
+            yield return apiService.PurchaseAvatar(
+                request,
+                onSuccess: (response) =>
+                {
+                    if (response.success)
+                    {
+                        UnlockAvatarInternal(request.avatarId);
+                        if (ServiceLocator.TryGet<IPlayerService>(out var playerService))
+                        {
+                            var playerData = playerService.GetPlayerData();
+                            playerData.resources.watts = response.newWattsBalance;
+                        }
+                        Debug.Log($"<color=#00FF00>[AvatarsService] Avatar '{request.avatarId}' purchased via legacy server</color>");
+                        OnAvatarPurchased?.Invoke(request.avatarId, AvatarPurchaseResult.Success);
+                        success = true;
+                        result = AvatarPurchaseResult.Success;
                     }
                     else
                     {
+                        Debug.LogWarning($"[AvatarsService] Legacy server purchase failed: {response.message}");
                         result = AvatarPurchaseResult.Error;
                     }
-                    
+                    completed = true;
+                },
+                onError: (error) =>
+                {
+                    Debug.LogError($"[AvatarsService] Legacy server purchase error: {error}");
+                    if (error.Contains("Not enough watts"))
+                        result = AvatarPurchaseResult.NotEnoughCoins;
+                    else if (error.Contains("already unlocked"))
+                        result = AvatarPurchaseResult.AlreadyUnlocked;
+                    else
+                        result = AvatarPurchaseResult.Error;
                     completed = true;
                 }
             );
@@ -739,9 +788,17 @@ namespace WattsTap.Game.Avatars
                 return;
             }
             
+            // Try new CoreServerService.ClaimAvatar first
+            if (ServiceLocator.TryGet<ICoreServerService>(out var coreService) && coreService.IsAuthenticated)
+            {
+                CoroutineRunner.Instance.StartCoroutine(ClaimAvatarCoroutine(coreService, avatarId, onComplete));
+                return;
+            }
+            
+            // Fallback to legacy IReferralAPIService
             if (!ServiceLocator.TryGet<IReferralAPIService>(out var apiService))
             {
-                Debug.LogWarning("[AvatarsService] IReferralAPIService not found, falling back to local unlock");
+                Debug.LogWarning("[AvatarsService] No API service found, falling back to local unlock");
                 var localResult = UnlockAvatarByLevel(avatarId);
                 onComplete?.Invoke(localResult == AvatarPurchaseResult.Success, localResult);
                 return;
@@ -761,6 +818,40 @@ namespace WattsTap.Game.Avatars
             };
             
             CoroutineRunner.Instance.StartCoroutine(UnlockAvatarByLevelCoroutine(apiService, request, onComplete));
+        }
+        
+        private IEnumerator ClaimAvatarCoroutine(
+            ICoreServerService coreService,
+            string avatarId,
+            Action<bool, AvatarPurchaseResult> onComplete)
+        {
+            bool completed = false;
+            bool success = false;
+            AvatarPurchaseResult result = AvatarPurchaseResult.Error;
+            
+            yield return coreService.ClaimAvatar(
+                avatarId,
+                onSuccess: (response) =>
+                {
+                    UnlockAvatarInternal(response.avatarId ?? avatarId);
+                    Debug.Log($"<color=#00FF00>[AvatarsService] Avatar '{avatarId}' claimed via CoreServerService</color>");
+                    OnAvatarPurchased?.Invoke(avatarId, AvatarPurchaseResult.Success);
+                    success = true;
+                    result = AvatarPurchaseResult.Success;
+                    completed = true;
+                },
+                onError: (error) =>
+                {
+                    Debug.LogWarning($"[AvatarsService] ClaimAvatar failed: {error}, falling back to local unlock");
+                    var localResult = UnlockAvatarByLevel(avatarId);
+                    success = localResult == AvatarPurchaseResult.Success;
+                    result = localResult;
+                    completed = true;
+                }
+            );
+            
+            yield return new WaitUntil(() => completed);
+            onComplete?.Invoke(success, result);
         }
         
         private IEnumerator UnlockAvatarByLevelCoroutine(

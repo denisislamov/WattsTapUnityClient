@@ -191,12 +191,38 @@ namespace WattsTap.Core.Services
 #if UNITY_EDITOR
             if (USE_MOCK_DATA_IN_EDITOR && !ServiceLocator.TryGet<IReferralAPIService>(out _))
             {
-                // Use mock data in Editor when API service is not available
                 LoadMockReferralData();
                 return;
             }
 #endif
             
+            // Try new CoreServerService first
+            if (ServiceLocator.TryGet<ICoreServerService>(out var coreService) && coreService.IsAuthenticated)
+            {
+                CoroutineRunner.Instance.StartCoroutine(
+                    coreService.GetMyReferral(
+                        onSuccess: (response) =>
+                        {
+                            _referralData = response;
+                            OnReferralDataLoaded?.Invoke(response);
+                            Debug.Log($"<color=#00FF00>[ReferralService] Loaded referral data (core): {response.referralCode}, invited: {response.totalFriendsInvited}</color>");
+                        },
+                        onError: (error) =>
+                        {
+                            Debug.LogError($"[ReferralService] Core service referral load failed: {error}");
+                            // Fallback to legacy
+                            LoadReferralDataLegacy();
+                        }
+                    )
+                );
+                return;
+            }
+            
+            LoadReferralDataLegacy();
+        }
+        
+        private void LoadReferralDataLegacy()
+        {
             if (!ServiceLocator.TryGet<IReferralAPIService>(out var apiService))
             {
                 Debug.LogError("[ReferralService] IReferralAPIService not found");
@@ -215,7 +241,6 @@ namespace WattsTap.Core.Services
                     {
                         Debug.LogError($"[ReferralService] Failed to load referral data: {error}");
 #if UNITY_EDITOR
-                        // Fallback to mock data on error in Editor
                         Debug.Log("<color=#FFFF00>[ReferralService] Falling back to mock data</color>");
                         LoadMockReferralData();
 #endif
@@ -229,12 +254,37 @@ namespace WattsTap.Core.Services
 #if UNITY_EDITOR
             if (USE_MOCK_DATA_IN_EDITOR && !ServiceLocator.TryGet<IReferralAPIService>(out _))
             {
-                // Use mock data in Editor when API service is not available
                 LoadMockFriendsList();
                 return;
             }
 #endif
             
+            // Try new CoreServerService first
+            if (ServiceLocator.TryGet<ICoreServerService>(out var coreService) && coreService.IsAuthenticated)
+            {
+                CoroutineRunner.Instance.StartCoroutine(
+                    coreService.GetFriends(
+                        onSuccess: (response) =>
+                        {
+                            _friendsData = response;
+                            OnFriendsListLoaded?.Invoke(response);
+                            Debug.Log($"<color=#00FF00>[ReferralService] Loaded {response.totalFriends} friends (core)</color>");
+                        },
+                        onError: (error) =>
+                        {
+                            Debug.LogError($"[ReferralService] Core service friends load failed: {error}");
+                            LoadFriendsListLegacy();
+                        }
+                    )
+                );
+                return;
+            }
+            
+            LoadFriendsListLegacy();
+        }
+        
+        private void LoadFriendsListLegacy()
+        {
             if (!ServiceLocator.TryGet<IReferralAPIService>(out var apiService))
             {
                 Debug.LogError("[ReferralService] IReferralAPIService not found");
@@ -253,7 +303,6 @@ namespace WattsTap.Core.Services
                     {
                         Debug.LogError($"[ReferralService] Failed to load friends: {error}");
 #if UNITY_EDITOR
-                        // Fallback to mock data on error in Editor
                         Debug.Log("<color=#FFFF00>[ReferralService] Falling back to mock data</color>");
                         LoadMockFriendsList();
 #endif

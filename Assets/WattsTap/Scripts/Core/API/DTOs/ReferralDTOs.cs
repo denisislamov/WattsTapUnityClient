@@ -92,6 +92,8 @@ namespace WattsTap.Core.API
         public List<FriendInfo> friends;
         public int totalFriends;
         public long totalBonusEarned;
+        /// <summary>NEW: total pending bonus from friends</summary>
+        public long totalBonusPending;
     }
     
     /// <summary>
@@ -105,6 +107,10 @@ namespace WattsTap.Core.API
         public int bonusPerFriend;
         public int totalFriendsInvited;
         public long totalBonusEarned;
+        /// <summary>NEW: pending bonus available from referrals</summary>
+        public long pendingBonus;
+        /// <summary>NEW: whether bonus can be claimed</summary>
+        public bool availableToClaim;
     }
     
     #endregion

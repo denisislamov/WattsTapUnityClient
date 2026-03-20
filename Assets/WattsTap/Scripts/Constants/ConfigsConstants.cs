@@ -4,6 +4,7 @@ namespace WattsTap.Constants
     {
         public const string UIConfig = "UIConfig";
         public const string ReferralConfig = "ReferralConfig";
+        public const string CoreServerConfig = "CoreServerConfig";
 #if !RELEASE
         public const string TelegramDebugData = "TelegramDebugDataDev";
 #else

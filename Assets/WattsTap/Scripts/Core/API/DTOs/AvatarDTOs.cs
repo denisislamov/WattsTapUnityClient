@@ -58,6 +58,8 @@ namespace WattsTap.Core.API
         public bool success;
         public string[] unlockedAvatars;
         public string currentAvatar;
+        /// <summary>NEW: full avatar catalog from new server</summary>
+        public AvatarCatalogItem[] avatars;
     }
     
     #endregion

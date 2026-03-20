@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54bd429f7fc14889a3daaac3626bd20d, type: 3}
+  m_Name: CoreServerConfig
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Configs.CoreServer.CoreServerConfig
+  BaseUrl: https://api-dev.wattstap.energy
+  RequestTimeout: 30
+  TokenRefreshBufferSeconds: 6000
+  EnableAutoRefresh: 0
+  RefreshCheckInterval: 3000
+  TapSyncInterval: 3
+  DebugLogging: 1
+  AuthTelegram: /auth/telegram
+  AuthRefresh: /auth/refresh
+  AuthLogout: /auth/logout
+  UserMe: /user/me
+  UserLanguage: /user/language
+  UserEventsRead: /user/events/read
+  Progress: /progress
+  ProgressReset: /progress/reset
+  BalanceMining: /balance/mining
+  SocialMyReferral: /social/my-referral
+  SocialFriends: /social/friends
+  SocialBonusClaim: /social/bonus/claim
+  ReferralApply: /referral/apply
+  Avatars: /avatars
+  AvatarsPurchase: /avatars/purchase
+  AvatarsClaimFmt: /avatars/{0}/claim
+  WalletMyWallet: /wallet/my-wallet
+  WalletPayload: /wallet/payload
+  WalletValidate: /wallet/validate
+  GameItemsCatalog: /game/items/catalog
+  GameInventory: /game/inventory
+  GameInventoryEquip: /game/inventory/equip
+  GameInventoryUnequip: /game/inventory/unequip
+  GameInventoryUpgrade: /game/inventory/upgrade
+  OrderByIdFmt: /orders/{0}

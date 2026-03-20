@@ -63,11 +63,14 @@ namespace WattsTap.Core
             _sharedDataService = new SharedDataService();
             ServiceLocator.Register<ISharedDataService>(_sharedDataService);
             
-            // Register Referral Services
+            // Register Core Server Service (new API)
+            ServiceLocator.Register<ICoreServerService>(new CoreServerService());
+            
+            // Register Referral Services (legacy — kept for backward compat)
             ServiceLocator.Register<IReferralAPIService>(new ReferralAPIService());
             ServiceLocator.Register<IReferralService>(new ReferralService());
             
-            // Register Progress Sync Service
+            // Register Progress Sync Service (auto-detects CoreServer vs legacy)
             ServiceLocator.Register<IProgressSyncService>(new ProgressSyncService());
             
             // Register Avatars Service
@@ -90,6 +93,11 @@ namespace WattsTap.Core
 
         private IEnumerator InitializeWithRemoteBalance()
         {
+            // Initialize the new Core Server Service first
+            var coreService = ServiceLocator.Get<ICoreServerService>();
+            coreService.Initialize();
+            
+            // Also initialize legacy API service
             var apiService = ServiceLocator.Get<IReferralAPIService>();
             apiService.Initialize();
 
@@ -98,7 +106,8 @@ namespace WattsTap.Core
             
             if (miningConfig != null)
             {
-                var remoteLoader = new MiningBalanceRemoteLoader(miningConfig, apiService);
+                // Use new CoreServerService for mining balance (same endpoint, compatible response)
+                var remoteLoader = new MiningBalanceRemoteLoader(miningConfig, coreService);
                 yield return remoteLoader.LoadFromServer();
                 
                 Debug.Log($"<color=#00FFFF>[ApplicationEntry] MiningBalance source: {remoteLoader.Source}</color>");
@@ -164,8 +173,73 @@ namespace WattsTap.Core
             
             Debug.Log($"Telegram user: {user.first_name} {user.last_name} (@{user.username}), ID: {user.id}");
             
-            // Authenticate with referral API
-            AuthenticateWithReferralAPI(initData);
+            // Authenticate with new Core Server API
+            AuthenticateWithCoreServer(initData);
+        }
+        
+        private void AuthenticateWithCoreServer(string initData)
+        {
+            if (!ServiceLocator.TryGet<ICoreServerService>(out var coreService))
+            {
+                Debug.LogWarning("[ApplicationEntry] ICoreServerService not found, falling back to legacy");
+                AuthenticateWithReferralAPI(initData);
+                return;
+            }
+            
+            if (coreService.IsAuthenticated)
+            {
+                Debug.Log("[ApplicationEntry] Already authenticated with Core Server");
+                return;
+            }
+            
+            string referralCode = _telegramService.GetCleanReferralCode();
+            if (string.IsNullOrEmpty(referralCode))
+            {
+                referralCode = ExtractReferralCodeFromInitData(initData);
+            }
+            
+            if (!string.IsNullOrEmpty(referralCode))
+            {
+                Debug.Log($"<color=#00FF00>[ApplicationEntry] Using referral code: {referralCode}</color>");
+            }
+            
+            StartCoroutine(coreService.Authenticate(
+                initData,
+                referralCode,
+                onSuccess: (response) =>
+                {
+                    Debug.Log($"<color=#00FF00>[ApplicationEntry] Core Server auth OK. Player: {response.player?.playerId}, expiresIn: {response.expiresIn}s</color>");
+                    
+                    if (response.referral != null && response.referral.applied)
+                    {
+                        Debug.Log($"<color=#00FF00>[ApplicationEntry] Referral applied! Referrer: {response.referral.referrer?.nickname}</color>");
+                    }
+                    
+                    // Store referral code in ReferralService
+                    if (ServiceLocator.TryGet<IReferralService>(out var referralService) && response.player != null)
+                    {
+                        referralService.SetReferralCodeFromAuth(response.player.referralCode);
+                    }
+                    
+                    // Start auto token refresh (critical: token expires in 15 min)
+                    coreService.StartAutoRefresh(this);
+                    
+                    // Load progress from server and start auto-sync (tap-based)
+                    if (ServiceLocator.TryGet<IProgressSyncService>(out var progressSyncService))
+                    {
+                        progressSyncService.LoadProgress();
+                        progressSyncService.StartAutoSync();
+                    }
+                    
+                    ShowWelcomeScreen(response.player?.isNewPlayer ?? true);
+                },
+                onError: (error) =>
+                {
+                    Debug.LogError($"[ApplicationEntry] Core Server auth failed: {error}. Falling back to legacy.");
+                    // Fallback to legacy service
+                    AuthenticateWithReferralAPI(initData);
+                }
+            ));
         }
         
         private void AuthenticateWithReferralAPI(string initData)

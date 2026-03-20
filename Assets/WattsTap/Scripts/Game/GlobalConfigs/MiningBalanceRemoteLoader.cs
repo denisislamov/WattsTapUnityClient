@@ -23,6 +23,7 @@ namespace WattsTap.Scripts.Game.GlobalConfigs
         
         private readonly MiningBalanceConfig _config;
         private readonly IReferralAPIService _apiService;
+        private readonly ICoreServerService _coreService;
 
         /// <summary>Whether the last load attempt succeeded from server.</summary>
         public bool LoadedFromServer { get; private set; }
@@ -33,10 +34,18 @@ namespace WattsTap.Scripts.Game.GlobalConfigs
         /// <summary>Source description for logging.</summary>
         public string Source => LoadedFromServer ? "SERVER" : "LOCAL (client)";
 
+        /// <summary>Constructor for legacy IReferralAPIService.</summary>
         public MiningBalanceRemoteLoader(MiningBalanceConfig config, IReferralAPIService apiService)
         {
             _config = config;
             _apiService = apiService;
+        }
+        
+        /// <summary>Constructor for new ICoreServerService.</summary>
+        public MiningBalanceRemoteLoader(MiningBalanceConfig config, ICoreServerService coreService)
+        {
+            _config = config;
+            _coreService = coreService;
         }
 
         /// <summary>
@@ -60,7 +69,7 @@ namespace WattsTap.Scripts.Game.GlobalConfigs
                 yield break;
             }
 
-            if (_apiService == null)
+            if (_apiService == null && _coreService == null)
             {
                 Debug.LogWarning($"{Tag} API service not available — using local defaults");
                 LogFinalSource(false);
@@ -72,27 +81,31 @@ namespace WattsTap.Scripts.Game.GlobalConfigs
             bool requestDone = false;
             bool requestSuccess = false;
 
-            yield return _apiService.LoadMiningBalance(
-                onSuccess: response =>
+            System.Action<MiningBalancePublicResponse> onSuccess = response =>
+            {
+                try
                 {
-                    try
-                    {
-                        ApplyServerData(response.balance);
-                        LoadedFromServer = true;
-                        requestSuccess = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogWarning($"<color={ColorError}>{Tag} Failed to apply server data: {ex.Message}</color>");
-                    }
-                    requestDone = true;
-                },
-                onError: error =>
-                {
-                    Debug.LogWarning($"<color={ColorError}>{Tag} Server request failed: {error}</color>");
-                    requestDone = true;
+                    ApplyServerData(response.balance);
+                    LoadedFromServer = true;
+                    requestSuccess = true;
                 }
-            );
+                catch (Exception ex)
+                {
+                    Debug.LogWarning($"<color={ColorError}>{Tag} Failed to apply server data: {ex.Message}</color>");
+                }
+                requestDone = true;
+            };
+            
+            System.Action<string> onError = error =>
+            {
+                Debug.LogWarning($"<color={ColorError}>{Tag} Server request failed: {error}</color>");
+                requestDone = true;
+            };
+
+            if (_coreService != null)
+                yield return _coreService.LoadMiningBalance(onSuccess, onError);
+            else
+                yield return _apiService.LoadMiningBalance(onSuccess, onError);
 
             while (!requestDone)
             {
@@ -112,7 +125,7 @@ namespace WattsTap.Scripts.Game.GlobalConfigs
             if (fromServer)
             {
                 Debug.Log($"<color={ColorServer}>{Tag} >>> SOURCE: SERVER (remote) <<<</color>");
-                Debug.Log($"<color={ColorServer}>{Tag} Balance loaded from: https://wattstap-referral-service.onrender.com/balance/mining</color>");
+                Debug.Log($"<color={ColorServer}>{Tag} Balance loaded from remote /balance/mining endpoint</color>");
             }
             else
             {
