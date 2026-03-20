@@ -82,9 +82,9 @@ namespace WattsTap.Core.Services.Editor
                     
                     // API Auth status
                     EditorGUILayout.Space(5);
-                    if (ServiceLocator.TryGet<IReferralAPIService>(out var apiService))
+                    if (ServiceLocator.TryGet<ICoreServerService>(out var coreService))
                     {
-                        DrawLabelPair("API Authenticated:", apiService.IsAuthenticated ? "✓ Yes" : "✗ No");
+                        DrawLabelPair("Core API Auth:", coreService.IsAuthenticated ? "✓ Yes" : "✗ No");
                     }
                 }
                 else

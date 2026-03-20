@@ -87,7 +87,10 @@ namespace WattsTap.Core.Services
         #region Private Fields
         
         private ICoreServerService _coreService;
+#if OLD_SERVER
+        // OLD_SERVER: Legacy-сервис для обратной совместимости
         private IReferralAPIService _legacyService;
+#endif
         private CoreServerConfig _coreConfig;
         private ProgressSyncConfig _config;
         private MonoBehaviour _coroutineRunner;
@@ -127,7 +130,8 @@ namespace WattsTap.Core.Services
             // Try new service first
             _useTapMode = ServiceLocator.TryGet(out _coreService) && _coreService.IsInitialized;
             
-            // Always grab legacy service for backward compat
+#if OLD_SERVER
+            // OLD_SERVER: Фоллбек на legacy-сервис
             ServiceLocator.TryGet(out _legacyService);
             
             if (!_useTapMode && _legacyService == null)
@@ -135,6 +139,13 @@ namespace WattsTap.Core.Services
                 Debug.LogError("[ProgressSyncService] Neither ICoreServerService nor IReferralAPIService found!");
                 return;
             }
+#else
+            if (!_useTapMode)
+            {
+                Debug.LogError("[ProgressSyncService] ICoreServerService not found or not initialized!");
+                return;
+            }
+#endif
             
             // Load configs
             if (ServiceLocator.TryGet<IConfigService>(out var configService))
@@ -260,8 +271,11 @@ namespace WattsTap.Core.Services
             
             if (_useTapMode)
                 FlushTaps();
+#if OLD_SERVER
+            // OLD_SERVER: Legacy save
             else
                 _coroutineRunner.StartCoroutine(SaveProgressLegacyCoroutine());
+#endif
         }
         
         public void ResetProgress()
@@ -315,6 +329,7 @@ namespace WattsTap.Core.Services
                         yield return SendTapsCoroutine();
                     }
                 }
+#if OLD_SERVER
                 else
                 {
                     // Legacy mode: send full state if dirty
@@ -323,6 +338,7 @@ namespace WattsTap.Core.Services
                         yield return SaveProgressLegacyCoroutine();
                     }
                 }
+#endif
             }
         }
         
@@ -371,6 +387,7 @@ namespace WattsTap.Core.Services
                     }
                 );
             }
+#if OLD_SERVER
             else if (_legacyService != null && _legacyService.IsAuthenticated)
             {
                 yield return _legacyService.LoadProgress(
@@ -398,6 +415,7 @@ namespace WattsTap.Core.Services
                     }
                 );
             }
+#endif
             else
             {
                 Debug.LogWarning("[ProgressSyncService] Cannot load progress — no authenticated service");
@@ -475,6 +493,7 @@ namespace WattsTap.Core.Services
             yield return new WaitUntil(() => completed);
         }
         
+#if OLD_SERVER
         private IEnumerator SaveProgressLegacyCoroutine()
         {
             if (_legacyService == null || !_legacyService.IsAuthenticated) yield break;
@@ -510,6 +529,7 @@ namespace WattsTap.Core.Services
             
             yield return new WaitUntil(() => completed);
         }
+#endif
         
         private IEnumerator ResetProgressCoroutine()
         {
@@ -543,6 +563,7 @@ namespace WattsTap.Core.Services
                     }
                 );
             }
+#if OLD_SERVER
             else if (_legacyService != null && _legacyService.IsAuthenticated)
             {
                 yield return _legacyService.ResetProgress(
@@ -570,6 +591,7 @@ namespace WattsTap.Core.Services
                     }
                 );
             }
+#endif
             
             yield return new WaitUntil(() => completed);
         }

@@ -22,7 +22,9 @@ namespace WattsTap.Scripts.Game.GlobalConfigs
         private const string ColorError = "#FF6600";
         
         private readonly MiningBalanceConfig _config;
+#if OLD_SERVER
         private readonly IReferralAPIService _apiService;
+#endif
         private readonly ICoreServerService _coreService;
 
         /// <summary>Whether the last load attempt succeeded from server.</summary>
@@ -34,12 +36,14 @@ namespace WattsTap.Scripts.Game.GlobalConfigs
         /// <summary>Source description for logging.</summary>
         public string Source => LoadedFromServer ? "SERVER" : "LOCAL (client)";
 
+#if OLD_SERVER
         /// <summary>Constructor for legacy IReferralAPIService.</summary>
         public MiningBalanceRemoteLoader(MiningBalanceConfig config, IReferralAPIService apiService)
         {
             _config = config;
             _apiService = apiService;
         }
+#endif
         
         /// <summary>Constructor for new ICoreServerService.</summary>
         public MiningBalanceRemoteLoader(MiningBalanceConfig config, ICoreServerService coreService)
@@ -69,7 +73,11 @@ namespace WattsTap.Scripts.Game.GlobalConfigs
                 yield break;
             }
 
-            if (_apiService == null && _coreService == null)
+            if (_coreService == null
+#if OLD_SERVER
+                && _apiService == null
+#endif
+            )
             {
                 Debug.LogWarning($"{Tag} API service not available — using local defaults");
                 LogFinalSource(false);
@@ -104,8 +112,10 @@ namespace WattsTap.Scripts.Game.GlobalConfigs
 
             if (_coreService != null)
                 yield return _coreService.LoadMiningBalance(onSuccess, onError);
-            else
+#if OLD_SERVER
+            else if (_apiService != null)
                 yield return _apiService.LoadMiningBalance(onSuccess, onError);
+#endif
 
             while (!requestDone)
             {

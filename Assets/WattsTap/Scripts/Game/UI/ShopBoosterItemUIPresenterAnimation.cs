@@ -87,35 +87,31 @@ namespace WattsTap.Game.UI
 
         private void ClaimReward(long rewardAmount)
         {
-            if (!ServiceLocator.TryGet<IReferralAPIService>(out var apiService) || !apiService.IsAuthenticated)
+#if OLD_SERVER
+            if (ServiceLocator.TryGet<IReferralAPIService>(out var apiService) && apiService.IsAuthenticated)
             {
-                Debug.LogWarning("[ShopBoosterItemAnimation] API service not available or not authenticated, adding locally");
-                AddRewardLocally(rewardAmount);
-                CloseAndReturn();
-                return;
+                var runner = GetCoroutineRunner();
+                if (runner != null)
+                {
+                    View.SetClaimButtonInteractable(false);
+                    var request = new AddResourcesRequest
+                    {
+                        watts = (int)rewardAmount,
+                        xp = 0
+                    };
+                    Debug.Log($"[ShopBoosterItemAnimation] Claiming reward via legacy API: {rewardAmount} watts");
+                    runner.StartCoroutine(ClaimRewardCoroutine(apiService, request));
+                    return;
+                }
             }
-
-            var runner = GetCoroutineRunner();
-            if (runner == null)
-            {
-                Debug.LogWarning("[ShopBoosterItemAnimation] No coroutine runner available, adding locally");
-                AddRewardLocally(rewardAmount);
-                CloseAndReturn();
-                return;
-            }
-
-            View.SetClaimButtonInteractable(false);
-
-            var request = new AddResourcesRequest
-            {
-                watts = (int)rewardAmount,
-                xp = 0
-            };
-
-            Debug.Log($"[ShopBoosterItemAnimation] Claiming reward: {rewardAmount} watts");
-            runner.StartCoroutine(ClaimRewardCoroutine(apiService, request));
+#endif
+            // Add reward locally (new server handles economy server-side via taps)
+            Debug.Log($"[ShopBoosterItemAnimation] Adding reward locally: {rewardAmount} watts");
+            AddRewardLocally(rewardAmount);
+            CloseAndReturn();
         }
 
+#if OLD_SERVER
         private IEnumerator ClaimRewardCoroutine(IReferralAPIService apiService, AddResourcesRequest request)
         {
             yield return apiService.AddResources(
@@ -145,6 +141,7 @@ namespace WattsTap.Game.UI
                 }
             );
         }
+#endif
 
         private void AddRewardLocally(long amount)
         {

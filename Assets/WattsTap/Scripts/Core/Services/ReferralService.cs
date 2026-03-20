@@ -188,7 +188,7 @@ namespace WattsTap.Core.Services
         
         public void LoadReferralData()
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR && OLD_SERVER
             if (USE_MOCK_DATA_IN_EDITOR && !ServiceLocator.TryGet<IReferralAPIService>(out _))
             {
                 LoadMockReferralData();
@@ -210,17 +210,29 @@ namespace WattsTap.Core.Services
                         onError: (error) =>
                         {
                             Debug.LogError($"[ReferralService] Core service referral load failed: {error}");
+#if OLD_SERVER
                             // Fallback to legacy
                             LoadReferralDataLegacy();
+#elif UNITY_EDITOR
+                            Debug.Log("<color=#FFFF00>[ReferralService] Falling back to mock data</color>");
+                            LoadMockReferralData();
+#endif
                         }
                     )
                 );
                 return;
             }
             
+#if OLD_SERVER
             LoadReferralDataLegacy();
+#elif UNITY_EDITOR
+            LoadMockReferralData();
+#else
+            Debug.LogWarning("[ReferralService] No API service available for referral data");
+#endif
         }
         
+#if OLD_SERVER
         private void LoadReferralDataLegacy()
         {
             if (!ServiceLocator.TryGet<IReferralAPIService>(out var apiService))
@@ -248,10 +260,11 @@ namespace WattsTap.Core.Services
                 )
             );
         }
+#endif
         
         public void LoadFriendsList()
         {
-#if UNITY_EDITOR
+#if UNITY_EDITOR && OLD_SERVER
             if (USE_MOCK_DATA_IN_EDITOR && !ServiceLocator.TryGet<IReferralAPIService>(out _))
             {
                 LoadMockFriendsList();
@@ -273,16 +286,28 @@ namespace WattsTap.Core.Services
                         onError: (error) =>
                         {
                             Debug.LogError($"[ReferralService] Core service friends load failed: {error}");
+#if OLD_SERVER
                             LoadFriendsListLegacy();
+#elif UNITY_EDITOR
+                            Debug.Log("<color=#FFFF00>[ReferralService] Falling back to mock data</color>");
+                            LoadMockFriendsList();
+#endif
                         }
                     )
                 );
                 return;
             }
             
+#if OLD_SERVER
             LoadFriendsListLegacy();
+#elif UNITY_EDITOR
+            LoadMockFriendsList();
+#else
+            Debug.LogWarning("[ReferralService] No API service available for friends list");
+#endif
         }
         
+#if OLD_SERVER
         private void LoadFriendsListLegacy()
         {
             if (!ServiceLocator.TryGet<IReferralAPIService>(out var apiService))
@@ -310,6 +335,7 @@ namespace WattsTap.Core.Services
                 )
             );
         }
+#endif
         
         public void ShareInviteLink()
         {

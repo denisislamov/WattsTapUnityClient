@@ -1,3 +1,6 @@
+// OLD_SERVER: Весь файл содержит legacy-сервер (IReferralAPIService / ReferralAPIService).
+// Чтобы вернуть старый сервер, добавьте OLD_SERVER в Scripting Define Symbols.
+#if OLD_SERVER
 using System;
 using System.Collections;
 using System.Text;
@@ -738,13 +741,18 @@ namespace WattsTap.Core.API
         
         #endregion
     }
-    
+} // namespace WattsTap.Core.API (when OLD_SERVER)
+#endif // OLD_SERVER
+
+namespace WattsTap.Core.API
+{
     #region Error Response
     
     /// <summary>
-    /// FastAPI standard error response format
+    /// FastAPI standard error response format.
+    /// Используется и в CoreServerService — НЕ обёрнут в OLD_SERVER.
     /// </summary>
-    [Serializable]
+    [System.Serializable]
     public class ApiErrorResponse
     {
         public string detail;

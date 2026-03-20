@@ -641,24 +641,19 @@ namespace WattsTap.Game.Avatars
                 return;
             }
             
+#if OLD_SERVER
             // Fallback to legacy IReferralAPIService
-            if (!ServiceLocator.TryGet<IReferralAPIService>(out var apiService))
+            if (ServiceLocator.TryGet<IReferralAPIService>(out var apiService) && apiService.IsAuthenticated)
             {
-                Debug.LogWarning("[AvatarsService] No API service found, falling back to local purchase");
-                var localResult = PurchaseAvatarWithCoins(avatarId);
-                onComplete?.Invoke(localResult == AvatarPurchaseResult.Success, localResult);
+                CoroutineRunner.Instance.StartCoroutine(PurchaseAvatarLegacyCoroutine(apiService, request, onComplete));
                 return;
             }
+#endif
             
-            if (!apiService.IsAuthenticated)
-            {
-                Debug.LogWarning("[AvatarsService] Not authenticated, falling back to local purchase");
-                var localResult = PurchaseAvatarWithCoins(avatarId);
-                onComplete?.Invoke(localResult == AvatarPurchaseResult.Success, localResult);
-                return;
-            }
-            
-            CoroutineRunner.Instance.StartCoroutine(PurchaseAvatarLegacyCoroutine(apiService, request, onComplete));
+            // No server available, fall back to local purchase
+            Debug.LogWarning("[AvatarsService] No API service found, falling back to local purchase");
+            var localResult = PurchaseAvatarWithCoins(avatarId);
+            onComplete?.Invoke(localResult == AvatarPurchaseResult.Success, localResult);
         }
         
         private IEnumerator PurchaseAvatarCoroutine(
@@ -714,6 +709,7 @@ namespace WattsTap.Game.Avatars
             onComplete?.Invoke(success, result);
         }
         
+#if OLD_SERVER
         private IEnumerator PurchaseAvatarLegacyCoroutine(
             IReferralAPIService apiService,
             PurchaseAvatarRequest request,
@@ -763,6 +759,7 @@ namespace WattsTap.Game.Avatars
             yield return new WaitUntil(() => completed);
             onComplete?.Invoke(success, result);
         }
+#endif
         
         /// <summary>
         /// Unlock avatar by level via server (async, free).
@@ -795,29 +792,23 @@ namespace WattsTap.Game.Avatars
                 return;
             }
             
+#if OLD_SERVER
             // Fallback to legacy IReferralAPIService
-            if (!ServiceLocator.TryGet<IReferralAPIService>(out var apiService))
+            if (ServiceLocator.TryGet<IReferralAPIService>(out var apiService) && apiService.IsAuthenticated)
             {
-                Debug.LogWarning("[AvatarsService] No API service found, falling back to local unlock");
-                var localResult = UnlockAvatarByLevel(avatarId);
-                onComplete?.Invoke(localResult == AvatarPurchaseResult.Success, localResult);
+                var request = new UnlockAvatarByLevelRequest
+                {
+                    avatarId = avatarId
+                };
+                CoroutineRunner.Instance.StartCoroutine(UnlockAvatarByLevelCoroutine(apiService, request, onComplete));
                 return;
             }
+#endif
             
-            if (!apiService.IsAuthenticated)
-            {
-                Debug.LogWarning("[AvatarsService] Not authenticated, falling back to local unlock");
-                var localResult = UnlockAvatarByLevel(avatarId);
-                onComplete?.Invoke(localResult == AvatarPurchaseResult.Success, localResult);
-                return;
-            }
-            
-            var request = new UnlockAvatarByLevelRequest
-            {
-                avatarId = avatarId
-            };
-            
-            CoroutineRunner.Instance.StartCoroutine(UnlockAvatarByLevelCoroutine(apiService, request, onComplete));
+            // No server available, fall back to local unlock
+            Debug.LogWarning("[AvatarsService] No API service found, falling back to local unlock");
+            var localResult = UnlockAvatarByLevel(avatarId);
+            onComplete?.Invoke(localResult == AvatarPurchaseResult.Success, localResult);
         }
         
         private IEnumerator ClaimAvatarCoroutine(
@@ -854,6 +845,7 @@ namespace WattsTap.Game.Avatars
             onComplete?.Invoke(success, result);
         }
         
+#if OLD_SERVER
         private IEnumerator UnlockAvatarByLevelCoroutine(
             IReferralAPIService apiService,
             UnlockAvatarByLevelRequest request,
@@ -895,6 +887,7 @@ namespace WattsTap.Game.Avatars
             yield return new WaitUntil(() => completed);
             onComplete?.Invoke(success, result);
         }
+#endif
         
         /// <summary>
         /// Auto-unlock all level-based avatars the player qualifies for.

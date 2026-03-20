@@ -66,8 +66,10 @@ namespace WattsTap.Core
             // Register Core Server Service (new API)
             ServiceLocator.Register<ICoreServerService>(new CoreServerService());
             
-            // Register Referral Services (legacy — kept for backward compat)
+#if OLD_SERVER
+            // OLD_SERVER: Регистрация legacy-сервиса. Чтобы вернуть — добавьте OLD_SERVER в Define Symbols.
             ServiceLocator.Register<IReferralAPIService>(new ReferralAPIService());
+#endif
             ServiceLocator.Register<IReferralService>(new ReferralService());
             
             // Register Progress Sync Service (auto-detects CoreServer vs legacy)
@@ -97,9 +99,11 @@ namespace WattsTap.Core
             var coreService = ServiceLocator.Get<ICoreServerService>();
             coreService.Initialize();
             
-            // Also initialize legacy API service
+#if OLD_SERVER
+            // OLD_SERVER: Инициализация legacy API сервиса
             var apiService = ServiceLocator.Get<IReferralAPIService>();
             apiService.Initialize();
+#endif
 
             var configService = ServiceLocator.Get<IConfigService>();
             var miningConfig = configService.GetConfig<MiningBalanceConfig>("MiningBalanceConfig");
@@ -181,8 +185,13 @@ namespace WattsTap.Core
         {
             if (!ServiceLocator.TryGet<ICoreServerService>(out var coreService))
             {
+#if OLD_SERVER
+                // OLD_SERVER: Фоллбек на legacy сервер
                 Debug.LogWarning("[ApplicationEntry] ICoreServerService not found, falling back to legacy");
                 AuthenticateWithReferralAPI(initData);
+#else
+                Debug.LogError("[ApplicationEntry] ICoreServerService not found!");
+#endif
                 return;
             }
             
@@ -235,13 +244,20 @@ namespace WattsTap.Core
                 },
                 onError: (error) =>
                 {
+#if OLD_SERVER
+                    // OLD_SERVER: Фоллбек на legacy при ошибке аутентификации
                     Debug.LogError($"[ApplicationEntry] Core Server auth failed: {error}. Falling back to legacy.");
-                    // Fallback to legacy service
                     AuthenticateWithReferralAPI(initData);
+#else
+                    Debug.LogError($"[ApplicationEntry] Core Server auth failed: {error}");
+                    ShowWelcomeScreen(true);
+#endif
                 }
             ));
         }
         
+#if OLD_SERVER
+        // OLD_SERVER: Метод аутентификации через legacy сервер. Чтобы вернуть — добавьте OLD_SERVER в Define Symbols.
         private void AuthenticateWithReferralAPI(string initData)
         {
             if (!ServiceLocator.TryGet<IReferralAPIService>(out var apiService))
@@ -309,6 +325,7 @@ namespace WattsTap.Core
                 }
             ));
         }
+#endif // OLD_SERVER
         
         private void ShowWelcomeScreen(bool isNewPlayer)
         {

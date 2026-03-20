@@ -94,6 +94,7 @@ public partial class SROptions
 
     private void SendAddResources(int watts, int xp)
     {
+#if OLD_SERVER
         if (!ServiceLocator.TryGet<IReferralAPIService>(out var apiService))
         {
             Debug.LogError("[SROptions] IReferralAPIService not found");
@@ -122,8 +123,12 @@ public partial class SROptions
         Debug.Log($"<color=#FF00FF>[SROptions] Sending add-resources: watts={watts}, xp={xp}</color>");
 
         runner.StartCoroutine(AddResourcesCoroutine(apiService, request));
+#else
+        Debug.LogWarning("[SROptions] AddResources debug endpoint is only available with OLD_SERVER define");
+#endif
     }
 
+#if OLD_SERVER
     private IEnumerator AddResourcesCoroutine(IReferralAPIService apiService, AddResourcesRequest request)
     {
         yield return apiService.AddResources(
@@ -150,6 +155,7 @@ public partial class SROptions
             }
         );
     }
+#endif
 
     private MonoBehaviour GetCoroutineRunner()
     {
