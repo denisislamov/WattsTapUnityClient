@@ -13,45 +13,33 @@ MonoBehaviour:
   m_Name: InventoryStartConfig
   m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.InventoryStartConfig
   _startItems:
-  - ItemData: {fileID: 11400000, guid: c69399ca9d474482493a88944301c9bf, type: 2}
-    Count: 4
-    AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: 997aa2a779b4c4ae5a46db282c9e2c4b, type: 2}
-    Count: 4
-    AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: 3e2747d3b12dd4989a544a31e1b25234, type: 2}
-    Count: 1
-    AutoEquip: 1
-  - ItemData: {fileID: 11400000, guid: c558f2f76c0f24fd38410327fbb1c181, type: 2}
-    Count: 4
-    AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: df3d5e4e8149248fe99ddc53686a18b0, type: 2}
-    Count: 4
-    AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: 9bde6e7eea290463eb1d031471e4c7d3, type: 2}
+  - ItemData: {fileID: 11400000, guid: d3226e38138df42cda3cf705d91649d9, type: 2}
     Count: 1
     AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: d84cbc5ed8dcc4257a2f9949b9eb7ebb, type: 2}
+  - ItemData: {fileID: 11400000, guid: 9b58d0db914d24c9f8c3af136c88f340, type: 2}
     Count: 1
     AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: a0ca8b9921fbd4183b2a439abe0a33ea, type: 2}
-    Count: 2
-    AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: 1ffef20ed57d24ec4a3c93f0c6b1fc74, type: 2}
+  - ItemData: {fileID: 11400000, guid: 1d01c860158ab4634a0c84a5e641387f, type: 2}
     Count: 1
     AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: 8d22cf338e14746418e8caa9580d74cd, type: 2}
+  - ItemData: {fileID: 11400000, guid: 840986b7969a947199b099c8bbec3be4, type: 2}
     Count: 1
     AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: b65b2baf39380484c91650d0cbe6294b, type: 2}
+  - ItemData: {fileID: 11400000, guid: e60860a40ec6944ab95bc8fcbf0a88e7, type: 2}
     Count: 1
     AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: 1afb8f9811f424032b3f769b1ab838ef, type: 2}
+  - ItemData: {fileID: 11400000, guid: 34b62dfafe97f4b6ea84d769edd3070c, type: 2}
     Count: 1
     AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: 7fa8fde2f378e4714a0aad970e760cb9, type: 2}
+  - ItemData: {fileID: 11400000, guid: 1f1102d3e82644be0b06fb3ca281801e, type: 2}
     Count: 1
     AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: feb4860caf9d0458daf25484a13d85f0, type: 2}
+  - ItemData: {fileID: 11400000, guid: 7b8aa3e23b69e499db97b97dd8191437, type: 2}
+    Count: 1
+    AutoEquip: 0
+  - ItemData: {fileID: 11400000, guid: 786381244c02c43bbbb52391c7fdaf12, type: 2}
+    Count: 1
+    AutoEquip: 0
+  - ItemData: {fileID: 11400000, guid: 1415d474764344c6d9a35d299d09dd47, type: 2}
     Count: 1
     AutoEquip: 0
