@@ -174,6 +174,30 @@ namespace WattsTap.Core.Inventory
         /// </summary>
         private void ApplyServerCatalog(CatalogResponse catalog)
         {
+            // Save icons from existing catalog items (local SO) keyed by variantId
+            var existingIcons = new Dictionary<string, Sprite>();
+            if (_itemsById != null)
+            {
+                foreach (var kvp in _itemsById)
+                {
+                    if (kvp.Value != null && kvp.Value.Icon != null)
+                        existingIcons[kvp.Key] = kvp.Value.Icon;
+                }
+            }
+            // Also save by code+rarity for fallback matching
+            var iconsByCodeRarity = new Dictionary<string, Sprite>();
+            if (_config?.Items != null)
+            {
+                foreach (var item in _config.Items)
+                {
+                    if (item != null && item.Icon != null && !string.IsNullOrEmpty(item.Code))
+                    {
+                        string key = $"{item.Code}_{item.Rarity}";
+                        iconsByCodeRarity[key] = item.Icon;
+                    }
+                }
+            }
+
             CleanupRuntimeItems();
 
             foreach (var template in catalog.items)
@@ -201,6 +225,16 @@ namespace WattsTap.Core.Inventory
                     // For runtime (non-editor), we use reflection or a runtime populate method
                     // Since PopulateFromServer is editor-only, we provide a runtime path:
                     PopulateItemDataRuntime(itemData, template, variant, itemType, rarity, mainStat, levels, bonuses);
+
+                    // Try to re-use icon from the local SO catalog
+                    Sprite icon = null;
+                    if (existingIcons.TryGetValue(variant.id, out var byId))
+                        icon = byId;
+                    else if (iconsByCodeRarity.TryGetValue($"{template.code}_{rarity}", out var byCode))
+                        icon = byCode;
+
+                    if (icon != null)
+                        SetField(typeof(ItemData), itemData, "_icon", icon);
 
                     _runtimeItems.Add(itemData);
                 }

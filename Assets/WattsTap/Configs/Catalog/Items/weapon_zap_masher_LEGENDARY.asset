@@ -89,5 +89,5 @@ MonoBehaviour:
     ValuePercent: 3
     Description: Crit Chance 3 %
   _requiredLevel: 1
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 7f941605f46f6414e80607bc3d6c7545, type: 3}
   _perTapBonus: 1.5

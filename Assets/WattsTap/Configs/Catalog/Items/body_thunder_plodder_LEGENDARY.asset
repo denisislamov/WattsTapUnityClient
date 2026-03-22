@@ -89,5 +89,5 @@ MonoBehaviour:
     ValuePercent: 5
     Description: Exp Bonus per tap 5 %
   _requiredLevel: 1
-  _icon: {fileID: 0}
+  _icon: {fileID: 21300000, guid: 2d26706bcc952436ba87c2865d7aa2c7, type: 3}
   _perTapBonus: 0

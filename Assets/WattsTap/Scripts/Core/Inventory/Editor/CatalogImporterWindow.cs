@@ -24,6 +24,49 @@ namespace WattsTap.Core.Editor
         private const string PREFS_TOKEN = "CatalogImporter_Token";
         private const string ITEMS_OUTPUT_FOLDER = "Assets/WattsTap/Configs/Catalog/Items";
         private const string CATALOG_CONFIG_PATH = "Assets/WattsTap/Configs/Catalog/CatalogConfig.asset";
+        private const string SPRITES_FOLDER = "Assets/Content/Sprites/v4/Items";
+
+        // ── Sprite mapping: item code → sprite prefix ──
+        // WEAPON → Hammer/Hamer sprites
+        // ARMS   → Gloves sprites
+        // BODY   → Armor sprites
+        // FEET   → Shoes sprites
+        // Format: {item_code, sprite_prefix}
+        // Sprite files: {prefix}_{rarityIndex}.png where rarityIndex: 1=Common,2=Uncommon,3=Rare,4=Legendary
+        private static readonly Dictionary<string, string> SpriteMapping = new Dictionary<string, string>
+        {
+            // WEAPON (6 items → Hammer1, Hamer2-6)
+            { "weapon_amp_thumper",    "Hammer1" },
+            { "weapon_lightning_maul", "Hamer2" },
+            { "weapon_teslas_touch",   "Hamer3" },
+            { "weapon_the_shocksmith", "Hamer4" },
+            { "weapon_watt_buster",    "Hamer5" },
+            { "weapon_zap_masher",     "Hamer6" },
+
+            // ARMS (6 items → Gloves1-6)
+            { "arms_power_grip_xt",      "Gloves1" },
+            { "arms_protective_gloves",  "Gloves2" },
+            { "arms_shiny_wristguard",   "Gloves3" },
+            { "arms_shock_harvesters",   "Gloves4" },
+            { "arms_volt_mittens",       "Gloves5" },
+            { "arms_watt_weaver",        "Gloves6" },
+
+            // BODY (6 items → Armor1-5, Armor5-1)
+            { "body_electric_suit",    "Armor1" },
+            { "body_energy_carapace",  "Armor2" },
+            { "body_miners_armor",     "Armor3" },
+            { "body_plasma_armor",     "Armor4" },
+            { "body_thunder_plodder",  "Armor5" },
+            { "body_volt_plates",      "Armor5-1" },
+
+            // FEET (6 items → Shoes1-6)
+            { "feet_electro_soles",  "Shoes1" },
+            { "feet_light_runners",  "Shoes2" },
+            { "feet_miners_boots",   "Shoes3" },
+            { "feet_shock_sneaks",   "Shoes4" },
+            { "feet_spark_boots",    "Shoes5" },
+            { "feet_volt_walkers",   "Shoes6" },
+        };
 
         private string _baseUrl;
         private string _authToken;
@@ -36,6 +79,10 @@ namespace WattsTap.Core.Editor
         private UnityWebRequest _activeRequest;
         private bool _isRequestInProgress;
         private Action<string> _onRequestDone;
+
+        // Cached styles
+        private GUIStyle _wordWrapTextArea;
+        private GUIStyle _wordWrapLabel;
 
         // Fetched data
         private CatalogResponse _fetchedCatalog;
@@ -100,6 +147,13 @@ namespace WattsTap.Core.Editor
 
         private void OnGUI()
         {
+            // Init styles once
+            if (_wordWrapTextArea == null)
+            {
+                _wordWrapTextArea = new GUIStyle(EditorStyles.textArea) { wordWrap = true };
+                _wordWrapLabel = new GUIStyle(EditorStyles.label) { wordWrap = true };
+            }
+
             _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
 
             EditorGUILayout.LabelField("Catalog Importer", EditorStyles.boldLabel);
@@ -112,10 +166,13 @@ namespace WattsTap.Core.Editor
 
             EditorGUILayout.Space(5);
             EditorGUILayout.LabelField("Init Data (from TelegramDebugData):");
-            _initData = EditorGUILayout.TextArea(_initData, GUILayout.Height(60));
+            _initData = EditorGUILayout.TextArea(_initData, _wordWrapTextArea, GUILayout.Height(60));
 
             EditorGUILayout.Space(5);
-            EditorGUILayout.LabelField($"Auth Token: {(string.IsNullOrEmpty(_authToken) ? "NOT SET" : _authToken.Substring(0, Math.Min(30, _authToken.Length)) + "...")}");
+            string tokenPreview = string.IsNullOrEmpty(_authToken)
+                ? "NOT SET"
+                : _authToken.Substring(0, Math.Min(30, _authToken.Length)) + "...";
+            EditorGUILayout.LabelField("Auth Token:", tokenPreview, _wordWrapLabel);
 
             EditorGUILayout.Space(10);
 
@@ -184,7 +241,7 @@ namespace WattsTap.Core.Editor
             EditorGUILayout.Space(10);
             EditorGUILayout.LabelField("Log", EditorStyles.boldLabel);
             _logScrollPos = EditorGUILayout.BeginScrollView(_logScrollPos, GUILayout.Height(200));
-            EditorGUILayout.TextArea(_statusLog, GUILayout.ExpandHeight(true));
+            EditorGUILayout.TextArea(_statusLog, _wordWrapTextArea, GUILayout.ExpandHeight(true));
             EditorGUILayout.EndScrollView();
 
             if (GUILayout.Button("Clear Log"))
@@ -312,6 +369,7 @@ namespace WattsTap.Core.Editor
             var allItemAssets = new List<ItemData>();
             int created = 0;
             int updated = 0;
+            int spritesAssigned = 0;
 
             foreach (var template in _fetchedCatalog.items)
             {
@@ -350,6 +408,19 @@ namespace WattsTap.Core.Editor
                         updated++;
                     }
 
+                    // Assign sprite
+                    var sprite = FindSpriteForItem(template.code, variant.rarity);
+                    if (sprite != null)
+                    {
+                        itemData.SetIcon(sprite);
+                        EditorUtility.SetDirty(itemData);
+                        spritesAssigned++;
+                    }
+                    else
+                    {
+                        Log($"  ⚠ No sprite found for {template.code} / {variant.rarity}");
+                    }
+
                     allItemAssets.Add(itemData);
                 }
             }
@@ -379,7 +450,7 @@ namespace WattsTap.Core.Editor
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            Log($"Import complete! Created: {created}, Updated: {updated}, Total: {allItemAssets.Count}");
+            Log($"Import complete! Created: {created}, Updated: {updated}, Total: {allItemAssets.Count}, Sprites: {spritesAssigned}/{allItemAssets.Count}");
         }
 
         private void AuthFetchImportAll()
@@ -509,6 +580,76 @@ namespace WattsTap.Core.Editor
                 });
             }
             return result;
+        }
+
+        // ─────────────────────────────────────────
+        //  Sprite Helpers
+        // ─────────────────────────────────────────
+
+        /// <summary>
+        /// Find the sprite for a given item code and rarity.
+        /// Uses the SpriteMapping dictionary and tries multiple filename formats.
+        /// </summary>
+        private Sprite FindSpriteForItem(string itemCode, string serverRarity)
+        {
+            if (!SpriteMapping.TryGetValue(itemCode, out var spritePrefix))
+                return null;
+
+            int rarityIndex = RarityToIndex(serverRarity);
+            if (rarityIndex < 1) return null;
+
+            // Different sprite types use different naming conventions:
+            // Armor/Hammer: _1, _2, _3, _4  (single digit)
+            // Gloves/Shoes: _01, _02, _03, _04  (two digits)
+            // Armor5-1 special: Armor5_1-1, Armor5_2-1, etc.
+
+            // Handle "Armor5-1" special prefix → file is Armor5_{rarity}-1.png
+            bool isSpecialSuffix = spritePrefix.EndsWith("-1");
+            string basePrefix = isSpecialSuffix ? spritePrefix.Substring(0, spritePrefix.Length - 2) : spritePrefix;
+
+            string[] candidates;
+            if (isSpecialSuffix)
+            {
+                candidates = new[]
+                {
+                    $"{basePrefix}_{rarityIndex}-1",       // Armor5_1-1
+                    $"{basePrefix}_{rarityIndex:D2}-1",    // Armor5_01-1 (just in case)
+                };
+            }
+            else
+            {
+                candidates = new[]
+                {
+                    $"{spritePrefix}_{rarityIndex}",       // Armor1_1, Hamer2_1, Hammer1_1
+                    $"{spritePrefix}_{rarityIndex:D2}",    // Gloves1_01, Shoes1_01
+                };
+            }
+
+            foreach (var name in candidates)
+            {
+                string path = $"{SPRITES_FOLDER}/{name}.png";
+                var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+                if (sprite != null) return sprite;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Convert server rarity string to 1-based index for sprite filenames.
+        /// 1=Common, 2=Uncommon, 3=Rare, 4=Legendary
+        /// </summary>
+        private static int RarityToIndex(string serverRarity)
+        {
+            if (string.IsNullOrEmpty(serverRarity)) return 0;
+            switch (serverRarity.ToUpperInvariant())
+            {
+                case "COMMON":    return 1;
+                case "UNCOMMON":  return 2;
+                case "RARE":      return 3;
+                case "LEGENDARY": return 4;
+                default:          return 0;
+            }
         }
 
         private void Log(string message)
