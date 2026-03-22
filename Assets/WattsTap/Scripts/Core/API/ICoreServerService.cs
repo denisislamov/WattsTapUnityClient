@@ -115,6 +115,28 @@ namespace WattsTap.Core.API
             Action<ReferralApplyResponse> onSuccess, Action<string> onError);
 
         #endregion
+
+        #region Game Items / Inventory
+
+        /// <summary>Get the full item catalog from server</summary>
+        IEnumerator GetCatalog(Action<CatalogResponse> onSuccess, Action<string> onError);
+
+        /// <summary>Get player's inventory, equipment, and currencies</summary>
+        IEnumerator GetInventory(Action<InventoryResponse> onSuccess, Action<string> onError);
+
+        /// <summary>Equip an item by player-item instance id</summary>
+        IEnumerator EquipItem(string playerItemId,
+            Action<EquipItemResponse> onSuccess, Action<string> onError);
+
+        /// <summary>Unequip a slot</summary>
+        IEnumerator UnequipItem(string slot,
+            Action<UnequipItemResponse> onSuccess, Action<string> onError);
+
+        /// <summary>Upgrade an item</summary>
+        IEnumerator UpgradeItem(string playerItemId,
+            Action<UpgradeItemResponse> onSuccess, Action<string> onError);
+
+        #endregion
     }
 }
 

@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520240fe70494709b259f7a270c37037, type: 3}
+  m_Name: weapon_watt_buster_LEGENDARY
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.ItemData
+  _id: 019d055a-1a15-75f3-b984-b9d8e26a9113
+  _templateId: 019d055a-198e-77d1-bfb9-2af1804b4fe7
+  _code: weapon_watt_buster
+  _displayName: Watt Buster
+  _description: Cracks ore and charges your core. Mining power, literally!
+  _itemType: 100
+  _rarity: 40
+  _mainStatType: 2
+  _maxLevel: 20
+  _levels:
+  - Level: 1
+    Value: 0.8
+    ValuePercent: 0
+  - Level: 2
+    Value: 0.85
+    ValuePercent: 0
+  - Level: 3
+    Value: 0.9
+    ValuePercent: 0
+  - Level: 4
+    Value: 0.95
+    ValuePercent: 0
+  - Level: 5
+    Value: 1
+    ValuePercent: 0
+  - Level: 6
+    Value: 1.05
+    ValuePercent: 0
+  - Level: 7
+    Value: 1.1
+    ValuePercent: 0
+  - Level: 8
+    Value: 1.15
+    ValuePercent: 0
+  - Level: 9
+    Value: 1.2
+    ValuePercent: 0
+  - Level: 10
+    Value: 1.25
+    ValuePercent: 0
+  - Level: 11
+    Value: 1.3
+    ValuePercent: 0
+  - Level: 12
+    Value: 1.35
+    ValuePercent: 0
+  - Level: 13
+    Value: 1.4
+    ValuePercent: 0
+  - Level: 14
+    Value: 1.45
+    ValuePercent: 0
+  - Level: 15
+    Value: 1.5
+    ValuePercent: 0
+  - Level: 16
+    Value: 1.55
+    ValuePercent: 0
+  - Level: 17
+    Value: 1.6
+    ValuePercent: 0
+  - Level: 18
+    Value: 1.65
+    ValuePercent: 0
+  - Level: 19
+    Value: 1.7
+    ValuePercent: 0
+  - Level: 20
+    Value: 1.75
+    ValuePercent: 0
+  _bonuses:
+  - StatType: 7
+    Value: 0
+    ValuePercent: 10
+    Description: Offline Bonus + 10 %
+  _requiredLevel: 1
+  _icon: {fileID: 0}
+  _perTapBonus: 0.8

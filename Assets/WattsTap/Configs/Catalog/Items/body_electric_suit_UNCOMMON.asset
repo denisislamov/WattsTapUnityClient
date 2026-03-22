@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520240fe70494709b259f7a270c37037, type: 3}
+  m_Name: body_electric_suit_UNCOMMON
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.ItemData
+  _id: 019d055a-2448-7cf1-85a7-d5a9bc54f90d
+  _templateId: 019d055a-242b-7de2-aaed-08c7cc16b692
+  _code: body_electric_suit
+  _displayName: Electric Suit
+  _description: Defends against hits and turns you into a portable power generator.
+    Batteries not included.
+  _itemType: 200
+  _rarity: 10
+  _mainStatType: 4
+  _maxLevel: 10
+  _levels:
+  - Level: 1
+    Value: 0.3
+    ValuePercent: 0
+  - Level: 2
+    Value: 0.4
+    ValuePercent: 0
+  - Level: 3
+    Value: 0.5
+    ValuePercent: 0
+  - Level: 4
+    Value: 0.6
+    ValuePercent: 0
+  - Level: 5
+    Value: 0.7
+    ValuePercent: 0
+  - Level: 6
+    Value: 0.8
+    ValuePercent: 0
+  - Level: 7
+    Value: 0.9
+    ValuePercent: 0
+  - Level: 8
+    Value: 1
+    ValuePercent: 0
+  - Level: 9
+    Value: 1.1
+    ValuePercent: 0
+  - Level: 10
+    Value: 1.2
+    ValuePercent: 0
+  _bonuses:
+  - StatType: 1
+    Value: 0
+    ValuePercent: 1
+    Description: Profit per tap 1 %
+  _requiredLevel: 1
+  _icon: {fileID: 0}
+  _perTapBonus: 0.3

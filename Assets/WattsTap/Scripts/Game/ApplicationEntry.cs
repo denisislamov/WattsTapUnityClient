@@ -233,14 +233,8 @@ namespace WattsTap.Core
                     // Start auto token refresh (critical: token expires in 15 min)
                     coreService.StartAutoRefresh(this);
                     
-                    // Load progress from server and start auto-sync (tap-based)
-                    if (ServiceLocator.TryGet<IProgressSyncService>(out var progressSyncService))
-                    {
-                        progressSyncService.LoadProgress();
-                        progressSyncService.StartAutoSync();
-                    }
-                    
-                    ShowWelcomeScreen(response.player?.isNewPlayer ?? true);
+                    // Load catalog & inventory from server (falls back to local SOs on failure)
+                    StartCoroutine(LoadServerDataAfterAuth(response.player?.isNewPlayer ?? true));
                 },
                 onError: (error) =>
                 {
@@ -327,6 +321,54 @@ namespace WattsTap.Core
         }
 #endif // OLD_SERVER
         
+        /// <summary>
+        /// After successful authentication, try to load catalog & inventory from server.
+        /// On success → replaces local SO data with server data.
+        /// On failure → logs error, keeps local SO data.
+        /// Then loads progress and shows welcome screen.
+        /// </summary>
+        private IEnumerator LoadServerDataAfterAuth(bool isNewPlayer)
+        {
+            // 1. Load catalog from server
+            if (ServiceLocator.TryGet<ICatalogService>(out var catalogService) && catalogService is CatalogService cs)
+            {
+                bool catalogDone = false;
+                yield return cs.TryLoadFromServer(success =>
+                {
+                    if (success)
+                        Debug.Log("<color=#00FF00>[ApplicationEntry] Catalog loaded from server</color>");
+                    else
+                        Debug.LogWarning("[ApplicationEntry] Catalog: using local SO data (server unavailable)");
+                    catalogDone = true;
+                });
+                yield return new WaitUntil(() => catalogDone);
+            }
+
+            // 2. Load inventory from server (must run after catalog so variant IDs can be resolved)
+            if (ServiceLocator.TryGet<IInventoryService>(out var inventoryService) && inventoryService is InventoryService invs)
+            {
+                bool invDone = false;
+                yield return invs.TryLoadFromServer(success =>
+                {
+                    if (success)
+                        Debug.Log("<color=#00FF00>[ApplicationEntry] Inventory loaded from server</color>");
+                    else
+                        Debug.LogWarning("[ApplicationEntry] Inventory: using local SO data (server unavailable)");
+                    invDone = true;
+                });
+                yield return new WaitUntil(() => invDone);
+            }
+
+            // 3. Load progress from server and start auto-sync (tap-based)
+            if (ServiceLocator.TryGet<IProgressSyncService>(out var progressSyncService))
+            {
+                progressSyncService.LoadProgress();
+                progressSyncService.StartAutoSync();
+            }
+
+            ShowWelcomeScreen(isNewPlayer);
+        }
+
         private void ShowWelcomeScreen(bool isNewPlayer)
         {
             if (!ServiceLocator.TryGet<IUIService>(out var uiService))

@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520240fe70494709b259f7a270c37037, type: 3}
+  m_Name: weapon_the_shocksmith_COMMON
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.ItemData
+  _id: 019d055a-1b61-7ae3-9018-a4936adf3c6c
+  _templateId: 019d055a-1b5d-7580-86ca-15bc5d508b5d
+  _code: weapon_the_shocksmith
+  _displayName: The Shocksmith
+  _description: Harvests minerals and minor heart attacks with every electrifying
+    strike.
+  _itemType: 100
+  _rarity: 0
+  _mainStatType: 4
+  _maxLevel: 5
+  _levels:
+  - Level: 1
+    Value: 0.1
+    ValuePercent: 0
+  - Level: 2
+    Value: 0.2
+    ValuePercent: 0
+  - Level: 3
+    Value: 0.3
+    ValuePercent: 0
+  - Level: 4
+    Value: 0.4
+    ValuePercent: 0
+  - Level: 5
+    Value: 0.5
+    ValuePercent: 0
+  _bonuses: []
+  _requiredLevel: 1
+  _icon: {fileID: 0}
+  _perTapBonus: 0.1

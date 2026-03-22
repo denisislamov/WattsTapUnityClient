@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520240fe70494709b259f7a270c37037, type: 3}
+  m_Name: weapon_lightning_maul_UNCOMMON
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.ItemData
+  _id: 019d055a-1c3b-7dc0-b13e-1aefcc6d7f4e
+  _templateId: 019d055a-1c23-7d03-a794-e1d4040e0a42
+  _code: weapon_lightning_maul
+  _displayName: Lightning Maul
+  _description: For miners who like their work shocking and their hammers sparky!
+  _itemType: 100
+  _rarity: 10
+  _mainStatType: 5
+  _maxLevel: 10
+  _levels:
+  - Level: 1
+    Value: 0
+    ValuePercent: 0.03
+  - Level: 2
+    Value: 0
+    ValuePercent: 0.04
+  - Level: 3
+    Value: 0
+    ValuePercent: 0.05
+  - Level: 4
+    Value: 0
+    ValuePercent: 0.06
+  - Level: 5
+    Value: 0
+    ValuePercent: 0.07
+  - Level: 6
+    Value: 0
+    ValuePercent: 0.08
+  - Level: 7
+    Value: 0
+    ValuePercent: 0.09
+  - Level: 8
+    Value: 0
+    ValuePercent: 0.1
+  - Level: 9
+    Value: 0
+    ValuePercent: 0.11
+  - Level: 10
+    Value: 0
+    ValuePercent: 0.12
+  _bonuses:
+  - StatType: 5
+    Value: 0
+    ValuePercent: 0.5
+    Description: Crit Chance 0.5 %
+  _requiredLevel: 1
+  _icon: {fileID: 0}
+  _perTapBonus: 0

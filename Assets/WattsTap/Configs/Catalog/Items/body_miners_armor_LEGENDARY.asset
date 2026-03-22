@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520240fe70494709b259f7a270c37037, type: 3}
+  m_Name: body_miners_armor_LEGENDARY
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.ItemData
+  _id: 019d055a-2604-7d11-85cf-78a5991aaf2b
+  _templateId: 019d055a-25a1-7bf1-9084-90335a7f4d3e
+  _code: body_miners_armor
+  _displayName: Miner's Armor
+  _description: Get powered up while staying protected - no outlet needed
+  _itemType: 200
+  _rarity: 40
+  _mainStatType: 6
+  _maxLevel: 20
+  _levels:
+  - Level: 1
+    Value: 1.15
+    ValuePercent: 0
+  - Level: 2
+    Value: 1.16
+    ValuePercent: 0
+  - Level: 3
+    Value: 1.17
+    ValuePercent: 0
+  - Level: 4
+    Value: 1.18
+    ValuePercent: 0
+  - Level: 5
+    Value: 1.19
+    ValuePercent: 0
+  - Level: 6
+    Value: 1.2
+    ValuePercent: 0
+  - Level: 7
+    Value: 1.21
+    ValuePercent: 0
+  - Level: 8
+    Value: 1.22
+    ValuePercent: 0
+  - Level: 9
+    Value: 1.23
+    ValuePercent: 0
+  - Level: 10
+    Value: 1.24
+    ValuePercent: 0
+  - Level: 11
+    Value: 1.25
+    ValuePercent: 0
+  - Level: 12
+    Value: 1.26
+    ValuePercent: 0
+  - Level: 13
+    Value: 1.27
+    ValuePercent: 0
+  - Level: 14
+    Value: 1.28
+    ValuePercent: 0
+  - Level: 15
+    Value: 1.29
+    ValuePercent: 0
+  - Level: 16
+    Value: 1.3
+    ValuePercent: 0
+  - Level: 17
+    Value: 1.31
+    ValuePercent: 0
+  - Level: 18
+    Value: 1.32
+    ValuePercent: 0
+  - Level: 19
+    Value: 1.33
+    ValuePercent: 0
+  - Level: 20
+    Value: 1.34
+    ValuePercent: 0
+  _bonuses:
+  - StatType: 1
+    Value: 0
+    ValuePercent: 10
+    Description: Profit per tap 10 %
+  _requiredLevel: 1
+  _icon: {fileID: 0}
+  _perTapBonus: 1.15

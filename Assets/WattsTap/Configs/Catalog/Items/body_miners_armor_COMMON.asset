@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520240fe70494709b259f7a270c37037, type: 3}
+  m_Name: body_miners_armor_COMMON
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.ItemData
+  _id: 019d055a-25a4-7223-bc30-c2034eb47a84
+  _templateId: 019d055a-25a1-7bf1-9084-90335a7f4d3e
+  _code: body_miners_armor
+  _displayName: Miner's Armor
+  _description: Get powered up while staying protected - no outlet needed
+  _itemType: 200
+  _rarity: 0
+  _mainStatType: 6
+  _maxLevel: 5
+  _levels:
+  - Level: 1
+    Value: 1.01
+    ValuePercent: 0
+  - Level: 2
+    Value: 1.02
+    ValuePercent: 0
+  - Level: 3
+    Value: 1.03
+    ValuePercent: 0
+  - Level: 4
+    Value: 1.04
+    ValuePercent: 0
+  - Level: 5
+    Value: 1.05
+    ValuePercent: 0
+  _bonuses: []
+  _requiredLevel: 1
+  _icon: {fileID: 0}
+  _perTapBonus: 1.01

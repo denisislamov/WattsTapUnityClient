@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520240fe70494709b259f7a270c37037, type: 3}
+  m_Name: weapon_teslas_touch_RARE
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.ItemData
+  _id: 019d055a-1d0d-79a2-ba20-4b2317a41b2a
+  _templateId: 019d055a-1cde-7713-859a-030fc0c26061
+  _code: weapon_teslas_touch
+  _displayName: Tesla's Touch
+  _description: Brings a whole new meaning to rock and roll - powered by high voltage.
+  _itemType: 100
+  _rarity: 20
+  _mainStatType: 6
+  _maxLevel: 15
+  _levels:
+  - Level: 1
+    Value: 1.07
+    ValuePercent: 0
+  - Level: 2
+    Value: 1.08
+    ValuePercent: 0
+  - Level: 3
+    Value: 1.09
+    ValuePercent: 0
+  - Level: 4
+    Value: 1.1
+    ValuePercent: 0
+  - Level: 5
+    Value: 1.11
+    ValuePercent: 0
+  - Level: 6
+    Value: 1.12
+    ValuePercent: 0
+  - Level: 7
+    Value: 1.13
+    ValuePercent: 0
+  - Level: 8
+    Value: 1.14
+    ValuePercent: 0
+  - Level: 9
+    Value: 1.15
+    ValuePercent: 0
+  - Level: 10
+    Value: 1.16
+    ValuePercent: 0
+  - Level: 11
+    Value: 1.17
+    ValuePercent: 0
+  - Level: 12
+    Value: 1.18
+    ValuePercent: 0
+  - Level: 13
+    Value: 1.19
+    ValuePercent: 0
+  - Level: 14
+    Value: 1.2
+    ValuePercent: 0
+  - Level: 15
+    Value: 1.21
+    ValuePercent: 0
+  _bonuses:
+  - StatType: 6
+    Value: 0
+    ValuePercent: 3
+    Description: Multiplier crit + 3%
+  _requiredLevel: 1
+  _icon: {fileID: 0}
+  _perTapBonus: 1.07

@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520240fe70494709b259f7a270c37037, type: 3}
+  m_Name: weapon_amp_thumper_LEGENDARY
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.ItemData
+  _id: 019d055a-1b05-7692-8652-08e3b4f228b1
+  _templateId: 019d055a-1a7d-7e22-b797-8f71c0aa199d
+  _code: weapon_amp_thumper
+  _displayName: Amp-Thumper
+  _description: Each swing generates enough electricity to power a toaster. Maybe
+    two if you're lucky!
+  _itemType: 100
+  _rarity: 40
+  _mainStatType: 3
+  _maxLevel: 20
+  _levels:
+  - Level: 1
+    Value: 150
+    ValuePercent: 0
+  - Level: 2
+    Value: 160
+    ValuePercent: 0
+  - Level: 3
+    Value: 170
+    ValuePercent: 0
+  - Level: 4
+    Value: 180
+    ValuePercent: 0
+  - Level: 5
+    Value: 190
+    ValuePercent: 0
+  - Level: 6
+    Value: 200
+    ValuePercent: 0
+  - Level: 7
+    Value: 210
+    ValuePercent: 0
+  - Level: 8
+    Value: 220
+    ValuePercent: 0
+  - Level: 9
+    Value: 230
+    ValuePercent: 0
+  - Level: 10
+    Value: 240
+    ValuePercent: 0
+  - Level: 11
+    Value: 250
+    ValuePercent: 0
+  - Level: 12
+    Value: 260
+    ValuePercent: 0
+  - Level: 13
+    Value: 270
+    ValuePercent: 0
+  - Level: 14
+    Value: 280
+    ValuePercent: 0
+  - Level: 15
+    Value: 290
+    ValuePercent: 0
+  - Level: 16
+    Value: 300
+    ValuePercent: 0
+  - Level: 17
+    Value: 310
+    ValuePercent: 0
+  - Level: 18
+    Value: 320
+    ValuePercent: 0
+  - Level: 19
+    Value: 330
+    ValuePercent: 0
+  - Level: 20
+    Value: 340
+    ValuePercent: 0
+  _bonuses:
+  - StatType: 2
+    Value: 0
+    ValuePercent: 5
+    Description: Exp Bonus per tap 5 %
+  _requiredLevel: 1
+  _icon: {fileID: 0}
+  _perTapBonus: 150

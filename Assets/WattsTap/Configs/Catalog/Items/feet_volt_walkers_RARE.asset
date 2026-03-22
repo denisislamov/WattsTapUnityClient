@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520240fe70494709b259f7a270c37037, type: 3}
+  m_Name: feet_volt_walkers_RARE
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.ItemData
+  _id: 019d055a-2742-7552-a06b-aecc897fa920
+  _templateId: 019d055a-270c-7622-824d-581016619bf2
+  _code: feet_volt_walkers
+  _displayName: Volt Walkers
+  _description: Move effortlessly while your shoes collect the energy around you,
+    keeping you charged and ready.
+  _itemType: 201
+  _rarity: 20
+  _mainStatType: 2
+  _maxLevel: 15
+  _levels:
+  - Level: 1
+    Value: 0.4
+    ValuePercent: 0
+  - Level: 2
+    Value: 0.45
+    ValuePercent: 0
+  - Level: 3
+    Value: 0.5
+    ValuePercent: 0
+  - Level: 4
+    Value: 0.55
+    ValuePercent: 0
+  - Level: 5
+    Value: 0.6
+    ValuePercent: 0
+  - Level: 6
+    Value: 0.65
+    ValuePercent: 0
+  - Level: 7
+    Value: 0.7
+    ValuePercent: 0
+  - Level: 8
+    Value: 0.75
+    ValuePercent: 0
+  - Level: 9
+    Value: 0.8
+    ValuePercent: 0
+  - Level: 10
+    Value: 0.85
+    ValuePercent: 0
+  - Level: 11
+    Value: 0.9
+    ValuePercent: 0
+  - Level: 12
+    Value: 0.95
+    ValuePercent: 0
+  - Level: 13
+    Value: 1
+    ValuePercent: 0
+  - Level: 14
+    Value: 1.05
+    ValuePercent: 0
+  - Level: 15
+    Value: 1.1
+    ValuePercent: 0
+  _bonuses:
+  - StatType: 5
+    Value: 0
+    ValuePercent: 1
+    Description: Crit Chance 1 %
+  _requiredLevel: 1
+  _icon: {fileID: 0}
+  _perTapBonus: 0.4

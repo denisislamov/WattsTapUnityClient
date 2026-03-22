@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520240fe70494709b259f7a270c37037, type: 3}
+  m_Name: arms_shiny_wristguard_LEGENDARY
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.ItemData
+  _id: 019d055a-1feb-7073-a4e3-f56e0463fedc
+  _templateId: 019d055a-1f7c-7493-bc06-258840eec01e
+  _code: arms_shiny_wristguard
+  _displayName: Shiny Wristguard
+  _description: Not just for crushing rocks - these gloves mine energy faster than
+    your smartphone drains it.
+  _itemType: 202
+  _rarity: 40
+  _mainStatType: 4
+  _maxLevel: 20
+  _levels:
+  - Level: 1
+    Value: 1.5
+    ValuePercent: 0
+  - Level: 2
+    Value: 1.6
+    ValuePercent: 0
+  - Level: 3
+    Value: 1.7
+    ValuePercent: 0
+  - Level: 4
+    Value: 1.8
+    ValuePercent: 0
+  - Level: 5
+    Value: 1.9
+    ValuePercent: 0
+  - Level: 6
+    Value: 2
+    ValuePercent: 0
+  - Level: 7
+    Value: 2.1
+    ValuePercent: 0
+  - Level: 8
+    Value: 2.2
+    ValuePercent: 0
+  - Level: 9
+    Value: 2.3
+    ValuePercent: 0
+  - Level: 10
+    Value: 2.4
+    ValuePercent: 0
+  - Level: 11
+    Value: 2.5
+    ValuePercent: 0
+  - Level: 12
+    Value: 2.6
+    ValuePercent: 0
+  - Level: 13
+    Value: 2.7
+    ValuePercent: 0
+  - Level: 14
+    Value: 2.8
+    ValuePercent: 0
+  - Level: 15
+    Value: 2.9
+    ValuePercent: 0
+  - Level: 16
+    Value: 3
+    ValuePercent: 0
+  - Level: 17
+    Value: 3.1
+    ValuePercent: 0
+  - Level: 18
+    Value: 3.2
+    ValuePercent: 0
+  - Level: 19
+    Value: 3.3
+    ValuePercent: 0
+  - Level: 20
+    Value: 3.4
+    ValuePercent: 0
+  _bonuses:
+  - StatType: 1
+    Value: 0
+    ValuePercent: 10
+    Description: Profit per tap 10 %
+  _requiredLevel: 1
+  _icon: {fileID: 0}
+  _perTapBonus: 1.5

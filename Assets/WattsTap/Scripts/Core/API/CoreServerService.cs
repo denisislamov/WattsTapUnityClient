@@ -372,6 +372,44 @@ namespace WattsTap.Core.API
 
         #endregion
 
+        #region Game Items / Inventory
+
+        public IEnumerator GetCatalog(Action<CatalogResponse> onSuccess, Action<string> onError)
+        {
+            yield return AuthenticatedGet<CatalogResponse>(Cfg.GameItemsCatalog, onSuccess, onError);
+        }
+
+        public IEnumerator GetInventory(Action<InventoryResponse> onSuccess, Action<string> onError)
+        {
+            yield return AuthenticatedGet<InventoryResponse>(Cfg.GameInventory, onSuccess, onError);
+        }
+
+        public IEnumerator EquipItem(string playerItemId,
+            Action<EquipItemResponse> onSuccess, Action<string> onError)
+        {
+            var req = new EquipItemRequest { playerItemId = playerItemId };
+            yield return AuthenticatedPost<EquipItemResponse>(
+                Cfg.GameInventoryEquip, JsonUtility.ToJson(req), onSuccess, onError);
+        }
+
+        public IEnumerator UnequipItem(string slot,
+            Action<UnequipItemResponse> onSuccess, Action<string> onError)
+        {
+            var req = new UnequipItemRequest { slot = slot };
+            yield return AuthenticatedPost<UnequipItemResponse>(
+                Cfg.GameInventoryUnequip, JsonUtility.ToJson(req), onSuccess, onError);
+        }
+
+        public IEnumerator UpgradeItem(string playerItemId,
+            Action<UpgradeItemResponse> onSuccess, Action<string> onError)
+        {
+            var req = new UpgradeItemRequest { playerItemId = playerItemId };
+            yield return AuthenticatedPost<UpgradeItemResponse>(
+                Cfg.GameInventoryUpgrade, JsonUtility.ToJson(req), onSuccess, onError);
+        }
+
+        #endregion
+
         #region Generic Request Helpers
 
         /// <summary>

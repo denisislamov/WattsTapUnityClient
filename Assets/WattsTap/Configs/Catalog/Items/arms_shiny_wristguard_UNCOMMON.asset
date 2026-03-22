@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520240fe70494709b259f7a270c37037, type: 3}
+  m_Name: arms_shiny_wristguard_UNCOMMON
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.ItemData
+  _id: 019d055a-1f94-79c1-afcd-0bf708e692f6
+  _templateId: 019d055a-1f7c-7493-bc06-258840eec01e
+  _code: arms_shiny_wristguard
+  _displayName: Shiny Wristguard
+  _description: Not just for crushing rocks - these gloves mine energy faster than
+    your smartphone drains it.
+  _itemType: 202
+  _rarity: 10
+  _mainStatType: 4
+  _maxLevel: 10
+  _levels:
+  - Level: 1
+    Value: 0.3
+    ValuePercent: 0
+  - Level: 2
+    Value: 0.4
+    ValuePercent: 0
+  - Level: 3
+    Value: 0.5
+    ValuePercent: 0
+  - Level: 4
+    Value: 0.6
+    ValuePercent: 0
+  - Level: 5
+    Value: 0.7
+    ValuePercent: 0
+  - Level: 6
+    Value: 0.8
+    ValuePercent: 0
+  - Level: 7
+    Value: 0.9
+    ValuePercent: 0
+  - Level: 8
+    Value: 1
+    ValuePercent: 0
+  - Level: 9
+    Value: 1.1
+    ValuePercent: 0
+  - Level: 10
+    Value: 1.2
+    ValuePercent: 0
+  _bonuses:
+  - StatType: 5
+    Value: 0
+    ValuePercent: 0.5
+    Description: Crit Chance 0.5 %
+  _requiredLevel: 1
+  _icon: {fileID: 0}
+  _perTapBonus: 0.3

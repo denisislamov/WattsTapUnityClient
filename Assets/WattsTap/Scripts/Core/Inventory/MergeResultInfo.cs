@@ -39,11 +39,12 @@ namespace WattsTap.Core.Inventory
         {
             switch (current)
             {
-                case ItemRarity.Common:   return ItemRarity.Uncommon;
-                case ItemRarity.Uncommon: return ItemRarity.Rare;
-                case ItemRarity.Rare:     return ItemRarity.Epic;
-                case ItemRarity.Epic:     return null; // Already max
-                default:                  return null;
+                case ItemRarity.Common:    return ItemRarity.Uncommon;
+                case ItemRarity.Uncommon:  return ItemRarity.Rare;
+                case ItemRarity.Rare:      return ItemRarity.Epic;
+                case ItemRarity.Epic:      return ItemRarity.Legendary;
+                case ItemRarity.Legendary: return null; // Already max
+                default:                   return null;
             }
         }
     }

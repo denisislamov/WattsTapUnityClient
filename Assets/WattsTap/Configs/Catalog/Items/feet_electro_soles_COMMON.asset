@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520240fe70494709b259f7a270c37037, type: 3}
+  m_Name: feet_electro_soles_COMMON
+  m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.ItemData
+  _id: 019d055a-27b3-7b62-a3b3-21670e301b56
+  _templateId: 019d055a-27b0-77b3-8648-c2709bbeb203
+  _code: feet_electro_soles
+  _displayName: Electro Soles
+  _description: Your feet might feel light, but each step packs a powerful punch
+    of electricity.
+  _itemType: 201
+  _rarity: 0
+  _mainStatType: 3
+  _maxLevel: 5
+  _levels:
+  - Level: 1
+    Value: 10
+    ValuePercent: 0
+  - Level: 2
+    Value: 20
+    ValuePercent: 0
+  - Level: 3
+    Value: 30
+    ValuePercent: 0
+  - Level: 4
+    Value: 40
+    ValuePercent: 0
+  - Level: 5
+    Value: 50
+    ValuePercent: 0
+  _bonuses: []
+  _requiredLevel: 1
+  _icon: {fileID: 0}
+  _perTapBonus: 10
