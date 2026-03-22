@@ -57,6 +57,27 @@ namespace WattsTap.Core.Inventory.Editor
             EditorGUILayout.HelpBox(
                 "Configure items to add to the player's inventory on game start or for testing purposes.",
                 MessageType.Info);
+            EditorGUILayout.Space(5);
+            
+            // Debug mode toggle
+            var isDebugProp = serializedObject.FindProperty("_isDebug");
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            EditorGUILayout.PropertyField(isDebugProp, new GUIContent("Is Debug",
+                "If ON — use local inventory from this config.\nIf OFF — load inventory from server /game/inventory."));
+            if (isDebugProp.boolValue)
+            {
+                EditorGUILayout.HelpBox(
+                    "Debug mode ON: inventory will be loaded from the local items list below.",
+                    MessageType.Warning);
+            }
+            else
+            {
+                EditorGUILayout.HelpBox(
+                    "Debug mode OFF: inventory will be loaded from server /game/inventory. The items below are ignored.",
+                    MessageType.Info);
+            }
+            EditorGUILayout.EndVertical();
+            
             EditorGUILayout.Space(10);
         }
         

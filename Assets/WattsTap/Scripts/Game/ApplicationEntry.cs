@@ -345,18 +345,26 @@ namespace WattsTap.Core
             }
 
             // 2. Load inventory from server (must run after catalog so variant IDs can be resolved)
+            //    Skip if InventoryStartConfig.IsDebug == true (use local SO data)
             if (ServiceLocator.TryGet<IInventoryService>(out var inventoryService) && inventoryService is InventoryService invs)
             {
-                bool invDone = false;
-                yield return invs.TryLoadFromServer(success =>
+                if (invs.IsDebugMode)
                 {
-                    if (success)
-                        Debug.Log("<color=#00FF00>[ApplicationEntry] Inventory loaded from server</color>");
-                    else
-                        Debug.LogWarning("[ApplicationEntry] Inventory: using local SO data (server unavailable)");
-                    invDone = true;
-                });
-                yield return new WaitUntil(() => invDone);
+                    Debug.Log("<color=#FFAA00>[ApplicationEntry] Inventory debug mode — skipping server load, using local SO</color>");
+                }
+                else
+                {
+                    bool invDone = false;
+                    yield return invs.TryLoadFromServer(success =>
+                    {
+                        if (success)
+                            Debug.Log("<color=#00FF00>[ApplicationEntry] Inventory loaded from server</color>");
+                        else
+                            Debug.LogWarning("[ApplicationEntry] Inventory: using local SO data (server unavailable)");
+                        invDone = true;
+                    });
+                    yield return new WaitUntil(() => invDone);
+                }
             }
 
             // 3. Load progress from server and start auto-sync (tap-based)

@@ -12,6 +12,9 @@ namespace WattsTap.Core.Inventory
     [CreateAssetMenu(menuName = "WattsTap/Inventory/Inventory Start Config")]
     public class InventoryStartConfig : BaseConfig
     {
+        [Tooltip("If true — load inventory from this local config (debug/testing). If false — load from server /game/inventory")]
+        [SerializeField] private bool _isDebug;
+        
         [Tooltip("Items to add to inventory on initialization")]
         [SerializeField] private List<InventoryStartItem> _startItems = new List<InventoryStartItem>();
         
@@ -19,6 +22,12 @@ namespace WattsTap.Core.Inventory
         /// All items to be added to inventory.
         /// </summary>
         public IReadOnlyList<InventoryStartItem> StartItems => _startItems;
+        
+        /// <summary>
+        /// If true — use local inventory from this config (debug/testing mode).
+        /// If false — load inventory from server /game/inventory.
+        /// </summary>
+        public bool IsDebug => _isDebug;
         
         /// <summary>
         /// Apply this configuration to the inventory service.

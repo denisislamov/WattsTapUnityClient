@@ -27,6 +27,9 @@ namespace WattsTap.Core.Inventory
         public long Coins { get; private set; }
         public long Drawings { get; private set; }
 
+        /// <summary>Whether inventory start config is in debug mode (use local data instead of server).</summary>
+        public bool IsDebugMode { get; private set; }
+
         public int InitializationOrder => 25; // After CatalogService (20)
         public bool IsInitialized { get; private set; }
 
@@ -36,7 +39,7 @@ namespace WattsTap.Core.Inventory
 
             _catalogService = ServiceLocator.Get<ICatalogService>();
 
-            // Try to load start config and apply it
+            // Try to load start config and check debug mode
             var configService = ServiceLocator.Get<IConfigService>();
             if (configService != null)
             {
@@ -45,8 +48,19 @@ namespace WattsTap.Core.Inventory
                     var startConfig = configService.GetConfig<InventoryStartConfig>(StartConfigKey);
                     if (startConfig != null)
                     {
-                        IsInitialized = true; // Set before applying to allow AddItem to work
-                        startConfig.ApplyToInventory(this);
+                        IsDebugMode = startConfig.IsDebug;
+                        
+                        if (startConfig.IsDebug)
+                        {
+                            // Debug mode: load inventory from local SO config
+                            IsInitialized = true; // Set before applying to allow AddItem to work
+                            startConfig.ApplyToInventory(this);
+                            Debug.Log("<color=#FFAA00>[InventoryService] Debug mode ON — using local SO inventory</color>");
+                        }
+                        else
+                        {
+                            Debug.Log("<color=#00AA00>[InventoryService] Debug mode OFF — inventory will be loaded from server</color>");
+                        }
                     }
                 }
                 catch
@@ -57,7 +71,7 @@ namespace WattsTap.Core.Inventory
 
             IsInitialized = true;
             IsServerData = false;
-            Debug.Log("<color=#00AA00>[InventoryService] Initialized from local SO</color>");
+            Debug.Log($"<color=#00AA00>[InventoryService] Initialized (debugMode={IsDebugMode})</color>");
         }
 
         public void Shutdown()
