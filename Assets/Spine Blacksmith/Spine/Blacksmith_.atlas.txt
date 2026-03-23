@@ -1,0 +1,458 @@
+Blacksmith_.png
+size:3828,2060
+filter:Linear,Linear
+pma:true
+Ear
+bounds:3386,780,56,83
+offsets:1,1,58,85
+rotate:90
+Eye_Lf
+bounds:1878,185,60,39
+offsets:2,2,63,42
+Eye_Rt
+bounds:961,2,37,31
+offsets:1,1,39,34
+rotate:90
+Eyebrow_Lf
+bounds:3777,1578,86,45
+rotate:90
+Eyebrow_Rt
+bounds:909,2,50,37
+offsets:1,0,51,37
+Eyelid_Lf_close
+bounds:3603,398,62,39
+offsets:1,10,63,51
+rotate:90
+Eyelid_Lf_open
+bounds:3792,1214,65,34
+offsets:2,3,69,39
+rotate:90
+Eyelid_Rt_close
+bounds:3644,413,48,32
+offsets:0,2,49,36
+rotate:90
+Eyelid_Rt_open
+bounds:2454,794,42,24
+offsets:1,1,45,27
+rotate:90
+Head
+bounds:1706,564,309,288
+Light_big
+bounds:2,1208,846,850
+offsets:1,28,889,914
+Light_little
+bounds:1720,854,420,295
+offsets:6,16,465,345
+rotate:90
+Lip
+bounds:3797,344,70,29
+offsets:1,1,72,36
+rotate:90
+Mouth
+bounds:1940,352,64,43
+offsets:1,1,66,45
+Mustache_Lf
+bounds:3475,398,126,62
+Mustache_Rt
+bounds:2735,2,89,53
+Mustache_und
+bounds:3488,1448,240,235
+Nose
+bounds:3703,107,86,77
+offsets:1,2,92,80
+Pupil_Lf
+bounds:2017,1252,22,22
+offsets:1,1,24,24
+Pupil_Rt
+bounds:2387,162,18,17
+offsets:1,1,20,19
+rotate:90
+Shadow
+bounds:850,1869,1233,189
+offsets:18,2,1256,193
+man 1/Anvil_1
+bounds:1740,1276,591,360
+offsets:1,1,594,362
+rotate:90
+man 1/Apron_1
+bounds:750,422,275,198
+offsets:2,1,278,200
+man 1/Belt_1
+bounds:2328,538,298,124
+offsets:1,1,300,126
+rotate:90
+man 1/Body_1
+bounds:3227,1685,373,517
+offsets:1,1,375,519
+rotate:90
+man 1/Crack_1
+bounds:2802,1440,290,247
+offsets:2,5,340,256
+man 1/Fingers_Rt_1
+bounds:3064,50,174,161
+offsets:1,1,176,163
+man 1/Fingers_Rt_TAP_1
+bounds:3295,1276,191,179
+offsets:0,0,191,181
+man 1/Glove_Lf_1_1
+bounds:2210,162,175,177
+offsets:1,1,177,179
+man 1/Glove_Rf_1_1
+bounds:3240,43,172,169
+offsets:1,1,176,171
+man 1/Glowe_Lf_2_1
+bounds:3488,1277,169,221
+offsets:2,1,172,223
+rotate:90
+man 1/Glowe_Rt_2_1
+bounds:2866,394,183,197
+offsets:1,2,185,201
+rotate:90
+man 1/Hammer_1
+bounds:2484,778,383,472
+offsets:1,1,385,476
+man 1/Hammer_TAP_1
+bounds:2017,838,412,465
+rotate:90
+man 1/Hand_Lf_1
+bounds:3474,1056,142,218
+offsets:1,1,144,220
+man 1/Hand_Rt_1
+bounds:3098,1274,173,195
+offsets:1,1,175,197
+rotate:90
+man 1/Light_Apron_1
+bounds:2643,1262,45,156
+offsets:2,6,124,164
+rotate:90
+man 1/Light_Belt_1
+bounds:2891,8,40,83
+offsets:2,4,101,89
+rotate:90
+man 1/Light_Fingers_Rt_1
+bounds:2734,220,179,126
+offsets:2,1,183,131
+rotate:90
+man 1/Light_Glove_Rt_1
+bounds:3374,909,104,97
+offsets:6,2,118,110
+rotate:90
+man 1/Light_Hammer_1
+bounds:1376,899,342,391
+offsets:1,1,351,400
+man 1/Light_Hand_Rt_1
+bounds:3775,799,85,51
+offsets:1,2,105,65
+rotate:90
+man 1/Light_Shoes_Rt_1
+bounds:3569,241,155,107
+offsets:1,12,160,120
+rotate:90
+man 1/Light_Shoulder_Rt_1
+bounds:3618,1022,172,57
+offsets:2,1,184,79
+man 1/Light_Sleeve_Rf_1
+bounds:3716,416,105,78
+offsets:2,1,111,95
+man 1/Light_Tourser_Rt_1
+bounds:3065,383,69,194
+offsets:1,3,116,374
+man 1/Light_body_1
+bounds:1027,436,113,305
+offsets:12,13,146,324
+rotate:90
+man 1/Shoes_Lf_1
+bounds:3582,107,132,119
+offsets:1,2,134,123
+rotate:90
+man 1/Shoes_Rt_1
+bounds:1069,24,223,133
+offsets:1,2,225,137
+man 1/Shoulder_Lf_1
+bounds:2869,761,217,275
+offsets:1,1,219,277
+rotate:90
+man 1/Shoulder_Rt_1
+bounds:1291,164,270,170
+offsets:1,1,273,173
+rotate:90
+man 1/Sleeve_Lf_1
+bounds:3611,886,164,134
+offsets:1,1,166,136
+man 1/Sleeve_Rt_1
+bounds:3611,768,116,162
+rotate:90
+man 1/Tourser_Lf_dwn_1
+bounds:1370,505,160,329
+offsets:1,1,162,331
+rotate:90
+man 1/Tourser_Lf_up_1
+bounds:1669,226,169,269
+offsets:1,20,171,291
+rotate:90
+man 1/Tourser_Rt_dwn_1
+bounds:3094,1449,130,238
+offsets:1,1,132,240
+man 1/Tourser_Rt_up_1
+bounds:2802,1274,164,294
+offsets:1,1,166,296
+rotate:90
+man 2/Anvil_2
+bounds:2102,1674,594,384
+offsets:1,1,596,386
+man 2/Apron_2
+bounds:1069,159,275,220
+offsets:1,1,277,222
+rotate:90
+man 2/Belt_2
+bounds:2643,1309,363,157
+offsets:0,1,364,158
+rotate:90
+man 2/Body_2
+bounds:2698,1689,369,527
+offsets:1,2,372,530
+rotate:90
+man 2/Crack_2
+bounds:1376,667,328,230
+offsets:1,1,377,250
+man 2/Fingers_Rt_2
+bounds:2685,401,179,156
+offsets:5,1,185,170
+man 2/Fingers_Rt_2_TAP
+bounds:3403,224,172,164
+offsets:1,2,174,167
+rotate:90
+man 2/Glove_Lf_1_2
+bounds:3061,213,168,154
+offsets:1,12,170,168
+rotate:90
+man 2/Glove_Rf_1_2
+bounds:2117,2,170,158
+offsets:5,1,176,160
+man 2/Glowe_Lf_2_2
+bounds:3115,1013,179,259
+offsets:1,2,181,262
+man 2/Glowe_Rt_2_2
+bounds:3618,1081,172,194
+offsets:1,2,174,197
+man 2/Hammer_2
+bounds:2102,1252,420,539
+offsets:1,1,422,541
+rotate:90
+man 2/Hammer_TAP_2
+bounds:750,622,584,297
+offsets:1,1,585,298
+rotate:90
+man 2/Hand_Lf_2
+bounds:2584,190,148,208
+offsets:1,1,150,210
+man 2/Hand_Rt_2
+bounds:2862,213,197,179
+offsets:1,1,199,181
+man 2/Light_Apron_2
+bounds:3582,52,53,146
+offsets:1,6,117,202
+rotate:90
+man 2/Light_Belt_2
+bounds:2289,3,139,157
+offsets:1,2,165,160
+man 2/Light_Fingers_Rt_2
+bounds:3703,186,95,109
+offsets:1,1,100,132
+man 2/Light_Glove_Rt_2
+bounds:3609,463,132,105
+offsets:10,2,160,139
+rotate:90
+man 2/Light_Hammer_2
+bounds:3475,462,132,133
+offsets:1,1,148,143
+man 2/Light_Hand_Rt_2
+bounds:2293,341,76,57
+offsets:2,1,88,73
+man 2/Light_Shoes_Rt_2
+bounds:2293,400,147,128
+offsets:1,7,171,136
+man 2/Light_Shoulder_Rt_2
+bounds:3386,838,81,69
+offsets:3,1,90,74
+man 2/Light_Sleeve_Rt_2
+bounds:3716,496,120,105
+offsets:2,2,123,152
+rotate:90
+man 2/Light_Tourser_Rt_2
+bounds:3113,580,84,179
+offsets:1,14,115,194
+man 2/Light_body_2
+bounds:3746,1832,64,226
+offsets:1,14,111,295
+man 2/Shoes_Lf_2
+bounds:3366,597,145,160
+offsets:1,1,147,162
+man 2/Shoes_Rt_2
+bounds:1878,22,237,139
+offsets:2,1,240,141
+man 2/Shoulder_Lf_2
+bounds:3226,1457,226,260
+offsets:2,1,229,262
+rotate:90
+man 2/Shoulder_Rt_2
+bounds:2812,579,299,180
+offsets:2,1,302,182
+man 2/Sleeve_Lf_2
+bounds:3475,813,164,134
+offsets:1,1,167,136
+rotate:90
+man 2/Sleeve_Rt_2
+bounds:2735,57,120,161
+offsets:2,2,123,164
+man 2/Tourser_Lf_dwn_2
+bounds:2857,50,161,205
+offsets:2,1,164,207
+rotate:90
+man 2/Tourser_Lf_up_2
+bounds:2454,559,217,356
+offsets:1,1,219,358
+rotate:90
+man 2/Tourser_Rt_dwn_2
+bounds:3199,577,165,190
+man 2/Tourser_Rt_up_2
+bounds:1701,397,165,303
+offsets:2,1,168,305
+rotate:90
+man 3/Anvil_3
+bounds:2,27,622,393
+offsets:1,1,624,395
+man 3/Apron_3
+bounds:2387,182,195,216
+man 3/Belt_3
+bounds:909,41,379,158
+offsets:2,1,383,165
+rotate:90
+man 3/Body_3
+bounds:850,1286,474,581
+offsets:1,1,476,583
+man 3/Crack_3
+bounds:626,12,408,281
+offsets:2,2,412,304
+rotate:90
+man 3/Fingers_Rt_3
+bounds:3319,398,177,154
+offsets:1,2,179,158
+rotate:90
+man 3/Fingers_Rt_3_TAP
+bounds:3136,390,181,185
+offsets:1,1,183,188
+man 3/Glove_Lf_1_3
+bounds:1657,27,197,219
+offsets:1,3,199,223
+rotate:90
+man 3/Glove_Rf_1_3
+bounds:3414,53,169,166
+offsets:1,1,171,168
+rotate:90
+man 3/Glowe_Lf_2_3
+bounds:3296,1015,176,259
+offsets:1,1,178,261
+man 3/Glowe_Rt_2_3
+bounds:2430,2,162,178
+offsets:2,1,165,180
+man 3/Hammer_3
+bounds:1326,1292,412,575
+offsets:1,2,414,578
+man 3/Hammer_TAP_3
+bounds:1049,727,557,325
+offsets:1,0,559,325
+rotate:90
+man 3/Hand_Lf_3
+bounds:2594,2,139,186
+offsets:1,1,141,188
+man 3/Hand_Rt_3
+bounds:3217,214,184,174
+offsets:1,1,186,176
+man 3/Light_Apron_3
+bounds:3475,759,52,134
+offsets:2,2,71,151
+rotate:90
+man 3/Light_Belt_3
+bounds:3474,979,75,135
+offsets:2,2,93,138
+rotate:90
+man 3/Light_Fingers_Rt_3
+bounds:3730,48,73,57
+offsets:1,3,86,68
+man 3/Light_Glove_Rt_3
+bounds:3289,801,100,95
+offsets:1,1,118,154
+rotate:90
+man 3/Light_Hammer_3
+bounds:3645,618,127,148
+offsets:1,2,163,198
+man 3/Light_Hand_Rt_3
+bounds:2826,2,63,46
+offsets:3,3,88,68
+man 3/Light_Shoes_Rt_3
+bounds:3678,297,117,117
+offsets:1,7,136,129
+man 3/Light_Shoulder_Rt_3
+bounds:1334,447,76,56
+offsets:51,10,131,129
+man 3/Light_Sleeve_Rt_3
+bounds:3289,903,108,83
+offsets:2,2,113,117
+rotate:90
+man 3/Light_Tourser_Rt_3
+bounds:3730,1471,45,193
+offsets:1,7,52,268
+man 3/Light_big_ye
+bounds:2,422,746,784
+offsets:0,46,800,830
+man 3/Light_body_3
+bounds:850,1215,69,196
+offsets:18,67,100,298
+rotate:90
+man 3/Shoes_Lf_3
+bounds:1294,2,160,183
+offsets:1,1,162,186
+rotate:90
+man 3/Shoes_Rt_3
+bounds:3146,769,242,141
+offsets:2,1,246,144
+rotate:90
+man 3/Shoulder_Lf_3_1
+bounds:2869,980,244,292
+offsets:1,1,246,294
+man 3/Shoulder_Lf_up_3_2
+bounds:2017,530,309,306
+offsets:1,1,311,309
+man 3/Shoulder_Rt_3
+bounds:1463,249,254,204
+offsets:1,3,256,208
+rotate:90
+man 3/Sleeve_Lf_3
+bounds:3513,597,160,130
+offsets:1,2,162,133
+rotate:90
+man 3/Sleeve_Rt_3
+bounds:3711,1281,113,165
+man 3/Tourser_Lf_dwn_3
+bounds:1940,163,176,268
+offsets:2,1,181,270
+rotate:90
+man 3/Tourser_Lf_up_3_1
+bounds:2006,341,187,285
+offsets:1,1,189,287
+rotate:90
+man 3/Tourser_Lf_up_3_2
+bounds:1479,34,176,213
+offsets:1,1,178,215
+man 3/Tourser_Rt_dwn_3
+bounds:2454,400,157,229
+offsets:1,1,160,231
+rotate:90
+man 3/Tourser_Rt_up_3_1
+bounds:1049,551,174,319
+offsets:1,1,176,321
+rotate:90
+man 3/Tourser_Rt_up_3_2
+bounds:3746,1666,79,164
+offsets:2,2,82,167
