@@ -24,13 +24,14 @@ namespace WattsTap.Game.SpineView
         [SpineAnimation] [SerializeField] private string _hitAnimation = "Hit";
 
         [Header("Skin")]
-        [SpineSkin] [SerializeField] private string _defaultSkin = "default";
+        [SpineSkin] [SerializeField] private string _bodySkin = "skin 1";
 
         [Header("Settings")]
         [SerializeField] private bool _playIdleOnStart = true;
         [SerializeField] private bool _loopIdle = true;
 
         private SkeletonAnimation _skeletonAnimation;
+        private const string BaseSkinName = "default";
 
         public Skeleton Skeleton => _skeletonAnimation?.Skeleton;
         public Spine.AnimationState AnimationState => _skeletonAnimation?.AnimationState;
@@ -44,12 +45,16 @@ namespace WattsTap.Game.SpineView
             if (_skeletonAnimation == null)
             {
                 Debug.LogError("[BlacksmithSpineController] No SkeletonAnimation found on this GameObject!", this);
+                return;
             }
+
+            // Force initialize so Skeleton and AnimationState are ready before Start
+            _skeletonAnimation.Initialize(false);
         }
 
         private void Start()
         {
-            SetSkin(_defaultSkin);
+            SetSkin(_bodySkin);
 
             if (_playIdleOnStart)
             {
@@ -100,23 +105,35 @@ namespace WattsTap.Game.SpineView
         }
 
         /// <summary>
-        /// Switch the skin at runtime.
-        /// Available skins: "default", "skin 1", "skin 2", "skin 3".
+        /// Switch the body skin at runtime.
+        /// The "default" skin (head/face) is always included as a base.
+        /// Available body skins: "skin 1", "skin 2", "skin 3".
         /// </summary>
-        public void SetSkin(string skinName)
+        public void SetSkin(string bodySkinName)
         {
             var skeleton = Skeleton;
             if (skeleton == null) return;
 
-            var skin = skeleton.Data.FindSkin(skinName);
-            if (skin == null)
+            var baseSkin = skeleton.Data.FindSkin(BaseSkinName);
+            var bodySkin = skeleton.Data.FindSkin(bodySkinName);
+
+            if (bodySkin == null)
             {
-                Debug.LogWarning($"[BlacksmithSpineController] Skin '{skinName}' not found!", this);
+                Debug.LogWarning($"[BlacksmithSpineController] Skin '{bodySkinName}' not found!", this);
                 return;
             }
 
-            skeleton.SetSkin(skin);
+            // Combine base skin (head/face — 25 slots) + body skin (clothes/body — 36 slots)
+            var combinedSkin = new Skin("combined");
+            if (baseSkin != null)
+                combinedSkin.AddSkin(baseSkin);
+            combinedSkin.AddSkin(bodySkin);
+
+            skeleton.SetSkin(combinedSkin);
             skeleton.SetupPoseSlots();
+            
+            // Re-apply current animation so attachments from the new skin are used immediately
+            AnimationState?.Apply(skeleton);
         }
 
         /// <summary>

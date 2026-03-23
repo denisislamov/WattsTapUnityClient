@@ -441,7 +441,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3490013820963098387
 RectTransform:
   m_ObjectHideFlags: 0
@@ -476,7 +476,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1740711760039721339}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -533,6 +533,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf364d6e9da94b2891768ba6cc01f2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: WattsTapGame::WattsTap.Scripts.Game.Tap.Runtime.TapUIView
+  spineController: {fileID: 5768581497757319775}
+  hitParticles: {fileID: 5573234326137694542}
+  oldEffectsToDisable:
+  - {fileID: 2432408681725846169}
   animator: {fileID: 1062464096672898414}
 --- !u!1 &1790122410760270625
 GameObject:
@@ -6073,6 +6077,22 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8146137678117043101, guid: ac7be4934bcf08244b2db6abdf41bf0c, type: 3}
   m_PrefabInstance: {fileID: 7200143987731792497}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &5573234326137694542 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 3365341039963958079, guid: ac7be4934bcf08244b2db6abdf41bf0c, type: 3}
+  m_PrefabInstance: {fileID: 7200143987731792497}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5768581497757319775 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3738570981767921710, guid: ac7be4934bcf08244b2db6abdf41bf0c, type: 3}
+  m_PrefabInstance: {fileID: 7200143987731792497}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ca9dba6aae646e79eedf6988f01f062, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: WattsTapGame::WattsTap.Game.SpineView.BlacksmithSpineController
 --- !u!1001 &7364269707454803496
 PrefabInstance:
   m_ObjectHideFlags: 0

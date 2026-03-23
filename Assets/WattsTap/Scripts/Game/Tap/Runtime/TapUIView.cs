@@ -1,15 +1,25 @@
 using UnityEngine;
 using WattsTap.Core;
 using WattsTap.Core.GameLoop;
+using WattsTap.Game.SpineView;
 using WattsTap.Game.Tap.Services;
 
 namespace WattsTap.Scripts.Game.Tap.Runtime
 {
     public class TapUIView : MonoBehaviour, IUpdatable
     {
-        [SerializeField] private Animator animator;
+        [Header("Spine Animation")]
+        [SerializeField] private BlacksmithSpineController spineController;
         
-        private static readonly int TapHash = Animator.StringToHash("Tap");
+        [Header("Hit Particles")]
+        [SerializeField] private ParticleSystem hitParticles;
+        
+        [Header("Old Effects (will be disabled)")]
+        [Tooltip("Old coin particles — will be disabled on Start")]
+        [SerializeField] private GameObject[] oldEffectsToDisable;
+
+        [Header("Legacy (unused)")]
+        [SerializeField] private Animator animator;
 
         private ITapControllerService _tapControllerService;
         private IUpdateService _updateService;
@@ -17,9 +27,24 @@ namespace WattsTap.Scripts.Game.Tap.Runtime
         private bool _isTapping;
         private float _tapCooldown;
         private const float TapCooldownDuration = 0.5f;
+        
+        private ParticleSystem[] _cachedHitParticles;
 
         private void Start()
         {
+            // Disable old coin particle effects
+            if (oldEffectsToDisable != null)
+            {
+                foreach (var obj in oldEffectsToDisable)
+                {
+                    if (obj != null)
+                        obj.SetActive(false);
+                }
+            }
+            
+            if (hitParticles != null)
+                _cachedHitParticles = hitParticles.GetComponentsInChildren<ParticleSystem>(true);
+            
             _tapControllerService = ServiceLocator.Get<ITapControllerService>();
             
             if (_tapControllerService != null)
@@ -55,38 +80,35 @@ namespace WattsTap.Scripts.Game.Tap.Runtime
                 
                 if (_tapCooldown <= 0 && _isTapping)
                 {
-                    Debug.Log($"[TapUIView] Stopping animation (SetBool false)");
                     _isTapping = false;
-                    SetTapAnimation(false);
+                    // Spine controller auto-returns to Idle after Hit, no extra action needed
                 }
             }
         }
 
-        private void OnTap(Vector2 screenPos, int i)
+        private void OnTap(Vector2 screenPos, int coinsEarned)
         {
-            // Only start animation if not already tapping
-            // This prevents animation from restarting on each tap
-            bool wasAlreadyTapping = _isTapping;
-            
-            Debug.Log($"[TapUIView] OnTap called. wasAlreadyTapping={wasAlreadyTapping}, instanceId={GetInstanceID()}");
-            
             _isTapping = true;
             _tapCooldown = TapCooldownDuration;
             
-            // Only set animation to true when starting a new tap sequence
-            // Subsequent taps just reset the cooldown without restarting animation
-            if (!wasAlreadyTapping)
+            // Play Spine Hit animation (auto-returns to Idle on complete)
+            if (spineController != null)
             {
-                Debug.Log($"[TapUIView] Starting animation (SetBool true)");
-                SetTapAnimation(true);
+                spineController.PlayHit();
             }
+            
+            // Play hit particle effect
+            PlayHitParticles();
         }
 
-        private void SetTapAnimation(bool isTapping)
+        private void PlayHitParticles()
         {
-            if (animator != null)
+            if (_cachedHitParticles == null) return;
+            
+            foreach (var ps in _cachedHitParticles)
             {
-                animator.SetBool(TapHash, isTapping);
+                ps.Stop(false, ParticleSystemStopBehavior.StopEmittingAndClear);
+                ps.Play(false);
             }
         }
     }
