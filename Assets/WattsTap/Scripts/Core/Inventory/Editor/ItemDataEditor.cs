@@ -306,6 +306,8 @@ namespace WattsTap.Core.Inventory.Editor
                     return new Color(0.3f, 0.5f, 1f);   // Blue
                 case ItemRarity.Epic:
                     return new Color(0.7f, 0.3f, 1f);   // Purple
+                case ItemRarity.Legendary:
+                    return new Color(1f, 0.75f, 0.15f);  // Gold
                 default:
                     return Color.white;
             }
@@ -319,6 +321,7 @@ namespace WattsTap.Core.Inventory.Editor
                 case ItemRarity.Uncommon: return "◆";
                 case ItemRarity.Rare:     return "★";
                 case ItemRarity.Epic:     return "✦";
+                case ItemRarity.Legendary: return "♛";
                 default:                  return "○";
             }
         }
