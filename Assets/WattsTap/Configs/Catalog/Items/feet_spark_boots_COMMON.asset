@@ -39,5 +39,5 @@ MonoBehaviour:
     ValuePercent: 0
   _bonuses: []
   _requiredLevel: 1
-  _icon: {fileID: 21300000, guid: d7f8c2997c84d4c3892440c8e707c76b, type: 3}
+  _icon: {fileID: 21300000, guid: b10cd010b3e01432fa3285fb3e0a379f, type: 3}
   _perTapBonus: 0.1

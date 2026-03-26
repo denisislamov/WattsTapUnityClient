@@ -89,5 +89,5 @@ MonoBehaviour:
     ValuePercent: 10
     Description: Profit per tap 10 %
   _requiredLevel: 1
-  _icon: {fileID: 21300000, guid: 426f8daa1a1d049ffa2460edd2461d8a, type: 3}
+  _icon: {fileID: 21300000, guid: 8a4d0021b99f6418d9ab3101484811e1, type: 3}
   _perTapBonus: 0

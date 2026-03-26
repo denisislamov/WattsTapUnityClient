@@ -74,5 +74,5 @@ MonoBehaviour:
     ValuePercent: 5
     Description: Recovers 1 Hit faster on 5 %
   _requiredLevel: 1
-  _icon: {fileID: 21300000, guid: 21d337a87d5c649558936ff123866ce7, type: 3}
+  _icon: {fileID: 21300000, guid: f2f64daf2567f4aef91ac3c7603b1d7c, type: 3}
   _perTapBonus: 0

@@ -88,5 +88,5 @@ MonoBehaviour:
     ValuePercent: 5
     Description: Multiplier crit + 5%
   _requiredLevel: 1
-  _icon: {fileID: 21300000, guid: e77b33235169f48c8beb3dbdbd746754, type: 3}
+  _icon: {fileID: 21300000, guid: ade36bcfeaaef4642a9e9200ef727f4c, type: 3}
   _perTapBonus: 1.5

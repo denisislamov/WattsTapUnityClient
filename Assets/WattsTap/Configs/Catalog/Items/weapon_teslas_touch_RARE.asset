@@ -73,5 +73,5 @@ MonoBehaviour:
     ValuePercent: 3
     Description: Multiplier crit + 3%
   _requiredLevel: 1
-  _icon: {fileID: 21300000, guid: 947f2ec6419644f1ea64801abd076721, type: 3}
+  _icon: {fileID: 21300000, guid: 9219b9e7905774a159e9f3fd136e1bc9, type: 3}
   _perTapBonus: 1.07

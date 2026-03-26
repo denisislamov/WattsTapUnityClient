@@ -74,5 +74,5 @@ MonoBehaviour:
     ValuePercent: 5
     Description: Offline Bonus + 5 %
   _requiredLevel: 1
-  _icon: {fileID: 21300000, guid: 58f2f3fd7b55548d0be5b2f0640bab14, type: 3}
+  _icon: {fileID: 21300000, guid: c2e7950010cfb43a99f36dc1c98fff22, type: 3}
   _perTapBonus: 0.7
