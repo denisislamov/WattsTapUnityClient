@@ -1,6 +1,9 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using WattsTap.Core;
+using WattsTap.Core.API;
 using WattsTap.Core.Inventory;
 using WattsTap.Core.React;
 using WattsTap.Core.UI;
@@ -15,6 +18,7 @@ namespace WattsTap.Game.UI
         public ReactiveProperty<int> HitsMax { get; private set; }
         public ReactiveProperty<int> CoinsPerTap { get; private set; }
         public ReactiveProperty<float> TotalEquipmentBonus { get; private set; }
+        public ReactiveProperty<bool> IsRefreshing { get; private set; }
         
         private IPlayerService _playerService;
         private ITapControllerService _tapController;
@@ -30,6 +34,7 @@ namespace WattsTap.Game.UI
             HitsMax = new ReactiveProperty<int>(0);
             CoinsPerTap = new ReactiveProperty<int>(1);
             TotalEquipmentBonus = new ReactiveProperty<float>(0f);
+            IsRefreshing = new ReactiveProperty<bool>(false);
             
             _playerService = ServiceLocator.Get<IPlayerService>();
             _tapController = ServiceLocator.Get<ITapControllerService>();
@@ -134,6 +139,45 @@ namespace WattsTap.Game.UI
             return _inventoryService?.UnequipItem(instanceId) ?? false;
         }
 
+        /// <summary>
+        /// Refresh inventory from server. Uses InventoryService.TryLoadFromServer
+        /// which replaces local data on success and fires OnInventoryLoaded.
+        /// </summary>
+        public IEnumerator RefreshFromServer(Action<bool> onComplete = null)
+        {
+            if (_inventoryService is not InventoryService invService)
+            {
+                Debug.LogWarning("[InventoryScreenUIModel] InventoryService not available for server refresh");
+                onComplete?.Invoke(false);
+                yield break;
+            }
+
+            if (!ServiceLocator.TryGet<ICoreServerService>(out var coreService) || !coreService.IsAuthenticated)
+            {
+                Debug.LogWarning("[InventoryScreenUIModel] Not authenticated — skipping server refresh");
+                onComplete?.Invoke(false);
+                yield break;
+            }
+
+            IsRefreshing.Value = true;
+            Debug.Log("<color=#00AAFF>[InventoryScreenUIModel] Refreshing inventory from server...</color>");
+
+            yield return invService.TryLoadFromServer(success =>
+            {
+                IsRefreshing.Value = false;
+                if (success)
+                {
+                    RecalculateTotalBonus();
+                    Debug.Log("<color=#00FF00>[InventoryScreenUIModel] Inventory refreshed from server</color>");
+                }
+                else
+                {
+                    Debug.LogWarning("[InventoryScreenUIModel] Server refresh failed — keeping local data");
+                }
+                onComplete?.Invoke(success);
+            });
+        }
+
         public override void Dispose()
         {
             if (_tapController != null)
@@ -156,6 +200,7 @@ namespace WattsTap.Game.UI
             HitsMax?.Dispose();
             CoinsPerTap?.Dispose();
             TotalEquipmentBonus?.Dispose();
+            IsRefreshing?.Dispose();
             
             base.Dispose();
         }

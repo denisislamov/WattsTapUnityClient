@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using WattsTap.Core.API;
 using WattsTap.Core.Configs;
+using WattsTap.Core.Configs.CoreServer;
 
 namespace WattsTap.Core.Inventory
 {
@@ -276,6 +277,12 @@ namespace WattsTap.Core.Inventory
                 yield break;
             }
 
+            // Log CURL equivalent
+            var baseUrl = GetBaseUrlForLog();
+            var token = coreServer.AuthToken;
+            Debug.Log($"<color=#FFA500>[CURL] curl -X GET '{baseUrl}/game/inventory' \\\n" +
+                      $"  -H 'Authorization: Bearer {token}'</color>");
+
             bool done = false;
             bool success = false;
 
@@ -284,18 +291,23 @@ namespace WattsTap.Core.Inventory
                 {
                     if (response != null)
                     {
+                        var responseJson = JsonUtility.ToJson(response, true);
+                        Debug.Log($"<color=#00FF00>[CURL] ← Response (Get Inventory):\n{responseJson}</color>");
+
                         ApplyServerInventory(response);
                         success = true;
                         Debug.Log($"<color=#00FF00>[InventoryService] Loaded {_items.Count} items from server (coins={Coins})</color>");
                     }
                     else
                     {
+                        Debug.LogWarning("[CURL] ← Response (Get Inventory): null");
                         Debug.LogWarning("[InventoryService] Server returned null inventory. Keeping local data.");
                     }
                     done = true;
                 },
                 error =>
                 {
+                    Debug.LogError($"[CURL] ← Error (Get Inventory): {error}");
                     Debug.LogError($"[InventoryService] Failed to load inventory from server: {error}");
                     done = true;
                 });
@@ -336,6 +348,20 @@ namespace WattsTap.Core.Inventory
 
             IsServerData = true;
             OnInventoryLoaded?.Invoke();
+        }
+
+        private string GetBaseUrlForLog()
+        {
+            if (ServiceLocator.TryGet<IConfigService>(out var configService))
+            {
+                try
+                {
+                    var cfg = configService.GetConfig<CoreServerConfig>("CoreServerConfig");
+                    if (cfg != null) return cfg.BaseUrl;
+                }
+                catch { /* fallback */ }
+            }
+            return "https://api-dev.wattstap.energy";
         }
     }
 }

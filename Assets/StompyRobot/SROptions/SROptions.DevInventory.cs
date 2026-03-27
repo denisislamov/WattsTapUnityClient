@@ -5,6 +5,8 @@ using SRDebugger;
 using UnityEngine;
 using WattsTap.Core;
 using WattsTap.Core.API;
+using WattsTap.Core.Configs;
+using WattsTap.Core.Configs.CoreServer;
 using WattsTap.Core.Inventory;
 
 public partial class SROptions
@@ -161,14 +163,29 @@ public partial class SROptions
 
     private IEnumerator DevGrantItemCoroutine(ICoreServerService coreService, string itemVariantId, int level)
     {
+        // Build and log CURL equivalent
+        var baseUrl = GetCoreServerBaseUrl();
+        var token = coreService.AuthToken;
+        var jsonBody = UnityEngine.JsonUtility.ToJson(
+            new WattsTap.Core.API.DevInventoryGrantRequest { itemVariantId = itemVariantId, level = level });
+        var endpoint = "/game/dev/inventory/grant";
+        
+        Debug.Log($"<color=#FFA500>[CURL] curl -X POST '{baseUrl}{endpoint}' \\\n" +
+                  $"  -H 'Content-Type: application/json' \\\n" +
+                  $"  -H 'Authorization: Bearer {token}' \\\n" +
+                  $"  -d '{jsonBody}'</color>");
+
         yield return coreService.DevGrantInventoryItem(
             itemVariantId, level,
             onSuccess: response =>
             {
+                var responseJson = UnityEngine.JsonUtility.ToJson(response, true);
+                Debug.Log($"<color=#00FF00>[CURL] ← Response (Grant Item):\n{responseJson}</color>");
                 Debug.Log($"<color=#00FF00>[SROptions] Item granted! playerItemId={response.playerItemId}, variantId={response.itemVariantId}, level={response.level}</color>");
             },
             onError: error =>
             {
+                Debug.LogError($"[CURL] ← Error (Grant Item): {error}");
                 Debug.LogError($"[SROptions] Failed to grant item: {error}");
             }
         );
@@ -176,13 +193,24 @@ public partial class SROptions
 
     private IEnumerator DevReloadInventoryCoroutine(ICoreServerService coreService)
     {
+        // Build and log CURL equivalent
+        var baseUrl = GetCoreServerBaseUrl();
+        var token = coreService.AuthToken;
+        var endpoint = "/game/inventory";
+
+        Debug.Log($"<color=#FFA500>[CURL] curl -X GET '{baseUrl}{endpoint}' \\\n" +
+                  $"  -H 'Authorization: Bearer {token}'</color>");
+
         yield return coreService.GetInventory(
             onSuccess: response =>
             {
+                var responseJson = UnityEngine.JsonUtility.ToJson(response, true);
+                Debug.Log($"<color=#00FF00>[CURL] ← Response (Get Inventory):\n{responseJson}</color>");
                 Debug.Log($"<color=#00FF00>[SROptions] Inventory reloaded: {response.inventory?.Count ?? 0} items</color>");
             },
             onError: error =>
             {
+                Debug.LogError($"[CURL] ← Error (Get Inventory): {error}");
                 Debug.LogError($"[SROptions] Failed to reload inventory: {error}");
             }
         );
@@ -205,6 +233,20 @@ public partial class SROptions
         }
 
         return _cachedVariantIds;
+    }
+
+    private string GetCoreServerBaseUrl()
+    {
+        if (ServiceLocator.TryGet<IConfigService>(out var configService))
+        {
+            try
+            {
+                var cfg = configService.GetConfig<CoreServerConfig>("CoreServerConfig");
+                if (cfg != null) return cfg.BaseUrl;
+            }
+            catch { /* fallback */ }
+        }
+        return "https://api-dev.wattstap.energy";
     }
 
     #endregion

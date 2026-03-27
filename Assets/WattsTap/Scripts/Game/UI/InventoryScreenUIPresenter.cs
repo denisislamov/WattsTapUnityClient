@@ -1,3 +1,4 @@
+using UnityEngine;
 using WattsTap.Constants;
 using WattsTap.Core;
 using WattsTap.Core.Inventory;
@@ -11,6 +12,7 @@ namespace WattsTap.Game.UI
     {
         private IUIService _uiService;
         private IHapticFeedbackService _hapticService;
+        private Coroutine _refreshCoroutine;
 
         protected override void OnInit()
         {
@@ -28,11 +30,18 @@ namespace WattsTap.Game.UI
             View.UpdateCoinsPerTap(Model.CoinsPerTap.Value);
             View.UpdateTotalBonus(Model.TotalEquipmentBonus.Value);
             
-            // Populate inventory
+            // Show cached inventory immediately (so UI is not blank)
             PopulateInventory();
-            
-            // Initialize equipment slots
             InitializeEquipmentSlots();
+
+            // Subscribe to inventory reload event (fires when server data arrives)
+            if (Model.InventoryService != null)
+            {
+                Model.InventoryService.OnInventoryLoaded += OnInventoryRefreshed;
+            }
+
+            // Refresh inventory from server in background
+            _refreshCoroutine = ((MonoBehaviour)View).StartCoroutine(Model.RefreshFromServer());
 
             // Subscribe to view events
             View.OnItemDoubleClicked += OnItemDoubleClicked;
@@ -106,6 +115,17 @@ namespace WattsTap.Game.UI
         private void OnTotalBonusChanged(float value)
         {
             View.UpdateTotalBonus(value);
+        }
+        
+        /// <summary>
+        /// Called when InventoryService finishes loading data from server.
+        /// Re-populates the entire inventory UI with fresh data.
+        /// </summary>
+        private void OnInventoryRefreshed()
+        {
+            Debug.Log("<color=#00AAFF>[InventoryScreenUIPresenter] Server data arrived — refreshing UI</color>");
+            PopulateInventory();
+            InitializeEquipmentSlots();
         }
         
         #endregion
@@ -218,6 +238,19 @@ namespace WattsTap.Game.UI
 
         protected override void OnDispose()
         {
+            // Stop pending server refresh
+            if (_refreshCoroutine != null && View is MonoBehaviour mb && mb != null)
+            {
+                mb.StopCoroutine(_refreshCoroutine);
+                _refreshCoroutine = null;
+            }
+
+            // Unsubscribe from inventory server reload
+            if (Model?.InventoryService != null)
+            {
+                Model.InventoryService.OnInventoryLoaded -= OnInventoryRefreshed;
+            }
+
             // Unsubscribe from model changes
             if (Model != null)
             {
