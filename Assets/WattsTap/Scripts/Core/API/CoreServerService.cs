@@ -410,6 +410,34 @@ namespace WattsTap.Core.API
 
         #endregion
 
+        #region Dev (non-production)
+
+        public IEnumerator DevAddResources(int watts, int xp,
+            Action<DevAddResourcesResponse> onSuccess, Action<string> onError)
+        {
+            var req = new DevAddResourcesRequest { watts = watts, xp = xp };
+            yield return AuthenticatedPost<DevAddResourcesResponse>(
+                Cfg.DevAddResources, JsonUtility.ToJson(req), onSuccess, onError);
+        }
+
+        public IEnumerator DevGrantInventoryItem(string itemVariantId, int level,
+            Action<DevInventoryGrantResponse> onSuccess, Action<string> onError)
+        {
+            var req = new DevInventoryGrantRequest { itemVariantId = itemVariantId, level = level };
+            yield return AuthenticatedPost<DevInventoryGrantResponse>(
+                Cfg.DevInventoryGrant, JsonUtility.ToJson(req), onSuccess, onError);
+        }
+
+        public IEnumerator DevGrantBooster(string code,
+            Action<DevBoosterGrantResponse> onSuccess, Action<string> onError)
+        {
+            var req = new DevBoosterGrantRequest { code = code };
+            yield return AuthenticatedPost<DevBoosterGrantResponse>(
+                Cfg.DevBoostersGrant, JsonUtility.ToJson(req), onSuccess, onError);
+        }
+
+        #endregion
+
         #region Generic Request Helpers
 
         /// <summary>

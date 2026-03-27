@@ -94,42 +94,72 @@ public partial class SROptions
 
     private void SendAddResources(int watts, int xp)
     {
+        // Try new Core Server first (POST /dev/add-resources on api-dev.wattstap.energy)
+        if (ServiceLocator.TryGet<ICoreServerService>(out var coreService) && coreService.IsAuthenticated)
+        {
+            var runner = GetCoroutineRunner();
+            if (runner == null)
+            {
+                Debug.LogError("[SROptions] No MonoBehaviour available to run coroutine");
+                return;
+            }
+
+            Debug.Log($"<color=#FF00FF>[SROptions] Sending dev/add-resources via CoreServer: watts={watts}, xp={xp}</color>");
+            runner.StartCoroutine(AddResourcesCoreCoroutine(coreService, watts, xp));
+            return;
+        }
+
 #if OLD_SERVER
-        if (!ServiceLocator.TryGet<IReferralAPIService>(out var apiService))
+        // Fallback to legacy server
+        if (ServiceLocator.TryGet<IReferralAPIService>(out var apiService) && apiService.IsAuthenticated)
         {
-            Debug.LogError("[SROptions] IReferralAPIService not found");
+            var runner = GetCoroutineRunner();
+            if (runner == null)
+            {
+                Debug.LogError("[SROptions] No MonoBehaviour available to run coroutine");
+                return;
+            }
+
+            var request = new AddResourcesRequest { watts = watts, xp = xp };
+            Debug.Log($"<color=#FF00FF>[SROptions] Sending add-resources via legacy: watts={watts}, xp={xp}</color>");
+            runner.StartCoroutine(AddResourcesLegacyCoroutine(apiService, request));
             return;
         }
-
-        if (!apiService.IsAuthenticated)
-        {
-            Debug.LogError("[SROptions] Not authenticated — cannot add resources");
-            return;
-        }
-
-        var runner = GetCoroutineRunner();
-        if (runner == null)
-        {
-            Debug.LogError("[SROptions] No MonoBehaviour available to run coroutine");
-            return;
-        }
-
-        var request = new AddResourcesRequest
-        {
-            watts = watts,
-            xp = xp
-        };
-
-        Debug.Log($"<color=#FF00FF>[SROptions] Sending add-resources: watts={watts}, xp={xp}</color>");
-
-        runner.StartCoroutine(AddResourcesCoroutine(apiService, request));
-#else
-        Debug.LogWarning("[SROptions] AddResources debug endpoint is only available with OLD_SERVER define");
 #endif
+
+        Debug.LogError("[SROptions] Not authenticated — cannot add resources");
+    }
+
+    private IEnumerator AddResourcesCoreCoroutine(ICoreServerService coreService, int watts, int xp)
+    {
+        yield return coreService.DevAddResources(
+            watts, xp,
+            onSuccess: response =>
+            {
+                Debug.Log($"<color=#00FF00>[SROptions] Resources added via CoreServer: {response.message}</color>");
+                Debug.Log($"<color=#00FF00>[SROptions] Added watts={response.addedWatts}, xp={response.addedXp}</color>");
+
+                // Update local player data from server response
+                if (response.progress != null && ServiceLocator.TryGet<IPlayerService>(out var playerService))
+                {
+                    playerService.LoadFromServer(
+                        response.progress.level,
+                        response.progress.watts,
+                        response.progress.currentXp,
+                        response.progress.totalXp
+                    );
+                    Debug.Log($"<color=#00FF00>[SROptions] Local player data synced from server</color>");
+                }
+            },
+            onError: error =>
+            {
+                Debug.LogError($"[SROptions] Failed to add resources via CoreServer: {error}");
+            }
+        );
     }
 
 #if OLD_SERVER
-    private IEnumerator AddResourcesCoroutine(IReferralAPIService apiService, AddResourcesRequest request)
+    private IEnumerator AddResourcesLegacyCoroutine(IReferralAPIService apiService, AddResourcesRequest request)
     {
         yield return apiService.AddResources(
             request,
@@ -169,3 +199,5 @@ public partial class SROptions
 
     #endregion
 }
+
+

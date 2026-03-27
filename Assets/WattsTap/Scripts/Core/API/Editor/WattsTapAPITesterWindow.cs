@@ -33,10 +33,13 @@ namespace WattsTap.Core.API.Editor
             Progress,
             Social,
             Avatars,
+            Boosters,
+            Chests,
             Items,
             Inventory,
             Wallet,
-            User
+            User,
+            Dev
         }
 
         #endregion
@@ -89,6 +92,24 @@ namespace WattsTap.Core.API.Editor
         private string _eventIds = "";
         private string _referralApplyCode = "";
         private string _referralApplySource = "miniapp";
+
+        // Boosters
+        private string _boosterUseId = "";
+        private string _boosterPurchaseCode = "";
+
+        // Chests
+        private string _chestOpenType = "";
+        private string _chestOpenRequestId = "";
+        private string _chestPurchaseType = "";
+        private int _chestPurchaseQuantity = 1;
+        private string _chestPurchaseRequestId = "";
+
+        // Dev
+        private int _devAddWatts = 1000;
+        private int _devAddXp = 500;
+        private string _devGrantItemVariantId = "";
+        private int _devGrantItemLevel = 1;
+        private string _devGrantBoosterCode = "";
 
         // Foldouts
         private bool _showResponseHeaders;
@@ -353,6 +374,12 @@ namespace WattsTap.Core.API.Editor
                 case ApiCategory.Avatars:
                     DrawAvatarsEndpoints();
                     break;
+                case ApiCategory.Boosters:
+                    DrawBoostersEndpoints();
+                    break;
+                case ApiCategory.Chests:
+                    DrawChestsEndpoints();
+                    break;
                 case ApiCategory.Items:
                     DrawItemsEndpoints();
                     break;
@@ -364,6 +391,9 @@ namespace WattsTap.Core.API.Editor
                     break;
                 case ApiCategory.User:
                     DrawUserEndpoints();
+                    break;
+                case ApiCategory.Dev:
+                    DrawDevEndpoints();
                     break;
             }
         }
@@ -802,6 +832,212 @@ namespace WattsTap.Core.API.Editor
                 string body = BuildEventsReadBody();
                 SendPostRequest("/user/events/read", body, true);
             }, () => BuildCurlPost("/user/events/read", BuildEventsReadBody(), true));
+            EditorGUILayout.EndVertical();
+        }
+
+        #endregion
+
+        #region New Endpoints (Boosters, Chests, Dev)
+
+        // ─── Boosters ───────────────────────────────────────────
+        private void DrawBoostersEndpoints()
+        {
+            DrawSectionHeader("Boosters");
+
+            // GET /game/boosters
+            DrawEndpointButton("GET", "/game/boosters", "Get boosters catalog, inventory and active boosters", () =>
+            {
+                SendGetRequest("/game/boosters", true);
+            });
+
+            EditorGUILayout.Space(4);
+
+            // POST /game/boosters/use
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            DrawEndpointLabel("POST", "/game/boosters/use", "Use owned booster");
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Player Booster ID", GUILayout.Width(120));
+            _boosterUseId = EditorGUILayout.TextField(_boosterUseId);
+            EditorGUILayout.EndHorizontal();
+
+            DrawSendButtonWithCurl("Use Booster", () =>
+            {
+                var body = $"{{\"playerBoosterId\":\"{EscapeJson(_boosterUseId)}\"}}";
+                SendPostRequest("/game/boosters/use", body, true);
+            }, () => BuildCurlPost("/game/boosters/use",
+                $"{{\"playerBoosterId\":\"{EscapeJson(_boosterUseId)}\"}}", true));
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.Space(4);
+
+            // POST /game/boosters/purchase
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            DrawEndpointLabel("POST", "/game/boosters/purchase", "Create booster purchase order");
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Booster Code", GUILayout.Width(120));
+            _boosterPurchaseCode = EditorGUILayout.TextField(_boosterPurchaseCode);
+            EditorGUILayout.EndHorizontal();
+
+            DrawSendButtonWithCurl("Purchase Booster", () =>
+            {
+                var body = $"{{\"boosterCode\":\"{EscapeJson(_boosterPurchaseCode)}\"}}";
+                SendPostRequest("/game/boosters/purchase", body, true);
+            }, () => BuildCurlPost("/game/boosters/purchase",
+                $"{{\"boosterCode\":\"{EscapeJson(_boosterPurchaseCode)}\"}}", true));
+            EditorGUILayout.EndVertical();
+        }
+
+        // ─── Chests ─────────────────────────────────────────────
+        private void DrawChestsEndpoints()
+        {
+            DrawSectionHeader("Chests");
+
+            // GET /game/chests/catalog
+            DrawEndpointButton("GET", "/game/chests/catalog", "Get chest catalog for current user", () =>
+            {
+                SendGetRequest("/game/chests/catalog", true);
+            });
+
+            EditorGUILayout.Space(4);
+
+            // GET /game/chests/state
+            DrawEndpointButton("GET", "/game/chests/state", "Get chest progress state", () =>
+            {
+                SendGetRequest("/game/chests/state", true);
+            });
+
+            EditorGUILayout.Space(4);
+
+            // POST /game/chests/open
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            DrawEndpointLabel("POST", "/game/chests/open", "Open chest from owned stock");
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Chest Type", GUILayout.Width(100));
+            _chestOpenType = EditorGUILayout.TextField(_chestOpenType);
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Request ID", GUILayout.Width(100));
+            _chestOpenRequestId = EditorGUILayout.TextField(_chestOpenRequestId);
+            if (GUILayout.Button("Gen", GUILayout.Width(40)))
+                _chestOpenRequestId = Guid.NewGuid().ToString();
+            EditorGUILayout.EndHorizontal();
+
+            DrawSendButtonWithCurl("Open Chest", () =>
+            {
+                var body = $"{{\"chestType\":\"{EscapeJson(_chestOpenType)}\",\"requestId\":\"{EscapeJson(_chestOpenRequestId)}\"}}";
+                SendPostRequest("/game/chests/open", body, true);
+            }, () => BuildCurlPost("/game/chests/open",
+                $"{{\"chestType\":\"{EscapeJson(_chestOpenType)}\",\"requestId\":\"{EscapeJson(_chestOpenRequestId)}\"}}", true));
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.Space(4);
+
+            // POST /game/chests/purchase
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            DrawEndpointLabel("POST", "/game/chests/purchase", "Create chest purchase order");
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Chest Type", GUILayout.Width(100));
+            _chestPurchaseType = EditorGUILayout.TextField(_chestPurchaseType);
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Quantity", GUILayout.Width(100));
+            _chestPurchaseQuantity = EditorGUILayout.IntSlider(_chestPurchaseQuantity, 1, 10);
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Request ID", GUILayout.Width(100));
+            _chestPurchaseRequestId = EditorGUILayout.TextField(_chestPurchaseRequestId);
+            if (GUILayout.Button("Gen", GUILayout.Width(40)))
+                _chestPurchaseRequestId = Guid.NewGuid().ToString();
+            EditorGUILayout.EndHorizontal();
+
+            DrawSendButtonWithCurl("Purchase Chest", () =>
+            {
+                var body = $"{{\"chestType\":\"{EscapeJson(_chestPurchaseType)}\",\"quantity\":{_chestPurchaseQuantity},\"requestId\":\"{EscapeJson(_chestPurchaseRequestId)}\"}}";
+                SendPostRequest("/game/chests/purchase", body, true);
+            }, () => BuildCurlPost("/game/chests/purchase",
+                $"{{\"chestType\":\"{EscapeJson(_chestPurchaseType)}\",\"quantity\":{_chestPurchaseQuantity},\"requestId\":\"{EscapeJson(_chestPurchaseRequestId)}\"}}", true));
+            EditorGUILayout.EndVertical();
+        }
+
+        // ─── Dev ─────────────────────────────────────────────────
+        private void DrawDevEndpoints()
+        {
+            DrawSectionHeader("Dev (non-production)");
+
+            EditorGUILayout.HelpBox("⚠ These endpoints only work on non-production servers.", MessageType.Warning);
+
+            EditorGUILayout.Space(4);
+
+            // POST /dev/add-resources
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            DrawEndpointLabel("POST", "/dev/add-resources", "Add watts and XP to current user");
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Watts", GUILayout.Width(100));
+            _devAddWatts = EditorGUILayout.IntField(_devAddWatts);
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("XP", GUILayout.Width(100));
+            _devAddXp = EditorGUILayout.IntField(_devAddXp);
+            EditorGUILayout.EndHorizontal();
+
+            DrawSendButtonWithCurl("Add Resources", () =>
+            {
+                var body = $"{{\"watts\":{_devAddWatts},\"xp\":{_devAddXp}}}";
+                SendPostRequest("/dev/add-resources", body, true);
+            }, () => BuildCurlPost("/dev/add-resources",
+                $"{{\"watts\":{_devAddWatts},\"xp\":{_devAddXp}}}", true));
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.Space(4);
+
+            // POST /game/dev/inventory/grant
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            DrawEndpointLabel("POST", "/game/dev/inventory/grant", "Grant inventory item to current user");
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Item Variant ID", GUILayout.Width(110));
+            _devGrantItemVariantId = EditorGUILayout.TextField(_devGrantItemVariantId);
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Level", GUILayout.Width(110));
+            _devGrantItemLevel = EditorGUILayout.IntSlider(_devGrantItemLevel, 1, 20);
+            EditorGUILayout.EndHorizontal();
+
+            DrawSendButtonWithCurl("Grant Item", () =>
+            {
+                var body = $"{{\"itemVariantId\":\"{EscapeJson(_devGrantItemVariantId)}\",\"level\":{_devGrantItemLevel}}}";
+                SendPostRequest("/game/dev/inventory/grant", body, true);
+            }, () => BuildCurlPost("/game/dev/inventory/grant",
+                $"{{\"itemVariantId\":\"{EscapeJson(_devGrantItemVariantId)}\",\"level\":{_devGrantItemLevel}}}", true));
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.Space(4);
+
+            // POST /game/dev/boosters/grant
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
+            DrawEndpointLabel("POST", "/game/dev/boosters/grant", "Grant booster to current user by code");
+
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Booster Code", GUILayout.Width(110));
+            _devGrantBoosterCode = EditorGUILayout.TextField(_devGrantBoosterCode);
+            EditorGUILayout.EndHorizontal();
+
+            DrawSendButtonWithCurl("Grant Booster", () =>
+            {
+                var body = $"{{\"code\":\"{EscapeJson(_devGrantBoosterCode)}\"}}";
+                SendPostRequest("/game/dev/boosters/grant", body, true);
+            }, () => BuildCurlPost("/game/dev/boosters/grant",
+                $"{{\"code\":\"{EscapeJson(_devGrantBoosterCode)}\"}}", true));
             EditorGUILayout.EndVertical();
         }
 

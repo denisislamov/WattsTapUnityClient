@@ -137,6 +137,22 @@ namespace WattsTap.Core.API
             Action<UpgradeItemResponse> onSuccess, Action<string> onError);
 
         #endregion
+
+        #region Dev (non-production)
+
+        /// <summary>Add watts and/or XP (dev only, uses /dev/add-resources)</summary>
+        IEnumerator DevAddResources(int watts, int xp,
+            Action<DevAddResourcesResponse> onSuccess, Action<string> onError);
+
+        /// <summary>Grant an inventory item (dev only, uses /game/dev/inventory/grant)</summary>
+        IEnumerator DevGrantInventoryItem(string itemVariantId, int level,
+            Action<DevInventoryGrantResponse> onSuccess, Action<string> onError);
+
+        /// <summary>Grant a booster by code (dev only, uses /game/dev/boosters/grant)</summary>
+        IEnumerator DevGrantBooster(string code,
+            Action<DevBoosterGrantResponse> onSuccess, Action<string> onError);
+
+        #endregion
     }
 }
 

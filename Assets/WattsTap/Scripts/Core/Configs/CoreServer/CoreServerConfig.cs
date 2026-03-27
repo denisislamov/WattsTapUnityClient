@@ -32,6 +32,10 @@ namespace WattsTap.Core.Configs.CoreServer
         [Range(1f, 30f)]
         public float TapSyncInterval = 3f;
 
+        [Header("Admin")]
+        [Tooltip("Admin token for /admin/* and /dev/* routes (non-production)")]
+        public string AdminToken = "";
+
         [Header("Debug")]
         [Tooltip("Enable verbose debug logging")]
         public bool DebugLogging = true;
@@ -79,14 +83,31 @@ namespace WattsTap.Core.Configs.CoreServer
         public string GameInventoryUnequip = "/game/inventory/unequip";
         public string GameInventoryUpgrade = "/game/inventory/upgrade";
 
+        [Header("Endpoints — Boosters")]
+        public string GameBoosters = "/game/boosters";
+        public string GameBoostersUse = "/game/boosters/use";
+        public string GameBoostersPurchase = "/game/boosters/purchase";
+
+        [Header("Endpoints — Chests")]
+        public string GameChestsCatalog = "/game/chests/catalog";
+        public string GameChestsState = "/game/chests/state";
+        public string GameChestsOpen = "/game/chests/open";
+        public string GameChestsPurchase = "/game/chests/purchase";
+
         [Header("Endpoints — Orders")]
         /// <summary>Use string.Format(OrderByIdFmt, orderId)</summary>
         public string OrderByIdFmt = "/orders/{0}";
+
+        [Header("Endpoints — Dev (non-production)")]
+        public string DevAddResources = "/dev/add-resources";
+        public string DevInventoryGrant = "/game/dev/inventory/grant";
+        public string DevBoostersGrant = "/game/dev/boosters/grant";
 
         // Helper methods
         public string GetFullUrl(string endpoint) => BaseUrl + endpoint;
         public string GetAvatarClaimUrl(string avatarId) => BaseUrl + string.Format(AvatarsClaimFmt, avatarId);
         public string GetOrderUrl(string orderId) => BaseUrl + string.Format(OrderByIdFmt, orderId);
+        public bool HasAdminToken => !string.IsNullOrEmpty(AdminToken);
     }
 }
 
