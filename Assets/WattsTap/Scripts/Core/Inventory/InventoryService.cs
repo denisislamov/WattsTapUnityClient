@@ -202,6 +202,10 @@ namespace WattsTap.Core.Inventory
 
             item.IsEquipped = true;
             OnItemEquipChanged?.Invoke(item, true);
+
+            // Sync with server (fire-and-forget)
+            SyncEquipToServer(instanceId);
+
             return true;
         }
 
@@ -209,8 +213,15 @@ namespace WattsTap.Core.Inventory
         {
             var item = GetItemByInstanceId(instanceId);
             if (item == null || !item.IsEquipped) return false;
+
+            var slotType = item.Data?.ItemType ?? ItemType.None;
+
             item.IsEquipped = false;
             OnItemEquipChanged?.Invoke(item, false);
+
+            // Sync with server (fire-and-forget)
+            SyncUnequipToServer(slotType);
+
             return true;
         }
 
@@ -362,6 +373,145 @@ namespace WattsTap.Core.Inventory
                 catch { /* fallback */ }
             }
             return "https://api-dev.wattstap.energy";
+        }
+
+        // ────────────────────────────────────────────
+        //  Server Sync: Equip / Unequip
+        // ────────────────────────────────────────────
+
+        private void SyncEquipToServer(string playerItemId)
+        {
+            if (!ServiceLocator.TryGet<ICoreServerService>(out var coreServer) || !coreServer.IsAuthenticated)
+            {
+                Debug.LogWarning("[InventoryService] Cannot sync equip to server: not authenticated.");
+                return;
+            }
+
+            var runner = CoroutineRunner.Instance;
+            if (runner == null)
+            {
+                Debug.LogWarning("[InventoryService] CoroutineRunner unavailable, skipping equip sync.");
+                return;
+            }
+
+            runner.StartCoroutine(SyncEquipCoroutine(coreServer, playerItemId));
+        }
+
+        private void SyncUnequipToServer(ItemType slotType)
+        {
+            if (!ServiceLocator.TryGet<ICoreServerService>(out var coreServer) || !coreServer.IsAuthenticated)
+            {
+                Debug.LogWarning("[InventoryService] Cannot sync unequip to server: not authenticated.");
+                return;
+            }
+
+            var runner = CoroutineRunner.Instance;
+            if (runner == null)
+            {
+                Debug.LogWarning("[InventoryService] CoroutineRunner unavailable, skipping unequip sync.");
+                return;
+            }
+
+            string serverSlot = slotType.ToServerSlot();
+            if (string.IsNullOrEmpty(serverSlot))
+            {
+                Debug.LogWarning($"[InventoryService] Cannot unequip: unknown slot type {slotType}");
+                return;
+            }
+
+            runner.StartCoroutine(SyncUnequipCoroutine(coreServer, serverSlot));
+        }
+
+        private IEnumerator SyncEquipCoroutine(ICoreServerService coreServer, string playerItemId)
+        {
+            var baseUrl = GetBaseUrlForLog();
+            var token = coreServer.AuthToken;
+            var jsonBody = JsonUtility.ToJson(new EquipItemRequest { playerItemId = playerItemId });
+
+            Debug.Log($"<color=#FFA500>[CURL] curl -X POST '{baseUrl}/game/inventory/equip' \\\n" +
+                      $"  -H 'Content-Type: application/json' \\\n" +
+                      $"  -H 'Authorization: Bearer {token}' \\\n" +
+                      $"  -d '{jsonBody}'</color>");
+
+            bool equipDone = false;
+            bool equipSuccess = false;
+
+            yield return coreServer.EquipItem(playerItemId,
+                onSuccess: response =>
+                {
+                    var responseJson = JsonUtility.ToJson(response, true);
+                    Debug.Log($"<color=#00FF00>[CURL] ← Response (Equip Item):\n{responseJson}</color>");
+                    Debug.Log($"<color=#00FF00>[InventoryService] Equip request accepted by server</color>");
+                    equipSuccess = true;
+                    equipDone = true;
+                },
+                onError: error =>
+                {
+                    Debug.LogError($"[CURL] ← Error (Equip Item): {error}");
+                    Debug.LogError($"[InventoryService] Failed to sync equip to server: {error}");
+                    equipDone = true;
+                });
+
+            yield return new WaitUntil(() => equipDone);
+
+            // After successful equip — reload full inventory from server for authoritative state
+            if (equipSuccess)
+            {
+                Debug.Log("<color=#00AAFF>[InventoryService] Equip OK → reloading full inventory from server...</color>");
+                yield return TryLoadFromServer(success =>
+                {
+                    if (success)
+                        Debug.Log($"<color=#00FF00>[InventoryService] Inventory reloaded after equip ({_items.Count} items)</color>");
+                    else
+                        Debug.LogWarning("[InventoryService] Failed to reload inventory after equip — local state may be stale");
+                });
+            }
+        }
+
+        private IEnumerator SyncUnequipCoroutine(ICoreServerService coreServer, string serverSlot)
+        {
+            var baseUrl = GetBaseUrlForLog();
+            var token = coreServer.AuthToken;
+            var jsonBody = JsonUtility.ToJson(new UnequipItemRequest { slot = serverSlot });
+
+            Debug.Log($"<color=#FFA500>[CURL] curl -X POST '{baseUrl}/game/inventory/unequip' \\\n" +
+                      $"  -H 'Content-Type: application/json' \\\n" +
+                      $"  -H 'Authorization: Bearer {token}' \\\n" +
+                      $"  -d '{jsonBody}'</color>");
+
+            bool unequipDone = false;
+            bool unequipSuccess = false;
+
+            yield return coreServer.UnequipItem(serverSlot,
+                onSuccess: response =>
+                {
+                    var responseJson = JsonUtility.ToJson(response, true);
+                    Debug.Log($"<color=#00FF00>[CURL] ← Response (Unequip Item):\n{responseJson}</color>");
+                    Debug.Log($"<color=#00FF00>[InventoryService] Unequip request accepted by server</color>");
+                    unequipSuccess = true;
+                    unequipDone = true;
+                },
+                onError: error =>
+                {
+                    Debug.LogError($"[CURL] ← Error (Unequip Item): {error}");
+                    Debug.LogError($"[InventoryService] Failed to sync unequip to server: {error}");
+                    unequipDone = true;
+                });
+
+            yield return new WaitUntil(() => unequipDone);
+
+            // After successful unequip — reload full inventory from server for authoritative state
+            if (unequipSuccess)
+            {
+                Debug.Log("<color=#00AAFF>[InventoryService] Unequip OK → reloading full inventory from server...</color>");
+                yield return TryLoadFromServer(success =>
+                {
+                    if (success)
+                        Debug.Log($"<color=#00FF00>[InventoryService] Inventory reloaded after unequip ({_items.Count} items)</color>");
+                    else
+                        Debug.LogWarning("[InventoryService] Failed to reload inventory after unequip — local state may be stale");
+                });
+            }
         }
     }
 }
