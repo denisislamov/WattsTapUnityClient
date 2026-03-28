@@ -27,6 +27,10 @@ namespace WattsTap.Game.UI
         [Header("Hits Display")]
         [SerializeField] private TMP_Text currentHitsText;
         [SerializeField] private TMP_Text maxMitsText;
+        
+        [Header("Profit Summary")]
+        [SerializeField] private TMP_Text _profitPerTapText;
+        [SerializeField] private TMP_Text _profitPerHourText;
 
         [Header("Skinning")]
         [SerializeField] private MainMenuThemeManager.SkinTokenBinding[] _skinBindings;
@@ -151,6 +155,22 @@ namespace WattsTap.Game.UI
             if (coinsPerTapText != null)
             {
                 coinsPerTapText.text = $"+{coinsPerTap}";
+            }
+        }
+        
+        public void UpdateProfitPerTap(int profitPerTap)
+        {
+            if (_profitPerTapText != null)
+            {
+                _profitPerTapText.text = $"+{profitPerTap}";
+            }
+        }
+        
+        public void UpdateProfitPerHour(int profitPerHour)
+        {
+            if (_profitPerHourText != null)
+            {
+                _profitPerHourText.text = $"+{profitPerHour}";
             }
         }
 

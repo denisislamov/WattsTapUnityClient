@@ -718,7 +718,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1761111583938332954}
   m_HandleRect: {fileID: 7026941787616694770}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3955,7 +3955,7 @@ MonoBehaviour:
   _questsButton: {fileID: 3069323069871148423}
   _updatesButton: {fileID: 6799635551544283900}
   _mergeButton: {fileID: 8138810845338837656}
-  _currentHitsText: {fileID: 1746827694055682074}
+  _currentHitsText: {fileID: 0}
   _maxHitsText: {fileID: 0}
   _coinsPerTapText: {fileID: 6460509753754934074}
   _inventoryContainer: {fileID: 6927483303239880639}
@@ -3965,6 +3965,16 @@ MonoBehaviour:
   _armsArmorSlot: {fileID: 3908533245978310897}
   _legsArmorSlot: {fileID: 2776099410454137643}
   _totalBonusText: {fileID: 0}
+  _profitPerTapText: {fileID: 6460509753754934074}
+  _profitPerHourText: {fileID: 5436137375144278926}
+  _totalRecoveryText: {fileID: 1746827694055682074}
+  _bonusCoinsPerTapText: {fileID: 0}
+  _bonusXpPerTapText: {fileID: 0}
+  _bonusCapacityText: {fileID: 0}
+  _bonusRecoveryText: {fileID: 0}
+  _bonusCritChanceText: {fileID: 0}
+  _bonusCritMultText: {fileID: 0}
+  _bonusOfflineText: {fileID: 0}
 --- !u!114 &879790415597460086
 MonoBehaviour:
   m_ObjectHideFlags: 0

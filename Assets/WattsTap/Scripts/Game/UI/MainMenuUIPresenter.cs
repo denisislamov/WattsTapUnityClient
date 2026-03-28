@@ -33,11 +33,15 @@ namespace WattsTap.Game.UI
             Model.HitsMax.OnValueChanged += OnHitsChanged;
             Model.Level.OnValueChanged += OnLevelChanged;
             Model.CurrentXp.OnValueChanged += OnCurrentXpChanged;
+            Model.ProfitPerTap.OnValueChanged += OnProfitPerTapChanged;
+            Model.ProfitPerHour.OnValueChanged += OnProfitPerHourChanged;
             
             // Инициализация начальных значений
             OnTotalCoinsChanged(Model.TotalCoins.Value);
             OnCoinsPerTapChanged(Model.CoinsPerTap.Value);
             View.UpdateHits(Model.HitsCurrent.Value, Model.HitsMax.Value);
+            View.UpdateProfitPerTap(Model.ProfitPerTap.Value);
+            View.UpdateProfitPerHour(Model.ProfitPerHour.Value);
             
             _sharedDataService = ServiceLocator.Get<ISharedDataService>();
             ServiceLocator.TryGet(out _hapticService);
@@ -393,6 +397,16 @@ namespace WattsTap.Game.UI
         {
             View.UpdateCoinsPerTap(coinsPerTap);
         }
+        
+        private void OnProfitPerTapChanged(int profitPerTap)
+        {
+            View.UpdateProfitPerTap(profitPerTap);
+        }
+        
+        private void OnProfitPerHourChanged(int profitPerHour)
+        {
+            View.UpdateProfitPerHour(profitPerHour);
+        }
 
         private void OnHitsChanged(int _)
         {
@@ -461,6 +475,8 @@ namespace WattsTap.Game.UI
                 Model.HitsMax.OnValueChanged -= OnHitsChanged;
                 Model.Level.OnValueChanged -= OnLevelChanged;
                 Model.CurrentXp.OnValueChanged -= OnCurrentXpChanged;
+                Model.ProfitPerTap.OnValueChanged -= OnProfitPerTapChanged;
+                Model.ProfitPerHour.OnValueChanged -= OnProfitPerHourChanged;
 
             }
         }

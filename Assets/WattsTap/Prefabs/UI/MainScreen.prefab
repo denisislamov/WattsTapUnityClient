@@ -1416,11 +1416,13 @@ MonoBehaviour:
   _profileButton: {fileID: 5329696522122386852}
   _currencyPanel: {fileID: 726128925095499454}
   totalCoinsText: {fileID: 3406190211271174298}
-  coinsPerTapText: {fileID: 4533605739123940352}
+  coinsPerTapText: {fileID: 0}
   _baseCurrencyPanelWidth: 92
   _widthIncreasePerDigit: 15
   currentHitsText: {fileID: 170728496808971627}
   maxMitsText: {fileID: 5420474072264530899}
+  _profitPerTapText: {fileID: 4533605739123940352}
+  _profitPerHourText: {fileID: 9187258481464173943}
   _skinBindings:
   - tokenId: bg-panel
     imageTargets:

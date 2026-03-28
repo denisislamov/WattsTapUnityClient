@@ -25,10 +25,26 @@ namespace WattsTap.Game.UI
             Model.CoinsPerTap.OnValueChanged += OnCoinsPerTapChanged;
             Model.TotalEquipmentBonus.OnValueChanged += OnTotalBonusChanged;
             
+            // Subscribe to per-stat equipment bonuses
+            Model.BonusCoinsPerTap.OnValueChanged += OnEquippedStatsChanged;
+            Model.BonusXpPerTap.OnValueChanged += OnEquippedStatsChanged;
+            Model.BonusCapacityHits.OnValueChanged += OnEquippedStatsChanged;
+            Model.BonusRecoverySpeed.OnValueChanged += OnEquippedStatsChanged;
+            Model.BonusCritChance.OnValueChanged += OnEquippedStatsChanged;
+            Model.BonusCritMultiplier.OnValueChanged += OnEquippedStatsChanged;
+            Model.BonusOfflinePercent.OnValueChanged += OnEquippedStatsChanged;
+            
+            // Subscribe to profit summary
+            Model.ProfitPerTap.OnValueChanged += OnProfitSummaryChanged;
+            Model.ProfitPerHour.OnValueChanged += OnProfitSummaryChanged;
+            Model.TotalRecovery.OnValueChanged += OnProfitSummaryChangedFloat;
+            
             // Initialize view with current values
             View.UpdateHits(Model.HitsCurrent.Value, Model.HitsMax.Value);
             View.UpdateCoinsPerTap(Model.CoinsPerTap.Value);
             View.UpdateTotalBonus(Model.TotalEquipmentBonus.Value);
+            RefreshEquippedStatsView();
+            RefreshProfitSummaryView();
             
             // Show cached inventory immediately (so UI is not blank)
             PopulateInventory();
@@ -117,6 +133,43 @@ namespace WattsTap.Game.UI
             View.UpdateTotalBonus(value);
         }
         
+        private void OnEquippedStatsChanged(float _)
+        {
+            RefreshEquippedStatsView();
+        }
+        
+        private void OnProfitSummaryChanged(int _)
+        {
+            RefreshProfitSummaryView();
+        }
+        
+        private void OnProfitSummaryChangedFloat(float _)
+        {
+            RefreshProfitSummaryView();
+        }
+        
+        private void RefreshEquippedStatsView()
+        {
+            View.UpdateEquippedStats(
+                Model.BonusCoinsPerTap.Value,
+                Model.BonusXpPerTap.Value,
+                Model.BonusCapacityHits.Value,
+                Model.BonusRecoverySpeed.Value,
+                Model.BonusCritChance.Value,
+                Model.BonusCritMultiplier.Value,
+                Model.BonusOfflinePercent.Value
+            );
+        }
+        
+        private void RefreshProfitSummaryView()
+        {
+            View.UpdateProfitSummary(
+                Model.ProfitPerTap.Value,
+                Model.ProfitPerHour.Value,
+                Model.TotalRecovery.Value
+            );
+        }
+        
         /// <summary>
         /// Called when InventoryService finishes loading data from server.
         /// Re-populates the entire inventory UI with fresh data.
@@ -126,6 +179,8 @@ namespace WattsTap.Game.UI
             Debug.Log("<color=#00AAFF>[InventoryScreenUIPresenter] Server data arrived — refreshing UI</color>");
             PopulateInventory();
             InitializeEquipmentSlots();
+            RefreshEquippedStatsView();
+            RefreshProfitSummaryView();
         }
         
         #endregion
@@ -258,6 +313,18 @@ namespace WattsTap.Game.UI
                 Model.HitsMax.OnValueChanged -= OnHitsChanged;
                 Model.CoinsPerTap.OnValueChanged -= OnCoinsPerTapChanged;
                 Model.TotalEquipmentBonus.OnValueChanged -= OnTotalBonusChanged;
+                
+                Model.BonusCoinsPerTap.OnValueChanged -= OnEquippedStatsChanged;
+                Model.BonusXpPerTap.OnValueChanged -= OnEquippedStatsChanged;
+                Model.BonusCapacityHits.OnValueChanged -= OnEquippedStatsChanged;
+                Model.BonusRecoverySpeed.OnValueChanged -= OnEquippedStatsChanged;
+                Model.BonusCritChance.OnValueChanged -= OnEquippedStatsChanged;
+                Model.BonusCritMultiplier.OnValueChanged -= OnEquippedStatsChanged;
+                Model.BonusOfflinePercent.OnValueChanged -= OnEquippedStatsChanged;
+                
+                Model.ProfitPerTap.OnValueChanged -= OnProfitSummaryChanged;
+                Model.ProfitPerHour.OnValueChanged -= OnProfitSummaryChanged;
+                Model.TotalRecovery.OnValueChanged -= OnProfitSummaryChangedFloat;
             }
             
             // Unsubscribe from view events

@@ -44,6 +44,20 @@ namespace WattsTap.Game.UI
         [Header("Stats Display")]
         [SerializeField] private TMP_Text _totalBonusText;
         
+        [Header("Profit Summary")]
+        [SerializeField] private TMP_Text _profitPerTapText;
+        [SerializeField] private TMP_Text _profitPerHourText;
+        [SerializeField] private TMP_Text _totalRecoveryText;
+        
+        [Header("Equipment Stats")]
+        [SerializeField] private TMP_Text _bonusCoinsPerTapText;
+        [SerializeField] private TMP_Text _bonusXpPerTapText;
+        [SerializeField] private TMP_Text _bonusCapacityText;
+        [SerializeField] private TMP_Text _bonusRecoveryText;
+        [SerializeField] private TMP_Text _bonusCritChanceText;
+        [SerializeField] private TMP_Text _bonusCritMultText;
+        [SerializeField] private TMP_Text _bonusOfflineText;
+        
         private readonly List<InventoryItemElementView> _itemViews = new List<InventoryItemElementView>();
         
         public event Action<InventoryItemElementView> OnItemDoubleClicked;
@@ -207,6 +221,60 @@ namespace WattsTap.Game.UI
             {
                 _totalBonusText.text = $"+{totalBonus:F1}/tap";
             }
+        }
+        
+        /// <summary>
+        /// Update profit summary fields: per tap, per hour, recovery.
+        /// </summary>
+        public void UpdateProfitSummary(int profitPerTap, int profitPerHour, float totalRecovery)
+        {
+            if (_profitPerTapText != null)
+            {
+                _profitPerTapText.text = $"+{profitPerTap}";
+            }
+            
+            if (_profitPerHourText != null)
+            {
+                _profitPerHourText.text = $"+{profitPerHour}";
+            }
+            
+            if (_totalRecoveryText != null)
+            {
+                _totalRecoveryText.text = $"{totalRecovery:F1}";
+            }
+        }
+        
+        /// <summary>
+        /// Update per-stat equipment bonuses display.
+        /// Only shows stats that have a non-zero value.
+        /// </summary>
+        public void UpdateEquippedStats(
+            float coinsPerTap, float xpPerTap, float capacityHits,
+            float recoverySpeed, float critChance, float critMult, float offlinePercent)
+        {
+            SetStatText(_bonusCoinsPerTapText, "Coins/Tap", coinsPerTap, false);
+            SetStatText(_bonusXpPerTapText, "XP/Tap", xpPerTap, false);
+            SetStatText(_bonusCapacityText, "Capacity", capacityHits, false);
+            SetStatText(_bonusRecoveryText, "Recovery", recoverySpeed, false);
+            SetStatText(_bonusCritChanceText, "Crit Chance", critChance, true);
+            SetStatText(_bonusCritMultText, "Crit Mult", critMult, true);
+            SetStatText(_bonusOfflineText, "Offline", offlinePercent, true);
+        }
+        
+        private void SetStatText(TMP_Text text, string label, float value, bool isPercent)
+        {
+            if (text == null) return;
+            
+            if (value == 0f)
+            {
+                text.gameObject.SetActive(false);
+                return;
+            }
+            
+            text.gameObject.SetActive(true);
+            text.text = isPercent
+                ? $"{label}: +{value:F1}%"
+                : $"{label}: +{value:F0}";
         }
         
         /// <summary>
