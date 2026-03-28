@@ -12,35 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a2029b586d04187b746ba94f37bd463, type: 3}
   m_Name: InventoryStartConfig
   m_EditorClassIdentifier: WattsTapCore::WattsTap.Core.Inventory.InventoryStartConfig
-  _isDebug: 1
-  _startItems:
-  - ItemData: {fileID: 11400000, guid: d3226e38138df42cda3cf705d91649d9, type: 2}
-    Count: 3
-    AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: 9b58d0db914d24c9f8c3af136c88f340, type: 2}
-    Count: 3
-    AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: 1d01c860158ab4634a0c84a5e641387f, type: 2}
-    Count: 1
-    AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: 840986b7969a947199b099c8bbec3be4, type: 2}
-    Count: 3
-    AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: e60860a40ec6944ab95bc8fcbf0a88e7, type: 2}
-    Count: 3
-    AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: 34b62dfafe97f4b6ea84d769edd3070c, type: 2}
-    Count: 3
-    AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: 1f1102d3e82644be0b06fb3ca281801e, type: 2}
-    Count: 1
-    AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: 7b8aa3e23b69e499db97b97dd8191437, type: 2}
-    Count: 1
-    AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: 786381244c02c43bbbb52391c7fdaf12, type: 2}
-    Count: 1
-    AutoEquip: 0
-  - ItemData: {fileID: 11400000, guid: 1415d474764344c6d9a35d299d09dd47, type: 2}
-    Count: 1
-    AutoEquip: 0
+  _isDebug: 0
+  _startItems: []

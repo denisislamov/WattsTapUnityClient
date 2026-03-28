@@ -332,16 +332,16 @@ namespace WattsTap.Core.Inventory
             {
                 foreach (var dto in response.inventory)
                 {
-                    if (string.IsNullOrEmpty(dto.variantId)) continue;
+                    if (string.IsNullOrEmpty(dto.itemVariantId)) continue;
 
-                    // Find ItemData in catalog by variantId
-                    if (!_catalogService.TryGetItem(dto.variantId, out var itemData))
+                    // Find ItemData in catalog by itemVariantId
+                    if (!_catalogService.TryGetItem(dto.itemVariantId, out var itemData))
                     {
-                        Debug.LogWarning($"[InventoryService] Variant '{dto.variantId}' not found in catalog, skipping");
+                        Debug.LogWarning($"[InventoryService] Variant '{dto.itemVariantId}' not found in catalog, skipping");
                         continue;
                     }
 
-                    var invItem = new InventoryItem(dto.id, itemData, dto.level, dto.isEquipped);
+                    var invItem = new InventoryItem(dto.playerItemId, itemData, dto.level, dto.isEquipped);
                     _items.Add(invItem);
                 }
             }

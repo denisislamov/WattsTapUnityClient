@@ -70,15 +70,13 @@ namespace WattsTap.Core.API
     [Serializable]
     public class PlayerInventoryItemDTO
     {
-        public string id;            // Player-item instance id
-        public string itemId;        // Template item id
-        public string variantId;     // Variant id (rarity-specific)
-        public int level;
-        public string slot;
-        public string rarity;
+        public string playerItemId;   // Player-item instance id (unique per player inventory entry)
+        public string itemVariantId;  // Variant id (rarity-specific, links to catalog variant)
+        public string itemBaseId;     // Base item template id (shared by all rarity variants)
         public string name;
-        public string code;
-        public string mainStatType;
+        public string rarity;
+        public string slot;
+        public int level;
         public bool isEquipped;
     }
 
